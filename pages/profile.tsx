@@ -141,7 +141,7 @@ const Profile: NextPage = () => {
           <div>status</div>
         </div>
         <div className={styles.playerInfo}>
-          <h3>маша маша маша</h3>
+          <h3>Маша Шарапова</h3>
           <div className={styles.achievements}>
             <div className={styles.rank}>
               <span>10</span>
