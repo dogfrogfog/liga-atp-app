@@ -1,0 +1,89 @@
+.profileContainer {
+  min-height: 100vh;
+  background-color: black;
+
+  .header {
+    background-color: blanchedalmond;
+    height: 300px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 15px;
+
+    .controls {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .playerInfo {
+      width: 100%;
+      background-color: aqua;
+      border-radius: 10px;
+      padding: 10px;
+
+      h3 {
+        margin: 0;
+        // color: white;
+        margin-bottom: 15px;
+      }
+    }
+
+    .rank,
+    .medal {
+      display: inline-block;
+    }
+  }
+
+  section {
+    padding: 15px;
+    color: white;
+  }
+
+  .menu {
+    margin-bottom: 15px;
+    display: flex;
+    overflow-x: scroll;
+
+    .menuItem {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 15px;
+      background-color: aqua;
+      margin-right: 10px;
+    }
+  }
+
+  .info {
+    .infoRow {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 0.2px solid darkgray;
+
+      &.coachRow {
+        display: block;
+        border: 0;
+
+        .title {
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .name {
+          display: block;
+          // background-color: rgba(22, 22, 22, 0.1);
+          background-color: #1B2223;
+          border-radius: 10px;
+          padding: 8px;
+          width: 100%;
+          margin-bottom: 8px;
+        }
+      }
+
+      &:last-child {
+        border: 0;
+      }
+    }
+  }
+}
