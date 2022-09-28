@@ -49,7 +49,7 @@ const Profile: NextPage = () => {
         return (
           <div className={styles.info}>
             {mockInfo.map(({ name, value }) => (
-              <div className={styles.infoRow}>
+              <div key={name} className={styles.infoRow}>
                 <span>{name}</span>
                 <span>{value}</span>
               </div>
@@ -70,12 +70,12 @@ const Profile: NextPage = () => {
           <div>
             <div style={{ display: 'flex', marginBottom: 30 }}>
               {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС', 'ПН', 'ВТ'].map((day) => (
-                <span style={{ padding: 5, marginRight: 5, backgroundColor: 'lightgrey' }}>{day}</span>
+                <span key={day} style={{ padding: 5, marginRight: 5, backgroundColor: 'lightgrey' }}>{day}</span>
               ))}
             </div>
             <div>
               {[1, 2, 3].map((day) => (
-                <div style={{ marginBottom: 40 }}>
+                <div key={day} style={{ marginBottom: 40 }}>
                   <p>DOUBLES FUTURES 23 | 2022</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                    <span>16.00</span>
@@ -93,9 +93,8 @@ const Profile: NextPage = () => {
       case 'Встречи':
         return (
           <div>
-            {[1, 2, 3].map(() => (
-              <>
-                <div>
+            {[1, 2, 3].map((a) => (
+              <div key={a}>
                   <p>14.05.2022</p>
                   <p>Challenger</p>
                   <p style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -106,10 +105,7 @@ const Profile: NextPage = () => {
                     <span>youtube</span>
                     <span>H2H</span>
                   </p>
-                </div>
-                <br />
-                <br />
-              </>
+              </div>
             ))}
           </div>
         );
@@ -155,7 +151,7 @@ const Profile: NextPage = () => {
       <section>
         <div className={styles.menu}>
           {['Информация', 'Расписание', 'Встречи', 'Статистика'].map((menuItem) => (
-            <div onClick={() => setActiveTab(menuItem)} className={styles.menuItem}>
+            <div key={menuItem} onClick={() => setActiveTab(menuItem)} className={styles.menuItem}>
               {menuItem}
             </div>
           ))}
