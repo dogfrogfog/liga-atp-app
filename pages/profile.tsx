@@ -124,6 +124,29 @@ const Profile: NextPage = () => {
             <p>статистика</p>
           </div>
         );
+      case 'Отзывы':
+        return (
+          <div>
+            <p>Отзывы</p>
+            <br />
+            <p>Отзывы</p>
+            <p>Отзывы</p>
+            <p>Отзывы</p>
+            <p>Отзывы</p>
+            <p>Отзывы</p>
+          </div>
+        );
+      case 'Дайджест':
+        return (
+          <div>
+            <p>Дайджест</p>
+            <br />
+            <p>упоминание 1</p>
+            <p>упоминание 33</p>
+            <p>упоминание 22</p>
+            <p>упоминание 2</p>
+          </div>
+        );
       default:
         return null;
     }
@@ -150,7 +173,7 @@ const Profile: NextPage = () => {
       </div>
       <section>
         <div className={styles.menu}>
-          {['Информация', 'Расписание', 'Встречи', 'Статистика'].map((menuItem) => (
+          {['Информация', 'Расписание', 'Встречи', 'Статистика', 'Отзывы', 'Дайджест'].map((menuItem) => (
             <div key={menuItem} onClick={() => setActiveTab(menuItem)} className={styles.menuItem}>
               {menuItem}
             </div>

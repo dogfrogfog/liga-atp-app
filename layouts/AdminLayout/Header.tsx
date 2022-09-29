@@ -8,6 +8,7 @@ function Header() {
     <header className={styles.headerContainer}>
       <div className={styles.logo}>
         <Link href="/admin">LOGO</Link>
+        <Link href="/">main app link</Link>
       </div>
       <div className={styles.menu}>
         {/* <ul>
