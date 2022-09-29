@@ -1,0 +1,21 @@
+.bottomMenu {
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  display: flexw;
+
+  a {
+    display: block;
+    height: inherit;
+    background: darkcyan;
+    color: white;
+    font-weight: bold;
+    border-right: 1px solid white;
+    width: calc(100% / 6);
+
+    &:last-child {
+      border: 0;
+    }
+  }
+}

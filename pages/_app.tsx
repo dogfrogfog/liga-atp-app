@@ -1,9 +1,9 @@
-// import { NativeBaseProvider } from "native-base"
 import type { AppProps } from 'next/app'
 import '../styles/globals.css'
 
 import PWALayout from '../layouts/PWALayout'
 import AdminLayout from '../layouts/AdminLayout'
+import MainAppLayout from '../layouts/MainAppLayout'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
 
@@ -19,7 +19,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   return (
     <PWALayout>
-      <Component {...pageProps} />
+      <MainAppLayout>
+        <Component {...pageProps} />
+      </MainAppLayout>
     </PWALayout>
   )
 }
