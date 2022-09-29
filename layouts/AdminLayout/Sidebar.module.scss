@@ -1,0 +1,11 @@
+.sidebarContainer {
+  width: 330px;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+  border-right: 1px solid lightgrey;
+
+  :global(.ant-menu-inline) {
+    border: 0;
+    font-size: 16px;
+  }
+}

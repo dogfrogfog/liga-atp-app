@@ -1,0 +1,10 @@
+.actions {
+  width: 100%;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: flex-end;
+
+  :global(.ant-btn) {
+    margin-left: 15px;
+  }
+}

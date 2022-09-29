@@ -1,0 +1,17 @@
+.userFormContainer {
+  :global {
+    .ant-form-item-label {
+      text-align: left;
+    }
+
+    .ant-form {
+      margin-top: 15px;
+      border-top: 1px solid lightgray;
+      padding: 15px 0;
+    }
+
+    .ant-btn {
+      margin-right: 15px;
+    }
+  }
+}
