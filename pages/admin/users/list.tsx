@@ -1,7 +1,7 @@
 import { useState, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { Table, Button, Tag, TableProps } from 'antd'
+import { Button, Tag } from 'antd-mobile'
 
 import styles from './UsersList.module.scss'
 
@@ -11,9 +11,9 @@ interface IActionsProps {
 
 const Actions = ({ handleReset }: IActionsProps) => (
   <div className={styles.actions}>
-    <Button onClick={handleReset} type="primary">Сбросить</Button>
+    <Button onClick={handleReset} >Сбросить</Button>
     <Button disabled>Изменить</Button>
-    <Button danger>Удалить</Button>
+    <Button >Удалить</Button>
   </div>
 )
 
@@ -75,7 +75,7 @@ const UsersList: NextPage = () => {
     setSelectedRowKeys([])
   }
 
-  const rowSelection: TableProps<{}>['rowSelection'] = {
+  const rowSelection = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: any) => {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
@@ -86,7 +86,8 @@ const UsersList: NextPage = () => {
   return (
     <div>
       <Actions handleReset={handleReset} />
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+      <h1>table</h1>
+      {/* <Table rowSelection={rowSelection} columns={columns} dataSource={data} /> */}
     </div>
   );
 }

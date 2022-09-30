@@ -10,16 +10,16 @@ const Elo: NextPage = () => {
       <br />
       <br />
       <div>
-        <span style={{ padding: 5, backgroundColor: 'aqua', marginRight: 10 }}>
+        <span style={{ padding: 5, backgroundColor: '#4CC4D1', marginRight: 10 }}>
           Masters
         </span>
-        <span style={{ padding: 5, backgroundColor: 'aqua', marginRight: 10 }}>
+        <span style={{ padding: 5, backgroundColor: '#4CC4D1', marginRight: 10 }}>
           Leger
         </span>
-        <span style={{ padding: 5, backgroundColor: 'aqua', marginRight: 10 }}>
+        <span style={{ padding: 5, backgroundColor: '#4CC4D1', marginRight: 10 }}>
           Challenger
         </span>
-        <span style={{ padding: 5, backgroundColor: 'aqua', marginRight: 10 }}>
+        <span style={{ padding: 5, backgroundColor: '#4CC4D1', marginRight: 10 }}>
           Futures
         </span>
       </div>

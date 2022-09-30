@@ -3,6 +3,8 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import cl from 'classnames'
 
+import ProfileHeader from '../components/profilePages/ProfileHeader'
+
 import styles from '../styles/Profile.module.scss'
 
 const mockInfo = [
@@ -154,23 +156,7 @@ const Profile: NextPage = () => {
 
   return (
     <div className={styles.profileContainer}>
-      <div className={styles.header}>
-        <div className={styles.controls}>
-          <div><Link href="/">back</Link></div>
-          <div>status</div>
-        </div>
-        <div className={styles.playerInfo}>
-          <h3>Маша Шарапова</h3>
-          <div className={styles.achievements}>
-            <div className={styles.rank}>
-              <span>10</span>
-              <span>Супермастерс</span>
-            </div>
-            <div className={styles.medal}>@ 3</div>
-            <div className={styles.medal}>@ 8</div>
-          </div>
-        </div>
-      </div>
+      <ProfileHeader />
       <section>
         <div className={styles.menu}>
           {['Информация', 'Расписание', 'Встречи', 'Статистика', 'Отзывы', 'Дайджест'].map((menuItem) => (
