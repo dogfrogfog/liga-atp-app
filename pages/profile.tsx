@@ -1,175 +1,102 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
-import Link from 'next/link'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import cl from 'classnames'
+import { useRouter } from 'next/router'
+import { BiArrowBack } from 'react-icons/bi'
+import { FaMedal } from 'react-icons/fa'
 
-import ProfileHeader from '../components/profilePages/ProfileHeader'
+import InfoTab from './components/profileTabs/Info'
+import MatchesTab from './components/profileTabs/Matches'
+import StatsTab from './components/profileTabs/Stats'
+import SpecsTab from './components/profileTabs/Specs'
 
 import styles from '../styles/Profile.module.scss'
 
-const mockInfo = [
-  {
-    name: 'Город',
-    value: 'Минск',
-  },
-  {
-    name: 'Возраст',
-    value: '32 года',
-  },
-  {
-    name: 'Рост',
-    value: '199 см',
-  },
-  {
-    name: 'Лет в теннисе',
-    value: '4 года',
-  },
-  {
-    name: 'Форхэнд',
-    value: 'Правая рука',
-  },
-  {
-    name: 'Бэкэнд',
-    value: 'Двуручный',
-  },
-  {
-    name: 'Инста',
-    value: '@',
-  },
-  {
-    name: 'Техничность',
-    value: '65 %',
-  },
-]
+const PROFILE_TABS = ['Информация', 'Личные встречи', 'Статистика'];
 
 const Profile: NextPage = () => {
-  const [activeTab, setActiveTab] = useState('Информация');
+  const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
 
   const activeTabContent = (() => {
-    switch (activeTab) {
+    switch (activeTabIndex) {
       case 'Информация':
-        return (
-          <div className={styles.info}>
-            {mockInfo.map(({ name, value }) => (
-              <div key={name} className={styles.infoRow}>
-                <span>{name}</span>
-                <span>{value}</span>
-              </div>
-            ))}
-            <div className={cl(styles.infoRow, styles.coachRow)}>
-              <span className={styles.title}>Тренер</span>
-              <span className={styles.name}>Кравченко Сергей</span>
-            </div>
-            <div className={cl(styles.infoRow, styles.coachRow)}>
-              <span className={styles.title}>Ученик</span>
-              <span className={styles.name}>Кравченко Сергей</span>
-              <span className={styles.name}>Кравченко Сергей</span>
-            </div>
-          </div>
-        );
-      case 'Расписание':
-        return (
-          <div>
-            <div style={{ display: 'flex', marginBottom: 30 }}>
-              {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС', 'ПН', 'ВТ'].map((day) => (
-                <span key={day} style={{ padding: 5, marginRight: 5, backgroundColor: 'lightgrey' }}>{day}</span>
-              ))}
-            </div>
-            <div>
-              {[1, 2, 3].map((day) => (
-                <div key={day} style={{ marginBottom: 40 }}>
-                  <p>DOUBLES FUTURES 23 | 2022</p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                   <span>16.00</span>
-                   <span>Усманов В, Кравченок У</span>
-                  </div>
-                  <div style={{ display: 'flex',  justifyContent: 'space-between' }}>
-                  <span>7 корт</span>
-                   <span>Кураш На, Полном Кураже</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      case 'Встречи':
-        return (
-          <div>
-            {[1, 2, 3].map((a) => (
-              <div key={a}>
-                  <p>14.05.2022</p>
-                  <p>Challenger</p>
-                  <p style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Марьянович</span>
-                    <span>6-4 6-4 6-4</span>
-                  </p>
-                  <p style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>youtube</span>
-                    <span>H2H</span>
-                  </p>
-              </div>
-            ))}
-          </div>
-        );
+        return <InfoTab />;
+      case 'Личные встречи':
+        return <MatchesTab />;
       case 'Статистика':
-        return (
-          <div>
-            <p>график изменения ЭЛО</p>
-            <br />
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-            <p>статистика</p>
-          </div>
-        );
-      case 'Отзывы':
-        return (
-          <div>
-            <p>Отзывы</p>
-            <br />
-            <p>Отзывы</p>
-            <p>Отзывы</p>
-            <p>Отзывы</p>
-            <p>Отзывы</p>
-            <p>Отзывы</p>
-          </div>
-        );
-      case 'Дайджест':
-        return (
-          <div>
-            <p>Дайджест</p>
-            <br />
-            <p>упоминание 1</p>
-            <p>упоминание 33</p>
-            <p>упоминание 22</p>
-            <p>упоминание 2</p>
-          </div>
-        );
+        return <StatsTab />;
       default:
         return null;
     }
   })();
 
+  const handleTabChange = (_: any, value: number) => {
+    setActiveTabIndex(PROFILE_TABS[value])
+  }
+
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader />
       <section>
-        <div className={styles.menu}>
-          {['Информация', 'Расписание', 'Встречи', 'Статистика', 'Отзывы', 'Дайджест'].map((menuItem) => (
-            <div key={menuItem} onClick={() => setActiveTab(menuItem)} className={styles.menuItem}>
-              {menuItem}
-            </div>
+        <Tabs
+          value={PROFILE_TABS.indexOf(activeTabIndex)}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          className={styles.tabsContainer}
+          TabIndicatorProps={{ children: null }}
+        >
+          {PROFILE_TABS.map((tab) => (
+            <Tab
+              className={cl(
+                styles.tab,
+                tab === activeTabIndex ? styles.activeTab : ''
+              )}
+              label={tab}
+            />
           ))}
-        </div>
+        </Tabs>
         {activeTabContent}
       </section>
     </div>
-
   )
+}
+
+const ProfileHeader = () => {
+  const router = useRouter()
+
+  return (
+    <div className={styles.profileHeader}>
+      <div className={styles.top}>
+        <a className={styles.back} onClick={() => router.back()}>
+          <BiArrowBack size='xl' />
+        </a>
+        <span className={styles.status}>Тренер</span>
+      </div>
+      <div className={styles.bottom}>
+        <p className={styles.title}>Маша Архаменко</p>
+        <div className={styles.infoContainer}>
+          <div className={styles.achievements}>
+            <div className={styles.rank}>
+              <span className={styles.position}>10</span>
+              <span className={styles.positionName}>Супермастерс</span>
+            </div>
+            <div className={styles.medal}>
+              <FaMedal color='yellow' />
+              3
+            </div>
+            <div className={styles.medal}>
+              <FaMedal color='lightgrey' />
+              6
+            </div>
+          </div>
+          <span className={styles.elo}>1444</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Profile

@@ -1,0 +1,31 @@
+.infoRow {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #121414;
+
+  span:last-child {
+    font-weight: bold;
+  }
+}
+
+.coaching {
+  padding: 10px 0;
+
+  .title {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .infoRow {
+    background-color: #1B2223;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+
+    span:last-child {
+      color: #4CC4D1;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.eloContainer {
+  height: 175px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #1B2223;
+  margin-bottom: 15px;
+}
+
+.lvlSelectContainer {
+  display: flex;
+  justify-content: right;
+
+  svg {
+    color: #DBDBDB;
+  }
+
+  :global(.MuiSelect-select) {
+    background-color: red;
+    padding: 5px 15px;
+    color: #DBDBDB;
+    background-color: #1B2223;
+  }
+}
+
+.statsRowsContainer {
+  .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #121414;
+
+    .valueName {
+      color: #DBDBDB;
+      font-weight: 100;
+    }
+
+    .value {
+      font-weight: bold;
+    }
+  }
+}
