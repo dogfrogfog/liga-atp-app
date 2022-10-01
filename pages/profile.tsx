@@ -10,7 +10,6 @@ import { FaMedal } from 'react-icons/fa'
 import InfoTab from './components/profileTabs/Info'
 import MatchesTab from './components/profileTabs/Matches'
 import StatsTab from './components/profileTabs/Stats'
-import SpecsTab from './components/profileTabs/Specs'
 
 import styles from '../styles/Profile.module.scss'
 
