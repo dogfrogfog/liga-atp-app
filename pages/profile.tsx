@@ -49,6 +49,7 @@ const Profile: NextPage = () => {
         >
           {PROFILE_TABS.map((tab) => (
             <Tab
+              key={tab}
               className={cl(
                 styles.tab,
                 tab === activeTabIndex ? styles.activeTab : ''
