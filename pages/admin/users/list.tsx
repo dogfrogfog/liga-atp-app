@@ -1,7 +1,7 @@
 import { useState, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { Button, Tag } from 'antd-mobile'
+// import { Button, Tag } from 'antd-mobile'
 
 import styles from './UsersList.module.scss'
 
@@ -11,9 +11,9 @@ interface IActionsProps {
 
 const Actions = ({ handleReset }: IActionsProps) => (
   <div className={styles.actions}>
-    <Button onClick={handleReset} >Сбросить</Button>
-    <Button disabled>Изменить</Button>
-    <Button >Удалить</Button>
+    {/* <Button onClick={handleReset} >Сбросить</Button> */}
+    {/* <Button disabled>Изменить</Button> */}
+    {/* <Button >Удалить</Button> */}
   </div>
 )
 
@@ -54,7 +54,7 @@ for (let i = 0; i < 146; i++) {
     currentRank: i + 1,
     status: (
       <div key={i}>
-        <Tag color="red" key={i}>
+        {/* <Tag color="red" key={i}>
           coach
         </Tag>
         <Tag color="green" key={i}>
@@ -62,7 +62,7 @@ for (let i = 0; i < 146; i++) {
         </Tag>
         <Tag color="yellow" key={i}>
           admin
-        </Tag>
+        </Tag> */}
       </div>
     ),
   })

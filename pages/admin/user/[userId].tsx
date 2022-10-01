@@ -1,13 +1,13 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { Form, DatePicker, Radio, Input, Button, Upload, Select } from 'antd'
+// import { Form, DatePicker, Radio, Input, Button, Upload, Select } from 'antd'
 
 import styles from './UserPage.module.scss'
 
 // todo prefetch data
 const UserPage: NextPage = () => {
   const router = useRouter()
-  const [{ submit }] = Form.useForm()
+  // const [{ submit }] = Form.useForm()
 
   const userId = router.query.userId
 
@@ -18,7 +18,7 @@ const UserPage: NextPage = () => {
   return (
     <div className={styles.userFormContainer}>
       <h1>Страница пользователя {userId}</h1>
-      <Button>Сбросить</Button>
+      {/* <Button>Сбросить</Button>
       <Button type="primary">Сохранить</Button>
       <Button danger>Удалить</Button>
       <Form
@@ -81,10 +81,10 @@ const UserPage: NextPage = () => {
               {/* <PlusOutlined /> */}
               <div style={{ marginTop: 8 }}>Upload</div>
             </div>
-          </Upload>
-        </Form.Item>
-      </Form>
-    </div>
+          // </Upload>
+        // </Form.Item>
+      // </Form > * /}
+    // </div>
   )
 }
 

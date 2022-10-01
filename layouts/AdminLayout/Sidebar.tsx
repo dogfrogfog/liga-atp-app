@@ -8,7 +8,7 @@ import { GiTabletopPlayers } from 'react-icons/gi'
 
 import styles from './Sidebar.module.scss'
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<any>['items'][number];
 
 function getItem(label: ReactNode, key: string, icon?: ReactNode, children?: MenuItem[]): MenuItem {
   return {
