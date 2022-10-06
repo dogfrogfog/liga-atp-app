@@ -1,0 +1,23 @@
+.playersContainer {
+  padding: 15px;
+
+  :global(.MuiFormControl-root) {
+    background-color: white;
+    margin-bottom: 15px;
+    width: 70%;
+  }
+
+  .header {
+    height: 60px;
+  }
+
+  .listTitle {
+    display: block;
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  .playersTable {
+    width: 100%;
+  }
+}

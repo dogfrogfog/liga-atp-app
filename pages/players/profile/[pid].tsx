@@ -7,11 +7,11 @@ import { useRouter } from 'next/router'
 import { BiArrowBack } from 'react-icons/bi'
 import { FaMedal } from 'react-icons/fa'
 
-import InfoTab from './components/profileTabs/Info'
-import MatchesTab from './components/profileTabs/Matches'
-import StatsTab from './components/profileTabs/Stats'
+import InfoTab from '../../components/profileTabs/Info'
+import MatchesTab from '../../components/profileTabs/Matches'
+import StatsTab from '../../components/profileTabs/Stats'
 
-import styles from '../styles/Profile.module.scss'
+import styles from '../../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'Личные встречи', 'Статистика'];
 
@@ -66,6 +66,9 @@ const Profile: NextPage = () => {
 
 const ProfileHeader = () => {
   const router = useRouter()
+  const { pid } = router.query
+
+  console.log('User id: ' + pid)
 
   return (
     <div className={styles.profileHeader}>
@@ -76,7 +79,7 @@ const ProfileHeader = () => {
         <span className={styles.status}>Тренер</span>
       </div>
       <div className={styles.bottom}>
-        <p className={styles.title}>Маша Архаменко</p>
+        <p className={styles.title}>Маша Ахраменко, userid: {pid}</p>
         <div className={styles.infoContainer}>
           <div className={styles.achievements}>
             <div className={styles.rank}>

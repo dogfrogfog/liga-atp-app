@@ -19,7 +19,7 @@ function MainAppLayout({ children }: { children: ReactNode }) {
         {children}
       </div>
       <div className={styles.bottomMenu}>
-        <Link href="/profile">
+        <Link href="/players">
           <div className={styles.menuItem}>
             <FiUsers />
             Игроки
