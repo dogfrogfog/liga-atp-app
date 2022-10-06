@@ -9,14 +9,29 @@ import PWALayout from '../layouts/PWALayout'
 import AdminLayout from '../layouts/AdminLayout'
 import MainAppLayout from '../layouts/MainAppLayout'
 
-function MyApp({ Component, pageProps, router }: AppProps) {
+// todo: rework layouts
+// admin | bottommenu | arrow back | header top (players view, tournaments view)
 
+
+function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
     return (
       <PWALayout>
         <AdminLayout>
           <Component {...pageProps} />
         </AdminLayout>
+      </PWALayout>
+    )
+  }
+
+
+  if (
+    router.pathname.startsWith('/players/profile/') ||
+    router.pathname.startsWith('/tournaments/')
+  ) {
+    return (
+      <PWALayout>
+        <Component {...pageProps} />
       </PWALayout>
     )
   }

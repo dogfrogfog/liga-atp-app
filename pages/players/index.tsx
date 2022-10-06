@@ -30,6 +30,13 @@ const rows = [
   createData(7, 'Ice cream sandwich', 'Futures', 2100),
   createData(8, 'Eclair', 'Chellenger', 1200),
   createData(9, 'Gingerbread', 'Settelite', 1),
+  createData(71, 'Ice cream sandwich', 'Futures', 2100),
+  createData(18, 'Eclair', 'Chellenger', 1200),
+  createData(29, 'Gingerbread', 'Settelite', 1),
+  createData(1228, 'Eclair', 'Chellenger', 1200),
+  createData(219, 'Gingerbread', 'Settelite', 1),
+  createData(118, 'Eclair', 'Chellenger', 1200),
+  createData(219, 'Gingerbread', 'Settelite', 1),
 ];
 
 const Players: NextPage = () => {
