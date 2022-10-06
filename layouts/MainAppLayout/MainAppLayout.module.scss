@@ -1,23 +1,27 @@
 .pageContainer {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 84px);
   overflow-y: scroll;
 }
 .bottomMenu {
   height: 50px;
+  margin-bottom: 34px;
   width: 100%;
   position: fixed;
   bottom: 0;
   display: flex;
 
+  .active {
+    color: #4CC4D1;
+  }
+
   .menuItem {
     width: calc(100% / 6);
-    border-right: 1px solid #121414;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     font-size: 14px;
-    background-color: darkgrey;
+    font-weight: 200;
     
     &:last-child {
       border: 0;
