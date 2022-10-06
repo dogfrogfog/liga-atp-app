@@ -51,7 +51,7 @@ const Players: NextPage = () => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Link href={row.link + '/' + row.id}>
+              <Link key={row.id} href={row.link + '/' + row.id}>
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
                     {row.name}
