@@ -1,0 +1,21 @@
+.secondaryLayoutContainer {
+  position: relative;
+
+  .back {
+    z-index: 3;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border-radius: 50%;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

@@ -68,38 +68,26 @@
   background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
   height: 350px;
   padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: relative;
 
-  .top {
-    height: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .back {
-      height: 50px;
-      width: 50px;
-      background-color: white;
-      color: black;
-      padding: 10px;
-      border-radius: 50%;
-    }
-
-    .status {
-      background-color: black;
-      color: white;
-      border-radius: 5px;
-      padding: 10px;
-    }
-  }
-
-  .bottom {
+  .status {
+    position: absolute;
+    z-index: 3;
+    right: 30px;
+    top: 30px;
     background-color: black;
     color: white;
     border-radius: 5px;
     padding: 10px;
+  }
+
+  .info {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    // fix
+    margin-top: 200px;
 
     .title {
       margin: 0;

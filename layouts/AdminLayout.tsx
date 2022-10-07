@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import type { ReactNode } from 'react'
 
-import Header from './Header'
-import Sidebar from './Sidebar'
-import styles from './CommonLayout.module.scss'
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
+import styles from './AdminLayout.module.scss'
 
-function CommonLayout({ children }: { children: ReactNode }) {
+// todo: wip
+function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div>
       <Head>
@@ -24,4 +25,4 @@ function CommonLayout({ children }: { children: ReactNode }) {
   )
 }
 
-export default CommonLayout
+export default AdminLayout

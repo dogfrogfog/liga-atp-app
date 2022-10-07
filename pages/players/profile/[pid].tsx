@@ -72,14 +72,9 @@ const ProfileHeader = () => {
 
   return (
     <div className={styles.profileHeader}>
-      <div className={styles.top}>
-        <a className={styles.back} onClick={() => router.back()}>
-          <BiArrowBack size='xl' />
-        </a>
-        <span className={styles.status}>Тренер</span>
-      </div>
-      <div className={styles.bottom}>
-        <p className={styles.title}>Маша Ахраменко, userid: {pid}</p>
+      <span className={styles.status}>Тренер</span>
+      <div className={styles.info}>
+        <p className={styles.name}>Маша Ахраменко, userid: {pid}</p>
         <div className={styles.infoContainer}>
           <div className={styles.achievements}>
             <div className={styles.rank}>
