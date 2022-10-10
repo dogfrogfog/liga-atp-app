@@ -6,7 +6,6 @@ import styles from '../styles/Home.module.css'
 const h2h: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Link href="/">home</Link>
       <h1>head to head page</h1>
     </div>
   )

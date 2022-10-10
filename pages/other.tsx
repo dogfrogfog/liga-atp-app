@@ -6,7 +6,6 @@ import styles from '../styles/Home.module.css'
 const Other: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Link href="/">home</Link>
       <h1>Other page</h1>
       <br />
       <h3>Support</h3>

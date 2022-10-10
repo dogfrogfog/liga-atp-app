@@ -17,7 +17,12 @@
     font-size: 20px;
   }
 
-  .playersTable {
+  :global(.MuiTableContainer-root) {
+    th,
+    td {
+      color: white;
+    }
+
     width: 100%;
   }
 }

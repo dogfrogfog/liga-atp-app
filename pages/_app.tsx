@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   // secondary pages
   if (
-    router.pathname.startsWith('/players/profile/') ||
+    router.pathname.startsWith('/players/') ||
     router.pathname.startsWith('/tournaments/')
   ) {
     return (

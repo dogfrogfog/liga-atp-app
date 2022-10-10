@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 
 import styles from '../../styles/Players.module.scss'
@@ -17,7 +16,7 @@ function createData(
   level: string,
   points: number,
 ) {
-  return { id, name, level, points, link: '/players/profile' };
+  return { id, name, level, points, link: '/players' };
 }
 
 const rows = [
@@ -47,7 +46,7 @@ const Players: NextPage = () => {
       </div>
       <TextField label="Введите имя игрока" variant="filled" color='primary' />
       <span className={styles.listTitle}>Список игроков</span>
-      <TableContainer component={Paper} className={styles.playersTable}>
+      <TableContainer className={styles.playersTable}>
         <Table>
           <TableHead>
             <TableRow>

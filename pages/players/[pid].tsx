@@ -4,14 +4,13 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import cl from 'classnames'
 import { useRouter } from 'next/router'
-import { BiArrowBack } from 'react-icons/bi'
 import { FaMedal } from 'react-icons/fa'
 
-import InfoTab from '../../components/profileTabs/Info'
-import MatchesTab from '../../components/profileTabs/Matches'
-import StatsTab from '../../components/profileTabs/Stats'
+import InfoTab from '../components/profileTabs/Info'
+import MatchesTab from '../components/profileTabs/Matches'
+import StatsTab from '../components/profileTabs/Stats'
 
-import styles from '../../../styles/Profile.module.scss'
+import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'Личные встречи', 'Статистика'];
 
@@ -20,11 +19,11 @@ const Profile: NextPage = () => {
 
   const activeTabContent = (() => {
     switch (activeTabIndex) {
-      case 'Информация':
+      case PROFILE_TABS[0]:
         return <InfoTab />;
-      case 'Личные встречи':
+      case PROFILE_TABS[1]:
         return <MatchesTab />;
-      case 'Статистика':
+      case PROFILE_TABS[2]:
         return <StatsTab />;
       default:
         return null;

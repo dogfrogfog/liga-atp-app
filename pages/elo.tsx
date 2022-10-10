@@ -6,7 +6,6 @@ import styles from '../styles/Home.module.css'
 const Elo: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Link href="/">home</Link>
       <br />
       <br />
       <div>

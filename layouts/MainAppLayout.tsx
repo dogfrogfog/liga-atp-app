@@ -11,7 +11,7 @@ import { HiViewList } from 'react-icons/hi'
 import styles from './MainAppLayout.module.scss'
 
 function MainAppLayout({ children }: { children: ReactNode }) {
-  const currentRoute = useRouter().pathname;
+  const currentRoute = useRouter().pathname
 
   return (
     <>

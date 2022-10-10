@@ -6,7 +6,6 @@ import styles from '../styles/Home.module.css'
 const Digest: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Link href="/">home</Link>
       <br />
       <br />
       <div>
