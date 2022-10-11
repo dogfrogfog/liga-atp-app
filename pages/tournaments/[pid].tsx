@@ -87,8 +87,8 @@ const TournamentPage: NextPage = () => {
               </Select>
             </FormControl>
             <ul className={styles.playersList}>
-              {Array(parseInt(stage.split('/')[1])).fill(1).map(() => (
-                <li>
+              {Array(parseInt(stage.split('/')[1])).fill(1).map((_, index) => (
+                <li key={index}>
                   <span>Кравченко С/Веремей Д</span>
                   <div>
                     <span>6-3</span>
