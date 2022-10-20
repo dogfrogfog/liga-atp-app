@@ -1,8 +1,12 @@
-.mainSection {
-  display: flex;
+.admin {
+  background-color: white;
 
-  .pageContainer {
-    width: 100%;
-    padding: 15px;
+  .mainSection {
+    display: flex;
+
+    .pageContainer {
+      width: 100%;
+      padding: 15px;
+    }
   }
 }

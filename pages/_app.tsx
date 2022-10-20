@@ -6,21 +6,18 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
 import PWALayout from '../layouts/PWALayout'
-// import AdminLayout from '../layouts/AdminLayout'
+import AdminLayout from '../layouts/AdminLayout'
 import MainAppLayout from '../layouts/MainAppLayout'
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  // admin
-  // if (router.pathname.startsWith('/admin')) {
-  //   return (
-  //     <PWALayout>
-  //       <AdminLayout>
-  //         <Component {...pageProps} />
-  //       </AdminLayout>
-  //     </PWALayout>
-  //   )
-  // }
+  if (router.pathname.startsWith('/admin')) {
+    return (
+      <AdminLayout>
+        <Component {...pageProps} />
+      </AdminLayout>
+    )
+  }
 
   // secondary pages
   if (

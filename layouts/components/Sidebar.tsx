@@ -1,59 +1,60 @@
-import { ReactNode } from 'react'
 import Link from 'next/link'
-// import { Menu, MenuProps } from 'antd-mobile'
-import { ImFilesEmpty } from 'react-icons/im'
 import { AiOutlineTrophy, AiOutlineHome } from 'react-icons/ai'
-import { BiNews, BiStats } from 'react-icons/bi'
-import { GiTabletopPlayers } from 'react-icons/gi'
+import { BiNews, BiStats, BiSupport } from 'react-icons/bi'
+import { GiBabyfootPlayers } from 'react-icons/gi'
+import cl from 'classnames'
 
-import styles from './Sidebar.module.scss'
-
-type MenuItem = Required<any>['items'][number];
-
-function getItem(label: ReactNode, key: string, icon?: ReactNode, children?: MenuItem[]): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-// const items: MenuProps['items'] = [
-//   getItem(<Link href="/admin/">Главная</Link>, 'home', <AiOutlineHome />),
-//   getItem('Игроки', 'users', <GiTabletopPlayers />, [
-//     getItem(<Link href="/admin/users/list">Список игроков</Link>, 'users/list'),
-//     getItem(<Link href="/admin/users/approve">Подтвердить</Link>, 'users/approve'),
-//     getItem(<Link href="/admin/users/elo">Эло</Link>, 'users/elo'),
-//   ]),
-//   getItem('Турниры', 'tournaments', <AiOutlineTrophy />, [
-//     getItem(<Link href="/admin/tournaments/list">Список турниров</Link>, 'tournaments/list'),
-//     getItem(<Link href="/admin/tournaments/create">Создать</Link>, 'tournaments/create'),
-//     getItem(<Link href="/admin/tournaments/formats">Форматы турниров</Link>, 'tournaments/formats'),
-//   ]),
-//   getItem('Контент', 'content', <BiNews />, [
-//     getItem(<Link href="/admin/content/news">Новости</Link>, 'content/news'),
-//     getItem(<Link href="/admin/content/digest">Дайджест</Link>, 'content/digest'),
-//     getItem(<Link href="/admin/content/stream">Трансляция</Link>, 'content/stream'),
-//   ]),
-//   getItem('Страницы', 'pages', <ImFilesEmpty />, [
-//     getItem(<Link href="/admin/pages/list">Список страниц</Link>, 'pages/list'),
-//     getItem(<Link href="/admin/pages/create">Создать</Link>, 'pages/create'),
-//   ]),
-//   getItem(<Link href="/admin/stats">Статистика</Link>, 'stats', <BiStats />),
-// ];
+import styles from '../../styles/Sidebar.module.scss'
 
 const Sidebar = () => {
   return (
     <div className={styles.sidebarContainer}>
-      {/* <Menu
-        defaultSelectedKeys={['home']}
-        mode="inline"
-        inlineCollapsed={false}
-        // items={items}
-      /> */}
+      <div className={styles.sidebarTop}>
+        <div className={styles.menuItem}>
+          <AiOutlineHome />
+          <Link href="/admin">
+            Главная
+          </Link>
+        </div>
+        <div className={styles.menuItem}>
+          <GiBabyfootPlayers />
+          <Link href="/admin/players">
+            Игроки
+          </Link>
+        </div>
+        <div className={styles.menuItem}>
+          <AiOutlineTrophy />
+          <Link href="/admin/tournaments">
+            Турниры
+          </Link>
+        </div>
+        <div className={styles.menuItem}>
+          <BiNews />
+          <Link href="/admin/content">
+            Контент
+          </Link>
+        </div>
+        <div className={styles.menuItem}>
+          <BiStats />
+          <Link href="/admin/stats">
+            Статистика
+          </Link>
+        </div>
+      </div>
+      <div className={styles.sidebarTop}>
+        <div className={cl(styles.menuItem, styles.supportItem)}>
+          <BiSupport />
+          <a href="mailto:maksim.hodasevich@gmail.com">
+            Support
+            <br />
+            <span>
+              (only emergency)
+            </span>
+          </a>
+        </div>
+      </div>
     </div>
-  );
-};
+  )
+}
 
 export default Sidebar

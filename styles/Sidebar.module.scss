@@ -1,0 +1,31 @@
+@import './variables.scss';
+
+.sidebarContainer {
+  width: 275px;
+  min-height: calc(100vh - 100px);
+  padding: $big-padding;
+  border-right: 1px solid $border-color;
+  color: $custom-darkgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .menuItem {
+    display: flex;
+    margin-right: 10px;
+    margin-bottom: 20px;
+
+    svg {
+      height: 20px;
+      width: 20px;
+      margin-right: 20px;
+      color: $custom-darkgray;
+    }
+
+    &.supportItem {
+      color: $custom-red;
+      margin-top: 20px;
+      margin-bottom: 0;
+    }
+  }
+}
