@@ -2,70 +2,22 @@
 
 .headerContainer {
   height: $header-height;
+  padding: $padding;
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: $custom-darkgray;
-  
-  .logo {
-    padding: 15px;
-    width: 120px;
-    font-size: 35px;
-    text-align: center;
-    margin-right: 50px;
+  justify-content: space-between;
+  background: $custom-darkgray;
+  background: linear-gradient(90deg, $custom-darkgray 0%, $custom-aqua 25%);
+
+  svg, 
+  .image {
+    width: 55px;
+    height: 55px;
   }
 
-  .menu {
-    width: 100%;
-
-    ul {
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      display: flex;
-      margin: 0 auto;
-
-      li {
-        cursor: pointer;
-        text-align: center;
-        width: 200px;
-        padding: 15px;
-        border-bottom: 2px solid black;
-        border-right: 2px solid black;
-        margin-right: 15px;
-      }
-    }
-  }
-
-  .user {
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-
-    ul {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-
-      li {
-        list-style-type: none;
-        margin-right: 15px;
-        
-        svg {
-          width: 35px;
-          height: 35px;
-          cursor: pointer;
-        }
-      }
-    }
-
-    .image {
-      cursor: pointer;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background-color: yellowgreen;
-    }
+  svg {
+    cursor: pointer;
+    color: $custom-darkgray;
   }
 }

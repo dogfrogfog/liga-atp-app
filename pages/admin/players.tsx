@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 
-const ProfilePage: NextPage = () => {
+const Players: NextPage = () => {
   return (
     <div>
       <h1>Профиль пользователя админки</h1>
@@ -8,4 +8,4 @@ const ProfilePage: NextPage = () => {
   )
 }
 
-export default ProfilePage
+export default Players

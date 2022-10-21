@@ -7,10 +7,10 @@ import styles from './AdminLayout.module.scss'
 
 function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className={styles.admin}>
+    <div className={styles.layoutContainer}>
       <Head>
         <title>Admin-panel</title>
-        <meta name="description" content="liga cms/admin panel" />
+        <meta name="description" content="admin panel | Liga Tennisa | Liga" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

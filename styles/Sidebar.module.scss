@@ -3,7 +3,7 @@
 .sidebarContainer {
   width: 275px;
   min-height: calc(100vh - 100px);
-  padding: $big-padding;
+  padding: $padding;
   border-right: 1px solid $border-color;
   color: $custom-darkgray;
   display: flex;
@@ -12,8 +12,15 @@
 
   .menuItem {
     display: flex;
-    margin-right: 10px;
-    margin-bottom: 20px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.15s;
+    
+    &:hover {
+      background-color: $custom-lightgray;
+      transition: 0.15s;
+    }
 
     svg {
       height: 20px;

@@ -1,12 +1,15 @@
-.admin {
-  background-color: white;
+@import '../styles/variables.scss';
+
+.layoutContainer {
+  color: $custom-darkgray;
 
   .mainSection {
     display: flex;
-
+    background-color: $custom-white;
+    
     .pageContainer {
+      padding: $padding;
       width: 100%;
-      padding: 15px;
     }
   }
 }
