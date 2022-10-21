@@ -9,7 +9,7 @@
     
     .pageContainer {
       padding: $padding;
-      width: 100%;
+      width: calc(100% - $sidebar-width);
     }
   }
 }

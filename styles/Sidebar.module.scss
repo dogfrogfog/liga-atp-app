@@ -1,7 +1,7 @@
 @import './variables.scss';
 
 .sidebarContainer {
-  width: 275px;
+  width: $sidebar-width;
   min-height: calc(100vh - 100px);
   padding: $padding;
   border-right: 1px solid $border-color;
