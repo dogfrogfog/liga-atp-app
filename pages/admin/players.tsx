@@ -1,177 +1,151 @@
-import { useState } from 'react'
+import { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import type { NextPage } from 'next'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getSortedRowModel,
 } from '@tanstack/react-table'
+import axios from 'axios'
 
 import PageTitle from '../../ui-kit/PageTitle'
 
 import styles from './players.module.scss';
+// import { GiConsoleController } from 'react-icons/gi'
 
-// should match prisma interface
-type Player = {
-  // id: number
-  first_name: string
-  last_name: string
-  date_of_birth: string
-  city: string
-  country: string
-  age: number
-  job_description: string
-  years_in_tennis: number
-  gameplay_style: string
-  forehand: string
-  beckhand: string
-  insta_link: string
-  is_coach: boolean
-  // 1st element - gold medals, 2nd element - silver medals
-  medals: [number, number]
-  email: string
-  phone: string
-  avatar: string
-  level: string
+const fieslds = [
+  'id',
+  'first_name',
+  'last_name',
+  'date_of_birth',
+  'city',
+  'country',
+  'age',
+  'job_description',
+  'years_in_tennis',
+  'gameplay_style',
+  'forehand',
+  'beckhand',
+  'insta_link',
+  'is_coach',
+  'medals',
+  'email',
+  'phone',
+  'avatar',
+  'level'
+];
+
+const columnHelper = createColumnHelper<any>()
+
+const columns = fieslds.map((fiesld) => (
+  columnHelper.accessor(fiesld, {
+    header: fiesld,
+  })
+))
+
+interface PaginationProps {
+  pageIndex: number
+  pageSize: number
 }
 
-const defaultData: Player[] = [
-  {
-    // id: 1,
-    first_name: 'Евгений',
-    last_name: 'Тищенко',
-    date_of_birth: '11.06.1989',
-    city: 'Minsk',
-    // add flags
-    country: 'Belarus',
-    age: 32,
-    job_description: 'Танцы',
-    years_in_tennis: 6,
-    gameplay_style: 'медленный',
-    forehand: 'правый',
-    beckhand: 'двуручный',
-    insta_link: 'instagram.com/liga_tennisa',
-    is_coach: false,
-    medals: [0, 6],
-    email: 'evgeby.ttiwenko@gmail.com',
-    phone: '+375291331111',
-    avatar: '<link>',
-    level: 'chellenger',
-  },
-]
-
-const columnHelper = createColumnHelper<Player>()
-
-const columns = [
-  columnHelper.accessor('first_name', {
-    header: 'first_name',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('last_name', {
-    header: 'last_name',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('date_of_birth', {
-    header: 'date_of_birth',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('city', {
-    header: 'city',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('country', {
-    header: 'country',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('age', {
-    header: 'age',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('job_description', {
-    header: 'job_description',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('years_in_tennis', {
-    header: 'years_in_tennis',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('gameplay_style', {
-    header: 'gameplay_style',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('forehand', {
-    header: 'forehand',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('beckhand', {
-    header: 'beckhand',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('insta_link', {
-    header: 'insta_link',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('is_coach', {
-    header: 'is_coach',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('medals', {
-    header: 'medals',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('email', {
-    header: 'email',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('phone', {
-    header: 'phone',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('avatar', {
-    header: 'avatar',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('avatar', {
-    header: 'avatar',
-    footer: info => info.column.id,
-  }),
-]
+const Pagination = ({
+  setPagination,
+  pagination,
+}: {
+  pagination: PaginationProps,
+  setPagination: Dispatch<SetStateAction<PaginationProps>>,
+}) => (
+  <div className={styles.paginationContainer}>
+    <div className={styles.arrows}>
+      <button
+        onClick={() => setPagination((v) => ({ ...v, pageIndex: pagination.pageIndex - 1 }))}
+        disabled={pagination.pageIndex === 0}
+      >
+        {'<'}
+      </button>
+      <button
+        onClick={() => setPagination((v) => ({ ...v, pageIndex: pagination.pageIndex + 1 }))}
+      >
+        {'>'}
+      </button>
+      <select
+        value={pagination.pageSize}
+        onChange={e => {
+          setPagination(v => ({ ...v, pageSize: Number(e.target.value) }))
+        }}
+      >
+        {[25, 50, 75, 100].map(pageSize => (
+          <option key={pageSize} value={pageSize}>
+            {pageSize}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+)
 
 const Table = () => {
-  const [data, setData] = useState(() => [...defaultData])
+  const [data, setData] = useState<any[]>([])
+  const [sorting, setSorting] = useState<any>([])
+  const [pagination, setPagination] = useState<{ pageIndex: number; pageSize: number }>({ pageIndex: 0, pageSize: 25 })
+
+  useEffect(() => {
+    const fetchWrapper = async () => {
+      const response = await axios.get(`/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`)
+
+      if (response.status === 200) {
+        setData(response.data)
+      }
+    }
+
+    fetchWrapper()
+  }, [pagination])
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   })
 
   return (
     <div className={styles.tableContainer}>
       <table>
         <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              <td>
+          {table.getHeaderGroups().map((headerGroup, index) => (
+            <tr key={headerGroup.id + index}>
+              {/* <td key="checkbox">
                 <input type="checkbox" />
-              </td>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
+              </td> */}
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
                   )}
+                  {{
+                    asc: ' 🔼',
+                    desc: ' 🔽',
+                  }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              <td>
+          {table.getRowModel().rows.map((row, index) => (
+            <tr key={row.id + index}>
+              {/* <td key="checkbox1">
                 <input type="checkbox" />
-              </td>
+              </td> */}
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -180,46 +154,29 @@ const Table = () => {
             </tr>
           ))}
         </tbody>
-        {/* <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                      header.column.columnDef.footer,
-                      header.getContext()
-                    )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot> */}
       </table>
+      <Pagination pagination={pagination} setPagination={setPagination} />
     </div>
   )
 }
 
-const Players: NextPage = () => {
-  return (
-    <div className={styles.pageContainer}>
-      <div className={styles.tableControls}>
-        <PageTitle>
-          Управление игроками
-        </PageTitle>
-        <div className={styles.buttons}>
-          <button>
-            delete
-          </button>
-          <button>
-            update
-          </button>
-        </div>
+const Players: NextPage = () => (
+  <div className={styles.pageContainer}>
+    <div className={styles.tableControls}>
+      <PageTitle>
+        Управление игроками
+      </PageTitle>
+      <div className={styles.buttons}>
+        <button>
+          delete
+        </button>
+        <button>
+          update
+        </button>
       </div>
-      <Table />
     </div>
-  )
-}
+    <Table />
+  </div>
+)
 
 export default Players

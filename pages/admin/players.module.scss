@@ -27,26 +27,41 @@
 
     table {
       border-spacing: 0;
+      font-size: 18px;
     }
 
     thead {
       background-color: $custom-lightgray;
+      font-size: 20px;
     }
   
     th,
     td {
-      padding: $padding;
+      padding: $small-padding;
       min-width: 200px;
       text-align: left;
       border: 1px solid $border-color;
 
+      // checkbox styles
       &:first-child {
-        min-width: initial;
+        // min-width: initial;
 
-        input {
-          width: 30px;
-          height: 30px;
-        }
+        // input {
+        //   width: 30px;
+        //   height: 30px;
+        // }
+      }
+    }
+  }
+
+  .paginationContainer {
+    padding: $padding;
+
+    .arrows {
+      button,
+      select {
+        margin-right: 5px;
+        margin-bottom: 15px;
       }
     }
   }

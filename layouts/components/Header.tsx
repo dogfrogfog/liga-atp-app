@@ -12,7 +12,7 @@ function Header() {
         <Image alt='liga-logo' src={ligaLogo} />
       </div>
       <Link href="/admin/settings">
-        <FiSettings />
+        <span><FiSettings /></span>
       </Link>
     </header>
   )
