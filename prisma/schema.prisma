@@ -151,7 +151,7 @@ model core_match {
 
 model core_player {
   id                                            Int                              @id @default(autoincrement())
-  first_name                                    String
+  first_name                                     String
   last_name                                     String
   date_of_birth                                 String?
   city                                          String
@@ -159,6 +159,15 @@ model core_player {
   email                                         String?
   phone                                         String?
   avatar                                        String?
+  age                                           String?
+  job_description                               String? 
+  years_in_tennis                               String?
+  gameplay_style                                String?
+  forehand                                      String?
+  beckhand                                      String?
+  insta_link                                    String?
+  is_coach                                      Int?
+  medals                                        Int?
   level                                         Int
   core_elorankingsdoublescurrent                core_elorankingsdoublescurrent[]
   core_elorankingssinglescurrent                core_elorankingssinglescurrent[]
