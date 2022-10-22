@@ -1,11 +1,11 @@
 import type { NextPage } from 'next'
 
-const Home: NextPage = () => {
+const AdminHome: NextPage = () => {
   return (
     <div>
-      home 
+      AdminHome 
     </div>
   )
 }
 
-export default Home
+export default AdminHome
