@@ -6,13 +6,8 @@ export default {
   component: Button,
 } as ComponentMeta<typeof Button>;
 
+
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const ButtonStory = Template.bind({});
-
-ButtonStory.args = {
-  type: 'primary',
-  disabled: false,
-  isLoading: false,
-  fullWidth: true
-}
+export const Primary = Template.bind({});
+Primary.args = { type: 'primary', disabled: true, isLoading: true, fullWidth: true };

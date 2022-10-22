@@ -1,3 +1,4 @@
+import type { FC, ReactNode } from 'react'
 import styles from './styles.module.css'
 
 interface ButtonProps {
@@ -5,10 +6,11 @@ interface ButtonProps {
   disabled: true | false,
   isLoading: true | false,
   fullWidth: true | false
+  children: ReactNode
 }
 
-const Button = ({ type , disabled, isLoading, fullWidth }: ButtonProps) => {
-    <button className={styles.Button} ></button>
+const Button: FC<ButtonProps> = ({ type, disabled, isLoading, fullWidth, children }: ButtonProps) => {
+    <button className={styles.Button}>{children}</button>
 }
 
 export default Button
