@@ -1,6 +1,6 @@
 module.exports = {
   stories: [
-    "../ui-kit/**/*.stories.@(ts|tsx)"
+    "../ui-kit/stories/*.stories.@(ts|tsx)"
   ],
   addons: [
     "@storybook/addon-links",
@@ -11,4 +11,4 @@ module.exports = {
   core: {
     builder: "@storybook/builder-webpack5",
   },
-};
+}
