@@ -1,6 +1,12 @@
-.button {
-  margin: 0;
-  padding: 15px;
-  color: black;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '../../styles/variables.scss';
+
+.Button {
+  margin: 10;
+  padding: $padding;
+  color: white;
   background-color: blue;
 }
