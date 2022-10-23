@@ -16,6 +16,10 @@
       button {
         font-size: 18px;
         margin-left: 20px;
+
+        &[disabled] {
+          cursor: not-allowed;
+        }
       }
     }
   }

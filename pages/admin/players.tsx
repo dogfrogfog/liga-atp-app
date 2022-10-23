@@ -168,8 +168,6 @@ const Players: NextPage = () => {
     fetchWrapper()
   }, [pagination])
   
-  console.log(isEditing);
-
   const table = useReactTable<any>({
     data,
     columns,
@@ -186,6 +184,9 @@ const Players: NextPage = () => {
     setSelectedPlayer(undefined)
   }
 
+  // add isLoading
+  const isDisabled = selectedPlayer === undefined;
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.tableControls}>
@@ -193,16 +194,16 @@ const Players: NextPage = () => {
           Управление игроками
         </PageTitle>
         <div className={styles.buttons}>
-          <button onClick={() => setEditingStatus(true)}>
+          <button disabled={isDisabled} onClick={() => setEditingStatus(true)} style={{ backgroundColor: 'yellow' }}>
             edit
           </button>
-          <button>
+          <button disabled={isDisabled} style={{ backgroundColor: 'green' }}>
             update
           </button>
-          <button>
+          <button disabled={isDisabled} style={{ backgroundColor: 'red' }}>
             delete
           </button>
-          <button onClick={handleResetClick}>
+          <button onClick={handleResetClick} style={{ backgroundColor: 'grey' }}>
             reset
           </button>
         </div>
