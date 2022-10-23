@@ -6,7 +6,9 @@ import {
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
+  Table as TypeTable,
 } from '@tanstack/react-table'
+import { core_player } from '@prisma/client'
 import axios from 'axios'
 
 import PageTitle from '../../ui-kit/PageTitle'
@@ -85,10 +87,74 @@ const Pagination = ({
   </div>
 )
 
-const Table = () => {
+const Table = ({
+  table,
+  selectedPlayer,
+  setSelectedPlayer,
+  pagination,
+  setPagination,
+}: {
+  table: TypeTable<core_player>;
+  selectedPlayer: any,
+  setSelectedPlayer: any,
+  pagination: PaginationProps;
+  setPagination: Dispatch<SetStateAction<PaginationProps>>;
+}) => (
+  <div className={styles.tableContainer}>
+    <table>
+      <thead>
+        {table.getHeaderGroups().map((headerGroup, index) => (
+          <tr key={headerGroup.id + index}>
+            <td />
+            {headerGroup.headers.map((header) => (
+              <th
+                key={header.id}
+                onClick={header.column.getToggleSortingHandler()}
+              >
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext()
+                )}
+                {{
+                  asc: ' 🔼',
+                  desc: ' 🔽',
+                }[header.column.getIsSorted() as string] ?? null}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody>
+        {table.getRowModel().rows.map((row, index) => (
+          <tr
+            key={row.id + index}
+            className={selectedPlayer === index ? styles.selectedRow : ''}
+          >
+            <td key="checkbox">
+              <input
+                checked={selectedPlayer === index}
+                onChange={() => setSelectedPlayer((v) => v === index ? undefined : index)} type="checkbox"
+              />
+            </td>
+            {row.getVisibleCells().map(cell => (
+              <td key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <Pagination pagination={pagination} setPagination={setPagination} />
+  </div>
+)
+
+const Players: NextPage = () => {
   const [data, setData] = useState<any[]>([])
   const [sorting, setSorting] = useState<any>([])
-  const [pagination, setPagination] = useState<{ pageIndex: number; pageSize: number }>({ pageIndex: 0, pageSize: 25 })
+  const [pagination, setPagination] = useState<PaginationProps>({ pageIndex: 0, pageSize: 25 })
+  const [selectedPlayer, setSelectedPlayer] = useState<number | undefined>()
+  const [isEditing, setEditingStatus] = useState(false)
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -101,8 +167,10 @@ const Table = () => {
 
     fetchWrapper()
   }, [pagination])
+  
+  console.log(isEditing);
 
-  const table = useReactTable({
+  const table = useReactTable<any>({
     data,
     columns,
     state: {
@@ -113,70 +181,42 @@ const Table = () => {
     getSortedRowModel: getSortedRowModel(),
   })
 
+  const handleResetClick = () => {
+    setEditingStatus(false)
+    setSelectedPlayer(undefined)
+  }
+
   return (
-    <div className={styles.tableContainer}>
-      <table>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup, index) => (
-            <tr key={headerGroup.id + index}>
-              {/* <td key="checkbox">
-                <input type="checkbox" />
-              </td> */}
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                  {{
-                    asc: ' 🔼',
-                    desc: ' 🔽',
-                  }[header.column.getIsSorted() as string] ?? null}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <tr key={row.id + index}>
-              {/* <td key="checkbox1">
-                <input type="checkbox" />
-              </td> */}
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Pagination pagination={pagination} setPagination={setPagination} />
+    <div className={styles.pageContainer}>
+      <div className={styles.tableControls}>
+        <PageTitle>
+          Управление игроками
+        </PageTitle>
+        <div className={styles.buttons}>
+          <button onClick={() => setEditingStatus(true)}>
+            edit
+          </button>
+          <button>
+            update
+          </button>
+          <button>
+            delete
+          </button>
+          <button onClick={handleResetClick}>
+            reset
+          </button>
+        </div>
+      </div>
+      <Table
+        // @ts-ignore
+        table={table}
+        selectedPlayer={selectedPlayer}
+        setSelectedPlayer={setSelectedPlayer}
+        pagination={pagination}
+        setPagination={setPagination}
+      />
     </div>
   )
 }
-
-const Players: NextPage = () => (
-  <div className={styles.pageContainer}>
-    <div className={styles.tableControls}>
-      <PageTitle>
-        Управление игроками
-      </PageTitle>
-      <div className={styles.buttons}>
-        <button>
-          delete
-        </button>
-        <button>
-          update
-        </button>
-      </div>
-    </div>
-    <Table />
-  </div>
-)
 
 export default Players

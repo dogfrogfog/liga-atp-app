@@ -34,6 +34,10 @@
       background-color: $custom-lightgray;
       font-size: 20px;
     }
+
+    .selectedRow {
+      background-color: $custom-lightgray;
+    }
   
     th,
     td {
@@ -42,14 +46,13 @@
       text-align: left;
       border: 1px solid $border-color;
 
-      // checkbox styles
       &:first-child {
-        // min-width: initial;
+        min-width: initial;
 
-        // input {
-        //   width: 30px;
-        //   height: 30px;
-        // }
+        input {
+          width: 30px;
+          height: 30px;
+        }
       }
     }
   }
