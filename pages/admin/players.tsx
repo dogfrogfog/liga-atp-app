@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import { useEffect, useState, Dispatch, SetStateAction, ChangeEvent } from 'react'
 import type { NextPage } from 'next'
 import {
   createColumnHelper,
@@ -90,13 +90,13 @@ const Pagination = ({
 const Table = ({
   table,
   selectedPlayer,
-  setSelectedPlayer,
+  handleCheckboxClick,
   pagination,
   setPagination,
 }: {
   table: TypeTable<core_player>;
   selectedPlayer: any,
-  setSelectedPlayer: any,
+    handleCheckboxClick: (v: any) => void,
   pagination: PaginationProps;
   setPagination: Dispatch<SetStateAction<PaginationProps>>;
 }) => (
@@ -133,7 +133,7 @@ const Table = ({
             <td key="checkbox">
               <input
                 checked={selectedPlayer === index}
-                onChange={() => setSelectedPlayer((v) => v === index ? undefined : index)} type="checkbox"
+                onChange={() => handleCheckboxClick(index)} type="checkbox"
               />
             </td>
             {row.getVisibleCells().map(cell => (
@@ -149,12 +149,43 @@ const Table = ({
   </div>
 )
 
+const createPlayer = async (player: core_player) => {
+  console.log(player)
+}
+
+const AddPlayerRow = ({ formValue, setPlayerForm }: any) => {
+  const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPlayerForm((v: any) => ({ ...v, [e.target.name]: e.target.value }))
+  }
+
+  return (
+    <>
+      {fieslds.map((fieldName) => {
+        if (fieldName !== 'id') {
+          return (
+            <input
+              key={fieldName}
+              type='text'
+              onChange={handleFormChange}
+              placeholder={fieldName}
+              value={formValue[fieldName]}
+              name={fieldName}
+            />
+          )
+        }
+      })}
+      <button onClick={() => createPlayer(formValue)}>submit</button>
+    </>
+  )
+}
+
 const Players: NextPage = () => {
   const [data, setData] = useState<any[]>([])
   const [sorting, setSorting] = useState<any>([])
   const [pagination, setPagination] = useState<PaginationProps>({ pageIndex: 0, pageSize: 25 })
   const [selectedPlayer, setSelectedPlayer] = useState<number | undefined>()
   const [isEditing, setEditingStatus] = useState(false)
+  const [playerForm, setPlayerForm] = useState<any>()
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -182,6 +213,18 @@ const Players: NextPage = () => {
   const handleResetClick = () => {
     setEditingStatus(false)
     setSelectedPlayer(undefined)
+    setPlayerForm(undefined)
+  }
+
+  const handleAddPlayerClick = () => {
+    setEditingStatus(true)
+    setPlayerForm({})
+    setSelectedPlayer(undefined)
+  }
+
+  const handleCheckboxClick = (index: number) => {
+    setPlayerForm(undefined)
+    setSelectedPlayer(v => v === index ? undefined : index)
   }
 
   // add isLoading
@@ -194,6 +237,13 @@ const Players: NextPage = () => {
           Управление игроками
         </PageTitle>
         <div className={styles.buttons}>
+          <button
+            disabled={isEditing}
+            style={{ backgroundColor: 'blue', color: 'white' }}
+            onClick={handleAddPlayerClick}
+          >
+            add player
+          </button>
           <button disabled={isDisabled} onClick={() => setEditingStatus(true)} style={{ backgroundColor: 'yellow' }}>
             edit
           </button>
@@ -203,16 +253,17 @@ const Players: NextPage = () => {
           <button disabled={isDisabled} style={{ backgroundColor: 'red' }}>
             delete
           </button>
-          <button onClick={handleResetClick} style={{ backgroundColor: 'grey' }}>
+          <button onClick={handleResetClick} style={{ backgroundColor: 'grey', color: 'white' }}>
             reset
           </button>
         </div>
       </div>
+      {playerForm && <AddPlayerRow formValue={playerForm} setPlayerForm={setPlayerForm} />}
       <Table
         // @ts-ignore
         table={table}
         selectedPlayer={selectedPlayer}
-        setSelectedPlayer={setSelectedPlayer}
+        handleCheckboxClick={handleCheckboxClick}
         pagination={pagination}
         setPagination={setPagination}
       />
