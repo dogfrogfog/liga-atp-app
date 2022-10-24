@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab'
 import cl from 'classnames'
 import { useRouter } from 'next/router'
 import { FaMedal } from 'react-icons/fa'
+import { PrismaClient } from '@prisma/client'
 
 import InfoTab from '../components/profileTabs/Info'
 import MatchesTab from '../components/profileTabs/Matches'
@@ -14,7 +15,7 @@ import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'Личные встречи', 'Статистика'];
 
-const Profile: NextPage = () => {
+const Profile: NextPage = ({ player }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
 
   const activeTabContent = (() => {
@@ -33,6 +34,8 @@ const Profile: NextPage = () => {
   const handleTabChange = (_: any, value: number) => {
     setActiveTabIndex(PROFILE_TABS[value])
   }
+
+  console.log(player)
 
   return (
     <div className={styles.profileContainer}>
@@ -94,6 +97,23 @@ const ProfileHeader = () => {
       </div>
     </div>
   );
+}
+
+export const getServerSideProps = async (ctx: any) => {
+  const prisma = new PrismaClient()
+
+  // data inside sqlite db
+  const player = await prisma.core_player.findUnique({
+    where: {
+      id: parseInt(ctx.query.pid)
+    }
+  })
+
+  return {
+    props: {
+      player,
+    }
+  }
 }
 
 export default Profile
