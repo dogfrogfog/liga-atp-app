@@ -17,7 +17,7 @@ const Button: FC<ButtonProps> = ({
   fullWidth = false,
 }: ButtonProps) => {
   return (
-    <button className={styles.Button}>{children}</button>
+    <button className="p-10">{children}</button>
   )
 }
 
