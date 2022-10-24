@@ -1,5 +1,7 @@
 import type { NextPage } from 'next'
+import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
+import axios from 'axios'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -17,7 +19,20 @@ interface PlayersPageProps {
 }
 
 const Players: NextPage<PlayersPageProps> = ({ players }) => {
-  console.log(players)
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState(players)
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value)
+  }
+
+  const submitSearch = async () => {
+    const response = await axios.get(`/api/players/search?name=${search}`)
+
+    if (response.status === 200) {
+      setData(response.data)
+    }
+  }
 
   return (
     <div className={styles.playersContainer}>
@@ -32,7 +47,15 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
       <br />
       <br />
       <br />
-      <TextField label="Введите имя игрока" variant="filled" color='primary' />
+      <TextField
+        color="primary"
+        label="Введите имя игрока"
+        variant="filled"
+        value={search}
+        onChange={handleSearch}
+      />
+      <button onClick={() => setSearch('')}>clear</button>
+      <button onClick={() => submitSearch()}>search</button>
       <span className={styles.listTitle}>Список игроков</span>
       <TableContainer className={styles.playersTable}>
         <Table>
@@ -44,14 +67,18 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {players.map(({ id, first_name, last_name, level, core_elorankingssinglescurrent }) => (
+            {data.map(({ id, first_name, last_name, level, core_rankingssinglescurrent }) => (
               <Link key={id} href={'/players/' + id}>
                 <TableRow key={id}>
                   <TableCell component="th" scope="row">
                     {first_name + ' ' + last_name}
                   </TableCell>
                   <TableCell align="left">{level}</TableCell>
-                  <TableCell align="right">{core_elorankingssinglescurrent}</TableCell>
+                  <TableCell align="right">
+                    {core_rankingssinglescurrent.length > 0
+                      ? core_rankingssinglescurrent[core_rankingssinglescurrent.length - 1].points
+                      : 0}
+                  </TableCell>
                 </TableRow>
               </Link>
             ))}
@@ -67,10 +94,9 @@ export const getServerSideProps = async () => {
 
   // data inside sqlite db
   const players = await prisma.core_player.findMany({
-    take: 50,
-  });
-
-  console.log(players);
+    take: 10,
+    include: { core_rankingssinglescurrent: true }
+  })
 
   return {
     props: {

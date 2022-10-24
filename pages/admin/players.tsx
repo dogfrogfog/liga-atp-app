@@ -150,12 +150,24 @@ const Table = ({
 )
 
 const createPlayer = async (player: core_player) => {
-  console.log(player)
+  const response = await axios.post('/api/players', { body: player });
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw new Error(response.statusText)
 }
 
-const AddPlayerRow = ({ formValue, setPlayerForm }: any) => {
+const AddPlayerRow = ({ formValue, setPlayerForm, setData }: any) => {
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPlayerForm((v: any) => ({ ...v, [e.target.name]: e.target.value }))
+  }
+
+  const handleCreatePlayes = async () => {
+    const data = await createPlayer({ ...formValue, is_coach: parseInt(formValue.is_coach), medals: 1, level: 1 })
+
+    setData(v => [data].concat(v))
   }
 
   return (
@@ -174,7 +186,7 @@ const AddPlayerRow = ({ formValue, setPlayerForm }: any) => {
           )
         }
       })}
-      <button onClick={() => createPlayer(formValue)}>submit</button>
+      <button onClick={handleCreatePlayes}>submit</button>
     </>
   )
 }
@@ -216,7 +228,7 @@ const Players: NextPage = () => {
     setPlayerForm(undefined)
   }
 
-  const handleAddPlayerClick = () => {
+  const openCreatePlayerForm = async () => {
     setEditingStatus(true)
     setPlayerForm({})
     setSelectedPlayer(undefined)
@@ -240,7 +252,7 @@ const Players: NextPage = () => {
           <button
             disabled={isEditing}
             style={{ backgroundColor: 'blue', color: 'white' }}
-            onClick={handleAddPlayerClick}
+            onClick={openCreatePlayerForm}
           >
             add player
           </button>
@@ -258,7 +270,7 @@ const Players: NextPage = () => {
           </button>
         </div>
       </div>
-      {playerForm && <AddPlayerRow formValue={playerForm} setPlayerForm={setPlayerForm} />}
+      {playerForm && <AddPlayerRow setData={setData} formValue={playerForm} setPlayerForm={setPlayerForm} />}
       <Table
         // @ts-ignore
         table={table}
