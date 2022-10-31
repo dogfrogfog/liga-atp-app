@@ -44,14 +44,7 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
   const [data, setData] = useState<core_match[]>([])
   const [pagination, setPagination] = useState({ take: 10, skip: 0 })
 
-  console.log(data)
-
-  // const name1 = data[0]?.core_player_core_match_player1_idTocore_player?.first_name + ' ' + data[0]?.core_player_core_match_player1_idTocore_player?.last_name
-  // const name1 = data[0]?.core_player_core_match_player2_idTocore_player?.first_name + ' ' + data[0]?.core_player_core_match_player2_idTocore_player?.last_name
-  
-  // console.log(name1)
-
-
+  // todo: move fetch to upper component and pass data as props 
   useEffect(() => {
     const fetchWrapper = async () => {
       // todo: refactor
@@ -81,18 +74,6 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
       ))}
   </>
   )
-}
-
-export const getServerSideProps = async () => {
-  // todo: add pagination
-  // todo: add pagination ui element
-
-
-  // return {
-  //   props: {
-  //     matches
-  //   }
-  // }
 }
 
 export default MatchesTab

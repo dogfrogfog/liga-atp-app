@@ -14,7 +14,7 @@ import { LevelNumberMap } from '../../constants/values'
 
 import styles from '../../styles/Profile.module.scss'
 
-const PROFILE_TABS = ['Информация', 'Личные встречи', 'Статистика'];
+const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
 const Profile: NextPage<{ player: core_player }> = ({ player }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
@@ -40,7 +40,8 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
     medals,
     level,
     // add height to db
-    height = 170,
+    // height = 170,
+    core_rankingssinglescurrent,
   } = player;
 
   const activeTabContent = (() => {
@@ -50,7 +51,7 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
           <InfoTab
             age={age}
             city={city}
-            height={height}
+            height={170}
             job_description={job_description}
             years_in_tennis={years_in_tennis}
             gameplay_style={gameplay_style}
@@ -62,7 +63,7 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
       case PROFILE_TABS[1]:
         return <MatchesTab playerId={id} />;
       case PROFILE_TABS[2]:
-        return <StatsTab />;
+        return <StatsTab playerId={id} />;
       default:
         return null;
     }
@@ -72,12 +73,17 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
     setActiveTabIndex(PROFILE_TABS[value])
   }
 
+  // get last node from db
+  const { position, points } = core_rankingssinglescurrent[core_rankingssinglescurrent.length - 1]
+
   return (
     <div className={styles.profileContainer}>
       {/* @ts-ignore */}
       <ProfileHeader
         name={first_name + ' ' + last_name}
         level={LevelNumberMap[level.toString()]}
+        points={points}
+        position={position}
       />
       <section>
         <Tabs
@@ -108,9 +114,11 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
 interface IProfileHeaderProps {
   name: string
   level: string
+  points: string
+  position: string
 }
 
-const ProfileHeader = ({ name, level }: IProfileHeaderProps) => {
+const ProfileHeader = ({ name, level, points, position }: IProfileHeaderProps) => {
   return (
     <div className={styles.profileHeader}>
       <span className={styles.status}>Тренер</span>
@@ -126,12 +134,15 @@ const ProfileHeader = ({ name, level }: IProfileHeaderProps) => {
               <FaMedal color='yellow' />
               {'<3>'}
             </div>
-            <div className={styles.medal}>
+            {/* <div className={styles.medal}>
               <FaMedal color='lightgrey' />
               {'<6>'}
-            </div>
+            </div> */}
           </div>
-          <span className={styles.elo}>1444</span>
+          <span>
+            points: <span className={styles.elo}>{points}</span>
+            position: <span className={styles.elo}>{position}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -145,6 +156,9 @@ export const getServerSideProps = async (ctx: any) => {
   const player = await prisma.core_player.findUnique({
     where: {
       id: parseInt(ctx.query.pid)
+    },
+    include: {
+      core_rankingssinglescurrent: true,
     }
   })
 
