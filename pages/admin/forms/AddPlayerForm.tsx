@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, Fragment } from 'react'
 import type { core_player } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -13,22 +13,25 @@ interface IAddPlayerFormProps {
 }
 
 const createPlayer = async (player: core_player) => {
-  const response = await axios.post('/api/players', { body: player });
+  const response = await axios.post('/api/players', { data: player });
 
   if (response.status === 200) {
-    return response.data;
+    return { isOk: true, message: 'player was successfully screated' }
+  } else {
+    // throw new Error(response.statusText)
+    return { isOk: false, message: response.statusText }
   }
-
-  throw new Error(response.statusText)
 }
 
 const AddPlayerForm = ({ setModalOpenStatus }: IAddPlayerFormProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<core_player>();
+  // todo: add fields validation and show message/paint red if there is an error
+  // const { formState: { errors } } = useForm<core_player>();
 
-  console.log(errors)
+  const onSubmit = async (v) => {
+    const { isOk, message } = await createPlayer({ ...v, medals: 1, level: 1, is_coach: 0, avatar: 'linkkk' })
 
-  const onSubmit = (v) => {
-    console.log(v)
+    console.log(isOk, message)
   }
 
   return (
@@ -37,14 +40,13 @@ const AddPlayerForm = ({ setModalOpenStatus }: IAddPlayerFormProps) => {
         {PLAYER_FORM_VALUES.map(({ name, required, type, placeholder, message }) => (
           <div className={styles.input}>
             {(type === 'checkbox' || type === 'file') ? (
-              <>
+              <Fragment key={name}>
                 <span>{placeholder}</span>
                 <input
-                  key={name}
                   type={type}
                   {...register(name, { required })}
                 />
-              </>
+              </Fragment>
             ) : (
               <input
                 key={name}

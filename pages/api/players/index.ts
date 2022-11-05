@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<core_player[]>
+  res: NextApiResponse<core_player | core_player[]>
 ) => {
   if (req.method === 'GET') {
     const paginatedPlayers = await prisma.core_player.findMany({
@@ -14,6 +14,16 @@ export default async (
     })
 
     res.json(paginatedPlayers)
+  }
+
+  if (req.method === 'POST') {
+    const createdPlayer = await prisma.core_player.create({
+      data: req.body.data,
+    })
+
+    console.log(createdPlayer)
+
+    res.json(createdPlayer)
   }
 }
 

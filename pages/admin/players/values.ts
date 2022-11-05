@@ -14,13 +14,13 @@ export const PLAYER_FORM_VALUES: any[] = [
   { name: 'forehand', required: true, type: 'text', placeholder: 'Форхэнд' },
   { name: 'beckhand', required: true, type: 'text', placeholder: 'Бэкэнд' },
   // todo: show only mnickname with @
-  { name: 'instaLink', required: true, type: 'text', placeholder: 'Ссылка на инст' },
+  { name: 'insta_link', required: true, type: 'text', placeholder: 'Ссылка на инст' },
   { name: 'medals', required: false, placeholder: '' },
   { name: 'email', required: true, type: 'email', placeholder: 'E-mail' },
   { name: 'phone', required: true, type: 'phone', placeholder: 'Номер телефона' },
   { name: 'level', required: true, type: 'text', placeholder: 'Уровень' },
-  { name: 'avatar', required: true, type: 'file', placeholder: 'Ава' },
-  { name: 'isCoach', required: true, type: 'checkbox', placeholder: 'Является тренером' },
+  { name: 'avatar', required: false, type: 'file', placeholder: 'Ава' },
+  { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
 ]
 
 export const PLAYER_FORM_VALUES_KEYS = Object.keys(PLAYER_FORM_VALUES);
