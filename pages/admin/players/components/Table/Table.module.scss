@@ -1,37 +1,6 @@
-@import '../../../../styles/variables.scss';
+@import '../../../../../styles/variables.scss';
 
-.pagination {
-  padding: $padding;
-
-  .arrows {
-    button,
-    select {
-      margin-right: 5px;
-      margin-bottom: 15px;
-    }
-  }
-}
-
-.tableControls {
-  width: 100%;
-  padding: $padding;
-  border-bottom: 1px solid $border-color;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  button {
-    font-size: 18px;
-    margin-left: 20px;
-
-    &[disabled] {
-      cursor: not-allowed;
-    }
-  }
-}
-
-
-.tableContainer {
+.table {
   overflow-x: scroll;
   padding: $padding;
   margin-bottom: 15px;

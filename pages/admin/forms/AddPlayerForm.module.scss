@@ -1,0 +1,30 @@
+@import '../../../styles//variables.scss';
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 16px;
+
+  .input {
+    width: 33%;
+    margin-bottom: 15px;
+    text-align: center;
+
+    input {
+      width: 80%;
+      font-size: 16px;
+      padding: 5px 10px;
+    }
+  }
+
+  .submit {
+    width: 100%;
+    padding: $padding;
+    background-color: $custom-green;
+    color: $custom-darkgray;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+}

@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
 
-import styles from './Table.module.scss'
+import styles from './Pagination.module.scss'
 
 export interface PaginationProps {
   pageIndex: number

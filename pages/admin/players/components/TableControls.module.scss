@@ -1,0 +1,19 @@
+@import '../../../../styles/variables.scss';
+
+.tableControls {
+  width: 100%;
+  padding: $padding;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  button {
+    font-size: 18px;
+    margin-left: 20px;
+
+    &[disabled] {
+      cursor: not-allowed;
+    }
+  }
+}

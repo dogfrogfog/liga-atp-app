@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
-import { useForm } from 'react-hook-form'
 
 import type { core_player } from '@prisma/client'
 import axios from 'axios'
-// import PlayerForm from '../forms/PlayerForm'
 
+import AddPlayerForm from '../forms/AddPlayerForm'
 import PageTitle from '../../../ui-kit/PageTitle'
-
-import Table, { useTable } from './Table';
+import TableControls from './components/TableControls'
+import Table, { useTable } from './components/Table'
+import Pagination from './components/Pagination'
 
 const Players: NextPage = () => {
   const [data, setData] = useState<core_player[]>([])
-  const useFormProps = useForm<core_player>();
-  const tableProps = useTable(data);
+  const [isModalOpen, setModalOpenStatus] = useState(false)
+  const { pagination, setPagination, ...tableProps } = useTable(data);
 
   useEffect(() => {
-    const { pagination } = tableProps;
     const fetchWrapper = async () => {
       const url = `/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`;
       const response = await axios.get<core_player[]>(url)
@@ -27,7 +26,11 @@ const Players: NextPage = () => {
     }
 
     fetchWrapper()
-  }, [tableProps.pagination])
+  }, [pagination])
+
+  const handleAddClick = () => {
+    setModalOpenStatus(true)
+  }
 
   return (
     <div>
@@ -36,8 +39,14 @@ const Players: NextPage = () => {
           Управление игроками
         </PageTitle>
       </div>
-      {/* <PlayerForm {...useFormProps} /> */}
-      {data.length > 0 ? <Table {...tableProps} /> : null}
+      {data.length > 0 ? (
+        <>
+          <TableControls handleAddClick={handleAddClick} />
+          <Table {...tableProps} />
+          <Pagination pagination={pagination} setPagination={setPagination} />
+        </>
+      ) : null}
+      {isModalOpen ? <AddPlayerForm setModalOpenStatus={setModalOpenStatus} /> : null}
     </div>
   )
 }

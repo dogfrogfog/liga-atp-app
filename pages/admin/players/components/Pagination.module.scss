@@ -1,0 +1,14 @@
+@import '../../../../styles/variables.scss';
+
+.pagination {
+  padding: $padding;
+
+  .arrows {
+
+    button,
+    select {
+      margin-right: 5px;
+      margin-bottom: 15px;
+    }
+  }
+}

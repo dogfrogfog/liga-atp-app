@@ -1,12 +1,20 @@
-import styles from './Table.module.scss'
+import type { FC } from 'react'
+
+import styles from './TableControls.module.scss'
+
+interface ITableControlsProps {
+  handleAddClick: any;
+}
 
 // todo: add disabled state (when editting or loading)
-const TableControls = () => {
+const TableControls: FC<ITableControlsProps> = ({
+  handleAddClick,
+}) => {
   return (
     <div className={styles.tableControls}>
       <button
         style={{ backgroundColor: 'blue', color: 'white' }}
-      // onClick={openCreatePlayerForm}
+        onClick={handleAddClick}
       >
         add player
       </button>
