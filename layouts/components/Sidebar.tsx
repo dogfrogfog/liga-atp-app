@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { AiOutlineTrophy, AiOutlineHome } from 'react-icons/ai'
-import { BiNews, BiStats, BiSupport } from 'react-icons/bi'
+import { AiOutlineTrophy } from 'react-icons/ai'
+import { BiNews, BiSupport } from 'react-icons/bi'
 import { GiBabyfootPlayers } from 'react-icons/gi'
 import cl from 'classnames'
 
@@ -10,12 +10,6 @@ const Sidebar = () => {
   return (
     <div className={styles.sidebarContainer}>
       <div className={styles.sidebarTop}>
-        <div className={styles.menuItem}>
-          <AiOutlineHome />
-          <Link href="/admin">
-            Главная
-          </Link>
-        </div>
         <div className={styles.menuItem}>
           <GiBabyfootPlayers />
           <Link href="/admin/players">
@@ -31,17 +25,17 @@ const Sidebar = () => {
         <div className={styles.menuItem}>
           <BiNews />
           <Link href="/admin/content">
-            Контент
+            Матчи
           </Link>
         </div>
-        <div className={styles.menuItem}>
+        {/* <div className={styles.menuItem}>
           <BiStats />
           <Link href="/admin/stats">
-            Статистика
+            Статистика приложения
           </Link>
-        </div>
+        </div> */}
       </div>
-      <div className={styles.sidebarTop}>
+      {/* <div className={styles.sidebarTop}>
         <div className={cl(styles.menuItem, styles.supportItem)}>
           <BiSupport />
           <a href="mailto:maksim.hodasevich@gmail.com">
@@ -52,7 +46,7 @@ const Sidebar = () => {
             </span>
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

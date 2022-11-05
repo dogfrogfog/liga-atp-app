@@ -9,7 +9,9 @@ function Header() {
   return (
     <header className={styles.headerContainer}>
       <div className={styles.image}>
-        <Image alt='liga-logo' src={ligaLogo} />
+        <Link href="/admin">
+          <Image alt='liga-logo' src={ligaLogo} />
+        </Link>
       </div>
       <Link href="/admin/settings">
         <span><FiSettings /></span>
