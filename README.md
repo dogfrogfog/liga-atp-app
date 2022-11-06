@@ -21,8 +21,7 @@ put db creds to the `env` file locally
 
 ```bash
 npx prisma help
-``` to discover the commands
+```
+<img width="1031" alt="Screenshot 2022-11-06 at 18 53 53" src="https://user-images.githubusercontent.com/47758224/200186864-43c2e726-84b1-4107-8226-17bf075c5f02.png">
 
-to test integration app + db locally you can npx prisma migration dev i think
-
-
+pick right command to test locally
