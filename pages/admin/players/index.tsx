@@ -82,7 +82,7 @@ const Players: NextPage = () => {
           <Pagination pagination={pagination} setPagination={setPagination} />
         </>
       ) : null}
-      // todo: make reusable form/fields
+      {/* // todo: make reusable form/fields */}
       {modalStatus.isOpen ?
         <AddPlayerForm
           pagination={pagination}

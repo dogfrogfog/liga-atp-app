@@ -61,8 +61,9 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
 
   return (
     <>
-      {data.map((match) => (
+      {data.map((match, index) => (
         <Match
+          key={index}
           tournamentName={match.core_tournament.name}
           startDate={match.start_date}
           score={match.score}

@@ -26,7 +26,7 @@ const StatsTab = ({ playerId }: { playerId: number }) => {
     }
 
     // fetchWrapper()
-  }, [selectedLvl])
+  }, [selectedLvl, playerId])
 
   return (
     <>
@@ -95,7 +95,7 @@ const StatsTab = ({ playerId }: { playerId: number }) => {
           <span className={styles.valueName}>Процент Двухсетовиков vs Трехсетовиков</span>
           <span className={styles.value}>3</span>
         </div>
-        // todo: add ability to add stat fields from db
+        {/* // todo: add ability to add stat fields from db */}
       </div>
     </>
   )
