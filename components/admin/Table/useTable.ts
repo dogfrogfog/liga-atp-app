@@ -9,7 +9,7 @@ import {
 import type { core_player } from '@prisma/client'
 
 import type { PaginationProps } from '../Pagination'
-import { PLAYER_FORM_VALUES } from '../../values'
+import { PLAYER_FORM_VALUES } from '../../../constants/values'
 
 const columnHelper = createColumnHelper()
 const columns = PLAYER_FORM_VALUES.map(({ name }) => (

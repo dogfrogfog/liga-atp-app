@@ -3,8 +3,8 @@ import type { core_player } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
-import { PLAYER_FORM_VALUES } from '../../players/values';
-import Modal from '../../../../ui-kit/Modal'
+import { PLAYER_FORM_VALUES } from '../../constants/values'
+import Modal from '../../ui-kit/Modal'
 
 import styles from './AddPlayerForm.module.scss'
 

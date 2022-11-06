@@ -9,9 +9,7 @@ import { PrismaClient, core_player } from '@prisma/client'
 import InfoTab from '../components/profileTabs/Info'
 import MatchesTab from '../components/profileTabs/Matches'
 import StatsTab from '../components/profileTabs/Stats'
-
 import { LevelNumberMap } from '../../constants/values'
-
 import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
