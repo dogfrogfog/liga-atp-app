@@ -64,11 +64,14 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
       {data.map((match, index) => (
         <Match
           key={index}
+          // @ts-ignore
           tournamentName={match.core_tournament.name}
           startDate={match.start_date}
           score={match.score}
           playersStr={
+            // @ts-ignore
             match.core_player_core_match_player1_idTocore_player.first_name +  ' ' + match.core_player_core_match_player1_idTocore_player.last_name + ' / ' +
+            // @ts-ignore
             match.core_player_core_match_player2_idTocore_player.first_name + ' ' + match.core_player_core_match_player2_idTocore_player.last_name
           }
         />

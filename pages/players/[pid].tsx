@@ -41,7 +41,8 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
     level,
     // add height to db
     // height = 170,
-    core_rankingssinglescurrent,
+
+    // core_rankingssinglescurrent,
   } = player;
 
   const activeTabContent = (() => {
@@ -74,13 +75,15 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
   }
 
   // get last node from db
+  // @ts-ignore
   const { position, points } = core_rankingssinglescurrent[core_rankingssinglescurrent.length - 1]
-
+  
   return (
     <div className={styles.profileContainer}>
       {/* @ts-ignore */}
       <ProfileHeader
         name={first_name + ' ' + last_name}
+        // @ts-ignore
         level={LevelNumberMap[level.toString()]}
         points={points}
         position={position}
