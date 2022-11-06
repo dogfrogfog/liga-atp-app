@@ -23,5 +23,7 @@ export const PLAYER_FORM_VALUES: any[] = [
   { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
 ]
 
+export default PLAYER_FORM_VALUES
+
 export const PLAYER_FORM_VALUES_KEYS = Object.keys(PLAYER_FORM_VALUES);
 export const PLAYER_TABLE_VALUES_KEYS = ['id', ...Object.keys(PLAYER_FORM_VALUES)];
