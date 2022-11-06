@@ -11,6 +11,23 @@
   button {
     font-size: 18px;
     margin-left: 20px;
+    cursor: pointer;
+
+    &.add {
+      background-color: $custom-green;
+    }
+
+    &.update {
+      background-color: $custom-yellow;
+    }
+
+    &.delete {
+      background-color: $custom-red;
+    }
+
+    &.reset {
+      background-color: $custom-lightgray;
+    }
 
     &[disabled] {
       cursor: not-allowed;

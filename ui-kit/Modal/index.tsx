@@ -4,13 +4,12 @@ import styles from './styles.module.scss';
 interface IModalProps {
   title: string;
   children: ReactNode;
-  setModalOpenStatus: Dispatch<SetStateAction<boolean>>;
+  setModalStatus: Dispatch<SetStateAction<{ type: string, isOpen: boolean }>>;
 }
 
-
-const Modal: FC<IModalProps> = ({ title, children, setModalOpenStatus }) => {
+const Modal: FC<IModalProps> = ({ title, children, setModalStatus }) => {
   const handleModalClose = () => {
-    setModalOpenStatus(false)
+    setModalStatus({ type: '', isOpen: false })
   }
 
   const handleOverlayClick = (e: any) => {

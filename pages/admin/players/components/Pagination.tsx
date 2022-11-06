@@ -32,7 +32,7 @@ const Pagination = ({ pagination, setPagination }: IPaginationProps) => (
           setPagination(v => ({ ...v, pageSize: Number(e.target.value) }))
         }}
       >
-        {[25, 50, 75, 100].map(pageSize => (
+        {[25, 50, 75, 100, 250].map(pageSize => (
           <option key={pageSize} value={pageSize}>
             {pageSize}
           </option>
