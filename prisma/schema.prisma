@@ -3,6 +3,8 @@ generator client {
   binaryTargets = ["darwin"]
 }
 
+// todo: some setup
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
