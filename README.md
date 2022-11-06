@@ -16,10 +16,13 @@ to run db locally:
 touch .env
 ```
 
-put db creds to the `env` file
+download `npx` and `prisma (google 'yarn add prisma')`
+put db creds to the `env` file locally
 
 ```bash
-npx prisma studio
-```
+npx prisma help
+``` to discover the commands
+
+to test integration app + db locally you can npx prisma migration dev i think
 
 
