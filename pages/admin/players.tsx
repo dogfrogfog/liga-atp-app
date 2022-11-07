@@ -4,11 +4,11 @@ import type { NextPage } from 'next'
 import type { core_player } from '@prisma/client'
 import axios from 'axios'
 
-import AddPlayerForm from '../../../components/admin/AddPlayerForm'
-import PageTitle from '../../../ui-kit/PageTitle'
-import TableControls from '../../../components/admin/TableControls'
-import Table, { useTable } from '../../../components/admin/Table'
-import Pagination from '../../../components/admin/Pagination'
+import PlayerForm from '../../components/admin/PlayerForm'
+import PageTitle from '../../ui-kit/PageTitle'
+import TableControls from '../../components/admin/TableControls'
+import Table, { useTable } from '../../components/admin/Table'
+import Pagination from '../../components/admin/Pagination'
 
 // todo: add multiple checkboxes + multiple delete
 const deleteSelectedPlayers = async (ids: number[]) => {
@@ -84,7 +84,7 @@ const Players: NextPage = () => {
       ) : null}
       {/* // todo: make reusable form/fields */}
       {modalStatus.isOpen ?
-        <AddPlayerForm
+        <PlayerForm
           pagination={pagination}
           setData={setData}
           editingUser={editingUser}

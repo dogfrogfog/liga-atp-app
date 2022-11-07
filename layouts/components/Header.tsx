@@ -14,7 +14,7 @@ function Header() {
         </Link>
       </div>
       <Link href="/admin/settings">
-        <span><FiSettings /></span>
+        <span className={styles.settingsIcon}><FiSettings /></span>
       </Link>
     </header>
   )

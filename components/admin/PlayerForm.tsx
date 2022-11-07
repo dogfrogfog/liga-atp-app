@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, Fragment } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import type { core_player } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -6,14 +6,14 @@ import axios from 'axios'
 import { PLAYER_FORM_VALUES } from '../../constants/values'
 import Modal from '../../ui-kit/Modal'
 
-import styles from './AddPlayerForm.module.scss'
+import styles from './PlayerForm.module.scss'
 
 const TITLES_BY_TYPE: Record<'add' | 'update', string> = {
   update: 'Обновить данные игрока',
   add: 'Добавить нового игрока',
 }
 
-interface IAddPlayerFormProps {
+interface IPlayerFormProps {
   modalStatus: { isOpen: boolean, type: string };
   setModalStatus: Dispatch<SetStateAction<{ isOpen: boolean, type: string }>>;
   editingUser?: core_player;
@@ -45,7 +45,7 @@ const updatePlayer = async (player: core_player) => {
 
 // todo: rename to commo form //
 // todo: edd validation + fiedls errors
-const AddPlayerForm = ({ pagination, setData, modalStatus, setModalStatus, editingUser }: IAddPlayerFormProps) => {
+const PlayerForm = ({ pagination, setData, modalStatus, setModalStatus, editingUser }: IPlayerFormProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<core_player>({
     defaultValues: editingUser,
   });
@@ -114,4 +114,4 @@ const AddPlayerForm = ({ pagination, setData, modalStatus, setModalStatus, editi
   )
 }
 
-export default AddPlayerForm
+export default PlayerForm
