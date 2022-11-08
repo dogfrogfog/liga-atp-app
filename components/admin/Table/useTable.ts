@@ -6,31 +6,41 @@ import {
   getSortedRowModel,
   Table,
 } from '@tanstack/react-table'
-import type { core_player } from '@prisma/client'
+import type { core_player, core_tournament, core_match } from '@prisma/client'
 
 import type { PaginationProps } from '../Pagination'
-import { PLAYER_FORM_VALUES } from '../../../constants/values'
+import { PLAYER_FORM_VALUES, TOURNAMENT_FORM_VALUES, MATCHES_FORM_VALUES } from '../../../constants/values'
 
 const columnHelper = createColumnHelper()
-const columns = PLAYER_FORM_VALUES.map(({ name }) => (
-  columnHelper.accessor(name, {
-    header: name,
-  })
-))
 
 export interface ITableProps {
-  table: Table<core_player[]>
+  table: Table<core_player[] | core_tournament[] | core_match[]>
   pagination: PaginationProps
   setPagination: Dispatch<SetStateAction<PaginationProps>>,
-  selectedPlayer: number,
-  setSelectedPlayer: Dispatch<SetStateAction<number>>,
+  selectedRow: number,
+  setSelectedRow: Dispatch<SetStateAction<number>>,
 }
 
-const useTable = (data: core_player[]): ITableProps => {
+const FORM_VALUES = {
+  players: PLAYER_FORM_VALUES,
+  tournaments: TOURNAMENT_FORM_VALUES,
+  matches: MATCHES_FORM_VALUES,
+}
+
+// todo: refactor types
+const useTable = (
+  type: 'tournaments' | 'players' | 'matches',
+  data: core_player[] | core_tournament[] | core_match[],
+): ITableProps => {
   // const [sorting, setSorting] = useState<any>([])
   const [pagination, setPagination] = useState<PaginationProps>({ pageIndex: 0, pageSize: 25 })
-  // todo: think of storing store id's instead of current page indexes
-  const [selectedPlayer, setSelectedPlayer] = useState(-1)
+  // todo: think of storing id's instead of current page indexes
+  const [selectedRow, setSelectedRow] = useState(-1)
+
+  const columns = [{ name: 'id' }, ...FORM_VALUES[type]].map(({ name }) => (
+    columnHelper.accessor(name, {
+      header: name,
+    })))
 
   const table = useReactTable({
     data,
@@ -47,8 +57,8 @@ const useTable = (data: core_player[]): ITableProps => {
     table: table as any,
     pagination,
     setPagination,
-    selectedPlayer,
-    setSelectedPlayer,
+    selectedRow,
+    setSelectedRow,
   }
 }
 

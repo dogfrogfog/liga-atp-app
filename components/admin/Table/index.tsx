@@ -1,20 +1,21 @@
 import { flexRender } from '@tanstack/react-table'
 
 import useTable, { ITableProps } from './useTable'
+import { LEVEL_NUMBER_VALUE } from '../../../constants/values'
 import styles from './Table.module.scss'
 
 const Table = ({
   table,
-  selectedPlayer,
-  setSelectedPlayer,
+  selectedRow,
+  setSelectedRow,
 }: {
   table: ITableProps['table'];
-  selectedPlayer: ITableProps['selectedPlayer'],
-  setSelectedPlayer: ITableProps['setSelectedPlayer'],
+    selectedRow: ITableProps['selectedRow'],
+    setSelectedRow: ITableProps['setSelectedRow'],
 }) => {
 
   const handleCheckboxClick = (index: number) => {
-    setSelectedPlayer(v => v === index ? -1 : index)
+    setSelectedRow(v => v === index ? -1 : index)
   }
 
   return (
@@ -25,11 +26,11 @@ const Table = ({
           {table.getRowModel().rows.map((row, index) => (
             <tr
               key={row.id + index}
-              className={selectedPlayer === index ? styles.selectedRow : ''}
+              className={selectedRow === index ? styles.selectedRow : ''}
             >
               <td key="checkbox">
                 <input
-                  checked={selectedPlayer === index}
+                  checked={selectedRow === index}
                   onChange={() => handleCheckboxClick(index)} type="checkbox"
                 />
               </td>

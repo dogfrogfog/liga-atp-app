@@ -6,7 +6,7 @@ import axios from 'axios'
 import { PLAYER_FORM_VALUES } from '../../constants/values'
 import Modal from '../../ui-kit/Modal'
 
-import styles from './PlayerForm.module.scss'
+import styles from './DataForm.module.scss'
 
 const TITLES_BY_TYPE: Record<'add' | 'update', string> = {
   update: 'Обновить данные игрока',
@@ -16,7 +16,7 @@ const TITLES_BY_TYPE: Record<'add' | 'update', string> = {
 interface IPlayerFormProps {
   modalStatus: { isOpen: boolean, type: string };
   setModalStatus: Dispatch<SetStateAction<{ isOpen: boolean, type: string }>>;
-  editingUser?: core_player;
+  editingRow?: core_player;
   setData: any;
   pagination: any;
 }
@@ -43,11 +43,10 @@ const updatePlayer = async (player: core_player) => {
 
 
 
-// todo: rename to commo form //
 // todo: edd validation + fiedls errors
-const PlayerForm = ({ pagination, setData, modalStatus, setModalStatus, editingUser }: IPlayerFormProps) => {
+const DataForm = ({ pagination, setData, modalStatus, setModalStatus, editingRow }: IPlayerFormProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<core_player>({
-    defaultValues: editingUser,
+    defaultValues: editingRow,
   });
 
   const fetchWrapper = async () => {
@@ -114,4 +113,4 @@ const PlayerForm = ({ pagination, setData, modalStatus, setModalStatus, editingU
   )
 }
 
-export default PlayerForm
+export default DataForm

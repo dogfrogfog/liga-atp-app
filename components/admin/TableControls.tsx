@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import styles from './TableControls.module.scss'
 
 interface ITableControlsProps {
-  selectedPlayer: number;
+  selectedRow: number;
   handleAddClick: any;
   handleUpdateClick: any;
   handleResetClick: any;
@@ -12,7 +12,7 @@ interface ITableControlsProps {
 
 // todo: add disabled state (when editting or loading)
 const TableControls: FC<ITableControlsProps> = ({
-  selectedPlayer,
+  selectedRow,
   handleAddClick,
   handleUpdateClick,
   handleDeleteClick,
@@ -23,13 +23,13 @@ const TableControls: FC<ITableControlsProps> = ({
       <button className={styles.add} onClick={handleAddClick}>
         Добавить
       </button>
-      <button disabled={selectedPlayer === -1} className={styles.update} onClick={handleUpdateClick}>
+      <button disabled={selectedRow === -1} className={styles.update} onClick={handleUpdateClick}>
         Обновить
       </button>
-      <button disabled={selectedPlayer === -1} className={styles.delete} onClick={handleDeleteClick}>
+      <button disabled={selectedRow === -1} className={styles.delete} onClick={handleDeleteClick}>
         Удалить
       </button>
-      <button disabled={selectedPlayer === -1} className={styles.reset} onClick={handleResetClick}>
+      <button disabled={selectedRow === -1} className={styles.reset} onClick={handleResetClick}>
         Снять выделение
       </button>
     </div>

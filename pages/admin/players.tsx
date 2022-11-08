@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import type { core_player } from '@prisma/client'
 import axios from 'axios'
 
-import PlayerForm from '../../components/admin/PlayerForm'
+import DataForm from '../../components/admin/DataForm'
 import PageTitle from '../../ui-kit/PageTitle'
 import TableControls from '../../components/admin/TableControls'
 import Table, { useTable } from '../../components/admin/Table'
@@ -22,7 +22,7 @@ const deleteSelectedPlayers = async (ids: number[]) => {
 const Players: NextPage = () => {
   const [data, setData] = useState<core_player[]>([])
   const [modalStatus, setModalStatus] = useState({ isOpen: false, type: '' })
-  const { pagination, setPagination, ...tableProps } = useTable(data);
+  const { pagination, setPagination, ...tableProps } = useTable('players', data);
   const [editingUser, setEditingUser] = useState()
 
   useEffect(() => {
@@ -47,16 +47,16 @@ const Players: NextPage = () => {
 
   const handleDeleteClick = async () => {
     // todo: fix delete + prisma delete: cascade delete
-    // await deleteSelectedPlayers([330])
+    // await deleteselectedRows([330])
   }
 
   const handleResetClick = () => {
-    tableProps.setSelectedPlayer(-1)
+    tableProps.setSelectedRow(-1)
     setEditingUser(undefined)
   }
 
   const handleUpdateClick = () => {
-    const updatingPlayerData = data[tableProps.selectedPlayer];
+    const updatingPlayerData = data[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' })
     setEditingUser(updatingPlayerData as any);
@@ -72,7 +72,7 @@ const Players: NextPage = () => {
       {data.length > 0 ? (
         <>
           <TableControls
-            selectedPlayer={tableProps.selectedPlayer}
+            selectedRow={tableProps.selectedRow}
             handleAddClick={handleAddClick}
             handleUpdateClick={handleUpdateClick}
             handleDeleteClick={handleDeleteClick}
@@ -84,12 +84,12 @@ const Players: NextPage = () => {
       ) : null}
       {/* // todo: make reusable form/fields */}
       {modalStatus.isOpen ?
-        <PlayerForm
-          pagination={pagination}
-          setData={setData}
-          editingUser={editingUser}
+        <DataForm
           modalStatus={modalStatus}
           setModalStatus={setModalStatus}
+          pagination={pagination}
+          setData={setData}
+          editingRow={editingUser}
         />
         : null}
     </div>

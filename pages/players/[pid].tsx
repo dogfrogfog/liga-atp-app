@@ -9,7 +9,7 @@ import { PrismaClient, core_player } from '@prisma/client'
 import InfoTab from '../components/profileTabs/Info'
 import MatchesTab from '../components/profileTabs/Matches'
 import StatsTab from '../components/profileTabs/Stats'
-import { LevelNumberMap } from '../../constants/values'
+import { LEVEL_NUMBER_VALUE } from '../../constants/values'
 import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
@@ -82,7 +82,7 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
       <ProfileHeader
         name={first_name + ' ' + last_name}
         // @ts-ignore
-        level={LevelNumberMap[level.toString()]}
+        level={LEVEL_NUMBER_VALUE[level.toString()]}
         points={points}
         position={position}
       />
