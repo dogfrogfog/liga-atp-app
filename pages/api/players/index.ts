@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient, core_player } from '@prisma/client'
+import { Prisma, PrismaClient, player } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<core_player | core_player[] | Prisma.BatchPayload>
+  res: NextApiResponse<player | player[] | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    const paginatedPlayers = await prisma.core_player.findMany({
+    const paginatedPlayers = await prisma.player.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
     })
@@ -17,7 +17,7 @@ export default async (
   }
 
   if (req.method === 'POST') {
-    const createdPlayer = await prisma.core_player.create({
+    const createdPlayer = await prisma.player.create({
       data: req.body.data,
     })
 
@@ -27,7 +27,7 @@ export default async (
   }
 
   if (req.method === 'DELETE') {
-    const deletedPlayers = await prisma.core_player.deleteMany({
+    const deletedPlayers = await prisma.player.deleteMany({
       where: {
         id: {
           // todo: add multiple delete operation
@@ -40,7 +40,7 @@ export default async (
   }
 
   if (req.method === 'PUT') {
-    const updatedPlayer = await prisma.core_player.update({
+    const updatedPlayer = await prisma.player.update({
       where: {
         id: req.body.data.id
       },

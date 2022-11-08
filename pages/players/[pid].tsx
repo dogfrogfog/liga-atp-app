@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import cl from 'classnames'
 import { FaMedal } from 'react-icons/fa'
-import { PrismaClient, core_player } from '@prisma/client'
+import { PrismaClient, player } from '@prisma/client'
 
 import InfoTab from '../components/profileTabs/Info'
 import MatchesTab from '../components/profileTabs/Matches'
@@ -14,7 +14,7 @@ import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
-const Profile: NextPage<{ player: core_player }> = ({ player }) => {
+const Profile: NextPage<{ player: player }> = ({ player }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
 
   const {
@@ -40,7 +40,7 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
     // add height to db
     // height = 170,
 
-    // core_rankingssinglescurrent,
+    // rankingssinglescurrent,
   } = player;
 
   const activeTabContent = (() => {
@@ -74,7 +74,7 @@ const Profile: NextPage<{ player: core_player }> = ({ player }) => {
 
   // get last node from db
   // @ts-ignore
-  const { position, points } = core_rankingssinglescurrent[core_rankingssinglescurrent.length - 1]
+  const { position, points } = rankingssinglescurrent[rankingssinglescurrent.length - 1]
   
   return (
     <div className={styles.profileContainer}>
@@ -154,12 +154,12 @@ export const getServerSideProps = async (ctx: any) => {
   const prisma = new PrismaClient()
 
   // data inside sqlite db
-  const player = await prisma.core_player.findUnique({
+  const player = await prisma.player.findUnique({
     where: {
       id: parseInt(ctx.query.pid)
     },
     include: {
-      core_rankingssinglescurrent: true,
+      rankingssinglescurrent: true,
     }
   })
 

@@ -6,7 +6,7 @@ import {
   getSortedRowModel,
   Table,
 } from '@tanstack/react-table'
-import type { core_player, core_tournament, core_match } from '@prisma/client'
+import type { player, tournament, match } from '@prisma/client'
 
 import type { PaginationProps } from '../Pagination'
 import { PLAYER_FORM_VALUES, TOURNAMENT_FORM_VALUES, MATCHES_FORM_VALUES } from '../../../constants/values'
@@ -14,7 +14,7 @@ import { PLAYER_FORM_VALUES, TOURNAMENT_FORM_VALUES, MATCHES_FORM_VALUES } from 
 const columnHelper = createColumnHelper()
 
 export interface ITableProps {
-  table: Table<core_player[] | core_tournament[] | core_match[]>
+  table: Table<player[] | tournament[] | match[]>
   pagination: PaginationProps
   setPagination: Dispatch<SetStateAction<PaginationProps>>,
   selectedRow: number,
@@ -30,7 +30,7 @@ const FORM_VALUES = {
 // todo: refactor types
 const useTable = (
   type: 'tournaments' | 'players' | 'matches',
-  data: core_player[] | core_tournament[] | core_match[],
+  data: player[] | tournament[] | match[],
 ): ITableProps => {
   // const [sorting, setSorting] = useState<any>([])
   const [pagination, setPagination] = useState<PaginationProps>({ pageIndex: 0, pageSize: 25 })

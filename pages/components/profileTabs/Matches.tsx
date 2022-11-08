@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { core_match } from '@prisma/client'
+import { match } from '@prisma/client'
 
 import styles from './Matches.module.scss'
 import matches from '../../api/matches'
@@ -41,7 +41,7 @@ interface IMatchesTabProps {
 }
 
 const MatchesTab = ({ playerId }: IMatchesTabProps) => {
-  const [data, setData] = useState<core_match[]>([])
+  const [data, setData] = useState<match[]>([])
   const [pagination, setPagination] = useState({ take: 10, skip: 0 })
 
   // todo: move fetch to upper component and pass data as props 
@@ -65,14 +65,14 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
         <Match
           key={index}
           // @ts-ignore
-          tournamentName={match.core_tournament.name}
+          tournamentName={match.tournament.name}
           startDate={match.start_date}
           score={match.score}
           playersStr={
             // @ts-ignore
-            match.core_player_core_match_player1_idTocore_player.first_name +  ' ' + match.core_player_core_match_player1_idTocore_player.last_name + ' / ' +
+            match.player_match_player1_idToplayer.first_name + ' ' + match.player_match_player1_idToplayer.last_name + ' / ' +
             // @ts-ignore
-            match.core_player_core_match_player2_idTocore_player.first_name + ' ' + match.core_player_core_match_player2_idTocore_player.last_name
+            match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
           }
         />
       ))}

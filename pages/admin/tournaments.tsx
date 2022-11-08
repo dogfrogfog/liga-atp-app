@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 
-import type { core_tournament } from '@prisma/client'
+import type { tournament } from '@prisma/client'
 import axios from 'axios'
 
 import PageTitle from '../../ui-kit/PageTitle'
@@ -10,7 +10,7 @@ import Table, { useTable } from '../../components/admin/Table'
 import Pagination from '../../components/admin/Pagination'
 
 const Tournaments: NextPage = () => {
-  const [data, setData] = useState<core_tournament[]>([])
+  const [data, setData] = useState<tournament[]>([])
   const [modalStatus, setModalStatus] = useState({ isOpen: false, type: '' })
   const { pagination, setPagination, ...tableProps } = useTable('tournaments', data);
   const [editingTournament, setEditingTournament] = useState()
@@ -18,7 +18,7 @@ const Tournaments: NextPage = () => {
   useEffect(() => {
     const fetchWrapper = async () => {
       const url = `/api/tournaments?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`
-      const response = await axios.get<core_tournament[]>(url)
+      const response = await axios.get<tournament[]>(url)
 
       if (response.status === 200) {
         setData(response.data)

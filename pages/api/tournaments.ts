@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient, core_tournament } from '@prisma/client'
+import { Prisma, PrismaClient, tournament } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<core_tournament | core_tournament[] | Prisma.BatchPayload>
+  res: NextApiResponse<tournament | tournament[] | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    const paginatedTournaments = await prisma.core_tournament.findMany({
+    const paginatedTournaments = await prisma.tournament.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
     })
@@ -17,7 +17,7 @@ export default async (
   }
 
   // if (req.method === 'POST') {
-  //   const createdPlayer = await prisma.core_tournament.create({
+  //   const createdPlayer = await prisma.tournament.create({
   //     data: req.body.data,
   //   })
 

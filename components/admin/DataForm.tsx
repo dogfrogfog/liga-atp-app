@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import type { core_player } from '@prisma/client'
+import type { player } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
@@ -16,12 +16,12 @@ const TITLES_BY_TYPE: Record<'add' | 'update', string> = {
 interface IPlayerFormProps {
   modalStatus: { isOpen: boolean, type: string };
   setModalStatus: Dispatch<SetStateAction<{ isOpen: boolean, type: string }>>;
-  editingRow?: core_player;
+  editingRow?: player;
   setData: any;
   pagination: any;
 }
 
-const createPlayer = async (player: core_player) => {
+const createPlayer = async (player: player) => {
   const response = await axios.post('/api/players', { data: player });
 
   if (response.status === 200) {
@@ -31,7 +31,7 @@ const createPlayer = async (player: core_player) => {
   }
 }
 
-const updatePlayer = async (player: core_player) => {
+const updatePlayer = async (player: player) => {
   const response = await axios.put('/api/players', { data: player });
 
   if (response.status === 200) {
@@ -45,13 +45,13 @@ const updatePlayer = async (player: core_player) => {
 
 // todo: edd validation + fiedls errors
 const DataForm = ({ pagination, setData, modalStatus, setModalStatus, editingRow }: IPlayerFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<core_player>({
+  const { register, handleSubmit, formState: { errors } } = useForm<player>({
     defaultValues: editingRow,
   });
 
   const fetchWrapper = async () => {
     const url = `/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`
-    const response = await axios.get<core_player[]>(url)
+    const response = await axios.get<player[]>(url)
 
     if (response.status === 200) {
       setData(response.data)

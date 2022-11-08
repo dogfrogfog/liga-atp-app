@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 
-import type { core_player } from '@prisma/client'
+import type { player } from '@prisma/client'
 import axios from 'axios'
 
 import DataForm from '../../components/admin/DataForm'
@@ -20,7 +20,7 @@ const deleteSelectedPlayers = async (ids: number[]) => {
 }
 
 const Players: NextPage = () => {
-  const [data, setData] = useState<core_player[]>([])
+  const [data, setData] = useState<player[]>([])
   const [modalStatus, setModalStatus] = useState({ isOpen: false, type: '' })
   const { pagination, setPagination, ...tableProps } = useTable('players', data);
   const [editingUser, setEditingUser] = useState()
@@ -28,7 +28,7 @@ const Players: NextPage = () => {
   useEffect(() => {
     const fetchWrapper = async () => {
       const url = `/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`
-      const response = await axios.get<core_player[]>(url)
+      const response = await axios.get<player[]>(url)
 
       if (response.status === 200) {
         setData(response.data)

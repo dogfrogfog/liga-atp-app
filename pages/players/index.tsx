@@ -67,7 +67,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(({ id, first_name, last_name, level, core_rankingssinglescurrent }) => (
+            {data.map(({ id, first_name, last_name, level, rankingssinglescurrent }) => (
               <Link key={id} href={'/players/' + id}>
                 <TableRow key={id}>
                   <TableCell component="th" scope="row">
@@ -75,8 +75,8 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                   </TableCell>
                   <TableCell align="left">{level}</TableCell>
                   <TableCell align="right">
-                    {core_rankingssinglescurrent.length > 0
-                      ? core_rankingssinglescurrent[core_rankingssinglescurrent.length - 1].points
+                    {rankingssinglescurrent.length > 0
+                      ? rankingssinglescurrent[rankingssinglescurrent.length - 1].points
                       : 0}
                   </TableCell>
                 </TableRow>
@@ -93,9 +93,9 @@ export const getServerSideProps = async () => {
   const prisma = new PrismaClient()
 
   // data inside sqlite db
-  const players = await prisma.core_player.findMany({
+  const players = await prisma.player.findMany({
     take: 10,
-    include: { core_rankingssinglescurrent: true }
+    include: { rankingssinglescurrent: true }
   })
 
   return {

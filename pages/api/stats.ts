@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, core_player } from '@prisma/client'
+import { PrismaClient, player } from '@prisma/client'
 import { AiOutlineConsoleSql } from 'react-icons/ai'
 
 const prisma = new PrismaClient()
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<core_player[] | core_player>
+  res: NextApiResponse<player[] | player>
 ) => {
   // if (req.method === 'GET') {
-  //   const paginatedPlayers = await prisma.core_player.findMany({
+  //   const paginatedPlayers = await prisma.player.findMany({
   //     take: parseInt(req.query.take as string),
   //     skip: parseInt(req.query.skip as string),
   //   })
@@ -18,7 +18,7 @@ export default async (
   // }
 
   // if (req.method === 'POST') {
-  //   const createdPlayer = await prisma.core_player.create({
+  //   const createdPlayer = await prisma.player.create({
   //     data: req.body.data,
   //   })
 

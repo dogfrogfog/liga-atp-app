@@ -61,7 +61,7 @@ const InfoTab = ({
       <span>Инстаграм</span>
       <span><BsInstagram /> {insta_link}</span>
     </div>
-    {/* be able to chose from one of the core_players  */}
+    {/* be able to chose from one of the players  */}
     {/* <div className={styles.coaching}>
       <span className={styles.title}>
         Тренер

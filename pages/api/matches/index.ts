@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, core_match } from '@prisma/client'
+import { PrismaClient, match } from '@prisma/client'
 
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<core_match[]>
+  res: NextApiResponse<match[]>
 ) => {
   const prisma = new PrismaClient()
   if (req.method === 'GET') {
     const intId = parseInt(req.query.id as string)
-    const matches = await prisma.core_match.findMany({
+    const matches = await prisma.match.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
       where: {
@@ -27,9 +27,9 @@ export default async (
         ],
       },
       include: {
-        core_player_core_match_player1_idTocore_player: true,
-        core_player_core_match_player2_idTocore_player: true,
-        core_tournament: true,
+        player_match_player1_idToplayer: true,
+        player_match_player2_idToplayer: true,
+        tournament: true,
       }
     })
 
