@@ -9,7 +9,7 @@ import {
 import type { player, tournament, match } from '@prisma/client'
 
 import type { PaginationProps } from '../Pagination'
-import { FORM_VALUES } from '../../../constants/values'
+import { FORM_VALUES, DEFAULT_PAGINATION } from '../../../constants/values'
 
 const columnHelper = createColumnHelper()
 
@@ -27,7 +27,7 @@ const useTable = (
   data: player[] | tournament[] | match[],
 ): ITableProps => {
   // const [sorting, setSorting] = useState<any>([])
-  const [pagination, setPagination] = useState<PaginationProps>({ pageIndex: 0, pageSize: 25 })
+  const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
   // todo: think of storing id's instead of current page indexes
   const [selectedRow, setSelectedRow] = useState(-1)
 

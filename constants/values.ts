@@ -7,6 +7,9 @@ export const LEVEL_NUMBER_VALUE = {
   '-1': 'Satellite', // todo: change index, reorder indexes
 }
 
+export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
+export const DEFAULT_MODAL = { isOpen: false, type: '' };
+
 export const PLAYER_FORM_VALUES: any[] = [
   // todo: camelize fields
   { name: 'first_name', required: false, type: 'text', placeholder: 'Имя' },
