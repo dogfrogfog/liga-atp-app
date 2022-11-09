@@ -9,7 +9,7 @@ import {
 import type { player, tournament, match } from '@prisma/client'
 
 import type { PaginationProps } from '../Pagination'
-import { PLAYER_FORM_VALUES, TOURNAMENT_FORM_VALUES, MATCHES_FORM_VALUES } from '../../../constants/values'
+import { FORM_VALUES } from '../../../constants/values'
 
 const columnHelper = createColumnHelper()
 
@@ -19,12 +19,6 @@ export interface ITableProps {
   setPagination: Dispatch<SetStateAction<PaginationProps>>,
   selectedRow: number,
   setSelectedRow: Dispatch<SetStateAction<number>>,
-}
-
-const FORM_VALUES = {
-  players: PLAYER_FORM_VALUES,
-  tournaments: TOURNAMENT_FORM_VALUES,
-  matches: MATCHES_FORM_VALUES,
 }
 
 // todo: refactor types

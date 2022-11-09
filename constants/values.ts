@@ -62,5 +62,8 @@ export const MATCHES_FORM_VALUES: any[] = [
   { name: 'name', required: false, type: 'text', placeholder: 'Название матча' },
 ]
 
-// export const PLAYER_FORM_VALUES_KEYS = Object.keys(PLAYER_FORM_VALUES)
-// export const PLAYER_TABLE_VALUES_KEYS = ['id', ...Object.keys(PLAYER_FORM_VALUES)]
+export const FORM_VALUES = {
+  players: PLAYER_FORM_VALUES,
+  tournaments: TOURNAMENT_FORM_VALUES,
+  matches: MATCHES_FORM_VALUES,
+}
