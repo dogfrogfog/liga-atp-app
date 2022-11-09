@@ -31,6 +31,7 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
     setEditingUser(undefined);
+    setModalStatus(DEFAULT_MODAL);
   };
 
   const handleAddClick = () => {
@@ -50,7 +51,7 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
   // todo: add notifications
   const onSubmit = async (newPlayer: PlayerT) => {
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createPlayer(newPlayer)
+      const { isOk, data, errorMessage } = await createPlayer({ ...newPlayer, date_of_birth: null })
 
       if (isOk) {
         handleReset();
@@ -67,6 +68,8 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
       if (isOk) {
         handleReset();
 
+        // todo: prevent duplication when updating same node
+        // to reproduce: update same multiple times and doplicated rows appear 
         setData(v => v.concat([data]));
       } else {
         console.warn(errorMessage);
@@ -89,11 +92,9 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
         handleResetClick={handleReset}
       />
       {data.length > 0 ? (
-        <>
           <Table {...tableProps} />
-          <Pagination pagination={pagination} setPagination={setPagination} />
-        </>
       ) : null}
+      <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ?
         <DataForm
           onSubmit={onSubmit}

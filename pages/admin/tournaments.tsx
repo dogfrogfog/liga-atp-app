@@ -1,32 +1,86 @@
-import { useEffect, useState } from 'react'
-import type { NextPage } from 'next'
+import { useEffect, useState } from 'react';
+import type { NextPage } from 'next';
 
-import type { tournament } from '@prisma/client'
-import axios from 'axios'
+import type { tournament as TournamentT } from '@prisma/client';
 
-import PageTitle from '../../ui-kit/PageTitle'
-import TableControls from '../../components/admin/TableControls'
-import Table, { useTable } from '../../components/admin/Table'
-import Pagination from '../../components/admin/Pagination'
+import TableControls from '../../components/admin/TableControls';
+import Table, { useTable } from '../../components/admin/Table';
+import Pagination from '../../components/admin/Pagination';
+import DataForm from '../../components/admin/DataForm';
+import { DEFAULT_MODAL } from '../../constants/values';
+import {
+  getTournaments,
+  createTournament,
+  updateTournament,
+} from '../../services/tournaments';
+import PageTitle from '../../ui-kit/PageTitle';
 
-const Tournaments: NextPage = () => {
-  const [data, setData] = useState<tournament[]>([])
-  const [modalStatus, setModalStatus] = useState({ isOpen: false, type: '' })
+const Tournaments: NextPage<{ tournaments: TournamentT[] }> = ({ tournaments = [] }) => {
+  const [data, setData] = useState(tournaments)
+  const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL)
+  const [editingTournament, setEditingTournament] = useState<undefined | TournamentT>()
   const { pagination, setPagination, ...tableProps } = useTable('tournaments', data);
-  const [editingTournament, setEditingTournament] = useState()
 
   useEffect(() => {
     const fetchWrapper = async () => {
-      const url = `/api/tournaments?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`
-      const response = await axios.get<tournament[]>(url)
+      const res = await getTournaments(pagination);
 
-      if (response.status === 200) {
-        setData(response.data)
+      if (res.isOk) {
+        setData(res.data as TournamentT[]);
+      }
+    };
+
+    fetchWrapper();
+  }, [pagination])
+
+  const handleReset = () => {
+    tableProps.setSelectedRow(-1);
+    setEditingTournament(undefined);
+    setModalStatus(DEFAULT_MODAL);
+  };
+
+  const handleAddClick = () => {
+    setModalStatus({ type: 'add', isOpen: true });
+  };
+
+  const handleUpdateClick = () => {
+    const updatingPlayerData = data[tableProps.selectedRow];
+
+    setModalStatus({ isOpen: true, type: 'update' });
+    setEditingTournament(editingTournament);
+  };
+
+  // todo: fix
+  const handleDeleteClick = async () => { };
+
+  // todo: add notifications
+  const onSubmit = async (newTournament: TournamentT) => {
+    if (modalStatus.type === 'add') {
+      const { isOk, data, errorMessage } = await createTournament({ ...newTournament, date_of_birth: null })
+
+      if (isOk) {
+        handleReset();
+
+        //todo: fix type
+        setData(v => v.concat([data]));
+      } else {
+        console.warn(errorMessage);
       }
     }
 
-    fetchWrapper()
-  }, [pagination])
+    if (modalStatus.type === 'update') {
+      const { isOk, data, errorMessage } = await updateTournament(newTournament);
+      if (isOk) {
+        handleReset();
+
+        // todo: prevent duplication when updating same node
+        // to reproduce: update same multiple times and doplicated rows appear 
+        setData(v => v.concat([data]));
+      } else {
+        console.warn(errorMessage);
+      }
+    }
+  }
 
   return (
     <div>
@@ -35,29 +89,25 @@ const Tournaments: NextPage = () => {
           Управление турнирами
         </PageTitle>
       </div>
+      <TableControls
+        selectedRow={tableProps.selectedRow}
+        handleAddClick={handleAddClick}
+        handleUpdateClick={handleUpdateClick}
+        handleDeleteClick={handleDeleteClick}
+        handleResetClick={handleReset}
+      />
       {data.length > 0 ? (
-        <>
-          <TableControls
-            selectedRow={tableProps.selectedRow}
-            handleAddClick={() => ({})}
-            handleUpdateClick={() => ({})}
-            handleDeleteClick={() => ({})}
-            handleResetClick={() => ({})}
-          />
           <Table {...tableProps} />
-          <Pagination pagination={pagination} setPagination={setPagination} />
-        </>
       ) : null}
-      {/* // todo: make reusable form/fields */}
-      {/* {modalStatus.isOpen ?
-        <PlayerForm
-          pagination={pagination}
-          setData={setData}
-          editingUser={editingUser}
-          modalStatus={modalStatus}
+      <Pagination pagination={pagination} setPagination={setPagination} />
+      {modalStatus.isOpen ?
+        <DataForm
+          onSubmit={onSubmit}
           setModalStatus={setModalStatus}
+          editingRow={editingTournament}
+          type="tournaments"
         />
-        : null} */}
+        : null}
     </div>
   )
 }

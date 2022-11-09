@@ -14,7 +14,7 @@ type ICreatePlayerResponse = PlayersResponse<PlayerT>;
 type IDeletePlayerResponse = PlayersResponse<Prisma.BatchPayload>;
 type IUpdatePlayerResponse = PlayersResponse<PlayerT>;
 
-export async function getPlayers(pagination: PaginationProps, ): Promise<IGetPlayersResponse> {
+export async function getPlayers(pagination: PaginationProps): Promise<IGetPlayersResponse> {
   const url = `/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`;
   const response = await axios.get<PlayerT[]>(url);
 
