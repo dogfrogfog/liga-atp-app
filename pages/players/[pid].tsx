@@ -9,7 +9,7 @@ import { PrismaClient, player } from '@prisma/client'
 import InfoTab from '../components/profileTabs/Info'
 import MatchesTab from '../components/profileTabs/Matches'
 import StatsTab from '../components/profileTabs/Stats'
-import { LEVEL_NUMBER_VALUE } from '../../constants/values'
+import { LEVEL_NUMBER_VALUES } from '../../constants/values'
 import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
@@ -78,7 +78,7 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
         is_coach={is_coach}
         name={first_name + ' ' + last_name}
         // @ts-ignore
-        level={LEVEL_NUMBER_VALUE[level.toString()]}
+        level={LEVEL_NUMBER_VALUES[level.toString()]}
         points={'1490'} // todo: add real elo rank
       />
       <section>

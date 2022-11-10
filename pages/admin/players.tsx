@@ -8,12 +8,17 @@ import DataForm from 'components/admin/DataForm';
 import Pagination from 'components/admin/Pagination';
 import PageTitle from 'ui-kit/PageTitle';
 import { DEFAULT_MODAL } from 'constants/values';
-import { getPlayers, createPlayer, updatePlayer, deleteSelectedPlayer } from 'services/players';
+import {
+  getPlayers,
+  createPlayer,
+  updatePlayer,
+  deleteSelectedPlayer,
+} from 'services/players';
 
 const FORM_TITLES: { [k: string]: string } = {
   add: 'Добавить игрока',
   update: 'Изменить игрока',
-}
+};
 
 const Players: NextPage = () => {
   const [data, setData] = useState<PlayerT[]>([]);
@@ -64,6 +69,8 @@ const Players: NextPage = () => {
       age: parseInt(newPlayer.age as any as string),
       level: parseInt(newPlayer.level as any as string),
       is_coach: newPlayer.is_coach || false,
+      in_tennis_from: new Date(newPlayer.in_tennis_from as any),
+      date_of_birth: new Date(newPlayer.date_of_birth as any),
       // todo: handle image
       avatar: null,
     };

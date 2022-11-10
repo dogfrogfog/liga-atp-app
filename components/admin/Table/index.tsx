@@ -1,7 +1,6 @@
 import { flexRender } from '@tanstack/react-table'
 
 import useTable, { ITableProps } from './useTable'
-import { LEVEL_NUMBER_VALUE } from '../../../constants/values'
 import styles from './Table.module.scss'
 
 const Table = ({

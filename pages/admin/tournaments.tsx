@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
-
 import type { tournament as TournamentT } from '@prisma/client';
 
-import TableControls from '../../components/admin/TableControls';
-import Table, { useTable } from '../../components/admin/Table';
-import Pagination from '../../components/admin/Pagination';
-import DataForm from '../../components/admin/DataForm';
-import { DEFAULT_MODAL } from '../../constants/values';
+import TableControls from 'components/admin/TableControls';
+import Table, { useTable } from 'components/admin/Table';
+import Pagination from 'components/admin/Pagination';
+import DataForm from 'components/admin/DataForm';
+import PageTitle from 'ui-kit/PageTitle';
+import { DEFAULT_MODAL } from 'constants/values';
 import {
   getTournaments,
   createTournament,
   updateTournament,
-} from '../../services/tournaments';
-import PageTitle from '../../ui-kit/PageTitle';
+  deleteSelectedTournament,
+} from 'services/tournaments';
 
-const Tournaments: NextPage<{ tournaments: TournamentT[] }> = ({ tournaments = [] }) => {
-  const [data, setData] = useState(tournaments)
-  const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL)
-  const [editingTournament, setEditingTournament] = useState<undefined | TournamentT>()
+const FORM_TITLES: { [k: string]: string } = {
+  add: 'Добавить турнир',
+  update: 'Изменить турнир',
+};
+
+const Tournaments: NextPage = () => {
+  const [data, setData] = useState<TournamentT[]>([]);
+  const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
+  const [editingTournament, setEditingTournament] = useState<undefined | TournamentT>();
   const { pagination, setPagination, ...tableProps } = useTable('tournaments', data);
 
   useEffect(() => {
@@ -40,29 +45,41 @@ const Tournaments: NextPage<{ tournaments: TournamentT[] }> = ({ tournaments = [
   };
 
   const handleAddClick = () => {
-    setModalStatus({ type: 'add', isOpen: true });
+    setModalStatus({ isOpen: true, type: 'add' });
   };
 
   const handleUpdateClick = () => {
-    const updatingPlayerData = data[tableProps.selectedRow];
+    const updatingTournamentData = data[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
-    setEditingTournament(editingTournament);
+    setEditingTournament(updatingTournamentData);
   };
 
-  // todo: fix
-  const handleDeleteClick = async () => { };
+  const handleDeleteClick = async () => {
+    const { id } = data[tableProps.selectedRow];
+
+    // todo: add delete operation
+    // deleteSelectedPlayer(id);
+  };
 
   // todo: add notifications
   const onSubmit = async (newTournament: TournamentT) => {
+    const normalizedNewTournament = {
+      ...newTournament,
+      is_doubles: newTournament.is_doubles || false,
+      tournament_type: parseInt(newTournament.tournament_type as any as string),
+      surface: parseInt(newTournament.surface as any as string),
+      status: parseInt(newTournament.status as any as string),
+      start_date: new Date(newTournament.start_date as any),
+    };
+
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createTournament({ ...newTournament, date_of_birth: null })
+      const { isOk, data, errorMessage } = await createTournament(normalizedNewTournament)
 
       if (isOk) {
         handleReset();
 
-        //todo: fix type
-        setData(v => v.concat([data]));
+        setData(v => v.concat([data as TournamentT]));
       } else {
         console.warn(errorMessage);
       }
@@ -73,14 +90,12 @@ const Tournaments: NextPage<{ tournaments: TournamentT[] }> = ({ tournaments = [
       if (isOk) {
         handleReset();
 
-        // todo: prevent duplication when updating same node
-        // to reproduce: update same multiple times and doplicated rows appear 
-        setData(v => v.concat([data]));
+        setData(v => v.concat([data as TournamentT]));
       } else {
         console.warn(errorMessage);
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -96,20 +111,19 @@ const Tournaments: NextPage<{ tournaments: TournamentT[] }> = ({ tournaments = [
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length > 0 ? (
-          <Table {...tableProps} />
-      ) : null}
+      {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ?
         <DataForm
-          onSubmit={onSubmit}
-          setModalStatus={setModalStatus}
-          editingRow={editingTournament}
           type="tournaments"
+          formTitle={FORM_TITLES[modalStatus.type]}
+          onSubmit={onSubmit}
+          onClose={handleReset}
+          editingRow={editingTournament}
         />
         : null}
     </div>
-  )
+  );
 }
 
-export default Tournaments
+export default Tournaments;

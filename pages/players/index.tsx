@@ -15,7 +15,7 @@ import TableRow from '@mui/material/TableRow'
 import { PrismaClient } from '@prisma/client'
 
 import Input from 'ui-kit/Input';
-import { LEVEL_NUMBER_VALUE } from 'constants/values';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Players.module.scss';
 
 // should be nested from schema
@@ -78,7 +78,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                   <TableCell component="th" scope="row">
                     {first_name + ' ' + last_name}
                   </TableCell>
-                  <TableCell align="left">{LEVEL_NUMBER_VALUE[level]}</TableCell>
+                  <TableCell align="left">{LEVEL_NUMBER_VALUES[level]}</TableCell>
                   <TableCell align="right">
                     {/* {rankings_singles_current.length > 0
                       ? rankings_singles_current[rankings_singles_current.length - 1].points

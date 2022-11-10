@@ -24,18 +24,14 @@ export default async (
     res.json(createdTournament);
   }
 
-  // todo: fix
   if (req.method === 'DELETE') {
-    // const deletedTournaments = await prisma.tournament.deleteMany({
-    //   where: {
-    //     id: {
-    //       // todo: add multiple delete operation
-    //       equals: req.body[0],
-    //     },
-    //   },
-    // });
+    const deletedTournaments = await prisma.tournament.delete({
+      where: {
+        id: req.body.data,
+      },
+    });
 
-    // res.json(deletedTournaments);
+    res.json(deletedTournaments);
   }
 
   if (req.method === 'PUT') {

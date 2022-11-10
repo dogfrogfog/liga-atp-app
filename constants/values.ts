@@ -1,11 +1,48 @@
-export const LEVEL_NUMBER_VALUE = {
+export const LEVEL_NUMBER_VALUES: any = {
   4: 'leger',
   3: 'pro',
   2: 'masters',
   1: 'challenger',
   0: 'futures',
   '-1': 'Satellite', // todo: change index, reorder indexes
-}
+};
+
+export const TOURNAMENT_TYPE_NUMBER_VALUES = {
+  0: 'Большой Шлем',
+  1: 'Про',
+  2: 'Мастерс',
+  11: 'Супермастерс', // new
+  3: 'Челленджер',
+  4: 'Фьючерс',
+  5: 'Сателлит',
+  6: 'Леджер',
+  7: 'Тайбрейк',
+
+  // previous used ids: 8, 9, 10, 16
+
+  12: 'Парный Сателлит',
+  13: 'Парный Суперсателлит', // new
+  14: 'Парный Фьючерс',
+  15: 'Парный Леджер', // new
+  18: 'Парный Челенджер',
+  20: 'Парный Мастерс',
+  22: 'Парный Про',
+
+  100: 'Итоговый Турнир', // new
+  101: 'Парный ProAm', // new
+};
+
+export const SURFACE_TYPE_NUMBER_VALUES = {
+  0: 'Хард',
+  1: 'Грунт',
+  2: 'Трава',
+};
+
+const ACTIVE_TYPE_VALUES = {
+  1: 'Запись',
+  2: 'Идет',
+  3: 'Завершен',
+};
 
 export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
@@ -19,7 +56,7 @@ export const PLAYER_FORM_VALUES = [
   { name: 'email', required: true, type: 'email', placeholder: 'E-mail' },
   { name: 'phone', required: true, type: 'phone', placeholder: 'Номер телефона' },
   // { name: 'avatar', required: true, type: 'file', placeholder: 'Ава' },
-  { name: 'level', required: true, type: 'select', placeholder: 'Уровень', options: LEVEL_NUMBER_VALUE },
+  { name: 'level', required: true, type: 'select', placeholder: 'Уровень', options: LEVEL_NUMBER_VALUES },
   { name: 'age', required: true, type: 'number', placeholder: 'Возраст' },
   { name: 'gameplay_style', required: true, type: 'text', placeholder: 'Стиль игры' },
   { name: 'forehand', required: true, type: 'text', placeholder: 'Форхэнд' },
@@ -30,33 +67,21 @@ export const PLAYER_FORM_VALUES = [
   { name: 'job_description', required: true, type: 'text', placeholder: 'Род деятельности' },
 ];
 
-// {
-//   "id": 3,
-//   "name": "Finals Masters",
-//   "address": "Смена",
-//   "start_date": "2016-12-24",
-//   "is_finished": 1,
-//   "surface": 0,
-//   "associated_tournament_id": null,
-//   "draw_type": 6,
-//   "players_order": "{\"players\":[623,532,533,492,437,596,453,648,657,546,548,549],\"seeds\":[623,532],\"wc\":[]}",
-//   "draw": "{\"brackets\":[{\"id\":\"000\",\"team1Id\":623,\"team2Id\":-1},{\"id\":\"100\",\"team1Id\":533,\"team2Id\":-1},{\"id\":\"010\",\"team1Id\":492,\"team2Id\":-1},{\"id\":\"110\",\"team1Id\":532,\"team2Id\":-1},{\"id\":\"00\",\"matchId\":16,\"team1Id\":623,\"team2Id\":533},{\"id\":\"10\",\"matchId\":17,\"team1Id\":492,\"team2Id\":532},{\"id\":\"0\",\"matchId\":18,\"team1Id\":623,\"team2Id\":532}]}",
-//   "city": "",
-//   "tournament_type": 8
-// }
-
 export const TOURNAMENT_FORM_VALUES: any[] = [
-  { name: 'name', required: false, type: 'text', placeholder: 'Название турнира' },
-  { name: 'city', required: false, type: 'text', placeholder: 'Город проведения' },
-  { name: 'address', required: false, type: 'text', placeholder: 'Место проведения' },
-  { name: 'start_date', required: false, type: 'date', placeholder: 'Дата начала' },
-  { name: 'is_finished', required: false, type: 'checkbox', placeholder: 'Закончен' },
-  { name: 'surface', required: false, type: 'text', placeholder: 'Покрытие' },
-  { name: 'draw_type', required: false, type: 'text', placeholder: '<Draw type>' },
-  { name: 'players_order', required: false, type: 'text', placeholder: '<Порядок игроков>' },
-  { name: 'draw', required: false, type: 'text', placeholder: '<Draw>' },
-  { name: 'tournament_type', required: false, type: 'text', placeholder: '<Тип турнира>' },
-]
+  { name: 'name', required: true, type: 'text', placeholder: 'Название турнира' },
+  { name: 'is_doubles', required: false, type: 'checkbox', placeholder: 'Парный турнир' },
+  { name: 'tournament_type', required: true, type: 'select', placeholder: 'Тип турнира', options: TOURNAMENT_TYPE_NUMBER_VALUES },
+  
+  // players //
+
+  { name: 'start_date', required: true, type: 'date', placeholder: 'Дата начала турнира' },
+  { name: 'surface', required: true, type: 'select', placeholder: 'Тип покрытия', options: SURFACE_TYPE_NUMBER_VALUES },
+  { name: 'status', required: true, type: 'select', placeholder: 'Статус', options: ACTIVE_TYPE_VALUES },
+  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
+
+  // draw_type on the seconds page
+];
+
 
 export const MATCHES_FORM_VALUES: any[] = [
   { name: 'name', required: false, type: 'text', placeholder: 'Название матча' },
