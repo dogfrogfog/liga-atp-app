@@ -24,18 +24,14 @@ export default async (
     res.json(createdPlayer);
   }
 
-  // todo: fix
   if (req.method === 'DELETE') {
-    // const deletedPlayers = await prisma.player.deleteMany({
-    //   where: {
-    //     id: {
-    //       // todo: add multiple delete operation
-    //       equals: req.body[0],
-    //     },
-    //   },
-    // });
+    const deletedPlayer = await prisma.player.delete({
+      where: {
+        id: req.body.data,
+      },
+    });
 
-    // res.json(deletedPlayers);
+    res.json(deletedPlayer);
   }
 
   if (req.method === 'PUT') {

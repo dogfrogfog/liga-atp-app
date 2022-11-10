@@ -45,9 +45,8 @@ export async function updatePlayer (player: PlayerT): Promise<IUpdatePlayerRespo
   }
 }
 
-export async function deleteSelectedPlayer (ids: number[]): Promise<IDeletePlayerResponse> {
-  // todo: match { data } with beckend
-  const response = await axios.delete('/api/players', { data: ids });
+export async function deleteSelectedPlayer(id: number): Promise<IDeletePlayerResponse> {
+  const response = await axios.delete('/api/players', { data: id });
 
   if (response.status === 200) {
     return { isOk: true };

@@ -2,16 +2,21 @@ import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 
-import TableControls from '../../components/admin/TableControls';
-import Table, { useTable } from '../../components/admin/Table';
-import DataForm from '../../components/admin/DataForm';
-import Pagination from '../../components/admin/Pagination';
-import { DEFAULT_MODAL } from '../../constants/values';
-import { getPlayers, createPlayer, updatePlayer } from '../../services/players';
-import PageTitle from '../../ui-kit/PageTitle';
+import TableControls from 'components/admin/TableControls';
+import Table, { useTable } from 'components/admin/Table';
+import DataForm from 'components/admin/DataForm';
+import Pagination from 'components/admin/Pagination';
+import PageTitle from 'ui-kit/PageTitle';
+import { DEFAULT_MODAL } from 'constants/values';
+import { getPlayers, createPlayer, updatePlayer, deleteSelectedPlayer } from 'services/players';
 
-const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
-  const [data, setData] = useState(players);
+const FORM_TITLES: { [k: string]: string } = {
+  add: 'Добавить игрока',
+  update: 'Изменить игрока',
+}
+
+const Players: NextPage = () => {
+  const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingUser, setEditingUser] = useState<undefined | PlayerT>();
   const { pagination, setPagination, ...tableProps } = useTable('players', data);
@@ -35,7 +40,7 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
   };
 
   const handleAddClick = () => {
-    setModalStatus({ type: 'add', isOpen: true });
+    setModalStatus({ isOpen: true, type: 'add' });
   };
 
   const handleUpdateClick = () => {
@@ -45,15 +50,19 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
     setEditingUser(updatingPlayerData);
   };
 
-  // todo: fix
-  const handleDeleteClick = async () => { };
+  const handleDeleteClick = async () => {
+    const { id } = data[tableProps.selectedRow];
+
+    // todo: add delete operation
+    // deleteSelectedPlayer(id);
+  };
 
   // todo: add notifications
   const onSubmit = async (newPlayer: PlayerT) => {
     const normalizedNewPlayer = {
       ...newPlayer,
-      age: parseInt(newPlayer.age),
-      level: parseInt(newPlayer.level),
+      age: parseInt(newPlayer.age as any as string),
+      level: parseInt(newPlayer.level as any as string),
       is_coach: newPlayer.is_coach || false,
       // todo: handle image
       avatar: null,
@@ -65,8 +74,7 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
       if (isOk) {
         handleReset();
 
-        //todo: fix type
-        setData(v => v.concat([data]));
+        setData(v => v.concat([data as PlayerT]));
       } else {
         console.warn(errorMessage);
       }
@@ -77,14 +85,12 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
       if (isOk) {
         handleReset();
 
-        // todo: prevent duplication when updating same node
-        // to reproduce: update same multiple times and doplicated rows appear 
-        setData(v => v.concat([data]));
+        setData(v => v.concat([data as PlayerT]));
       } else {
         console.warn(errorMessage);
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -100,20 +106,19 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length > 0 ? (
-          <Table {...tableProps} />
-      ) : null}
+      {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ?
         <DataForm
-          onSubmit={onSubmit}
-          setModalStatus={setModalStatus}
-          editingRow={editingUser}
           type="players"
+          formTitle={FORM_TITLES[modalStatus.type]}
+          onSubmit={onSubmit}
+          onClose={handleReset}
+          editingRow={editingUser}
         />
         : null}
     </div>
-  )
+  );
 }
 
-export default Players
+export default Players;

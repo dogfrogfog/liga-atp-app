@@ -14,10 +14,9 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { PrismaClient } from '@prisma/client'
 
-import { LEVEL_NUMBER_VALUE } from '../../constants/values';
-import Input from '../../ui-kit/Input';
-
-import styles from '../../styles/Players.module.scss';
+import Input from 'ui-kit/Input';
+import { LEVEL_NUMBER_VALUE } from 'constants/values';
+import styles from 'styles/Players.module.scss';
 
 // should be nested from schema
 interface PlayersPageProps {
@@ -52,8 +51,8 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
       <div className={styles.search}>
         <Input
           placeholder="Введите имя игрока"
-        value={search}
-        onChange={handleSearch}
+          value={search}
+          onChange={handleSearch}
         />
         <button onClick={() => setSearch('')}>
           <MdOutlineClear />
@@ -101,7 +100,7 @@ export const getServerSideProps = async () => {
 
   const players = await prisma.player.findMany({
     take: 5,
-    include: { tournament_players: true }
+    // include: { tournament_players: true }
   })
 
   return {

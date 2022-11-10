@@ -1,24 +1,21 @@
-import { Dispatch, SetStateAction, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { player as PlayerT, tournament as TournamentT } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 
-import { FORM_VALUES } from '../../constants/values'
-import Modal from '../../ui-kit/Modal'
+import Modal from 'ui-kit/Modal'
+import { FORM_VALUES } from 'constants/values'
 
 import styles from './DataForm.module.scss'
 
-// todo: add optional titles for each modal 
-// update- 'Обновить данные игрока/турнира/матча',
-// add- -Добавить нового игрока/турнира/матча',
-
 interface IDataFormProps {
-  setModalStatus: Dispatch<SetStateAction<{ isOpen: boolean, type: string }>>;
-  editingRow?: PlayerT | TournamentT;
+  type: 'players' | 'matches' | 'tournaments';
+  formTitle: string;
   onSubmit: any;
-  type: 'players' | 'matches' | 'tournaments'
+  onClose: any;
+  editingRow?: PlayerT | TournamentT;
 }
 
-const getField = (props, register) => {
+const getField = (props: any, register: any) => {
   switch (props.type) {
     case 'file':
     case 'checkbox': {
@@ -53,15 +50,20 @@ const getField = (props, register) => {
   }
 }
 
-// todo: edd validation + fiedls errors
-const DataForm = ({ onSubmit, setModalStatus, editingRow, type }: IDataFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<PlayerT | TournamentT>({
+// todo: add validation + errors
+const DataForm = ({
+  onSubmit,
+  onClose,
+  editingRow,
+  type,
+  formTitle,
+}: IDataFormProps) => {
+  const { register, handleSubmit } = useForm<PlayerT | TournamentT>({
     defaultValues: editingRow,
   });
 
   return (
-    // <Modal title={T÷ITLES_BY_TYPE[modalStatus.type as 'add' | 'update']} setModalStatus={setModalStatus}>
-    <Modal title="<form_title>" setModalStatus={setModalStatus}>
+    <Modal title={formTitle} handleClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         {FORM_VALUES[type].map((props) => (
           <div key={props.name} className={styles.input}>
