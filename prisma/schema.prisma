@@ -8,40 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model elo_rankings_doubles_current {
-  id            Int       @id(map: "idx_16936_elorankingsdoublescurrent_pkey") @default(autoincrement())
-  date          DateTime? @db.Date
-  position      Int?
-  points        Int?
-  move          Int?
-  level         Int?
-  player_id     Int?
-  opponent_id   Int?
-  points_delta  Int?
-  straight_sets Boolean?
-  won           Boolean?
-  player        player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_elorankingsdoublescurrent_player_id_fkey")
-
-  @@index([player_id], map: "idx_16936_core_elorankingsdoublescurrent_afe72417")
-}
-
-model elo_rankings_singles_current {
-  id            Int       @id(map: "idx_16941_elorankingssinglescurrent_pkey") @default(autoincrement())
-  date          DateTime? @db.Date
-  position      Int?
-  points        Int?
-  move          Int?
-  level         Int?
-  player_id     Int?
-  opponent_id   Int?
-  points_delta  Int?
-  straight_sets Boolean?
-  won           Boolean?
-  player        player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_elorankingssinglescurrent_player_id_fkey")
-
-  @@index([player_id], map: "idx_16941_core_elorankingssinglescurrent_afe72417")
-}
-
 model match {
   id                              Int         @id(map: "idx_16888_match_pkey") @default(autoincrement())
   tournament_id                   Int?
@@ -69,7 +35,7 @@ model match {
 }
 
 model player {
-  id                             Int                            @id(map: "idx_16917_core_player_pkey") @default(autoincrement())
+  id                             Int                  @id(map: "idx_16917_core_player_pkey") @default(autoincrement())
   first_name                     String?
   last_name                      String?
   date_of_birth                  String?
@@ -87,111 +53,30 @@ model player {
   is_coach                       Boolean?
   in_tennis_from                 String?
   job_description                String?
-  elo_rankings_doubles_current   elo_rankings_doubles_current[]
-  elo_rankings_singles_current   elo_rankings_singles_current[]
-  match_match_player1_idToplayer match[]                        @relation("match_player1_idToplayer")
-  match_match_player2_idToplayer match[]                        @relation("match_player2_idToplayer")
-  match_match_player3_idToplayer match[]                        @relation("match_player3_idToplayer")
-  match_match_player4_idToplayer match[]                        @relation("match_player4_idToplayer")
-  rankings_doubles_current       rankings_doubles_current[]
-  rankings_doubles_race          rankings_doubles_race[]
-  rankings_singles_current       rankings_singles_current[]
-  rankings_singles_race          rankings_singles_race[]
+  match_match_player1_idToplayer match[]              @relation("match_player1_idToplayer")
+  match_match_player2_idToplayer match[]              @relation("match_player2_idToplayer")
+  match_match_player3_idToplayer match[]              @relation("match_player3_idToplayer")
+  match_match_player4_idToplayer match[]              @relation("match_player4_idToplayer")
   tournament_players             tournament_players[]
-  tournament_points_doubles      tournament_points_doubles[]
-  tournament_points_singles      tournament_points_singles[]
-}
-
-model rankings_doubles_current {
-  id        Int       @id(map: "idx_16895_core_rankingsdoublescurrent_pkey") @default(autoincrement())
-  date      DateTime? @db.Date
-  position  Int?
-  points    Int?
-  move      Int?
-  level     Int?
-  player_id Int?
-  player    player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_rankingsdoublescurrent_player_id_fkey")
-
-  @@index([player_id], map: "idx_16895_core_rankingsdoublescurrent_afe72417")
-}
-
-model rankings_doubles_race {
-  id        Int       @id(map: "idx_16900_core_rankingsdoublesrace_pkey") @default(autoincrement())
-  date      DateTime? @db.Date
-  position  Int?
-  points    Int?
-  move      Int?
-  level     Int?
-  player_id Int?
-  player    player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_rankingsdoublesrace_player_id_fkey")
-
-  @@index([player_id], map: "idx_16900_core_rankingsdoublesrace_afe72417")
-}
-
-model rankings_singles_current {
-  id        Int       @id(map: "idx_16878_core_rankingssinglescurrent_pkey") @default(autoincrement())
-  date      DateTime? @db.Date
-  position  Int?
-  points    Int?
-  player_id Int?
-  move      Int?
-  level     Int?
-  player    player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_rankingssinglescurrent_player_id_fkey")
-
-  @@index([player_id], map: "idx_16878_core_rankingssinglescurrent_afe72417")
-}
-
-model rankings_singles_race {
-  id        Int       @id(map: "idx_16883_core_rankingssinglesrace_pkey") @default(autoincrement())
-  date      DateTime? @db.Date
-  position  Int?
-  points    Int?
-  player_id Int?
-  move      Int?
-  level     Int?
-  player    player?   @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_rankingssinglesrace_player_id_fkey")
-
-  @@index([player_id], map: "idx_16883_core_rankingssinglesrace_afe72417")
-}
-
-model scoring_template {
-  id                   Int  @id(map: "idx_16924_core_scoringtemplate_pkey") @default(autoincrement())
-  finalist_points      Int?
-  qf_points            Int?
-  r16_points           Int?
-  sf_points            Int?
-  winner_points        Int?
-  draw_type            Int?
-  group_2nd_place      Int?
-  group_3rd_place      Int?
-  qual_points          Int?
-  r32_points           Int?
-  group_qual_2nd_place Int?
-  group_qual_3rd_place Int?
-  group_4th_place      Int?
-  group_qual_4th_place Int?
-  tournament_type      Int?
 }
 
 model tournament {
-  id                        Int                         @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
-  name                      String?
-  address                   String?
-  start_date                DateTime?                   @db.Date
-  is_finished               Boolean?
-  surface                   Int?
-  associated_tournament_id  Int?                        @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
-  draw_type                 Int?
-  players_order             String?
-  draw                      String?
-  city                      String?
-  tournament_type           Int?
-  tournament                tournament?                 @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
-  match                     match[]
-  other_tournament          tournament?                 @relation("tournamentTotournament")
-  tournament_players        tournament_players[]
-  tournament_points_doubles tournament_points_doubles[]
-  tournament_points_singles tournament_points_singles[]
+  id                       Int                  @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
+  name                     String?
+  address                  String?
+  start_date               DateTime?            @db.Date
+  is_finished              Boolean?
+  surface                  Int?
+  associated_tournament_id Int?                 @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
+  draw_type                Int?
+  players_order            String?
+  draw                     String?
+  city                     String?
+  tournament_type          Int?
+  tournament               tournament?          @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
+  match                    match[]
+  other_tournament         tournament?          @relation("tournamentTotournament")
+  tournament_players       tournament_players[]
 }
 
 model tournament_players {
@@ -204,32 +89,4 @@ model tournament_players {
   @@unique([tournament_id, player_id], map: "idx_16849_sqlite_autoindex_core_tournament_players_1")
   @@index([tournament_id], map: "idx_16849_core_tournament_players_656a3fdb")
   @@index([player_id], map: "idx_16849_core_tournament_players_afe72417")
-}
-
-model tournament_points_doubles {
-  id               Int         @id(map: "idx_16912_core_tournamentpointsdoubles_pkey") @default(autoincrement())
-  date             DateTime?   @db.Date
-  points           Int?
-  defending_points Int?
-  player_id        Int?
-  tournament_id    Int?
-  player           player?     @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournamentpointsdoubles_player_id_fkey")
-  tournament       tournament? @relation(fields: [tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournamentpointsdoubles_tournament_id_fkey")
-
-  @@index([tournament_id], map: "idx_16912_core_tournamentpointsdoubles_656a3fdb")
-  @@index([player_id], map: "idx_16912_core_tournamentpointsdoubles_afe72417")
-}
-
-model tournament_points_singles {
-  id               Int         @id(map: "idx_16859_core_tournamentpointssingles_pkey") @default(autoincrement())
-  date             DateTime?   @db.Date
-  points           Int?
-  defending_points Int?
-  player_id        Int?
-  tournament_id    Int?
-  player           player?     @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournamentpointssingles_player_id_fkey")
-  tournament       tournament? @relation(fields: [tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournamentpointssingles_tournament_id_fkey")
-
-  @@index([tournament_id], map: "idx_16859_core_tournamentpointssingles_656a3fdb")
-  @@index([player_id], map: "idx_16859_core_tournamentpointssingles_afe72417")
 }

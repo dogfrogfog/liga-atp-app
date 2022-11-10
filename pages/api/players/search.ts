@@ -17,7 +17,7 @@ export default async (
         },
       },
       // return only latest version
-      include: { rankingssinglescurrent: true }
+      // include: { rankings_singles_current: true }
     })
 
     res.json(searchPlayers)

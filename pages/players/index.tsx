@@ -2,16 +2,22 @@ import type { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import { MdOutlineClear } from 'react-icons/md';
+import { AiOutlineSearch } from 'react-icons/ai';
+
+// todo: migrate FROM mui
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import TextField from '@mui/material/TextField'
 import { PrismaClient } from '@prisma/client'
 
-import styles from '../../styles/Players.module.scss'
+import { LEVEL_NUMBER_VALUE } from '../../constants/values';
+import Input from '../../ui-kit/Input';
+
+import styles from '../../styles/Players.module.scss';
 
 // should be nested from schema
 interface PlayersPageProps {
@@ -21,6 +27,10 @@ interface PlayersPageProps {
 const Players: NextPage<PlayersPageProps> = ({ players }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState(players)
+
+  if (data.length > 0) {
+    console.log(data)
+  }
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
@@ -39,23 +49,19 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
       <div className={styles.header}>
         LIGA TENNISA APP
       </div>
-      <br />
-      <br />
-      <br />
-      wefwef
-      <br />
-      <br />
-      <br />
-      <br />
-      <TextField
-        color="primary"
-        label="Введите имя игрока"
-        variant="filled"
+      <div className={styles.search}>
+        <Input
+          placeholder="Введите имя игрока"
         value={search}
         onChange={handleSearch}
-      />
-      <button onClick={() => setSearch('')}>clear</button>
-      <button onClick={() => submitSearch()}>search</button>
+        />
+        <button onClick={() => setSearch('')}>
+          <MdOutlineClear />
+        </button>
+        <button onClick={submitSearch}>
+          <AiOutlineSearch />
+        </button>
+      </div>
       <span className={styles.listTitle}>Список игроков</span>
       <TableContainer className={styles.playersTable}>
         <Table>
@@ -67,17 +73,18 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(({ id, first_name, last_name, level, rankingssinglescurrent }) => (
+            {data.map(({ id, first_name, last_name, level, rankings_singles_current }) => (
               <Link key={id} href={'/players/' + id}>
                 <TableRow key={id}>
                   <TableCell component="th" scope="row">
                     {first_name + ' ' + last_name}
                   </TableCell>
-                  <TableCell align="left">{level}</TableCell>
+                  <TableCell align="left">{LEVEL_NUMBER_VALUE[level]}</TableCell>
                   <TableCell align="right">
-                    {rankingssinglescurrent.length > 0
-                      ? rankingssinglescurrent[rankingssinglescurrent.length - 1].points
-                      : 0}
+                    {/* {rankings_singles_current.length > 0
+                      ? rankings_singles_current[rankings_singles_current.length - 1].points
+                      : 0} */}
+                      1489
                   </TableCell>
                 </TableRow>
               </Link>
@@ -92,10 +99,9 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
 export const getServerSideProps = async () => {
   const prisma = new PrismaClient()
 
-  // data inside sqlite db
   const players = await prisma.player.findMany({
-    take: 10,
-    include: { rankingssinglescurrent: true }
+    take: 5,
+    include: { tournament_players: true }
   })
 
   return {

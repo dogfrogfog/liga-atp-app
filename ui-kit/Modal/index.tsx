@@ -1,22 +1,19 @@
-import type { FC, ReactNode, Dispatch, SetStateAction } from 'react'
+import type { ReactNode } from 'react'
+
 import styles from './styles.module.scss';
 
 interface IModalProps {
   title: string;
   children: ReactNode;
-  setModalStatus: Dispatch<SetStateAction<{ type: string, isOpen: boolean }>>;
+  handleClose: () => void;
 }
 
-const Modal: FC<IModalProps> = ({ title, children, setModalStatus }) => {
-  const handleModalClose = () => {
-    setModalStatus({ type: '', isOpen: false })
-  }
-
+const Modal = ({ title, children, handleClose }: IModalProps) => {
   const handleOverlayClick = (e: any) => {
     if (e.target.id === 'overlay') {
-      handleModalClose()
+      handleClose();
     }
-  }
+  };
 
   return (
     <div className={styles.modal}>
@@ -24,14 +21,14 @@ const Modal: FC<IModalProps> = ({ title, children, setModalStatus }) => {
       <div className={styles.modalBlock}>
         <div className={styles.modalHeader}>
           <p>{title}</p>
-          <p className={styles.close} onClick={handleModalClose}>X</p>
+          <p className={styles.close} onClick={handleClose}>X</p>
         </div>
         <div className={styles.modalBody}>
           {children}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Modal
+export default Modal;

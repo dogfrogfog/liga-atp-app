@@ -11,6 +11,39 @@
     height: 60px;
   }
 
+  .search {
+    display: flex;
+    align-items: center;
+
+    input {
+      width: calc(100% - 80px);
+      height: 30px;
+      background: none;
+      border: 1px solid white;
+      border-radius: 5px;
+      color: white;
+      outline: none;
+      padding: 0 10px;
+    }
+
+    button {
+      width: 30px;
+      height: 30px;
+      background: none;
+      border: 1px solid white;
+      border-radius: 5px;
+      color: white;
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
   .listTitle {
     display: block;
     padding: 15px;

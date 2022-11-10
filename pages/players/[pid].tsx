@@ -27,20 +27,15 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
     email,
     phone,
     avatar,
+    level,
     age,
-    job_description,
-    years_in_tennis,
     gameplay_style,
     forehand,
     beckhand,
     insta_link,
     is_coach,
-    medals,
-    level,
-    // add height to db
-    // height = 170,
-
-    // rankingssinglescurrent,
+    in_tennis_from,
+    job_description,
   } = player;
 
   const activeTabContent = (() => {
@@ -52,7 +47,7 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
             city={city}
             height={170}
             job_description={job_description}
-            years_in_tennis={years_in_tennis}
+            in_tennis_from={in_tennis_from}
             gameplay_style={gameplay_style}
             forehand={forehand}
             beckhand={beckhand}
@@ -74,17 +69,17 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
 
   // get last node from db
   // @ts-ignore
-  const { position, points } = rankingssinglescurrent[rankingssinglescurrent.length - 1]
+  // const { position, points } = rankingssinglescurrent[rankingssinglescurrent.length - 1]
   
   return (
     <div className={styles.profileContainer}>
       {/* @ts-ignore */}
       <ProfileHeader
+        is_coach={is_coach}
         name={first_name + ' ' + last_name}
         // @ts-ignore
         level={LEVEL_NUMBER_VALUE[level.toString()]}
-        points={points}
-        position={position}
+        points={'1490'} // todo: add real elo rank
       />
       <section>
         <Tabs
@@ -116,13 +111,13 @@ interface IProfileHeaderProps {
   name: string
   level: string
   points: string
-  position: string
+  is_coach: boolean
 }
 
-const ProfileHeader = ({ name, level, points, position }: IProfileHeaderProps) => {
+const ProfileHeader = ({ name, level, points, is_coach }: IProfileHeaderProps) => {
   return (
     <div className={styles.profileHeader}>
-      <span className={styles.status}>Тренер</span>
+      <span className={styles.status}>{is_coach ? 'Тренер' : 'Игрок'}</span>
       <div className={styles.info}>
         <p className={styles.name}>{name}</p>
         <div className={styles.infoContainer}>
@@ -140,10 +135,7 @@ const ProfileHeader = ({ name, level, points, position }: IProfileHeaderProps) =
               {'<6>'}
             </div> */}
           </div>
-          <span>
-            points: <span className={styles.elo}>{points}</span>
-            position: <span className={styles.elo}>{position}</span>
-          </span>
+          <span className={styles.elo}>{points}</span>
         </div>
       </div>
     </div>
@@ -153,14 +145,13 @@ const ProfileHeader = ({ name, level, points, position }: IProfileHeaderProps) =
 export const getServerSideProps = async (ctx: any) => {
   const prisma = new PrismaClient()
 
-  // data inside sqlite db
   const player = await prisma.player.findUnique({
     where: {
       id: parseInt(ctx.query.pid)
     },
-    include: {
-      rankingssinglescurrent: true,
-    }
+    // include: {
+    //   rankings_singles_current: true,
+    // }
   })
 
   return {

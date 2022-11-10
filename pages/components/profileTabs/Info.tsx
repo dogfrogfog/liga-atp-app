@@ -59,7 +59,7 @@ const InfoTab = ({
     </div>
     <div className={styles.infoRow}>
       <span>Инстаграм</span>
-      <span><BsInstagram /> {insta_link}</span>
+      <span><BsInstagram /> {insta_link.split('https://www.instagram.com/')[1]}</span>
     </div>
     {/* be able to chose from one of the players  */}
     {/* <div className={styles.coaching}>
