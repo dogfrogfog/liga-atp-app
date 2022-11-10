@@ -10,28 +10,25 @@ export const LEVEL_NUMBER_VALUE = {
 export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
-export const PLAYER_FORM_VALUES: any[] = [
-  // todo: camelize fields
-  { name: 'first_name', required: false, type: 'text', placeholder: 'Имя' },
-  { name: 'last_name', required: false, type: 'text', placeholder: 'Фамилия' },
-  { name: 'date_of_birth', required: false, type: 'date', placeholder: 'Дата рождения' },
-  { name: 'city', required: false, type: 'text', placeholder: 'Город' },
-  { name: 'country', required: false, type: 'text', placeholder: 'Страна' },
-  // { name: 'age', required: false, type: 'number', placeholder: 'Возраст' },
-  // { name: 'job_description', required: false, type: 'text', placeholder: 'Род деятельности' },
-  // { name: 'years_in_tennis', required: false, type: 'text', placeholder: 'Лет в теннисе' },
-  // { name: 'gameplay_style', required: false, type: 'text', placeholder: 'Стиль игры' },
-  // { name: 'forehand', required: false, type: 'text', placeholder: 'Форхэнд' },
-  // { name: 'beckhand', required: false, type: 'text', placeholder: 'Бэкэнд' },
-  // todo: show only mnickname with @
-  // { name: 'insta_link', required: false, type: 'text', placeholder: 'Ссылка на инст' },
-  // { name: 'medals', required: false, placeholder: '' },
-  // { name: 'email', required: false, type: 'email', placeholder: 'E-mail' },
-  // { name: 'phone', required: false, type: 'phone', placeholder: 'Номер телефона' },
-  // { name: 'level', required: false, type: 'text', placeholder: 'Уровень' },
-  // { name: 'avatar', required: false, type: 'file', placeholder: 'Ава' },
-  // { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
-]
+export const PLAYER_FORM_VALUES = [
+  { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
+  { name: 'last_name', required: true, type: 'text', placeholder: 'Фамилия' },
+  { name: 'date_of_birth', required: true, type: 'date', placeholder: 'Дата рождения' },
+  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
+  { name: 'country', required: true, type: 'text', placeholder: 'Страна' },
+  { name: 'email', required: true, type: 'email', placeholder: 'E-mail' },
+  { name: 'phone', required: true, type: 'phone', placeholder: 'Номер телефона' },
+  // { name: 'avatar', required: true, type: 'file', placeholder: 'Ава' },
+  { name: 'level', required: true, type: 'select', placeholder: 'Уровень', options: LEVEL_NUMBER_VALUE },
+  { name: 'age', required: true, type: 'number', placeholder: 'Возраст' },
+  { name: 'gameplay_style', required: true, type: 'text', placeholder: 'Стиль игры' },
+  { name: 'forehand', required: true, type: 'text', placeholder: 'Форхэнд' },
+  { name: 'beckhand', required: true, type: 'text', placeholder: 'Бэкэнд' },
+  { name: 'insta_link', required: true, type: 'text', placeholder: 'Ссылка на инст' },
+  { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
+  { name: 'in_tennis_from', required: true, type: 'date', placeholder: 'Начал играть' },
+  { name: 'job_description', required: true, type: 'text', placeholder: 'Род деятельности' },
+];
 
 // {
 //   "id": 3,

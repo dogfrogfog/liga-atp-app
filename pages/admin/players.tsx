@@ -50,8 +50,17 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
 
   // todo: add notifications
   const onSubmit = async (newPlayer: PlayerT) => {
+    const normalizedNewPlayer = {
+      ...newPlayer,
+      age: parseInt(newPlayer.age),
+      level: parseInt(newPlayer.level),
+      is_coach: newPlayer.is_coach || false,
+      // todo: handle image
+      avatar: null,
+    };
+
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createPlayer({ ...newPlayer, date_of_birth: null })
+      const { isOk, data, errorMessage } = await createPlayer(normalizedNewPlayer)
 
       if (isOk) {
         handleReset();
@@ -64,7 +73,7 @@ const Players: NextPage<{ players: PlayerT[] }> = ({ players = [] }) => {
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updatePlayer(newPlayer);
+      const { isOk, data, errorMessage } = await updatePlayer(normalizedNewPlayer);
       if (isOk) {
         handleReset();
 
