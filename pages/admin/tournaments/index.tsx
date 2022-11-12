@@ -111,6 +111,8 @@ const Tournaments: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
+      {/* // todo add links ti each pages */}
+      {/* // <Link key={id} href={'/players/' + id}></Link> */}
       {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ?

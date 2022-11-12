@@ -14,7 +14,7 @@ import styles from '../../styles/Profile.module.scss'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
-const Profile: NextPage<{ player: player }> = ({ player }) => {
+const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
 
   const {
@@ -73,13 +73,12 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
   
   return (
     <div className={styles.profileContainer}>
-      {/* @ts-ignore */}
       <ProfileHeader
-        is_coach={is_coach}
+        is_coach={is_coach as boolean}
         name={first_name + ' ' + last_name}
-        // @ts-ignore
-        level={LEVEL_NUMBER_VALUES[level.toString()]}
-        points={'1490'} // todo: add real elo rank
+        level={LEVEL_NUMBER_VALUES[(level as number).toString()]}
+         // todo: add real elo rank
+        points={'1490'}
       />
       <section>
         <Tabs
@@ -104,7 +103,7 @@ const Profile: NextPage<{ player: player }> = ({ player }) => {
         {activeTabContent}
       </section>
     </div>
-  )
+  );
 }
 
 interface IProfileHeaderProps {
@@ -143,22 +142,19 @@ const ProfileHeader = ({ name, level, points, is_coach }: IProfileHeaderProps) =
 }
 
 export const getServerSideProps = async (ctx: any) => {
-  const prisma = new PrismaClient()
+  const prisma = new PrismaClient();
 
   const player = await prisma.player.findUnique({
     where: {
-      id: parseInt(ctx.query.pid)
+      id: parseInt(ctx.query.pid),
     },
-    // include: {
-    //   rankings_singles_current: true,
-    // }
-  })
+  });
 
   return {
     props: {
       player,
     }
-  }
+  };
 }
 
-export default Profile
+export default SingleProfilePage;
