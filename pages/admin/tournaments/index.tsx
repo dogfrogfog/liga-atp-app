@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
 
 import TableControls from 'components/admin/TableControls';
@@ -21,6 +22,7 @@ const FORM_TITLES: { [k: string]: string } = {
 };
 
 const Tournaments: NextPage = () => {
+  const router = useRouter()
   const [data, setData] = useState<TournamentT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingTournament, setEditingTournament] = useState<undefined | TournamentT>();
@@ -60,6 +62,12 @@ const Tournaments: NextPage = () => {
 
     // todo: add delete operation
     // deleteSelectedPlayer(id);
+  };
+
+  const handlePickClick = () => {
+    const { id } = data[tableProps.selectedRow];
+    const href = '/admin/tournaments/' + id;
+    router.push(href);
   };
 
   // todo: add notifications
@@ -106,13 +114,12 @@ const Tournaments: NextPage = () => {
       </div>
       <TableControls
         selectedRow={tableProps.selectedRow}
+        handlePickClick={handlePickClick}
         handleAddClick={handleAddClick}
         handleUpdateClick={handleUpdateClick}
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {/* // todo add links ti each pages */}
-      {/* // <Link key={id} href={'/players/' + id}></Link> */}
       {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ?

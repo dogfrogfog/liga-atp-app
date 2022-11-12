@@ -11,6 +11,9 @@ export default async (
     const paginatedTournaments = await prisma.tournament.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
+      orderBy: {
+        id: 'desc',
+      },
     });
 
     res.json(paginatedTournaments);
@@ -42,6 +45,24 @@ export default async (
       data: req.body.data,
     });
 
-    res.json(updatedTournament);
+    const updatedTournamentFull = await prisma.tournament.findUnique({
+      where: {
+        id: req.body.data.id,
+      },
+      include: {
+        // easy to add related column
+        tournament_players: true,
+        match: {
+          include: {
+            player_match_player1_idToplayer: true,
+            player_match_player2_idToplayer: true,
+            player_match_player3_idToplayer: true,
+            player_match_player4_idToplayer: true,
+          }
+        },
+      },
+    });
+
+    res.json(updatedTournamentFull);
   }
 }

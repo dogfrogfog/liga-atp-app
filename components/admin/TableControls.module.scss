@@ -13,6 +13,10 @@
     margin-left: 20px;
     cursor: pointer;
 
+    &.pick {
+      background-color: $custom-aqua;
+    }
+
     &.add {
       background-color: $custom-green;
     }

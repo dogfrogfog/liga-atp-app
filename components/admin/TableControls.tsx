@@ -4,6 +4,7 @@ import styles from './TableControls.module.scss'
 
 interface ITableControlsProps {
   selectedRow: number;
+  handlePickClick?: any;
   handleAddClick: any;
   handleUpdateClick: any;
   handleResetClick: any;
@@ -13,6 +14,7 @@ interface ITableControlsProps {
 // todo: add disabled state (when editting or loading)
 const TableControls: FC<ITableControlsProps> = ({
   selectedRow,
+  handlePickClick,
   handleAddClick,
   handleUpdateClick,
   handleDeleteClick,
@@ -20,6 +22,11 @@ const TableControls: FC<ITableControlsProps> = ({
 }) => {
   return (
     <div className={styles.tableControls}>
+      {handlePickClick ?
+        <button disabled={selectedRow === -1} className={styles.pick} onClick={handlePickClick}>
+          Выбрать
+        </button>
+        : null}
       <button className={styles.add} onClick={handleAddClick}>
         Добавить
       </button>

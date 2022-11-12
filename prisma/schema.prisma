@@ -17,7 +17,7 @@ model match {
   is_completed                    Boolean?
   stage                           Int?
   start_date                      DateTime?   @db.Date
-  winner_id                       Decimal?    @db.Decimal
+  winner_id                       String?
   score                           String?
   player3_id                      Int?
   player4_id                      Int?

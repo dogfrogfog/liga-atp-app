@@ -1,3 +1,8 @@
+// interface NumberValuesT {
+//   [k: number | string]: number;
+// }
+// todo: add types objects
+
 export const LEVEL_NUMBER_VALUES: any = {
   4: 'leger',
   3: 'pro',
@@ -7,7 +12,7 @@ export const LEVEL_NUMBER_VALUES: any = {
   '-1': 'Satellite', // todo: change index, reorder indexes
 };
 
-export const TOURNAMENT_TYPE_NUMBER_VALUES = {
+export const TOURNAMENT_TYPE_NUMBER_VALUES: any = {
   0: 'Большой Шлем',
   1: 'Про',
   2: 'Мастерс',
@@ -32,13 +37,34 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES = {
   101: 'Парный ProAm', // new
 };
 
-export const SURFACE_TYPE_NUMBER_VALUES = {
+export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: any = {
+  // olympic net (singles types)
+  10: 'D8',
+  3: 'D16',
+  1: 'D32',
+  12: 'D64', // new
+  11: 'D8 + Q',
+  4: 'D16 + Q',
+  2: 'D32 + Q',
+  13: 'D64 + Q', // new
+
+  //  22, 5, 7, 6, 8, 9 // used indexes (deprecated)
+
+  // groups net (doubles types)
+  14: 'G6',
+  15: 'G10',
+  16: 'G12',
+  17: 'G16',
+  18: 'G6',
+};
+
+export const SURFACE_TYPE_NUMBER_VALUES: any = {
   0: 'Хард',
   1: 'Грунт',
   2: 'Трава',
 };
 
-const ACTIVE_TYPE_VALUES = {
+export const TOURNAMENT_STATUS_NUMBER_VALUES = {
   1: 'Запись',
   2: 'Идет',
   3: 'Завершен',
@@ -76,7 +102,7 @@ export const TOURNAMENT_FORM_VALUES: any[] = [
 
   { name: 'start_date', required: true, type: 'date', placeholder: 'Дата начала турнира' },
   { name: 'surface', required: true, type: 'select', placeholder: 'Тип покрытия', options: SURFACE_TYPE_NUMBER_VALUES },
-  { name: 'status', required: true, type: 'select', placeholder: 'Статус', options: ACTIVE_TYPE_VALUES },
+  { name: 'status', required: true, type: 'select', placeholder: 'Статус', options: TOURNAMENT_STATUS_NUMBER_VALUES },
   { name: 'city', required: true, type: 'text', placeholder: 'Город' },
 
   // draw_type on the seconds page
