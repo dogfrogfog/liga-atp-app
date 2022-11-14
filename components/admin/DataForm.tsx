@@ -7,6 +7,7 @@ import Modal from 'ui-kit/Modal'
 import { FORM_VALUES, PlayerFormType, PlayerSchema } from 'constants/formValues'
 
 import styles from './DataForm.module.scss'
+import ErrorMessage from "../common/errorMessage";
 
 interface IDataFormProps {
   type: 'players' | 'matches' | 'tournaments';
@@ -27,7 +28,7 @@ const getField = (props: any, register: any, errors: any) => {
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
-          {errors[props.name] && (<p>Error</p>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
         </>
       );
     };
@@ -39,7 +40,7 @@ const getField = (props: any, register: any, errors: any) => {
               <option value={key}>{value as ReactNode}</option>
             ))}
           </select>
-          {errors[props.name] && (<p>Error</p>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
         </>
       )
     }
@@ -51,7 +52,7 @@ const getField = (props: any, register: any, errors: any) => {
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
-          {errors[props.name] && (<p>Error</p>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
         </>
       )
     };
