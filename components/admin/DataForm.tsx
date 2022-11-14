@@ -37,7 +37,7 @@ const getField = (props: any, register: any, errors: any) => {
         <>
           <select name={props.name} {...register(props.name, { required: props.required })}>
             {Object.entries(props.options).map(([key, value]) => (
-              <option value={key}>{value as ReactNode}</option>
+              <option key={key} value={key}>{value as ReactNode}</option>
             ))}
           </select>
           {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
