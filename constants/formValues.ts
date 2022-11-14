@@ -8,21 +8,21 @@ import {
 } from './values';
 
 export const PlayerSchema = z.object({
-  first_name: z.number(),
-  last_name: z.string(),
+  first_name: z.string().min(2),
+  last_name: z.string().min(2),
   date_of_birth: z.date(),
-  city: z.string(),
-  country: z.string(),
+  city: z.string().min(2),
+  country: z.string().min(2),
   email: z.string().email(),
   phone: z.number(),
   age: z.number().positive(),
-  gameplay_style: z.string(),
-  forehand: z.string(),
-  beckhand: z.string(),
-  insta_link: z.string(),
+  gameplay_style: z.string().min(2),
+  forehand: z.string().min(2),
+  beckhand: z.string().min(2),
+  insta_link: z.string().min(2),
   is_coach: z.boolean(),
   in_tennis_from: z.date(),
-  job_description: z.string(),
+  job_description: z.string().min(2),
 });
 export type PlayerFormType = z.infer<typeof PlayerSchema>;
 
