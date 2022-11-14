@@ -1,13 +1,12 @@
 import type { ReactNode } from 'react'
 import type { player as PlayerT, tournament as TournamentT } from '@prisma/client'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Modal from 'ui-kit/Modal'
-import { FORM_VALUES } from 'constants/values'
+import { FORM_VALUES, PlayerFormType, PlayerSchema } from 'constants/formValues'
 
 import styles from './DataForm.module.scss'
-import {AddPlayerFormType, AddPlayerSchema} from "../../zod/admin/addPlayer";
-import {zodResolver} from "@hookform/resolvers/zod";
 
 interface IDataFormProps {
   type: 'players' | 'matches' | 'tournaments';
@@ -17,7 +16,7 @@ interface IDataFormProps {
   editingRow?: PlayerT | TournamentT;
 }
 
-const getField = (props: any, register: any, errors:any) => {
+const getField = (props: any, register: any, errors: any) => {
   switch (props.type) {
     case 'file':
     case 'checkbox': {
@@ -34,20 +33,26 @@ const getField = (props: any, register: any, errors:any) => {
     };
     case 'select': {
       return (
-        <select name={props.name} {...register(props.name, { required: props.required })}>
-          {Object.entries(props.options).map(([key, value]) => (
-            <option value={key}>{value as ReactNode}</option>
-          ))}
-        </select>
+        <>
+          <select name={props.name} {...register(props.name, { required: props.required })}>
+            {Object.entries(props.options).map(([key, value]) => (
+              <option value={key}>{value as ReactNode}</option>
+            ))}
+          </select>
+          {errors[props.name] && (<p>Error</p>)}
+        </>
       )
     }
     default: {
       return (
-        <input
-          placeholder={props.placeholder}
-          type={props.type}
-          {...register(props.name, { required: props.required })}
-        />
+        <>
+          <input
+            placeholder={props.placeholder}
+            type={props.type}
+            {...register(props.name, { required: props.required })}
+          />
+          {errors[props.name] && (<p>Error</p>)}
+        </>
       )
     };
     }
@@ -61,9 +66,12 @@ const DataForm = ({
   type,
   formTitle,
 }: IDataFormProps) => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<AddPlayerFormType>({
-    resolver: zodResolver(AddPlayerSchema)
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
+    resolver: zodResolver(PlayerSchema),
+    defaultValues: editingRow,
   });
+
+  console.log(errors)
 
   return (
     <Modal title={formTitle} handleClose={onClose}>
@@ -75,7 +83,6 @@ const DataForm = ({
         ))}
         <input className={styles.submit} type="submit" />
       </form>
-      <pre>{JSON.stringify(watch(), null, 2)}</pre>
     </Modal>
   );
 }
