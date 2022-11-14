@@ -8,12 +8,15 @@
     "start": "next start",
     "lint": "next lint",
     "sb": "start-storybook -p 6006",
-    "build-sb": "build-storybook"
+    "build-sb": "build-storybook",
+    "seeds": "prisma migrate reset",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@fontsource/roboto": "^4.5.8",
+    "@hookform/resolvers": "^2.9.10",
     "@mui/material": "^5.10.7",
     "@prisma/client": "4.5.0",
     "@tanstack/react-table": "^8.5.15",
@@ -29,7 +32,8 @@
     "react-icons": "^4.4.0",
     "react-outside-click-handler": "^1.3.0",
     "sass": "^1.55.0",
-    "superjson": "^1.11.0"
+    "superjson": "^1.11.0",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
