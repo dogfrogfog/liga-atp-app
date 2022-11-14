@@ -8,9 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "sb": "start-storybook -p 6006",
-    "build-sb": "build-storybook",
-    "seeds": "prisma migrate reset",
-    "generate": "prisma generate"
+    "build-sb": "build-storybook"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
