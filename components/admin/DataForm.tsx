@@ -93,7 +93,6 @@ const DataForm = ({
         ))}
         <input className={styles.submit} type="submit" />
       </form>
-      <pre>{JSON.stringify(watch(), null, 2)}</pre>
     </Modal>
   );
 }
