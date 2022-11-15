@@ -1,0 +1,93 @@
+@import '../../../styles/variables.scss';
+
+.drawContainer {
+  width: 100%;
+  height: 500px;
+  border: 2px solid red;
+  overflow-x: scroll;
+  display: flex;
+
+  .stage {
+    width: 300px;
+    border: 1px solid green;
+    display: flex;
+    flex-direction: column;
+
+    .matchesContainer {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.twoSides {
+  display: flex;
+
+  .addPlayersContainer {
+    width: 75%;
+  }
+
+  .playersListContainer {
+    width: 25%;
+
+    .playersToDragIntoDraw {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      
+      li {
+        margin-bottom: 10px;
+        background-color: $custom-lightgray;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.addNewPlayerBlock {
+  margin-bottom: 20px;
+
+  .selectedOptionsContainer {
+    width: 100%;
+    font-size: 14px;
+    margin-top: 10px;
+
+    .selectedNameTag {
+      display: inline-block;
+      background-color: $custom-lightgray;
+      border-radius: 5px;
+      padding: 5px;
+      margin-right: 10px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .addPlayersControls {
+    display: flex;
+    justify-content: space-between;
+
+    .multiSelect {
+      width: 70%;
+    }
+  }
+
+  .submitButton {
+    width: 100px;
+    cursor: pointer;
+    background-color: $custom-green;
+    border: none;
+    
+    &:hover {
+      border: 1px solid $border-color;
+    }
+
+    button[disabled] {
+      cursor: not-allowed;
+      border: none;
+    }
+  }
+}
+

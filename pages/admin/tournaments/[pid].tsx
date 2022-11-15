@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, SetStateAction, useState, Dispatch, ReactNode } from 'react';
 import type { NextPage } from 'next';
-import { PrismaClient, tournament as TournamentT } from '@prisma/client';
+import { PrismaClient, tournament as TournamentT, player as PlayerT, match as MatchT } from '@prisma/client';
+import { MultiSelect, Option } from 'react-multi-select-component';
 
 import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
@@ -9,37 +10,67 @@ import {
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
-import { getPlayers } from 'services/players';
+import styles from './AdminSingleTournamentPape.module.scss';
+import { AiFillCodeSandboxCircle } from 'react-icons/ai';
 
 interface IAdminSingleTournamentPapeProps {
   tournament: TournamentT;
+  players: PlayerT[];
 }
 
-const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({ tournament }) => {
-  const [activeTournament, setActiveTournament] = useState(tournament);
+// todo: serialize JSON and return a JSON object (for tournament.players_order and tournament.draw)
+const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
+  tournament,
+  players,
+}) => {
   const { match, is_finished } = tournament;
+  const [activeTournament, setActiveTournament] = useState(tournament);
   const [drawType, setDrawType] = useState(tournament.draw_type);
-
-  console.log(tournament)
+  const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
 
   const handleDrawTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setDrawType(parseInt(e.target.value));
   };
 
-  const handleSaveDraw = async () => {
-    const { data } = await getPlayers({ pageIndex: 40, pageSize: 20 });
-    console.log(data)
-    // const newTournament = await updateTournament({ ...activeTournament, draw_type: drawType, match: undefined, tournament_players: undefined });
+  const updateDrawType = async () => {
+    const newTournament = await updateTournament({
+      ...activeTournament,
+      draw_type: drawType,
+    });
 
-    // if (newTournament.isOk) {
-    //   setActiveTournament(newTournament.data as any);
-    // }
+    if (newTournament.isOk) {
+      setActiveTournament(newTournament.data as any);
+    }
+  };
+
+  console.log(tournament);
+
+  const registeredPlayersIds = tournament.players_order ? JSON.parse(tournament?.players_order)?.players : [];
+  const drawBrackets =  tournament?.draw ? JSON.parse(tournament?.draw)?.brackets : [];
+
+  const saveNewPlayers = async () => {
+    const newSelectedPlayersIds = newSelectedPlayers.reduce(
+      (acc, v) => ([...acc, v.value]),
+      [] as Option[],
+    );
+    const { tournament_players, match, ...rest } = activeTournament;
+    const newTournament = await updateTournament({
+      ...rest,
+      players_order: JSON.stringify({
+        players: registeredPlayersIds.concat(newSelectedPlayersIds),
+      }),
+    });
+
+    if (newTournament.isOk) {
+      setActiveTournament(newTournament.data as any);
+      setNewSelectedPlayers([]); // to reset multiselect if saved with ok 200
+    }
   };
 
   return (
     <div>
       <PageTitle>
-        Управление турниром: <i>{activeTournament.name}</i> (статус: {TOURNAMENT_STATUS_NUMBER_VALUES[tournament?.status]})
+        Управление турниром: <i>{activeTournament.name}</i> (статус: {TOURNAMENT_STATUS_NUMBER_VALUES[tournament?.status] || (is_finished && 'Завершен')})
       </PageTitle>
       <div>
         Тип турнира: {TOURNAMENT_TYPE_NUMBER_VALUES[activeTournament.tournament_type as number]}
@@ -63,33 +94,134 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({ 
       <div>
         <button
           disabled={!!is_finished}
-          onClick={handleSaveDraw}
+          onClick={updateDrawType}
         >
-          Сохранить
+          Изменить тип сетки
         </button>
       </div>
-      {is_finished ? (
-        <div>
-          <span>Добавить участница турнира</span>
-          <h3>
-            should show fixed + filled tournament net
-          </h3>
-        </div>
-      ) : (
-        <div>
-          <h3>Создать сетку турнира</h3>
+      <div className={styles.twoSides}>
+        <div className={styles.addPlayersContainer}>
+          <h3>Добавить игроков в турнир:</h3>
           <br />
-          <CreateTournamentNet />
+          <AddNewPlayerBlock
+            disabled={!!is_finished}
+            players={players}
+            newSelectedPlayers={newSelectedPlayers}
+            setNewSelectedPlayers={setNewSelectedPlayers}
+            SubmitButton={
+              <button
+                disabled={!!is_finished}
+                onClick={saveNewPlayers}
+                className={styles.submitButton}
+              >
+                Добавить
+              </button>}
+          />
+
         </div>
-      )}
+        <div className={styles.playersListContainer}>
+          <h3>Добавить игроков в турнир:</h3>
+          <br />
+          <ul className={styles.playersToDragIntoDraw}>
+            {registeredPlayersIds && players.map((v, index) => (
+              registeredPlayersIds.indexOf(v.id) !== -1 ? (
+                <li className={styles.registeredPlayer}>
+                  {`${v.first_name} ${v.last_name}`}
+                </li>) : null
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3>Сетка турнира</h3>
+        <br />
+        <TournamentDraw
+          brackets={drawBrackets}
+          matches={tournament.match}
+        />
+      </div>
     </div>
   );
 }
 
-const CreateTournamentNet = () => {
+const formatToMultiSelectFormat = (players: PlayerT[]) =>
+  players.reduce((acc, v) => {
+    acc.push({ value: v.id, label: `${v.first_name} ${v.last_name}` });
+    return acc;
+  }, [] as Option[]);
+
+interface IAddNewPlayerBlockProps {
+  disabled: boolean;
+  players: PlayerT[];
+  newSelectedPlayers: Option[];
+  setNewSelectedPlayers: Dispatch<SetStateAction<Option[]>>;
+  SubmitButton: ReactNode;
+}
+
+const AddNewPlayerBlock = ({
+  disabled,
+  players,
+  newSelectedPlayers,
+  setNewSelectedPlayers,
+  SubmitButton,
+}: IAddNewPlayerBlockProps) => {
   return (
-    <div>
-      CreateTournamentNet 
+    <div className={styles.addNewPlayerBlock}>
+      <div className={styles.selectedOptionsContainer}>
+        {newSelectedPlayers.map(({ label }) => (
+          <span key={label} className={styles.selectedNameTag}>
+            {label}
+          </span>
+        ))}
+      </div>
+      <div className={styles.addPlayersControls}>
+        <MultiSelect
+          disabled={disabled}
+          className={styles.multiSelect}
+          options={formatToMultiSelectFormat(players)}
+          value={newSelectedPlayers}
+          onChange={setNewSelectedPlayers}
+          labelledBy="Выбирите игроков из списка"
+        />
+        {SubmitButton}
+      </div>
+    </div>
+  );
+}
+
+interface ITournamentDrawProps {
+  brackets: any;
+  matches: MatchT[];
+}
+
+const TournamentDraw = ({ brackets, matches }: ITournamentDrawProps) => {
+  // console.log('brackets, matches:')
+  // console.log(brackets, matches);
+
+  return (
+    <div className={styles.drawContainer}>
+      <div className={styles.stage}>
+        <p>Stage 33</p>
+        <div className={styles.matchesContainer}>
+          <div className={styles.match}>
+            <span>игрок 1</span>
+            <span>игрок 2</span>
+          </div>
+          <div className={styles.match}>
+            <span>игрок 1</span>
+            <span>игрок 2</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.stage}>
+        <p>Stage 33</p>
+        <div className={styles.matchesContainer}>
+          <div className={styles.match}>
+            <span>игрок 1</span>
+            <span>игрок 2</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -104,7 +236,6 @@ export const getServerSideProps = async (ctx: any) => {
       id: parseInt(ctx.query.pid),
     },
     include: {
-      // easy to add related column
       tournament_players: true,
       match: {
         include: {
@@ -117,9 +248,12 @@ export const getServerSideProps = async (ctx: any) => {
     },
   });
 
+  const players = await prisma.player.findMany();
+
   return {
     props: {
       tournament,
+      players,
     },
   };
 }
