@@ -10,18 +10,18 @@ import {
 export const PlayerSchema = z.object({
   first_name: z.string().min(2),
   last_name: z.string().min(2),
-  date_of_birth: z.date(),
+  date_of_birth: z.string(),
   city: z.string().min(2),
   country: z.string().min(2),
   email: z.string().email(),
-  phone: z.number(),
-  age: z.number().positive(),
+  phone: z.string().refine((val) => !Number.isNaN(parseInt(val, 10))),
+  age: z.string().refine((val) => !Number.isNaN(parseInt(val, 10))),
   gameplay_style: z.string().min(2),
   forehand: z.string().min(2),
   beckhand: z.string().min(2),
   insta_link: z.string().min(2),
   is_coach: z.boolean(),
-  in_tennis_from: z.date(),
+  in_tennis_from: z.string(),
   job_description: z.string().min(2),
 });
 export type PlayerFormType = z.infer<typeof PlayerSchema>;

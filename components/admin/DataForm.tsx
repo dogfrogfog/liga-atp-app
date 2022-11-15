@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Modal from 'ui-kit/Modal'
 import { FORM_VALUES, PlayerSchema } from 'constants/formValues'
 
-import styles from './errorMessage.module.scss'
-
+import styles from './DataForm.module.scss'
 
 interface IDataFormProps {
   type: 'players' | 'matches' | 'tournaments';
