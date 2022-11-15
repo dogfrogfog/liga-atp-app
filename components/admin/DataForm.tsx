@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import type { player as PlayerT, tournament as TournamentT } from '@prisma/client'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Modal from 'ui-kit/Modal'
-import { FORM_VALUES } from 'constants/values'
+import { FORM_RESOLVERS, FORM_VALUES } from 'constants/formValues'
 
 import styles from './DataForm.module.scss'
 
@@ -15,7 +16,19 @@ interface IDataFormProps {
   editingRow?: PlayerT | TournamentT;
 }
 
-const getField = (props: any, register: any) => {
+type IErrorMessageProps = {
+  errorMessage: string
+}
+
+const ErrorMessage = ({errorMessage}: IErrorMessageProps) => {
+  return (
+    <p className={styles.errorMessage}>
+      {errorMessage}
+    </p>
+  );
+};
+
+const getField = (props: any, register: any, errors: any) => {
   switch (props.type) {
     case 'file':
     case 'checkbox': {
@@ -26,28 +39,35 @@ const getField = (props: any, register: any) => {
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
         </>
       );
     };
     case 'select': {
       return (
-        <select name={props.name} {...register(props.name, { required: props.required })}>
-          {Object.entries(props.options).map(([key, value]) => (
-            <option value={key}>{value as ReactNode}</option>
-          ))}
-        </select>
+        <>
+          <select name={props.name} {...register(props.name, { required: props.required })}>
+            {Object.entries(props.options).map(([key, value]) => (
+              <option key={key} value={key}>{value as ReactNode}</option>
+            ))}
+          </select>
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
+        </>
       )
     }
     default: {
       return (
-        <input
-          placeholder={props.placeholder}
-          type={props.type}
-          {...register(props.name, { required: props.required })}
-        />
+        <>
+          <input
+            placeholder={props.placeholder}
+            type={props.type}
+            {...register(props.name, { required: props.required })}
+          />
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
+        </>
       )
     };
-  }
+    }
 }
 
 // todo: add validation + errors
@@ -58,7 +78,8 @@ const DataForm = ({
   type,
   formTitle,
 }: IDataFormProps) => {
-  const { register, handleSubmit } = useForm<PlayerT | TournamentT>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
+    resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
   });
 
@@ -67,13 +88,13 @@ const DataForm = ({
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         {FORM_VALUES[type].map((props) => (
           <div key={props.name} className={styles.input}>
-            {getField(props, register)}
+            {getField(props, register, errors)}
           </div>
         ))}
         <input className={styles.submit} type="submit" />
       </form>
     </Modal>
-  )
+  );
 }
 
 export default DataForm

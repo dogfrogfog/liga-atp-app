@@ -28,3 +28,9 @@
     text-transform: uppercase;
   }
 }
+
+.errorMessage {
+  margin: 4px 0 0 0;
+  color: $custom-red;
+  font-size: 10px;
+}
