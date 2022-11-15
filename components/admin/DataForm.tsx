@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Modal from 'ui-kit/Modal'
-import { FORM_VALUES, PlayerFormType, PlayerSchema } from 'constants/formValues'
+import { FORM_VALUES, PlayerSchema } from 'constants/formValues'
 
-import styles from './DataForm.module.scss'
-import ErrorMessage from "../common/errorMessage";
+import styles from './errorMessage.module.scss'
+
 
 interface IDataFormProps {
   type: 'players' | 'matches' | 'tournaments';
@@ -16,6 +16,18 @@ interface IDataFormProps {
   onClose: any;
   editingRow?: PlayerT | TournamentT;
 }
+
+type IErrorMessageProps = {
+  errorMessage: string
+}
+
+const ErrorMessage = ({errorMessage}: IErrorMessageProps) => {
+  return (
+    <p className={styles.errorMessage}>
+      {errorMessage}
+    </p>
+  );
+};
 
 const getField = (props: any, register: any, errors: any) => {
   switch (props.type) {
