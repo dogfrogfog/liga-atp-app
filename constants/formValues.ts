@@ -83,7 +83,7 @@ export const FORM_VALUES = {
   matches: MATCHES_FORM_VALUES,
 }
 
-export const FORM_RESOLVERS = {
+export const FORM_RESOLVERS: any = {
   players: PlayerSchema,
   tournaments: TournamentSchema
 }
