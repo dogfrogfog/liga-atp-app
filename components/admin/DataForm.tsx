@@ -40,7 +40,7 @@ const getField = (props: any, register: any, errors: any) => {
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
         </>
       );
     };
@@ -52,7 +52,7 @@ const getField = (props: any, register: any, errors: any) => {
               <option key={key} value={key}>{value as ReactNode}</option>
             ))}
           </select>
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
         </>
       )
     }
@@ -64,7 +64,7 @@ const getField = (props: any, register: any, errors: any) => {
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}></ErrorMessage>)}
+          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
         </>
       )
     };
