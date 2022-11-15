@@ -26,6 +26,17 @@ export const PlayerSchema = z.object({
 });
 export type PlayerFormType = z.infer<typeof PlayerSchema>;
 
+export const TournamentSchema = z.object({
+  name: z.string(),
+  is_doubles: z.boolean(),
+  tournament_type: z.string(),
+  start_date: z.string(),
+  surface: z.string(),
+  status: z.string(),
+  city: z.string(),
+});
+export type TournamentFormType = z.infer<typeof TournamentSchema>;
+
 const PLAYER_FORM_VALUES = [
   { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
   { name: 'last_name', required: true, type: 'text', placeholder: 'Фамилия' },
@@ -70,4 +81,9 @@ export const FORM_VALUES = {
   players: PLAYER_FORM_VALUES,
   tournaments: TOURNAMENT_FORM_VALUES,
   matches: MATCHES_FORM_VALUES,
+}
+
+export const FORM_RESOLVERS = {
+  players: PlayerSchema,
+  tournaments: TournamentSchema
 }

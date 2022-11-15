@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Modal from 'ui-kit/Modal'
-import { FORM_VALUES, PlayerSchema } from 'constants/formValues'
+import { FORM_RESOLVERS, FORM_VALUES } from 'constants/formValues'
 
 import styles from './DataForm.module.scss'
 
@@ -79,7 +79,7 @@ const DataForm = ({
   formTitle,
 }: IDataFormProps) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
-    resolver: zodResolver(PlayerSchema),
+    resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
   });
 
@@ -95,6 +95,7 @@ const DataForm = ({
         ))}
         <input className={styles.submit} type="submit" />
       </form>
+      <pre>{JSON.stringify(watch(), null, 2)}</pre>
     </Modal>
   );
 }
