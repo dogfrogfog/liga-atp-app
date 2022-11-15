@@ -27,13 +27,13 @@ export const PlayerSchema = z.object({
 export type PlayerFormType = z.infer<typeof PlayerSchema>;
 
 export const TournamentSchema = z.object({
-  name: z.string(),
+  name: z.string().min(2),
   is_doubles: z.boolean(),
   tournament_type: z.string(),
-  start_date: z.string(),
+  start_date: z.string().min(2),
   surface: z.string(),
   status: z.string(),
-  city: z.string(),
+  city: z.string().min(2),
 });
 export type TournamentFormType = z.infer<typeof TournamentSchema>;
 

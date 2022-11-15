@@ -83,8 +83,6 @@ const DataForm = ({
     defaultValues: editingRow,
   });
 
-  console.log(errors)
-
   return (
     <Modal title={formTitle} handleClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
