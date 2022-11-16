@@ -57,7 +57,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
       draw_type: parseInt(activeTournament.draw_type, 10),
-      tournament_type: parseInt(activeTournament.draw_type, 10)
+      tournament_type: parseInt(activeTournament.tournament_type, 10)
     });
 
     if (newTournament.isOk) {
@@ -72,10 +72,14 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     setActiveTournament(v => ({ ...v, [key]: value }));
   };
 
+  const isDisabled = 
+    (activeTournament.is_finished === null || activeTournament.is_finished) &&
+    (activeTournament.status === 3);
+
   return (
     <div>
       <PageTitle>
-        Управление турниром: <i>{activeTournament.name}</i> (статус:  || (activeTournament.is_finished && 'Завершен')})
+        Управление турниром
       </PageTitle>
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
@@ -90,7 +94,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                     <select
                       onChange={(e) => handleTournamentFieldChange('draw_type', e.target.value)}
                       value={activeTournament.draw_type as number}
-                      disabled={!!activeTournament.is_finished}
+                      disabled={isDisabled}
                       name="drawType"
                     >
                       <option value={0}>not selected</option>
@@ -105,12 +109,12 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                 return (
                   <div className={cl(styles.field, styles.type)} key={key}>
                     <span>
-                      Тип сетки в турнире:
+                      Тип турнира
                     </span>
                     <select
-                      onChange={(e) => handleTournamentFieldChange('tournament_type', e.target.value)}
+                      onChange={(e) => handleTournamentFieldChange('tournament_type', parseInt(e.target.value, 10))}
                       value={activeTournament.tournament_type as number}
-                      disabled={!!activeTournament.is_finished}
+                      disabled={isDisabled}
                       name="type"
                     >
                       <option value={0}>not selected</option>
@@ -157,7 +161,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         </div>
         <div className={cl(styles.side, styles.addPlayersContainer)}>
           <MultiSelect
-            disabled={false}
+            disabled={isDisabled || newSelectedPlayers.length === 0}
             className={styles.multiSelect}
             options={playersToMultiSelectFormat(players)}
             value={newSelectedPlayers}
@@ -166,13 +170,13 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           />
           <div className={styles.controlButtons}>
             <button
-              disabled={newSelectedPlayers.length === 0}
+              disabled={isDisabled || newSelectedPlayers.length === 0}
               onClick={() => updateActiveTournament()}
             >
               Сохранить
             </button>
             <button
-              disabled={newSelectedPlayers.length === 0}
+              disabled={isDisabled || newSelectedPlayers.length === 0}
               onClick={() => setNewSelectedPlayers([])}
             >
               Отменить
