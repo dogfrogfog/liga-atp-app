@@ -18,10 +18,10 @@ interface IDataFormProps {
 
 interface IInputWithError {
   errorMessage: string,
-  children: any
+  children: ReactNode
 }
 
-const InputWithError = ({errorMessage, children}: IInputWithError) => {
+const InputWithError = ({ errorMessage, children }: IInputWithError) => {
   return (
     <>
       {children}
