@@ -22,71 +22,137 @@
 
 .twoSides {
   display: flex;
+  flex: 1;
 
-  .addPlayersContainer {
-    width: 75%;
+  .side {
+    width: 50%;
+    margin: 20px;
+    margin-right: 40px;
+  }
+}
+
+.playersListContainer {
+  .playersListTitle {
+    margin: 20px 0;
+    margin-top: 10px;
+    font-size: 18px;
+    background-color: $custom-scarlet;
+    padding: 10px;
+    text-align: center;
+    color: $custom-white
   }
 
-  .playersListContainer {
-    width: 25%;
+  .playersList {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
-    .playersToDragIntoDraw {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      
-      li {
-        margin-bottom: 10px;
+    &.new .player span {
+      background-color: $custom-olive;
+    }
+
+    .player {
+      display: block;
+      width: 50%;
+      padding: 5px;
+      margin-bottom: 10px;
+
+      span {
+        font-style: italic;
+        padding: 5px;
         background-color: $custom-lightgray;
-        padding: 15px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
       }
     }
   }
 }
 
-.addNewPlayerBlock {
-  margin-bottom: 20px;
+.addPlayersContainer {
+  max-width: 50%;
+  overflow: hidden;
+}
 
-  .selectedOptionsContainer {
-    width: 100%;
-    font-size: 14px;
-    margin-top: 10px;
-
-    .selectedNameTag {
-      display: inline-block;
-      background-color: $custom-lightgray;
-      border-radius: 5px;
-      padding: 5px;
-      margin-right: 10px;
-      margin-bottom: 5px;
-    }
-  }
-
-  .addPlayersControls {
+.fieldsContainer {
+  .field {
     display: flex;
     justify-content: space-between;
+    padding: 0 10px;
+    background-color: $custom-lightgray;
+    margin-bottom: 10px;
+    align-items: center;
 
-    .multiSelect {
-      width: 70%;
+    span {
+      width: 50%;
+      height: 20px;
+
+      &:first-child {
+        text-align: left;
+        font-weight: 400;
+      }
+      
+      &:last-child {
+        text-align: right;
+        cursor: pointer;
+        overflow: hidden;
+        border-bottom: $custom-green;
+      }
+    }
+
+    &.drawType,
+    &.type {
+      select {
+        width: 50%;
+        height: 30px;
+        font-size: 16px;
+        border: none;
+        background: black;
+        color: white;
+        cursor: pointer;
+        outline: none;
+      }
+    }
+
+    &.status {
+      span:last-child {
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        background-color: $custom-yellow;
+        text-align: center;
+      }
+    }
+
+    &[disabled] {
+      background-color: $custom-lightlightgray;
+      cursor: not-allowed;
+      border: 1px solid $custom-darkgray;
     }
   }
+}
 
-  .submitButton {
-    width: 100px;
+.controlButtons {
+  display: flex;
+  flex: 1;
+
+  button {
+    width: 50%;
+    margin: 10px;
     cursor: pointer;
-    background-color: $custom-green;
-    border: none;
-    
-    &:hover {
-      border: 1px solid $border-color;
+
+    &:first-child {
+      background-color: $custom-green;
+      font-size: 18px;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.8;
+      }
     }
 
-    button[disabled] {
-      cursor: not-allowed;
-      border: none;
+    &:last-child {
+      background-color: $custom-lightlightgray;
+      font-size: 18px;
     }
   }
 }

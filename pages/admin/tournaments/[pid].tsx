@@ -1,5 +1,6 @@
-import { ChangeEvent, SetStateAction, useState, Dispatch, ReactNode } from 'react';
+import { useState } from 'react';
 import type { NextPage } from 'next';
+import cl from 'classnames';
 import { PrismaClient, tournament as TournamentT, player as PlayerT, match as MatchT } from '@prisma/client';
 import { MultiSelect, Option } from 'react-multi-select-component';
 
@@ -11,125 +12,200 @@ import {
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
 import styles from './AdminSingleTournamentPape.module.scss';
-import { AiFillCodeSandboxCircle } from 'react-icons/ai';
 
 interface IAdminSingleTournamentPapeProps {
   tournament: TournamentT;
   players: PlayerT[];
+  matches: MatchT[];
+  tournament_players: any[]
 }
 
-// todo: serialize JSON and return a JSON object (for tournament.players_order and tournament.draw)
+const playersToMultiSelectFormat = (players: PlayerT[]) =>
+  players.reduce((acc, v) => {
+    acc.push({ value: v.id, label: `${v.first_name} ${v.last_name}` });
+    return acc;
+  }, [] as Option[]);
+
+const multiSelectFormatToPlayersIds = (options: Option[]) =>
+  options.reduce((acc, { value }) => {
+    acc.push(value);
+    return acc;
+  }, [] as number[]);
+
 const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   tournament,
   players,
+  matches,
+  // tournament_players,
 }) => {
-  const { match, is_finished } = tournament;
   const [activeTournament, setActiveTournament] = useState(tournament);
-  const [drawType, setDrawType] = useState(tournament.draw_type);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
 
-  const handleDrawTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDrawType(parseInt(e.target.value));
-  };
-
-  const updateDrawType = async () => {
-    const newTournament = await updateTournament({
-      ...activeTournament,
-      draw_type: drawType,
-    });
-
-    if (newTournament.isOk) {
-      setActiveTournament(newTournament.data as any);
-    }
-  };
-
-  console.log(tournament);
-
-  const registeredPlayersIds = tournament.players_order ? JSON.parse(tournament?.players_order)?.players : [];
+  const registeredPlayersIds = activeTournament.players_order ? JSON.parse(activeTournament?.players_order)?.players : [];
+  const newSelectedPlayersIds = multiSelectFormatToPlayersIds(newSelectedPlayers);
   const drawBrackets =  tournament?.draw ? JSON.parse(tournament?.draw)?.brackets : [];
 
-  const saveNewPlayers = async () => {
+  const updateActiveTournament = async () => {
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
       (acc, v) => ([...acc, v.value]),
       [] as Option[],
     );
-    const { tournament_players, match, ...rest } = activeTournament;
+
     const newTournament = await updateTournament({
-      ...rest,
+      ...activeTournament,
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
+      draw_type: parseInt(activeTournament.draw_type, 10),
+      tournament_type: parseInt(activeTournament.draw_type, 10)
     });
 
     if (newTournament.isOk) {
-      setActiveTournament(newTournament.data as any);
-      setNewSelectedPlayers([]); // to reset multiselect if saved with ok 200
+      const { match, tournament_players, ...v } = newTournament.data;
+
+      setActiveTournament(v as any);
+      setNewSelectedPlayers([]);
     }
+  }
+
+  const handleTournamentFieldChange = (key: string, value: any) => {
+    setActiveTournament(v => ({ ...v, [key]: value }));
   };
 
   return (
     <div>
       <PageTitle>
-        Управление турниром: <i>{activeTournament.name}</i> (статус: {TOURNAMENT_STATUS_NUMBER_VALUES[tournament?.status] || (is_finished && 'Завершен')})
+        Управление турниром: <i>{activeTournament.name}</i> (статус:  || (activeTournament.is_finished && 'Завершен')})
       </PageTitle>
-      <div>
-        Тип турнира: {TOURNAMENT_TYPE_NUMBER_VALUES[activeTournament.tournament_type as number]}
-      </div>
-      <br />
-      <div>
-        Тип сетки в турнире:{' '}
-        <select
-          onChange={handleDrawTypeChange}
-          value={drawType as number}
-          disabled={!!is_finished}
-          name="drawType"
-        >
-          <option value={0}>not selected</option>
-          {Object.entries(TOURNAMENT_DRAW_TYPE_NUMBER_VALUES).map(([key, name]) => (
-            <option key={key} value={key}>{name as string}</option>
-          ))}
-        </select>
-      </div>
-      <br />
-      <div>
-        <button
-          disabled={!!is_finished}
-          onClick={updateDrawType}
-        >
-          Изменить тип сетки
-        </button>
-      </div>
       <div className={styles.twoSides}>
-        <div className={styles.addPlayersContainer}>
-          <h3>Добавить игроков в турнир:</h3>
-          <br />
-          <AddNewPlayerBlock
-            disabled={!!is_finished}
-            players={players}
-            newSelectedPlayers={newSelectedPlayers}
-            setNewSelectedPlayers={setNewSelectedPlayers}
-            SubmitButton={
-              <button
-                disabled={!!is_finished}
-                onClick={saveNewPlayers}
-                className={styles.submitButton}
-              >
-                Добавить
-              </button>}
-          />
-
+        <div className={cl(styles.side, styles.fieldsContainer)}>
+          {Object.entries(tournament).map(([key, value]) => {
+            switch (key) {
+              case 'draw_type': {
+                return (
+                  <div className={cl(styles.field, styles.drawType)} key={key}>
+                    <span>
+                      Тип сетки в турнире
+                    </span>
+                    <select
+                      onChange={(e) => handleTournamentFieldChange('draw_type', e.target.value)}
+                      value={activeTournament.draw_type as number}
+                      disabled={!!activeTournament.is_finished}
+                      name="drawType"
+                    >
+                      <option value={0}>not selected</option>
+                      {Object.entries(TOURNAMENT_DRAW_TYPE_NUMBER_VALUES).map(([key, name]) => {
+                        return <option key={key} value={key}>{name as string}</option>
+                      })}
+                    </select>
+                  </div>
+                )
+              }
+              case 'tournament_type': {
+                return (
+                  <div className={cl(styles.field, styles.type)} key={key}>
+                    <span>
+                      Тип сетки в турнире:
+                    </span>
+                    <select
+                      onChange={(e) => handleTournamentFieldChange('tournament_type', e.target.value)}
+                      value={activeTournament.tournament_type as number}
+                      disabled={!!activeTournament.is_finished}
+                      name="type"
+                    >
+                      <option value={0}>not selected</option>
+                      {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(([key, name]) => {
+                        return <option key={key} value={key}>{name as string}</option>
+                      })}
+                    </select>
+                  </div>
+                )
+              }
+              case 'status': {
+                return (
+                  <div key={key} className={cl(styles.field, styles.status)}>
+                    <span>Статус</span>
+                    {/* @ts-ignore */}
+                    <span>{TOURNAMENT_STATUS_NUMBER_VALUES[activeTournament.is_finished ? 3 : activeTournament?.status]}</span>
+                  </div>
+                );
+              }
+              default: {
+                return (
+                  <div key={key} className={cl(styles.field)}>
+                    <span>{key}</span>
+                    <span>{JSON.stringify(value)}</span>
+                  </div>
+                );
+              }
+            }
+          })}
+          <div className={styles.controlButtons}>
+            <button
+              disabled={JSON.stringify(tournament) === JSON.stringify(activeTournament)}
+              onClick={() => updateActiveTournament()}
+            >
+              Сохранить
+            </button>
+            <button
+              disabled={JSON.stringify(tournament) === JSON.stringify(activeTournament)}
+              onClick={() => setActiveTournament(tournament)}
+            >
+              Отменить
+            </button>
+          </div>
         </div>
-        <div className={styles.playersListContainer}>
-          <h3>Добавить игроков в турнир:</h3>
-          <br />
-          <ul className={styles.playersToDragIntoDraw}>
-            {registeredPlayersIds && players.map((v, index) => (
-              registeredPlayersIds.indexOf(v.id) !== -1 ? (
-                <li className={styles.registeredPlayer}>
-                  {`${v.first_name} ${v.last_name}`}
-                </li>) : null
-            ))}
-          </ul>
+        <div className={cl(styles.side, styles.addPlayersContainer)}>
+          <MultiSelect
+            disabled={false}
+            className={styles.multiSelect}
+            options={playersToMultiSelectFormat(players)}
+            value={newSelectedPlayers}
+            onChange={setNewSelectedPlayers}
+            labelledBy="Выбирите игроков из списка"
+          />
+          <div className={styles.controlButtons}>
+            <button
+              disabled={newSelectedPlayers.length === 0}
+              onClick={() => updateActiveTournament()}
+            >
+              Сохранить
+            </button>
+            <button
+              disabled={newSelectedPlayers.length === 0}
+              onClick={() => setNewSelectedPlayers([])}
+            >
+              Отменить
+            </button>
+          </div>
+          <div className={styles.playersListContainer}>
+            {newSelectedPlayersIds.length > 0 ? (
+              <>
+                <p className={styles.playersListTitle}>
+                  Новые игроки
+                </p>
+                <div className={cl(styles.playersList, styles.new)}>
+                  {players.map((v) => (
+                    newSelectedPlayersIds.indexOf(v.id) !== -1 ? (
+                      <div key={v.id} className={styles.player}>
+                        <span>{`${v.first_name} ${v.last_name}`}</span>
+                      </div>) : null
+                  ))}
+                </div>
+              </>
+            ) : null}
+            <p className={styles.playersListTitle}>
+              Уже зарегестрировавшиеся
+            </p>
+            <div className={styles.playersList}>
+              {registeredPlayersIds && players.map((v) => (
+                registeredPlayersIds.indexOf(v.id) !== -1 ? (
+                  <div key={v.id} className={styles.player}>
+                    <span>{`${v.first_name} ${v.last_name}`}</span>
+                  </div>) : null
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -137,53 +213,8 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         <br />
         <TournamentDraw
           brackets={drawBrackets}
-          matches={tournament.match}
+          matches={matches}
         />
-      </div>
-    </div>
-  );
-}
-
-const formatToMultiSelectFormat = (players: PlayerT[]) =>
-  players.reduce((acc, v) => {
-    acc.push({ value: v.id, label: `${v.first_name} ${v.last_name}` });
-    return acc;
-  }, [] as Option[]);
-
-interface IAddNewPlayerBlockProps {
-  disabled: boolean;
-  players: PlayerT[];
-  newSelectedPlayers: Option[];
-  setNewSelectedPlayers: Dispatch<SetStateAction<Option[]>>;
-  SubmitButton: ReactNode;
-}
-
-const AddNewPlayerBlock = ({
-  disabled,
-  players,
-  newSelectedPlayers,
-  setNewSelectedPlayers,
-  SubmitButton,
-}: IAddNewPlayerBlockProps) => {
-  return (
-    <div className={styles.addNewPlayerBlock}>
-      <div className={styles.selectedOptionsContainer}>
-        {newSelectedPlayers.map(({ label }) => (
-          <span key={label} className={styles.selectedNameTag}>
-            {label}
-          </span>
-        ))}
-      </div>
-      <div className={styles.addPlayersControls}>
-        <MultiSelect
-          disabled={disabled}
-          className={styles.multiSelect}
-          options={formatToMultiSelectFormat(players)}
-          value={newSelectedPlayers}
-          onChange={setNewSelectedPlayers}
-          labelledBy="Выбирите игроков из списка"
-        />
-        {SubmitButton}
       </div>
     </div>
   );
@@ -198,6 +229,7 @@ const TournamentDraw = ({ brackets, matches }: ITournamentDrawProps) => {
   // console.log('brackets, matches:')
   // console.log(brackets, matches);
 
+  return null;
   return (
     <div className={styles.drawContainer}>
       <div className={styles.stage}>
@@ -248,12 +280,16 @@ export const getServerSideProps = async (ctx: any) => {
     },
   });
 
+  // @ts-ignore
+  const { match, tournament_players, ...tournamentProps } = tournament;
   const players = await prisma.player.findMany();
 
   return {
     props: {
-      tournament,
+      tournament: tournamentProps,
       players,
+      matches: match,
+      tournament_players,
     },
   };
 }
