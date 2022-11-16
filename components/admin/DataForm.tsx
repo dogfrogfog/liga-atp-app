@@ -16,15 +16,17 @@ interface IDataFormProps {
   editingRow?: PlayerT | TournamentT;
 }
 
-type IErrorMessageProps = {
-  errorMessage: string
+interface IInputWithError {
+  errorMessage: string,
+  children: any
 }
 
-const ErrorMessage = ({errorMessage}: IErrorMessageProps) => {
+const InputWithError = ({errorMessage, children}: IInputWithError) => {
   return (
-    <p className={styles.errorMessage}>
-      {errorMessage}
-    </p>
+    <>
+      {children}
+      <p className={styles.errorMessage}>{errorMessage}</p>
+    </>
   );
 };
 
@@ -33,38 +35,36 @@ const getField = (props: any, register: any, errors: any) => {
     case 'file':
     case 'checkbox': {
       return (
-        <>
+        <InputWithError errorMessage={errors[props.name]?.message}>
           <span>{props.placeholder}</span>
           <input
             type={props.type}
             {...register(props.name, { required: props.required })}
           />
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
-        </>
+        </InputWithError>
       );
     };
     case 'select': {
       return (
-        <>
+        <InputWithError errorMessage={errors[props.name]?.message}>
           <select name={props.name} {...register(props.name, { required: props.required })}>
             {Object.entries(props.options).map(([key, value]) => (
               <option key={key} value={key}>{value as ReactNode}</option>
             ))}
           </select>
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
-        </>
+        </InputWithError>
       )
     }
     default: {
       return (
-        <>
+        <InputWithError errorMessage={errors[props.name]?.message}>
           <input
             placeholder={props.placeholder}
             type={props.type}
             {...register(props.name, { required: props.required })}
+            autoComplete="off"
           />
-          {errors[props.name] && (<ErrorMessage errorMessage={errors[props.name].message}/>)}
-        </>
+        </InputWithError>
       )
     };
     }
@@ -91,7 +91,10 @@ const DataForm = ({
             {getField(props, register, errors)}
           </div>
         ))}
-        <input className={styles.submit} type="submit" />
+        <div className={styles.container}>
+          <input className={styles.reset} type="reset" />
+          <input className={styles.submit} type="submit" />
+        </div>
       </form>
     </Modal>
   );
