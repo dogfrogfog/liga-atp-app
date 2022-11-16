@@ -17,7 +17,6 @@ interface IAdminSingleTournamentPapeProps {
   tournament: TournamentT;
   players: PlayerT[];
   matches: MatchT[];
-  tournament_players: any[]
 }
 
 const playersToMultiSelectFormat = (players: PlayerT[]) =>
@@ -36,7 +35,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   tournament,
   players,
   matches,
-  // tournament_players,
 }) => {
   const [activeTournament, setActiveTournament] = useState(tournament);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
@@ -61,7 +59,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     });
 
     if (newTournament.isOk) {
-      const { match, tournament_players, ...v } = newTournament.data;
+      const { match, ...v } = newTournament.data;
 
       setActiveTournament(v as any);
       setNewSelectedPlayers([]);
@@ -274,7 +272,6 @@ export const getServerSideProps = async (ctx: any) => {
       id: parseInt(ctx.query.pid),
     },
     include: {
-      tournament_players: true,
       match: {
         include: {
           player_match_player1_idToplayer: true,
@@ -286,8 +283,7 @@ export const getServerSideProps = async (ctx: any) => {
     },
   });
 
-  // @ts-ignore
-  const { match, tournament_players, ...tournamentProps } = tournament;
+  const { match, ...tournamentProps } = tournament as any;
   const players = await prisma.player.findMany();
 
   return {
@@ -295,7 +291,6 @@ export const getServerSideProps = async (ctx: any) => {
       tournament: tournamentProps,
       players,
       matches: match,
-      tournament_players,
     },
   };
 }
