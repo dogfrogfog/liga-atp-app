@@ -73,7 +73,9 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   };
 
   const isDisabled = 
+    // OLD db records has is_finished prop...so we check it
     (activeTournament.is_finished === null || activeTournament.is_finished) &&
+    // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     (activeTournament.status === 3);
 
   return (
@@ -161,7 +163,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         </div>
         <div className={cl(styles.side, styles.addPlayersContainer)}>
           <MultiSelect
-            disabled={isDisabled || newSelectedPlayers.length === 0}
+            disabled={isDisabled}
             className={styles.multiSelect}
             options={playersToMultiSelectFormat(players)}
             value={newSelectedPlayers}
