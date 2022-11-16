@@ -11,25 +11,28 @@
     text-align: center;
     display: flex;
     align-items: center;
+
     input {
       width: 80%;
       font-size: 16px;
       padding: 5px 10px;
+
       &:focus{
         outline: none;
         border: none;
       }
     }
+
     input[type='checkbox']{
       width: 20px;
       height: 20px;
     }
 
-
     select{
       width: 80%;
       font-size: 16px;
       padding: 5px 10px;
+
       &:focus{
         outline: none;
         border: none;
@@ -58,6 +61,7 @@
     cursor: pointer;
     text-transform: uppercase;
   }
+
   .container{
     width: 100%;
   }

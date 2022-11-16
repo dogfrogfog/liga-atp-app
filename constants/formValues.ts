@@ -68,6 +68,7 @@ const TOURNAMENT_FORM_VALUES: any[] = [
   { name: 'surface', required: true, type: 'select', placeholder: 'Тип покрытия', options: SURFACE_TYPE_NUMBER_VALUES },
   { name: 'status', required: true, type: 'select', placeholder: 'Статус', options: TOURNAMENT_STATUS_NUMBER_VALUES },
   { name: 'is_doubles', required: false, type: 'checkbox', placeholder: 'Парный турнир' },
+
   // draw_type on the seconds page
 ];
 

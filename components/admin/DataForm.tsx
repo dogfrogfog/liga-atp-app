@@ -18,10 +18,10 @@ interface IDataFormProps {
 
 interface IInputWithError {
   errorMessage: string,
-  children: any
+  children: ReactNode
 }
 
-const InputWithError = ({errorMessage, children}: IInputWithError) => {
+const InputWithError = ({ errorMessage, children }: IInputWithError) => {
   return (
     <>
       {children}
@@ -67,7 +67,7 @@ const getField = (props: any, register: any, errors: any) => {
         </InputWithError>
       )
     };
-    }
+  }
 }
 
 // todo: add validation + errors
@@ -77,7 +77,7 @@ const DataForm = ({
   editingRow,
   type,
   formTitle,
-}: IDataFormProps) => {
+  }: IDataFormProps) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
     resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
