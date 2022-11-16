@@ -72,12 +72,12 @@ const getField = (props: any, register: any, errors: any) => {
 
 // todo: add validation + errors
 const DataForm = ({
-                    onSubmit,
-                    onClose,
-                    editingRow,
-                    type,
-                    formTitle,
-                  }: IDataFormProps) => {
+  onSubmit,
+  onClose,
+  editingRow,
+  type,
+  formTitle,
+  }: IDataFormProps) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
     resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
