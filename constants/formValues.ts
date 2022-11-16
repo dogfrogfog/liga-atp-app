@@ -52,14 +52,14 @@ const PLAYER_FORM_VALUES = [
   { name: 'forehand', required: true, type: 'text', placeholder: 'Форхэнд' },
   { name: 'beckhand', required: true, type: 'text', placeholder: 'Бэкэнд' },
   { name: 'insta_link', required: true, type: 'text', placeholder: 'Ссылка на инст' },
-  { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
-  { name: 'in_tennis_from', required: true, type: 'date', placeholder: 'Начал играть' },
   { name: 'job_description', required: true, type: 'text', placeholder: 'Род деятельности' },
+  { name: 'in_tennis_from', required: true, type: 'date', placeholder: 'Начал играть' },
+  { name: 'is_coach', required: false, type: 'checkbox', placeholder: 'Является тренером' },
 ];
 
 const TOURNAMENT_FORM_VALUES: any[] = [
   { name: 'name', required: true, type: 'text', placeholder: 'Название турнира' },
-  { name: 'is_doubles', required: false, type: 'checkbox', placeholder: 'Парный турнир' },
+  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
   { name: 'tournament_type', required: true, type: 'select', placeholder: 'Тип турнира', options: TOURNAMENT_TYPE_NUMBER_VALUES },
 
   // players //
@@ -67,7 +67,7 @@ const TOURNAMENT_FORM_VALUES: any[] = [
   { name: 'start_date', required: true, type: 'date', placeholder: 'Дата начала турнира' },
   { name: 'surface', required: true, type: 'select', placeholder: 'Тип покрытия', options: SURFACE_TYPE_NUMBER_VALUES },
   { name: 'status', required: true, type: 'select', placeholder: 'Статус', options: TOURNAMENT_STATUS_NUMBER_VALUES },
-  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
+  { name: 'is_doubles', required: false, type: 'checkbox', placeholder: 'Парный турнир' },
 
   // draw_type on the seconds page
 ];
