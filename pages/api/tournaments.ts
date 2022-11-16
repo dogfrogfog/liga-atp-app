@@ -50,8 +50,6 @@ export default async (
         id: req.body.data.id,
       },
       include: {
-        // easy to add related column
-        tournament_players: true,
         match: {
           include: {
             player_match_player1_idToplayer: true,
@@ -63,6 +61,6 @@ export default async (
       },
     });
 
-    res.json(updatedTournamentFull);
+    res.json(updatedTournamentFull as TournamentT);
   }
 }
