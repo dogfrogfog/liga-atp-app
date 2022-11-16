@@ -72,7 +72,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   const isDisabled = 
     // OLD db records has is_finished prop...so we check it
-    (activeTournament.is_finished === null || activeTournament.is_finished) &&
+    (activeTournament.is_finished !== null && activeTournament.is_finished) ||
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     (activeTournament.status === 3);
 
