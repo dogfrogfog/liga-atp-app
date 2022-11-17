@@ -27,9 +27,11 @@ const Pagination = ({ pagination, setPagination }: IPaginationProps) => (
         {'>'}
       </button>
       <button
+        onClick={() => setPagination((v) => ({ ...v, pageIndex: 0}))}
       >
         Первая страница
-      </button><button
+      </button>
+      <button onClick={() => setPagination((v) => ({ ...v, pageIndex: 850/Math.ceil(pagination.pageSize)}))}
       >
         Последняя страница
       </button>
