@@ -26,6 +26,13 @@ const Pagination = ({ pagination, setPagination }: IPaginationProps) => (
       >
         {'>'}
       </button>
+      <button
+      >
+        Первая страница
+      </button><button
+      >
+        Последняя страница
+      </button>
       <select
         value={pagination.pageSize}
         onChange={e => {
