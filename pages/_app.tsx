@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   // to show user once
   // todo: add inavailable (WIP) routs here; 
-  if (router.pathname === '/preview') {
+  if (router.pathname === '/' || router.pathname === '/preview') {
     return (
       <PWALayout>
         <Component {...pageProps} />
