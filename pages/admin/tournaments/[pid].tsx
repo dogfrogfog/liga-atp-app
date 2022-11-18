@@ -8,7 +8,10 @@ import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
   TOURNAMENT_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
+  SINGLES_TOURNAMENT_DRAW,
+  // DOUBLES_TOURNAMENT_DRAW,
 } from 'constants/values';
+import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
 import styles from './AdminSingleTournamentPape.module.scss';
@@ -54,8 +57,8 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
-      draw_type: parseInt(activeTournament.draw_type, 10),
-      tournament_type: parseInt(activeTournament.tournament_type, 10)
+      draw_type: parseInt(activeTournament.draw_type as any as string, 10),
+      tournament_type: parseInt(activeTournament.tournament_type as any as string, 10)
     });
 
     if (newTournament.isOk) {
@@ -76,11 +79,19 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     (activeTournament.status === 3);
 
+
+  console.log(matches)
   return (
     <div>
       <PageTitle>
         Управление турниром
       </PageTitle>
+      <TournamentDraw
+        isSingles={!activeTournament.is_doubles}
+        drawType={activeTournament.draw_type as number}
+        brackets={drawBrackets}
+        matches={matches}
+      />
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
           {Object.entries(tournament).map(([key, value]) => {
@@ -162,7 +173,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         <div className={cl(styles.side, styles.addPlayersContainer)}>
           <MultiSelect
             disabled={isDisabled}
-            className={styles.multiSelect}
             options={playersToMultiSelectFormat(players)}
             value={newSelectedPlayers}
             onChange={setNewSelectedPlayers}
@@ -212,52 +222,70 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           </div>
         </div>
       </div>
-      <div>
-        <h3>Сетка турнира</h3>
-        <br />
-        <TournamentDraw
-          brackets={drawBrackets}
-          matches={matches}
-        />
-      </div>
     </div>
   );
 }
 
 interface ITournamentDrawProps {
+  isSingles: boolean;
+  drawType: number;
   brackets: any;
   matches: MatchT[];
 }
 
-const TournamentDraw = ({ brackets, matches }: ITournamentDrawProps) => {
-  // console.log('brackets, matches:')
-  // console.log(brackets, matches);
+const TournamentDraw = ({ isSingles, drawType, brackets, matches }: ITournamentDrawProps) => {
+  console.log('brackets, matches:')
+  console.log(drawType, brackets, matches);
+  console.log(brackets, matches);
 
-  return null;
+  if(matches.length === 0) {
+    return null;
+  }
+
+  const { firstStageMatches } = DRAW_TYPE_NUMBER_VALUES[drawType];
+
+  // return values is array of stages
+  // each stage is array of players 
+  const getStages = () => {
+    let currentStage = 0;
+    let stageMatches = firstStageMatches;
+
+    const stagesMatches = matches.reduce((acc, m) => {
+      const isStageComplete = acc[currentStage].length === stageMatches;
+
+      if (isStageComplete) {
+        currentStage += 1;
+        stageMatches = stageMatches / 2;
+
+
+        acc.push([]);
+      }
+      acc[currentStage].push(m);
+
+      return acc;
+    }, [[]] as MatchT[][]);
+
+    return stagesMatches
+  };
+
+  const stages = getStages();
+
   return (
     <div className={styles.drawContainer}>
-      <div className={styles.stage}>
-        <p>Stage 33</p>
-        <div className={styles.matchesContainer}>
-          <div className={styles.match}>
-            <span>игрок 1</span>
-            <span>игрок 2</span>
-          </div>
-          <div className={styles.match}>
-            <span>игрок 1</span>
-            <span>игрок 2</span>
-          </div>
+      {stages.map((stage, index) => (
+        <div key={index} className={styles.stage}>
+          {stage.map((match) => (
+            <div key={match.id} className={styles.match}>
+              <span>{
+                match.player_match_player1_idToplayer.first_name + ' ' + match.player_match_player1_idToplayer.last_name
+              }</span>
+              <span>{
+                match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
+              }</span>
+            </div>
+          ))}
         </div>
-      </div>
-      <div className={styles.stage}>
-        <p>Stage 33</p>
-        <div className={styles.matchesContainer}>
-          <div className={styles.match}>
-            <span>игрок 1</span>
-            <span>игрок 2</span>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
