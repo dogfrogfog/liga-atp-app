@@ -1,8 +1,8 @@
-import type { FC, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react';
 import styles from './styles.module.scss';
 
 interface PageTitleProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const PageTitle: FC<PageTitleProps> = ({ children }) => (

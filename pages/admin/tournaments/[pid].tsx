@@ -54,11 +54,14 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
+      // @ts-ignore
       draw_type: parseInt(activeTournament.draw_type, 10),
+      // @ts-ignore
       tournament_type: parseInt(activeTournament.tournament_type, 10)
     });
-
+    
     if (newTournament.isOk) {
+      // @ts-ignore
       const { match, ...v } = newTournament.data;
 
       setActiveTournament(v as any);

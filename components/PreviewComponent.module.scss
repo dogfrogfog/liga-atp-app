@@ -1,20 +1,21 @@
 .container {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  background-image: url("../public/Back.png");
+  background-image: url("../public/previewBGImage.png");
   background-repeat: no-repeat;
+  background-size: contain;
 
   .blur {
-    height: 311px;
+    height: 300px;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px);
     border-radius: 14px 14px 0 0;
     position: absolute;
-    top: 533px;
+    bottom: 0;
 
-    .description{
-      padding: 20px 80px 20px 28px;
+    .description {
+      padding: 20px;
 
       h2 {
         margin: 0;
@@ -27,8 +28,8 @@
         text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       }
 
-      p{
-        margin: 24px 0 44px 0 ;
+      p {
+        margin: 24px 0 44px 0;
         font-weight: 500;
         font-size: 14px;
         line-height: 18px;
@@ -37,11 +38,11 @@
       }
     }
 
-    .buttons{
-      .back{
+    .buttons {
+      .back {
         z-index: 3;
         position: absolute;
-        top: 204px;
+        bottom: 30px;
         left: 30px;
         height: 40px;
         width: 40px;
@@ -49,12 +50,13 @@
         color: black;
         padding: 10px;
         border-radius: 50%;
-        svg{
+
+        svg {
           width: 100%;
           height: 100%;
         }
 
-        &:last-child{
+        &:last-child {
           margin-left: 60px;
           transform: rotate(180deg);
         }
