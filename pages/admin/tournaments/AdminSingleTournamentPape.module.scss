@@ -3,22 +3,57 @@
 .drawContainer {
   padding: 40px;
   display: flex;
-  overflow-x: scroll;
-  background-color: DarkSalmon;
-  // width: 100%;
-  justify-content: center;
+  overflow: scroll;
+  background-color: $custom-lightgray;
+  height: 450px;
+
+  .stageWrapper {
+    width: 250px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+
+    .stageTitle {
+      background-color: $custom-darkgray;
+      margin-bottom: 20px;
+    }
+  }
 
   .stage {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+    border-right: 3px solid $custom-red;
+
+    .addMatch {
+      padding: 10px;
+      // display: flex;
+      // align-items: center;
+
+      .match {
+        width: calc(100% - 40px);
+        display: inline-block;
+      }
+
+      .plusButton {
+        margin-left: 10px;
+        height: 30px;
+        width: 30px;
+        padding: 10px;
+        outline: 0;
+        cursor: pointer;
+        font-size: 20px;
+        background-color: $custom-black;
+        color: $custom-white;
+
+        &[disabled] {
+          background-color: $custom-lightgray;
+          cursor: not-allowed;
+        }
+      }
+    }
 
     .match {
       padding: 10px;
 
       span {
-        cursor: pointer;
         background-color: $custom-white;
         display: block;
         margin-bottom: 5px;

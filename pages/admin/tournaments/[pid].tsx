@@ -79,8 +79,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     (activeTournament.status === 3);
 
-
-  console.log(matches)
   return (
     <div>
       <PageTitle>
@@ -91,6 +89,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         drawType={activeTournament.draw_type as number}
         brackets={drawBrackets}
         matches={matches}
+        isDisabled={isDisabled}
       />
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
@@ -231,9 +230,10 @@ interface ITournamentDrawProps {
   drawType: number;
   brackets: any;
   matches: MatchT[];
+  isDisabled: boolean;
 }
 
-const TournamentDraw = ({ isSingles, drawType, brackets, matches }: ITournamentDrawProps) => {
+const TournamentDraw = ({ isDisabled, isSingles, drawType, brackets, matches }: ITournamentDrawProps) => {
   console.log('brackets, matches:')
   console.log(drawType, brackets, matches);
   console.log(brackets, matches);
@@ -273,22 +273,53 @@ const TournamentDraw = ({ isSingles, drawType, brackets, matches }: ITournamentD
   return (
     <div className={styles.drawContainer}>
       {stages.map((stage, index) => (
-        <div key={index} className={styles.stage}>
-          {stage.map((match) => (
-            <div key={match.id} className={styles.match}>
-              <span>{
-                match.player_match_player1_idToplayer.first_name + ' ' + match.player_match_player1_idToplayer.last_name
-              }</span>
-              <span>{
-                match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
-              }</span>
-            </div>
-          ))}
+        <div className={styles.stageWrapper}>
+          <div key={index} className={styles.stage}>
+            <p className={styles.stageTitle}>{index + 1}</p>
+            {/* <div className={styles.matches}> */}
+            {/* {index === 0
+                ? stage.map((match, index) => <AddMatch isDisabled={isDisabled} match={match} />)
+                : stage.map((match, index) => <Match match={match} />)
+              } */}
+            {/* </div> */}
+          </div>
         </div>
       ))}
     </div>
   );
 }
+
+const addMatch = async () => {
+  // const 
+};
+
+const AddMatch = ({ isDisabled, match }: { match: MatchT; isDisabled: boolean }) => {
+  const handleButtonClick = () => {
+
+  };
+
+  return (
+    <div className={styles.addMatch}>
+      <Match match={match} />
+      <button disabled={isDisabled} className={styles.plusButton} onClick={handleButtonClick}>
+        +
+      </button>
+    </div>
+  )
+};
+
+
+
+const Match = ({ match }: { match: MatchT }) => (
+  <div key={match.id} className={styles.match}>
+    <span>{
+      match.player_match_player1_idToplayer.last_name + ' ' + match.player_match_player1_idToplayer.first_name[0]
+    }</span>
+    <span>{
+      match.player_match_player2_idToplayer.last_name + ' ' + match.player_match_player2_idToplayer.first_name[0]
+    }</span>
+  </div>
+);
 
 export default AdminSingleTournamentPape;
 
