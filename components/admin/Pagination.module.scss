@@ -10,22 +10,24 @@
     display: flex;
     align-items: center;
 
-    button{
+    button {
       font-weight: bold;
       margin-right: 10px;
       background-color: $custom-lightlightgray;
       font-size: 20px;
+      cursor: pointer;
 
-      &:hover{
+      &:hover {
         background-color: $custom-lightgray;
       }
     }
 
     select {
+      cursor: pointer;
+      outline: none;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 21px;
       margin-right: 5px;
-      padding: 1px 10px;
       border: 2px solid;
     }
 
