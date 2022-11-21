@@ -1,6 +1,61 @@
 .playersContainer {
   padding: 15px;
 
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    thead {
+      border-bottom: 20px solid transparent;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 30px;
+      letter-spacing: -0.165px;
+      color: #FFFFFF;
+    }
+
+    tbody {
+
+      tr {
+        border-bottom: 10px solid transparent;
+
+        td:nth-child(2) {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 18px;
+        }
+
+        td:last-child {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 18px;
+          letter-spacing: -0.165px;
+          color: #4CC4D1;
+        }
+
+        td {
+
+          .userInfo {
+            display: flex;
+            align-items: center;
+
+            .userImage {
+              width: 42px;
+              height: 42px;
+              border: 1px solid #D9D9D9;
+              border-radius: 50%;
+            }
+
+            p {
+              margin: 0 0 0 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
   :global(.MuiFormControl-root) {
     background-color: white;
     margin-bottom: 15px;
