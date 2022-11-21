@@ -1,8 +1,71 @@
+@import '../styles/variables';
+
 .playersContainer {
   padding: 15px;
 
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    thead {
+      border-bottom: 20px solid transparent;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 30px;
+      letter-spacing: -0.165px;
+      color: $custom-white;
+
+      tr {
+        td:nth-child(2), td:last-child {
+          text-align: center;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 10px solid transparent;
+
+        td:nth-child(2) {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 18px;
+          text-align: center;
+        }
+
+        td:last-child {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 18px;
+          letter-spacing: -0.165px;
+          color: $custom-aqua;
+          text-align: center;
+        }
+
+        td {
+          .userInfo {
+            display: flex;
+            align-items: center;
+
+            .userImage {
+              width: 42px;
+              height: 42px;
+              border: 1px solid $custom-lightgray;
+              border-radius: 50%;
+            }
+
+            p {
+              margin: 0 0 0 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
   :global(.MuiFormControl-root) {
-    background-color: white;
+    background-color: $custom-white;
     margin-bottom: 15px;
     width: 70%;
   }
@@ -19,9 +82,9 @@
       width: calc(100% - 80px);
       height: 30px;
       background: none;
-      border: 1px solid white;
+      border: 1px solid $custom-white;
       border-radius: 5px;
-      color: white;
+      color: $custom-white;
       outline: none;
       padding: 0 10px;
     }
@@ -30,9 +93,9 @@
       width: 30px;
       height: 30px;
       background: none;
-      border: 1px solid white;
+      border: 1px solid $custom-white;
       border-radius: 5px;
-      color: white;
+      color: $custom-white;
       display: flex;
       align-items: center;
       margin-left: 10px;
@@ -53,7 +116,7 @@
   :global(.MuiTableContainer-root) {
     th,
     td {
-      color: white;
+      color: $custom-white;
     }
 
     width: 100%;
