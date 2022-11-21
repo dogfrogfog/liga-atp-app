@@ -1,3 +1,5 @@
+@import '../styles/variables';
+
 .playersContainer {
   padding: 15px;
 
@@ -12,7 +14,7 @@
       font-size: 14px;
       line-height: 30px;
       letter-spacing: -0.165px;
-      color: #FFFFFF;
+      color: $custom-white;
 
       tr {
         td:nth-child(2), td:last-child {
@@ -37,7 +39,7 @@
           font-size: 14px;
           line-height: 18px;
           letter-spacing: -0.165px;
-          color: #4CC4D1;
+          color: $custom-aqua;
           text-align: center;
         }
 
@@ -49,7 +51,7 @@
             .userImage {
               width: 42px;
               height: 42px;
-              border: 1px solid #D9D9D9;
+              border: 1px solid $custom-lightgray;
               border-radius: 50%;
             }
 
@@ -63,7 +65,7 @@
   }
 
   :global(.MuiFormControl-root) {
-    background-color: white;
+    background-color: $custom-white;
     margin-bottom: 15px;
     width: 70%;
   }
@@ -80,9 +82,9 @@
       width: calc(100% - 80px);
       height: 30px;
       background: none;
-      border: 1px solid white;
+      border: 1px solid $custom-white;
       border-radius: 5px;
-      color: white;
+      color: $custom-white;
       outline: none;
       padding: 0 10px;
     }
@@ -91,9 +93,9 @@
       width: 30px;
       height: 30px;
       background: none;
-      border: 1px solid white;
+      border: 1px solid $custom-white;
       border-radius: 5px;
-      color: white;
+      color: $custom-white;
       display: flex;
       align-items: center;
       margin-left: 10px;
@@ -114,7 +116,7 @@
   :global(.MuiTableContainer-root) {
     th,
     td {
-      color: white;
+      color: $custom-white;
     }
 
     width: 100%;

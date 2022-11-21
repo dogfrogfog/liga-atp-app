@@ -7,7 +7,6 @@ import { MdOutlineClear } from 'react-icons/md';
 import { AiOutlineSearch } from 'react-icons/ai';
 import ligaLogo from '../../public/180x180.png'
 
-// todo: migrate FROM mui
 import { PrismaClient } from '@prisma/client'
 
 import Input from 'ui-kit/Input';
