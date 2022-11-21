@@ -1,3 +1,5 @@
+@import '../styles/variables.scss';
+
 .pageContainer {
   height: calc(100vh - 84px);
   overflow-y: scroll;
@@ -12,8 +14,14 @@
   bottom: 0;
   display: flex;
 
+  svg {
+    color: $custom-gray;
+  }
+
   .active {
-    color: #4CC4D1;
+    svg {
+        color: $custom-aqua;
+    }
   }
 
   .menuItem {
@@ -24,7 +32,7 @@
     align-items: center;
     font-size: 14px;
     font-weight: 200;
-    
+
     &:last-child {
       border: 0;
     }
