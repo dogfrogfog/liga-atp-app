@@ -19,7 +19,7 @@ const PreviewComponent = ({ title }: IPreviewComponentProps) => (
         </p>
       </div>
       <div className={styles.buttons}>
-        <a className={styles.back}>
+        <a href="/players" className={styles.back}>
           <GiTennisRacket size='xl' />
         </a>
         <a className={styles.back}>
