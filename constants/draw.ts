@@ -1,17 +1,21 @@
 export const D8 = {
   firstStageMatches: 4,
+  totalStages: 3,
 };
 
 export const D16 = {
   firstStageMatches: 8,
+  totalStages: 4,
 };
 
 export const D32 = {
   firstStageMatches: 16,
+  totalStages: 5,
 };
 
 export const D64 = {
   firstStageMatches: 32,
+  totalStages: 6,
 };
 
 export const DRAW_TYPE_NUMBER_VALUES: any = {

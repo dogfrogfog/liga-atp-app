@@ -4,7 +4,7 @@ import { PrismaClient, match } from '@prisma/client'
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<match[]>
+  res: NextApiResponse<match[] | match>
 ) => {
   const prisma = new PrismaClient()
   if (req.method === 'GET') {
@@ -34,5 +34,13 @@ export default async (
     })
 
     res.json(matches)
+  }
+
+  if (req.method === 'POST') {
+    const createdMatch = await prisma.match.create({
+      data: req.body.data,
+    });
+
+    res.json(createdMatch);
   }
 }

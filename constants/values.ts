@@ -37,9 +37,6 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: any = {
   101: 'Парный ProAm', // new
 };
 
-export const SINGLES_TOURNAMENT_DRAW = [10, 3, 1, 12, 11, 4, 2, 13];
-export const DOUBLES_TOURNAMENT_DRAW = [14, 15, 16, 17, 18];
-export const TOURNAMENT_DRAW_WITH_QUAL = [11, 4, 2, 13];
 export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: any = {
   // olympic net (singles types)
   10: 'D8',
