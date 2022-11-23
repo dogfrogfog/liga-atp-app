@@ -15,5 +15,11 @@
     display: inline-block;
     border-radius: 14px;
     color: $custom-white;
+    cursor: pointer;
+  }
+
+  .isActive {
+    background-color: $custom-aqua;
+    color: $custom-black
   }
 }
