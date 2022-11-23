@@ -1,0 +1,19 @@
+@import '../../styles/variables';
+
+.container {
+  overflow: auto;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .tab {
+    padding: 8px 12px;
+    margin-right: 4px;
+    background-color: $custom-darkgray;
+    display: inline-block;
+    border-radius: 14px;
+    color: $custom-white;
+  }
+}
