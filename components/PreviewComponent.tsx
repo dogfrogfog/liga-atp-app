@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { GiTennisBall } from 'react-icons/gi';
 import { GiTennisRacket } from 'react-icons/gi';
 
@@ -19,9 +20,11 @@ const PreviewComponent = ({ title }: IPreviewComponentProps) => (
         </p>
       </div>
       <div className={styles.buttons}>
-        <a href="/players" className={styles.back}>
+        <Link href="/players">
+          <span className={styles.back}>
           <GiTennisRacket size='xl' />
-        </a>
+          </span>
+        </Link>
         <a className={styles.back}>
           <GiTennisBall size='xl' />
         </a>
