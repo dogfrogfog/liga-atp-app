@@ -3,15 +3,20 @@ import styles from './styles.module.scss';
 import cl from 'classnames'
 
 interface ITabsProps {
-  data: string[];
-  onClick: (v : string) => void;
+  tabNames: string[];
+  onClick: (v: string) => void;
   activeTabIndex: string;
-
 }
 
-const Tabs: FC<ITabsProps> = ({ data, activeTabIndex, onClick }: ITabsProps) => (
+const Tabs: FC<ITabsProps> = ({ tabNames, activeTabIndex, onClick }: ITabsProps) => (
   <div className={styles.container}>
-    {data.map(v => (<div key={v}  onClick={() =>onClick(v)} className={cl(styles.tab, activeTabIndex === v ? styles.isActive : '')}>{v}</div>))}
+    {tabNames.map(v => (
+      <div key={v}
+           onClick={() =>onClick(v)}
+           className={cl(styles.tab, activeTabIndex === v ? styles.isActive : '')}>
+        {v}
+      </div>
+      ))}
   </div>
 )
 
