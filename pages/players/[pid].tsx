@@ -101,7 +101,7 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
         {/*    />*/}
         {/*  ))}*/}
         {/*</Tabs>*/}
-        <Tabs activeTabIndex={activeTabIndex} onClick={setActiveTabIndex} data={PROFILE_TABS}/>
+        <Tabs activeTabIndex={activeTabIndex} onClick={setActiveTabIndex} tabNames={PROFILE_TABS}/>
         {activeTabContent}
       </section>
     </div>
