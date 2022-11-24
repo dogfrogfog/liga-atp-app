@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import cl from 'classnames'
 import { FaMedal } from 'react-icons/fa'
 import { PrismaClient, player } from '@prisma/client'
 
@@ -11,6 +8,7 @@ import MatchesTab from '../components/profileTabs/Matches'
 import StatsTab from '../components/profileTabs/Stats'
 import { LEVEL_NUMBER_VALUES } from '../../constants/values'
 import styles from '../../styles/Profile.module.scss'
+import TabsMUI from 'ui-kit/Tabs'
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
@@ -81,25 +79,7 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
         points={'1490'}
       />
       <section>
-        <Tabs
-          value={PROFILE_TABS.indexOf(activeTabIndex)}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          className={styles.tabsContainer}
-          TabIndicatorProps={{ children: null }}
-        >
-          {PROFILE_TABS.map((tab) => (
-            <Tab
-              key={tab}
-              className={cl(
-                styles.tab,
-                tab === activeTabIndex ? styles.activeTab : ''
-              )}
-              label={tab}
-            />
-          ))}
-        </Tabs>
+        <TabsMUI activeTabIndex={activeTabIndex} onChange={handleTabChange} tabNames={PROFILE_TABS}/>
         {activeTabContent}
       </section>
     </div>
