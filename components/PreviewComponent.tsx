@@ -22,12 +22,15 @@ const PreviewComponent = ({ title }: IPreviewComponentProps) => (
       <div className={styles.buttons}>
         <Link href="/players">
           <span className={styles.back}>
-          <GiTennisRacket size='xl' />
+            <GiTennisRacket size='xl' />
+          </span>
+
+        </Link>
+        <Link href="/players">
+          <span className={styles.back}>
+            <GiTennisBall size='xl' />
           </span>
         </Link>
-        <a className={styles.back}>
-          <GiTennisBall size='xl' />
-        </a>
       </div>
     </div>
   </div>
