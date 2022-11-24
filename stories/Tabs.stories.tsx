@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof Tabs> = (args) => {
   const onClick = (v : string) =>{
     setActiveTabIndex(v)
   }
-  return <Tabs tabNames={data} activeTabIndex={activeTabIndex} onClick={onClick}/>;
+  return <Tabs tabNames={data} activeTabIndex={activeTabIndex} onChange={onClick}/>;
 }
 
 export const Primary = Template.bind({});

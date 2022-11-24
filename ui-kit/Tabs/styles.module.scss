@@ -3,22 +3,23 @@
 .container {
   overflow: auto;
   white-space: nowrap;
+  height: 32px;
 
-  &::-webkit-scrollbar {
-    width: 0;
+  :global(.MuiTabs-indicator) {
+    display: none;
   }
 
+
   .tab {
-    padding: 8px 12px;
+    text-transform: capitalize;
     margin-right: 4px;
     background-color: $custom-darkgray;
-    display: inline-block;
     border-radius: 14px;
     color: $custom-white;
     cursor: pointer;
   }
 
-  .isActive {
+  .activeTab {
     background-color: $custom-aqua;
     color: $custom-black
   }

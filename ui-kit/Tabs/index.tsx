@@ -1,23 +1,32 @@
 import type { FC } from 'react';
 import styles from './styles.module.scss';
 import cl from 'classnames'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 
 interface ITabsProps {
   tabNames: string[];
-  onClick: (v: string) => void;
+  onChange: (_: any, value: number) => void;
   activeTabIndex: string;
 }
 
-const Tabs: FC<ITabsProps> = ({ tabNames, activeTabIndex, onClick }: ITabsProps) => (
-  <div className={styles.container}>
+const TabsMUI: FC<ITabsProps> = ({ tabNames, activeTabIndex, onChange }: ITabsProps) => (
+  <Tabs
+    className={styles.container}
+    value={tabNames.indexOf(activeTabIndex)}
+    onChange={onChange}
+    variant="scrollable"
+    scrollButtons="auto"
+    TabIndicatorProps={{ children: null }}
+  >
     {tabNames.map(v => (
-      <div key={v}
-           onClick={() =>onClick(v)}
-           className={cl(styles.tab, activeTabIndex === v ? styles.isActive : '')}>
-        {v}
-      </div>
+      <Tab
+        key={v}
+        label={v}
+        className={cl(styles.tab, activeTabIndex === v ? styles.activeTab : '')}
+      />
       ))}
-  </div>
+  </Tabs>
 )
 
-export default Tabs
+export default TabsMUI
