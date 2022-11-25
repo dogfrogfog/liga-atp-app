@@ -88,8 +88,9 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       draw_type: parseInt(activeTournament.draw_type as any as string, 10),
       tournament_type: parseInt(activeTournament.tournament_type as any as string, 10)
     });
-
+    
     if (newTournament.isOk) {
+      // @ts-ignore
       const { match, ...v } = newTournament.data;
 
       setActiveTournament(v as any);

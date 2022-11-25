@@ -57,7 +57,7 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
     }
 
     fetchWrapper()
-  }, [playerId])
+  }, [playerId, pagination])
 
   return (
     <>

@@ -1,10 +1,12 @@
+@import '../styles/variables';
+
 .profileContainer {
   min-height: 100vh;
 
   section {
     padding: 15px;
-    background-color: black;
-    color: white;
+    background-color: $custom-black;
+    color: $custom-lightgray;
   }
 
   .tabsContainer {
@@ -13,7 +15,7 @@
     :global(.MuiTabs-indicator) {
       display: none;
     }
-      
+
     .tab {
       margin: 0;
       margin-right: 15px;
@@ -45,15 +47,6 @@
           margin-bottom: 8px;
         }
 
-        .name {
-          display: block;
-          // background-color: rgba(22, 22, 22, 0.1);
-          background-color: #1B2223;
-          border-radius: 10px;
-          padding: 8px;
-          width: 100%;
-          margin-bottom: 8px;
-        }
       }
 
       &:last-child {
@@ -74,11 +67,11 @@
     position: absolute;
     z-index: 3;
     right: 30px;
-    top: 30px;
-    background-color: black;
-    color: white;
-    border-radius: 5px;
-    padding: 10px;
+    top: 40px;
+    background-color: rgba(30, 30, 30, 0.6);
+    color: $custom-white;
+    border-radius: 14px;
+    padding: 8px 12px;
   }
 
   .info {
@@ -88,12 +81,22 @@
     padding: 10px;
     // fix
     margin-top: 200px;
+    background-color: rgba(18, 20, 20, 0.6);
 
     .title {
       margin: 0;
       display: block;
       font-size: 20px;
       margin-bottom: 10px;
+    }
+
+
+    .name {
+      display: block;
+      // background-color: rgba(22, 22, 22, 0.1);
+      margin: 0;
+      font-size: 28px;
+      line-height: 36px;
     }
 
     .infoContainer {
@@ -122,10 +125,10 @@
         }
 
         .medal {
-          background-color: #1B2223;
-          padding: 5px;
+          background-color: rgba(27, 34, 36, 0.6);
+          padding: 0 6px;
           margin-right: 5px;
-          border-radius: 5px;
+          border-radius: 8px;
           display: flex;
           align-items: center;
 
@@ -136,10 +139,10 @@
       }
 
       .elo {
-        background-color: #1B2223;
-        color: #4CC4D1;
-        border-radius: 5px;
-        padding: 5px 10px;
+        background-color: rgba(27, 34, 35, 0.6);
+        color: $custom-aqua;
+        border-radius: 8px;
+        padding: 3px 6px;
       }
     }
   }

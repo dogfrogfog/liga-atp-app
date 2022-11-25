@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     )
   }
 
-  // secondary pages
+  // secondary pages with top circle back button <-
   if (
     router.pathname.startsWith('/players/') ||
     router.pathname.startsWith('/tournaments/')
@@ -31,6 +31,16 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         </SecondaryPageLayout>
       </PWALayout>
     )
+  }
+
+  // to show user once
+  // todo: add inavailable (WIP) routs here; 
+  if (router.pathname === '/' || router.pathname === '/preview') {
+    return (
+      <PWALayout>
+        <Component {...pageProps} />
+      </PWALayout>
+    );
   }
 
   // with bottom menu

@@ -2,13 +2,37 @@
 
 .pagination {
   padding: $padding;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .arrows {
+    display: flex;
+    align-items: center;
 
-    button,
+    button {
+      font-weight: bold;
+      margin-right: 10px;
+      background-color: $custom-lightlightgray;
+      font-size: 20px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $custom-lightgray;
+      }
+    }
+
     select {
+      cursor: pointer;
+      outline: none;
+      font-weight: bold;
+      font-size: 21px;
       margin-right: 5px;
-      margin-bottom: 15px;
+      border: 2px solid;
+    }
+
+    .currentPage{
+      margin-right: 10px;
     }
   }
 }
