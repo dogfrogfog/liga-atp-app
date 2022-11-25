@@ -412,28 +412,11 @@ const TournamentDraw = ({
     match,
     bracketUnit,
   }: { match: MatchT | null, bracketUnit: IBracketsUnit }) => {
-    // if match is null we have to create match and update tournament's draw
     if (match === null) {
       createMatchAndUpdateBracket(bracketUnit);
     } else {
       updateMatchAndBracket(bracketUnit, match)
-      // update match and draw
-      // handleBracketsChange
     }
-    // const isMatchEdited = 
-    // newBracketElement?.matchInStageIndex === match;
-    // const { stageIndex, matchInStageIndex } = bracketUnit;
-    // const newBracketUnit = {
-    //   ...bracketUnit,
-    //   player1: bracketUnit.player1 || match.player1_id,
-    //   player2: bracketUnit.player2 || match.player2_id,
-    //   matchId: match.id,
-    //   stageIndex,
-    //   matchInStageIndex,
-    // };
-
-    // const newPlayer1IdValue = bracketUnit.player1 || match.player1_id || null;
-    // const newPlayer2IdValue = bracketUnit.player1 || match.player1_id || null;
   };
 
   return (
