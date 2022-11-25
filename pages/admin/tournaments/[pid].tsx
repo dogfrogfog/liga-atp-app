@@ -150,6 +150,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       } as TournamentT);
 
       if (updatedTournament.isOk) {
+        // @ts-ignore
         const { match, ...v } = updatedTournament.data;
 
         setActiveTournament(v);
@@ -176,6 +177,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     } as TournamentT);
 
     if (updatedTournament.isOk) {
+      // @ts-ignore
       const { match, ...v } = updatedTournament.data;
 
       setActiveTournament(v);
