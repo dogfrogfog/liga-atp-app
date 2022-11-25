@@ -1,8 +1,16 @@
+@import '../../../styles/variables';
+
 .infoRow {
+
+  &:first-child {
+    margin-top: 80px;
+  }
+
   padding: 10px 0;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #121414;
+  border-bottom: 0.5px solid $custom-darkgray;
+
 
   span:last-child {
     font-weight: bold;
