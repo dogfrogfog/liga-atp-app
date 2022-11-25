@@ -439,7 +439,7 @@ const TournamentDraw = ({
   return (
     <div className={styles.drawContainer}>
       {brackets.map((stage, si) => (
-        <div className={styles.stageWrapper}>
+        <div key={si} className={styles.stageWrapper}>
           <div key={si} className={styles.stage}>
             <p className={styles.stageTitle}>{si + 1}</p>
             <div className={styles.matchesWrapper}>
