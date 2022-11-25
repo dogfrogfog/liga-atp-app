@@ -43,4 +43,15 @@ export default async (
 
     res.json(createdMatch);
   }
+
+  if (req.method === 'PUT') {
+    const updatedMatch = await prisma.match.update({
+      where: {
+        id: req.body.data.id,
+      },
+      data: req.body.data,
+    });
+
+    res.json(updatedMatch);
+  }
 }
