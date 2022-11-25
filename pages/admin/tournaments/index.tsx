@@ -87,7 +87,7 @@ const Tournaments: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData(v => v.concat([data as TournamentT]));
+        setData(v => [data as TournamentT].concat(v));
       } else {
         console.warn(errorMessage);
       }

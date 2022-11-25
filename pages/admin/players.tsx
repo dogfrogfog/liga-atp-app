@@ -81,7 +81,7 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData(v => v.concat([data as PlayerT]));
+        setData(v => [data as PlayerT].concat(v));
       } else {
         console.warn(errorMessage);
       }

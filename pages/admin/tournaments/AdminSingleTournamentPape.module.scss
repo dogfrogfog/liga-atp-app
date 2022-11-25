@@ -1,21 +1,99 @@
 @import '../../../styles/variables.scss';
 
 .drawContainer {
-  width: 100%;
-  height: 500px;
-  border: 2px solid red;
-  overflow-x: scroll;
+  padding: 15px;
   display: flex;
+  overflow: auto;
+  background-color: $custom-lightgray;
+  height: 750px;
 
-  .stage {
-    width: 300px;
-    border: 1px solid green;
-    display: flex;
-    flex-direction: column;
+  .stageWrapper {
+    min-width: 325px;
 
-    .matchesContainer {
+    .stageTitle {
+      background-color: $custom-darkgray;
+      color: $custom-white;
+      text-align: center;
+      padding: 10px;
+      margin: 0 0 20px;
+    }
+
+    .stage {
+      border-right: 1px solid $custom-yellow;
+    }
+  }
+
+  .matchesWrapper {
+    .matchInputContainer {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      margin-bottom: 35px;
+
+      &.activeInput {
+        background-color: $custom-yellow; 
+      }
+
+      .fields {
+        select {
+          min-width: 200px;
+          display: block;;
+          outline: none;
+          color: $custom-white;
+          background-color: $custom-black;
+          padding: 5px;
+          margin-right: 25px;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+      }
+
+      .plusButton {
+        // height: 30px;
+        // width: 30px;
+        padding: 0;
+        outline: 0;
+        cursor: pointer;
+        font-size: 20px;
+        background-color: $custom-darkgray;
+        background-color: $custom-darkgray;
+        color: $custom-white;
+        
+        &[disabled] {
+          background-color: $custom-olive;
+          opacity: 0.8;
+          color: $custom-darkgray;
+          border-color: $custom-darkgray;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .match {
+      padding: 10px;
+      position: relative;
+
+      .player {
+        background-color: $custom-white;
+        display: block;
+        margin-bottom: 5px;
+        padding: 5px;
+
+        &.loser {
+          background-color: $custom-lightlightgray;
+          color: $custom-lightgray;
+        }
+      }
+
+      select {
+        background-color: $custom-white;
+        margin-bottom: 5px;
+        padding: 5px;
+      }
+
+      .score {
+        position: absolute;
+        bottom: 5px;
+      }
     }
   }
 }
@@ -104,10 +182,11 @@
         height: 30px;
         font-size: 16px;
         border: none;
-        background: black;
-        color: white;
+        background: $custom-darkgray;
+        color: $custom-white;
         cursor: pointer;
         outline: none;
+        padding: 0 5px;
 
         &[disabled] {
           cursor: not-allowed;
@@ -124,6 +203,16 @@
         background-color: $custom-yellow;
         text-align: center;
       }
+    }
+
+    &.inputField input {
+      outline: none;
+      background-color: $custom-darkgray;
+      color: $custom-white;
+      height: 30px;
+      font-size: 16px;
+      border: none;
+      padding: 0 5px;
     }
 
     &[disabled] {
@@ -159,4 +248,3 @@
     }
   }
 }
-
