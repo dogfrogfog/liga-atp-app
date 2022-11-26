@@ -1,16 +1,50 @@
+@import '../../../styles/variables';
+
 .match {
   margin-bottom: 30px;
+  border-bottom: 0.5px solid $custom-darkgray;
+
+  .time {
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
 
   .title {
     display: block;
     font-size: 16px;
     text-transform: uppercase;
-    color: #DBDBDB;
+    color: $custom-lightgray;
   }
 
   .row {
     display: flex;
     justify-content: space-between;
+
+    .win {
+      color: $custom-aqua;
+    }
+
+    .lose {
+      color: $custom-red;
+    }
+
+    .pair {
+      font-weight: 600;
+      margin: 8px 0;
+    }
+
+    .button {
+      border: 1px solid $custom-aqua;
+      border-radius: 8px;
+      color: $custom-aqua;
+      padding: 4px 6px;
+    }
+
+    &:last-child {
+      justify-content: start;
+      gap: 8px;
+    }
   }
 
   .title,
