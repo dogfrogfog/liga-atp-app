@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { match } from '@prisma/client'
-
+import { format } from 'date-fns/fp'
 import styles from './Matches.module.scss'
-import matches from '../../api/matches'
 
 // comment: ""
 // id: 10641
@@ -18,20 +17,25 @@ import matches from '../../api/matches'
 // tournament_id: 478
 // winner_id: 1220
 
-const Match = ({ tournamentName, startDate, playersStr, score }: any) => (
+const Match = ({ tournamentName, startDate, playersStr, score , win}: any) => (
   <div className={styles.match}>
-    {/* <span className={styles.title}>{tournamentName} | {startDate}</span> */}
-    <div className={styles.row}>
-      <span className={styles.time}>
-        {tournamentName} | {startDate}
+    <span className={styles.time}>
+      {format('dd.MM.yyyy', new Date(startDate))}
       </span>
-      <span className={styles.pair}>
+    <div className={styles.row}>
+      <span className={styles.tournamentName}>
+        {tournamentName}
+      </span>
+      <span className={win === true ? styles.win : styles.lose}>
         {score}  
       </span>
     </div>
     <div className={styles.row}>
-      <span className={styles.court}>{playersStr}</span>
-      <span className={styles.pair}></span>
+      <span className={styles.pair}>{playersStr}</span>
+    </div>
+    <div className={styles.row}>
+      <div className={styles.button}>YouTube</div>
+      <div className={styles.button}>H2H</div>
     </div>
   </div>
 )
@@ -58,7 +62,6 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
 
     fetchWrapper()
   }, [playerId, pagination])
-
   return (
     <>
       {data.map((match, index) => (
@@ -70,10 +73,9 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
           score={match.score}
           playersStr={
             // @ts-ignore
-            match.player_match_player1_idToplayer.first_name + ' ' + match.player_match_player1_idToplayer.last_name + ' / ' +
-            // @ts-ignore
             match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
           }
+          win={String(playerId) === match.winner_id}
         />
       ))}
   </>
