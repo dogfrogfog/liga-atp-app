@@ -17,7 +17,15 @@ import styles from './Matches.module.scss'
 // tournament_id: 478
 // winner_id: 1220
 
-const Match = ({ tournamentName, startDate, playersStr, score , win}: any) => (
+interface IMatchProps {
+  tournamentName: string;
+  startDate: string;
+  opponent: string;
+  score: string;
+  win: boolean;
+}
+
+const Match = ({ tournamentName, startDate, opponent, score , win }: IMatchProps) => (
   <div className={styles.match}>
     <span className={styles.time}>
       {format('dd.MM.yyyy', new Date(startDate))}
@@ -26,12 +34,12 @@ const Match = ({ tournamentName, startDate, playersStr, score , win}: any) => (
       <span className={styles.tournamentName}>
         {tournamentName}
       </span>
-      <span className={win === true ? styles.win : styles.lose}>
-        {score}  
+      <span className={win ? styles.win : styles.lose}>
+        {score}
       </span>
     </div>
     <div className={styles.row}>
-      <span className={styles.pair}>{playersStr}</span>
+      <span className={styles.pair}>{opponent}</span>
     </div>
     <div className={styles.row}>
       <div className={styles.button}>YouTube</div>
@@ -69,9 +77,11 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
           key={index}
           // @ts-ignore
           tournamentName={match.tournament.name}
+          // @ts-ignore
           startDate={match.start_date}
+          // @ts-ignore
           score={match.score}
-          playersStr={
+          opponent={
             // @ts-ignore
             match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
           }
