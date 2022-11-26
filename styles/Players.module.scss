@@ -2,6 +2,7 @@
 
 .playersContainer {
   padding: 15px;
+  position: relative;
 
   .table {
     width: 100%;
@@ -124,14 +125,13 @@
       padding: 10px 10px 10px 60px;
       text-align: left;
     }
-
-
   }
 
   .popupContainer {
+    position: absolute;
     background-color: $custom-medium-dark;
     border-radius: 14px;
-    position: relative;
+    width: calc(100% - 30px);
 
     .filterButton {
       cursor: pointer;
