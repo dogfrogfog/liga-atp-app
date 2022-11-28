@@ -1,0 +1,66 @@
+@import '../styles/variables';
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../public/loginPageBGImage.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: relative;
+
+  .back {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: $custom-white;
+    border-radius: 50%;
+    z-index: 3;
+    color: $custom-black;
+    top: 80px;
+    left: 35px;
+    padding: 4px;
+  }
+
+  .section {
+    position: absolute;
+    bottom: 0;
+    padding: 35px;
+
+    .info {
+      margin-bottom: 40px;
+
+      h3 {
+        margin: 0 0 22px 0;
+      }
+
+      p {
+        margin: 0;
+        line-height: 16px;
+        letter-spacing: -0.165px;
+        font-weight: 500;
+        font-size: 14px;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+
+      button {
+        padding: 16px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+      }
+
+      .login {
+        background-color: $custom-aqua;
+        margin-bottom: 10px;
+      }
+
+      .signup {
+        background-color: $custom-white;
+      }
+    }
+  }
+}
