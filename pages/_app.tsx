@@ -43,6 +43,14 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
+  if (router.pathname === '/' || router.pathname === '/login') {
+    return (
+      <PWALayout>
+        <Component {...pageProps} />
+      </PWALayout>
+    );
+  }
+
   // with bottom menu
   return (
     <PWALayout>
