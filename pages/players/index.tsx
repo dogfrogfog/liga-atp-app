@@ -12,6 +12,7 @@ import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Players.module.scss';
 import { FiMenu, FiSearch } from 'react-icons/fi'
 import { BsFillPersonFill } from 'react-icons/bs'
+import NotFoundMessage from "../../ui-kit/NotFoundMessage";
 
 // should be nested from schema
 interface PlayersPageProps {
@@ -67,17 +68,21 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
           ))}
         </ul>
       </div>}
-      <span className={styles.listTitle}>Список игроков</span>
-      <div className={styles.playersTable}>
-        <table className={styles.table}>
-          <thead>
+      {data.length === 0 ?
+        (<NotFoundMessage message={'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра'}/>)
+        :
+      (<>
+        <span className={styles.listTitle}>Список игроков</span>
+        <div className={styles.playersTable}>
+          <table className={styles.table}>
+            <thead>
             <tr>
               <td>Игрок</td>
               <td>Уровень</td>
               <td>Рейтинг</td>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             {data.map(({ id, first_name, last_name, level, rankings_singles_current, avatar }) => (
               <Link key={id} href={'/players/' + id}>
                 <tr key={id}>
@@ -97,6 +102,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
           </tbody>
         </table>
       </div>
+      </>)}
     </div >
   )
 }
