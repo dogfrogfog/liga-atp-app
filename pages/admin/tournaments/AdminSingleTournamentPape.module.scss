@@ -195,17 +195,20 @@
     }
 
     &.status {
-      span:last-child {
-        width: 100px;
+      select {
+        width: 50%;
         height: 30px;
         line-height: 30px;
         padding: 0 10px;
         background-color: $custom-yellow;
         text-align: center;
+        outline: none;
+        font-size: 20px;
       }
     }
 
     &.inputField input {
+      width: 50%;
       outline: none;
       background-color: $custom-darkgray;
       color: $custom-white;
@@ -213,6 +216,17 @@
       font-size: 16px;
       border: none;
       padding: 0 5px;
+    }
+
+    &.surface select {
+      width: 50%;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      background-color: $custom-olive;
+      text-align: center;
+      outline: none;
+      font-size: 20px;
     }
 
     &[disabled] {
