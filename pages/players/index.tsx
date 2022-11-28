@@ -12,6 +12,7 @@ import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Players.module.scss';
 import { FiMenu, FiSearch } from 'react-icons/fi'
 import { BsFillPersonFill } from 'react-icons/bs'
+import NotFoundMessage from "../../ui-kit/NotFoundMessage";
 
 // should be nested from schema
 interface PlayersPageProps {
@@ -68,9 +69,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
         </ul>
       </div>}
       {data.length === 0 ?
-        (<div className={styles.notFoundMessage}>
-          <p>Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра</p>
-      </div>)
+        (<NotFoundMessage message={'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра'}/>)
         :
       (<>
         <span className={styles.listTitle}>Список игроков</span>
