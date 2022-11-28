@@ -9,12 +9,19 @@ import {
   TOURNAMENT_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
   // DOUBLES_TOURNAMENT_DRAW,
+  SURFACE_TYPE_NUMBER_VALUES,
 } from 'constants/values';
 import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
 import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
+
+const translation = {
+  city: 'Город',
+  address: 'Адрес',
+  name: 'Название',
+};
 
 interface IAdminSingleTournamentPapeProps {
   tournament: TournamentT;
@@ -221,7 +228,10 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                       Тип сетки в турнире
                     </span>
                     <select
-                      onChange={(e) => handleTournamentFieldChange('draw_type', e.target.value)}
+                      onChange={(e) => {
+                        handleTournamentFieldChange('draw', JSON.stringify({ brackets: getInitialBrackets(parseInt(e.target.value, 10)) }));
+                        handleTournamentFieldChange('draw_type', e.target.value);
+                      }}
                       value={activeTournament.draw_type as number}
                       disabled={isDisabled}
                       name="drawType"
@@ -257,17 +267,28 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               case 'status': {
                 return (
                   <div key={key} className={cl(styles.field, styles.status)}>
-                    <span>Статус</span>
-                    {/* @ts-ignore */}
-                    <span>{TOURNAMENT_STATUS_NUMBER_VALUES[activeTournament.is_finished ? 3 : activeTournament?.status]}</span>
+                    <span>
+                      Статус
+                    </span>
+                    <select
+                      onChange={(e) => handleTournamentFieldChange('status', parseInt(e.target.value, 10))}
+                      value={activeTournament.status as number}
+                      disabled={isDisabled}
+                      name="type"
+                    >
+                      <option value={1}>{TOURNAMENT_STATUS_NUMBER_VALUES[1]}</option>
+                      <option value={2}>{TOURNAMENT_STATUS_NUMBER_VALUES[2]}</option>
+                      <option value={3}>{TOURNAMENT_STATUS_NUMBER_VALUES[3]}</option>
+                    </select>
                   </div>
-                );
+                )
               }
+              case 'city':
               case 'address':
               case 'name': {
                 return (
                   <div key={key} className={cl(styles.field, styles.inputField)}>
-                    <span>{key}</span>
+                    <span>{translation[key]}</span>
                     <input
                       value={activeTournament[key] as string}
                       type="text"
@@ -275,6 +296,47 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                     />
                   </div>
                 )
+              }
+              case 'start_date': {
+                return (
+                  <div key={key} className={cl(styles.field, styles.inputField)}>
+                    <span>Дата начала</span>
+                    {/* FIXME: types and date format */}
+                    {/* @ts-ignore  */}
+                    <input type="date" onChange={(e) => setActiveTournament(v => ({ ...v, [key]: new Date(e.target.value) }))} />
+                  </div>
+                );
+              }
+              case 'associated_tournament_id':
+              case 'players_order':
+              case 'draw':
+              case 'is_finished': {
+                return null;
+              }
+              case 'is_doubles': {
+                return (
+                  <div key={key} className={cl(styles.field, styles.is_doubles)}>
+                    <span>Парный турнир</span>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        setActiveTournament(v => ({ ...v, [key]: e.target.checked }))
+                      }}
+                    />
+                  </div>
+                )
+              }
+              case 'surface': {
+                return (
+                  <div key={key} className={cl(styles.field, styles.surface)}>
+                    <span>Покрытие</span>
+                    <select name="surface">
+                      <option value={0}>{SURFACE_TYPE_NUMBER_VALUES[0]}</option>
+                      <option value={1}>{SURFACE_TYPE_NUMBER_VALUES[1]}</option>
+                      <option value={2}>{SURFACE_TYPE_NUMBER_VALUES[2]}</option>
+                    </select>
+                  </div>
+                );
               }
               default: {
                 return (
