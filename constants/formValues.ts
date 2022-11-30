@@ -7,7 +7,7 @@ import {
   TOURNAMENT_STATUS_NUMBER_VALUES
 } from './values';
 
-export const PlayerSchema = z.object({
+const PlayerSchema = z.object({
   first_name: z.string().min(2),
   last_name: z.string().min(2),
   date_of_birth: z.string().min(2),
@@ -24,9 +24,8 @@ export const PlayerSchema = z.object({
   in_tennis_from: z.string().min(2),
   job_description: z.string().min(2),
 });
-export type PlayerFormType = z.infer<typeof PlayerSchema>;
 
-export const TournamentSchema = z.object({
+const TournamentSchema = z.object({
   name: z.string().min(2),
   is_doubles: z.boolean(),
   tournament_type: z.string(),
@@ -35,7 +34,16 @@ export const TournamentSchema = z.object({
   status: z.string(),
   city: z.string().min(2),
 });
-export type TournamentFormType = z.infer<typeof TournamentSchema>;
+
+const MatchSchema = z.object({
+  player1_id: z.number(),
+  player2_id: z.number(),
+  player3_id: z.number().nullable(),
+  player4_id: z.number().nullable(),
+  winner_id: z.number().nullable(),
+  score: z.string().nullable(),
+  start_date: z.union([z.string(), z.date()]).nullable(),
+});
 
 const PLAYER_FORM_VALUES = [
   { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
@@ -72,18 +80,25 @@ const TOURNAMENT_FORM_VALUES: any[] = [
   // draw_type on the seconds page
 ];
 
-
 const MATCHES_FORM_VALUES: any[] = [
-  { name: 'name', required: false, type: 'text', placeholder: 'Название матча' },
-]
+  { name: 'player1_id', required: true, type: 'select', placeholder: 'Игрок 1' },
+  { name: 'player3_id', required: false, type: 'text', placeholder: 'Игрок 3 (пара игрока 1)' },
+  { name: 'start_date', required: true, type: 'date', placeholder: 'Дата матча' },
+  { name: 'player2_id', required: true, type: 'select', placeholder: 'Игрок 2' },
+  { name: 'player4_id', required: false, type: 'text', placeholder: 'Игрок 4 (пара игрока 2)' },
+  { name: 'score', required: false, type: 'text', placeholder: 'Счет' }, // should be regexped
+  { name: 'winner_id', required: false, type: 'text', placeholder: 'Победитель' },
+];
 
 export const FORM_VALUES = {
   players: PLAYER_FORM_VALUES,
   tournaments: TOURNAMENT_FORM_VALUES,
   matches: MATCHES_FORM_VALUES,
-}
+};
 
+// todo: put resolvers in separate file
 export const FORM_RESOLVERS: any = {
   players: PlayerSchema,
-  tournaments: TournamentSchema
-}
+  tournaments: TournamentSchema,
+  matches: MatchSchema,
+};

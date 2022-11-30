@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { player as PlayerT, tournament as TournamentT } from '@prisma/client'
+import type { player as PlayerT, tournament as TournamentT, match as MatchT } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,7 +13,9 @@ interface IDataFormProps {
   formTitle: string;
   onSubmit: any;
   onClose: any;
-  editingRow?: PlayerT | TournamentT;
+  editingRow?: PlayerT | TournamentT | MatchT;
+  // we need this prop to pass registered players to modal
+  registeredPlayers?: PlayerT[]
 }
 
 interface IInputWithError {
@@ -32,11 +34,9 @@ const InputWithError = ({ errorMessage, children }: IInputWithError) => {
 
 const getField = (props: any, register: any, errors: any) => {
   switch (props.type) {
-    case 'file':
     case 'checkbox': {
       return (
         <InputWithError errorMessage={errors[props.name]?.message}>
-          <span>{props.placeholder}</span>
           <input
             type={props.type}
             {...register(props.name, { required: props.required })}
@@ -59,7 +59,6 @@ const getField = (props: any, register: any, errors: any) => {
       return (
         <InputWithError errorMessage={errors[props.name]?.message}>
           <input
-            placeholder={props.placeholder}
             type={props.type}
             {...register(props.name, { required: props.required })}
             autoComplete="off"
@@ -70,6 +69,8 @@ const getField = (props: any, register: any, errors: any) => {
   }
 }
 
+const REGISTERED_PLAYERS_FIELD_NAMES = ['player1_id', 'player2_id', 'player3_id', 'player4_id']
+
 // todo: add validation + errors
 const DataForm = ({
   onSubmit,
@@ -77,7 +78,8 @@ const DataForm = ({
   editingRow,
   type,
   formTitle,
-  }: IDataFormProps) => {
+  registeredPlayers,
+}: IDataFormProps) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
     resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
@@ -86,11 +88,35 @@ const DataForm = ({
   return (
     <Modal title={formTitle} handleClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        {FORM_VALUES[type].map((props) => (
-          <div key={props.name} className={styles.input}>
-            {getField(props, register, errors)}
-          </div>
-        ))}
+        {FORM_VALUES[type].map((props) => {
+          // to have ability to explicitly pass options to select fields 
+          if (type === 'matches' && REGISTERED_PLAYERS_FIELD_NAMES.indexOf(props.name) !== -1) {
+            return (
+              <div key={props.name} className={styles.input}>
+                <span>{props.placeholder}</span>
+                <InputWithError key={'trick' + props.name} errorMessage={errors[props.name]?.message as any}>
+                  <select
+                    // @ts-ignore
+                    name={props.name}
+                    {...register(props.name, { required: props.required, valueAsNumber: true })}
+                  >
+                    <option value=''>not selected</option>
+                    {registeredPlayers?.map(({ id, first_name, last_name }) => (
+                      <option key={id} value={id}>{last_name + ' ' + first_name}</option>
+                    ))}
+                  </select>
+                </InputWithError>
+              </div>
+            );
+          }
+
+          return (
+            <div key={props.name} className={styles.input}>
+              <span>{props.placeholder}</span>
+              {getField(props, register, errors)}
+            </div>
+          );
+        })}
         <div className={styles.container}>
           <input className={styles.reset} type="reset" />
           <input className={styles.submit} type="submit" />

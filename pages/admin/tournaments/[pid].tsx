@@ -78,13 +78,16 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   const [activeTournament, setActiveTournament] = useState(tournament);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
 
-  // for match
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [editingMatch, setEditingMatch] = useState<MatchT>();
+  const [editingMatch, setEditingMatch] = useState<undefined | MatchT>();
 
   const registeredPlayersIds = activeTournament.players_order ? JSON.parse(activeTournament?.players_order)?.players : [];
   const newSelectedPlayersIds = multiSelectFormatToPlayersIds(newSelectedPlayers);
   const brackets = activeTournament.draw && JSON.parse(activeTournament?.draw)?.brackets;
+
+  // this regestered players array we use to get options for "edit match" players select inputs
+  // also we use same data to get options for "draw unit" players select inputs (TournamentT)
+  const registeredPlayers = players.filter(({ id }) => registeredPlayersIds.indexOf(id) !== -1);
 
   const updateActiveTournament = async () => {
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
@@ -205,24 +208,21 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     }
   };
 
+  const submitEditMatchForm = (match: MatchT) => {
+    console.log(match);
+  };
+
+  const openEditMatchModal = (match: any) => {
+    setModalStatus({ isOpen: true, type: 'update' });
+    setEditingMatch(match);
+  };
+
   const isDisabled = 
     // OLD db records has is_finished prop...so we check it
     // (activeTournament.is_finished !== null && activeTournament.is_finished) ||
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     // (activeTournament.status === 3);
     false;
-
-  const openEditMatchModal = (match: any) => {
-    setModalStatus({ isOpen: true, type: 'update' });
-    setEditingMatch(v => ({ ...v, ...match }));
-  };
-
-  const handleMatchFieldChange = (key: string, value: any) => {
-    // @ts-ignore
-    setEditingMatch(v => ({ ...v, [key]: value }));
-  };
-
-  console.log(editingMatch)
 
   return (
     <div>
@@ -445,18 +445,19 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           brackets={brackets || [[]]}
           matches={matches}
           isDisabled={isDisabled}
-          registeredPlayers={players.filter(({ id }) => registeredPlayersIds.indexOf(id) !== -1)}
+          registeredPlayers={registeredPlayers}
         />
         : 'Выбирите тип сетки турнира чтобы создать турнир'}
-      {/* {modalStatus.isOpen ?
+      {modalStatus.isOpen ?
         <DataForm
-          type="players"
-          formTitle={FORM_TITLES[modalStatus.type]}
-          onSubmit={onSubmit}
-          onClose={handleReset}
-          editingRow={editingUser}
+          type="matches"
+          formTitle="Обновить матч"
+          onSubmit={submitEditMatchForm}
+          onClose={() => setModalStatus(DEFAULT_MODAL)}
+          editingRow={editingMatch}
+          registeredPlayers={registeredPlayers}
         />
-        : null} */}
+        : null}
     </div>
   );
 }
