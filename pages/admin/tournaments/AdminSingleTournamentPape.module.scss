@@ -4,7 +4,7 @@
   padding: 15px;
   display: flex;
   overflow: auto;
-  background-color: $custom-lightgray;
+  background-color: $custom-lightlightgray;
   height: 750px;
 
   .stageWrapper {
@@ -19,51 +19,33 @@
     }
 
     .stage {
-      border-right: 1px solid $custom-yellow;
+      margin-right: 35px;
     }
   }
 
   .matchesWrapper {
     .matchInputContainer {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       margin-bottom: 35px;
 
-      &.activeInput {
-        background-color: $custom-yellow; 
+      .matchButtons {
+        width: 100%;
       }
 
-      .fields {
-        select {
-          min-width: 200px;
-          display: block;;
-          outline: none;
-          color: $custom-white;
-          background-color: $custom-black;
-          padding: 5px;
-          margin-right: 25px;
-          margin-bottom: 10px;
-          font-size: 16px;
-        }
-      }
-
-      .plusButton {
-        // height: 30px;
-        // width: 30px;
-        padding: 0;
-        outline: 0;
-        cursor: pointer;
-        font-size: 20px;
-        background-color: $custom-darkgray;
-        background-color: $custom-darkgray;
-        color: $custom-white;
+      .playersRow {
+        background-color: $custom-lightgray;
+        width: 100%;
+        margin-bottom: 10px;
+        display: flex;
         
-        &[disabled] {
-          background-color: $custom-olive;
-          opacity: 0.8;
-          color: $custom-darkgray;
-          border-color: $custom-darkgray;
-          cursor: not-allowed;
+        select {
+          font-size: 18px;
+          margin: 5px;
+          width: 50%;
+          display: block;
+          outline: none;
         }
       }
     }
@@ -143,6 +125,33 @@
     }
   }
 }
+
+.matchActionsButtons {
+  display: flex;
+  margin: 5px;
+  width: 100%;
+  justify-content: space-around;
+
+  .saveMatch {
+    background-color: $custom-green;
+  }
+  .editMatch {
+    background-color: $custom-yellow;
+  }
+
+  .saveMatch,
+  .editMatch {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+}
+
 
 .addPlayersContainer {
   max-width: 50%;

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { match } from '@prisma/client'
-import { format } from 'date-fns/fp'
-import styles from './Matches.module.scss'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { match } from '@prisma/client';
+import { format } from 'date-fns/fp';
+
+import styles from './Matches.module.scss';
 
 // comment: ""
 // id: 10641

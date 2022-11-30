@@ -29,3 +29,13 @@ export async function updateMatch(match: MatchT): Promise<IUpdateMatchResponse> 
     return { isOk: false, errorMessage: response.statusText };
   }
 }
+
+export async function updateScore(id: number, score: string): Promise<IUpdateMatchResponse> {
+  const response = await axios.put<MatchT>('/api/matches', { data: { id, score } });
+
+  if (response.status === 200) {
+    return { isOk: true, data: response.data };
+  } else {
+    return { isOk: false, errorMessage: response.statusText };
+  }
+}
