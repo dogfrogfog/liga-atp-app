@@ -82,12 +82,12 @@ const TOURNAMENT_FORM_VALUES: any[] = [
 
 const MATCHES_FORM_VALUES: any[] = [
   { name: 'player1_id', required: true, type: 'select', placeholder: 'Игрок 1' },
-  { name: 'player3_id', required: false, type: 'text', placeholder: 'Игрок 3 (пара игрока 1)' },
+  { name: 'player3_id', required: false, type: 'select', placeholder: 'Игрок 3 (пара игрока 1)' },
   { name: 'start_date', required: true, type: 'date', placeholder: 'Дата матча' },
   { name: 'player2_id', required: true, type: 'select', placeholder: 'Игрок 2' },
-  { name: 'player4_id', required: false, type: 'text', placeholder: 'Игрок 4 (пара игрока 2)' },
+  { name: 'player4_id', required: false, type: 'select', placeholder: 'Игрок 4 (пара игрока 2)' },
   { name: 'score', required: false, type: 'text', placeholder: 'Счет' }, // should be regexped
-  { name: 'winner_id', required: false, type: 'text', placeholder: 'Победитель' },
+  { name: 'winner_id', required: false, type: 'select', placeholder: 'Победитель' },
 ];
 
 export const FORM_VALUES = {

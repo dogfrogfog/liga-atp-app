@@ -17,7 +17,7 @@ import {
 import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
-import { createMatch, updateMatch, updateScore } from 'services/matches';
+import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
 
 // todo: https://github.com/dogfrogfog/liga-atp-app/issues/49
@@ -208,8 +208,59 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     }
   };
 
-  const submitEditMatchForm = (match: MatchT) => {
-    console.log(match);
+  console.log(activeTournament)
+
+  const submitEditMatchForm = async (match: MatchT) => {
+    const newMatch = { ...editingMatch, ...match };
+
+    // we have to update tournament draw, because it should be inside tournament to render
+    const currentBrackets: IBracketsUnit[][] = JSON.parse(activeTournament.draw as string).brackets;
+    const newBrackets = currentBrackets.map((s) => (
+      s.map((m) => {
+        if (m.matchId === newMatch.id) {
+          return {
+            ...m,
+            player1: newMatch.player1_id || m.player1,
+            player2: newMatch.player2_id || m.player2,
+            player3: newMatch.player3_id || m.player3,
+            player4: newMatch.player4_id || m.player4,
+          }
+        }
+
+        return m;
+      })
+    ));
+
+    const updatedTournament = await updateTournament({
+      id: activeTournament.id,
+      draw: JSON.stringify({
+        brackets: newBrackets,
+      }),
+    } as TournamentT);
+
+    if (updatedTournament.isOk) {
+      // @ts-ignore
+      const { match, ...v } = updatedTournament.data;
+
+      setActiveTournament(v);
+    };
+
+    const updatedMatch = await updateMatch({
+      ...newMatch,
+      // should be string because we have to parse old values (bigint converted to string)
+      winner_id: newMatch.winner_id + '',
+      start_date: newMatch.start_date ? new Date(newMatch.start_date) : null
+    });
+
+    if (updatedMatch.isOk) {
+      const { data } = updatedMatch;
+
+      setMatches(v => {
+        // update existed array element
+        // to prevent 2 versions of the same element (old + new one)
+        return v.map(v1 => v1.id === data?.id ? data : v1);
+      });
+    }
   };
 
   const openEditMatchModal = (match: any) => {
@@ -645,23 +696,6 @@ const TournamentDraw = ({
   );
 }
 
-// const Match = ({ match }: { match?: any }) => (
-//   <div key={match.id} className={styles.match}>
-//     {[
-//       match.player_match_player1_idToplayer,
-//       match.player_match_player2_idToplayer,
-//     ].map(({ id, first_name, last_name }) => (
-//       <span
-//         className={cl(styles.player, { [styles.loser]: id !== parseInt(match.winner_id, 10) })}
-//         key={id}
-//       >
-//         {`${first_name} ${last_name}`}
-//       </span>
-//     ))}
-//     <div className={styles.score}>{match.score}</div>
-//   </div>
-// );
-
 export default AdminSingleTournamentPape;
 
 export const getServerSideProps = async (ctx: any) => {
@@ -672,14 +706,7 @@ export const getServerSideProps = async (ctx: any) => {
       id: parseInt(ctx.query.pid),
     },
     include: {
-      match: {
-        include: {
-          player_match_player1_idToplayer: true,
-          player_match_player2_idToplayer: true,
-          player_match_player3_idToplayer: true,
-          player_match_player4_idToplayer: true,
-        }
-      },
+      match: true,
     },
   });
 

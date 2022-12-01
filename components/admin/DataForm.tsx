@@ -69,7 +69,7 @@ const getField = (props: any, register: any, errors: any) => {
   }
 }
 
-const REGISTERED_PLAYERS_FIELD_NAMES = ['player1_id', 'player2_id', 'player3_id', 'player4_id']
+const REGISTERED_PLAYERS_FIELD_NAMES = ['player1_id', 'player2_id', 'player3_id', 'player4_id', 'winner_id']
 
 // todo: add validation + errors
 const DataForm = ({
