@@ -39,6 +39,10 @@
         width: 100%;
         margin-bottom: 10px;
         display: flex;
+
+        &.winnerRow {
+          background-color: $custom-green;
+        }
         
         select {
           font-size: 18px;

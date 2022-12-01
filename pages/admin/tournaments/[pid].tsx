@@ -617,7 +617,8 @@ const TournamentDraw = ({
                     key={si + mi}
                     className={styles.matchInputContainer}
                   >
-                    <div className={styles.playersRow}>
+                    {/* different type, so we use == */}
+                    <div className={cl(styles.playersRow, { [styles.winnerRow]: p1 == matchRecord?.winner_id })}>
                       <select
                         value={p1}
                         name="player1"
@@ -641,7 +642,7 @@ const TournamentDraw = ({
                         </select>
                       )}
                     </div>
-                    <div className={styles.playersRow}>
+                    <div className={cl(styles.playersRow, { [styles.winnerRow]: p2 == matchRecord?.winner_id })}>
                       <select
                         value={p2}
                         name="player2"
@@ -665,6 +666,11 @@ const TournamentDraw = ({
                         </select>
                       )}
                     </div>
+                    {matchRecord?.score &&
+                      <div className={styles.score}>
+                        {matchRecord.score}
+                      </div>
+                    }
                     <div className={styles.matchActionsButtons}>
                       {matchRecord &&
                         <button
