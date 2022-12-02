@@ -2,11 +2,13 @@ import { NextPage } from 'next';
 import styles from '../styles/LoginPage.module.scss';
 import { BiArrowBack } from "react-icons/bi";
 import { ReactNode, useState } from "react";
+import { useForm } from "react-hook-form";
 
-interface IModalProps {
+interface IAuthFormProps {
   title: string;
   toClose: (option: boolean)=> void;
   children: ReactNode;
+  handleSubmit: (v: any)=> any;
 }
 
 const Photo = () => {
@@ -22,14 +24,14 @@ const Photo = () => {
   )
 }
 
-const Modal = ({ title, toClose, children } :IModalProps) => {
+const AuthForm = ({ title, toClose, children , handleSubmit } :IAuthFormProps) => {
   return(
     <div className={styles.modal}>
       <div className={styles.header}>
         <h1 onClick={()=> toClose(false)}>{title}</h1>
        <Photo/>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(d=> alert(JSON.stringify(d)))}>
         {children}
       </form>
       <div className={styles.footer}>
@@ -42,6 +44,7 @@ const Modal = ({ title, toClose, children } :IModalProps) => {
 const LoginPage: NextPage = () => {
   const [loginFormIsOpen, setLoginFormIsOpen] = useState(false);
   const [signupFormIsOpen, setSignupFormIsOpen] = useState(false);
+  const {register, handleSubmit} = useForm();
 
   return (
     <div className={styles.container}>
@@ -56,21 +59,24 @@ const LoginPage: NextPage = () => {
           <button onClick={()=> setSignupFormIsOpen(true)} className={styles.signup}>Регистрация</button>
         </div>
       </div>
-      {loginFormIsOpen && <Modal title={'Вход в аккаунт'} toClose={setLoginFormIsOpen}>
-        <input name={'phoneNumber'} placeholder={''}  type={'phone'}/>
-        <input name={'password'} placeholder={'Пароль'}  type={'password'}/>
+      {loginFormIsOpen && <AuthForm title='Вход в аккаунт' toClose={setLoginFormIsOpen} handleSubmit={handleSubmit}>
+        <input {...register('phoneNumber')} placeholder=''  type='phone'/>
+        <input {...register('password')} placeholder='Пароль'  type='password'/>
+        <div className={styles.forgetPassword}>
+          <span>Забыли пароль? <span className={styles.resetPassword}>Восстановить</span></span>
+        </div>
         <div className={styles.rememberMe}>
-          <input type="checkbox"/>
+          <input type="checkbox" {...register('rememberMe')}/>
           <span>Запомнить меня</span>
         </div>
         <input className={styles.login} type="submit" value='Войти в аккаунт'/>
-      </Modal>}
-      {signupFormIsOpen && <Modal title={'Новый Аккаунт'} toClose={setSignupFormIsOpen}>
-        <input name={'phoneNumber'} placeholder={''}  type={'phone'}/>
-        <input name={'email'} placeholder={'Почтовый адрес'}  type={'email'}/>
-        <input name={'password'} placeholder={'Пароль'}  type={'password'}/>
+      </AuthForm>}
+      {signupFormIsOpen && <AuthForm title='Новый Аккаунт' toClose={setSignupFormIsOpen} handleSubmit={handleSubmit}>
+        <input {...register('phoneNumber')} placeholder=''  type='phone'/>
+        <input {...register('email')} placeholder='Почтовый адрес'  type='email'/>
+        <input {...register('password')} placeholder='Пароль'  type='password'/>
         <input className={styles.signup} type="submit" value='Зарегистрироваться'/>
-      </Modal>}
+      </AuthForm>}
     </div>
   );
 };

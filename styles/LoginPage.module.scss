@@ -94,6 +94,7 @@
       background-color: $custom-medium-dark;
       border: none;
       margin-bottom: 10px;
+      padding-left: 20px;
     }
 
     .signup {
@@ -107,8 +108,18 @@
       margin-top: 44px;
     }
 
-    .header {
+    .forgetPassword {
+      display: flex;
+      justify-content: flex-end;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: -0.165px;
+      margin-bottom: 14px;
 
+      .resetPassword {
+        color: $custom-aqua;
+      }
     }
 
     .footer {
@@ -128,6 +139,10 @@
       display: flex;
       align-items: center;
       justify-content: start;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: -0.165px;
 
       input {
         width: 20px;
