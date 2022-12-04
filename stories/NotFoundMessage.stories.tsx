@@ -7,7 +7,9 @@ export default {
   component: NotFoundMessageUI,
 } as ComponentMeta<typeof NotFoundMessageUI>;
 
-const Template: ComponentStory<typeof NotFoundMessageUI> = (args) => <NotFoundMessageUI {...args} />;
+const Template: ComponentStory<typeof NotFoundMessageUI> = (args) => (
+  <NotFoundMessageUI {...args} />
+);
 
 export const NotFoundMessage = Template.bind({});
 NotFoundMessage.args = {};

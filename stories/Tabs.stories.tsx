@@ -1,26 +1,29 @@
+import { useState } from 'react';
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Tabs from '../ui-kit/Tabs';
-import { useState } from 'react';
+import TabsUI from '../ui-kit/Tabs';
 
 export default {
-  title: 'Tabs/Tabs',
-  component: Tabs,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
-} as ComponentMeta<typeof Tabs>;
+  title: 'Tabs',
+  component: TabsUI,
+} as ComponentMeta<typeof TabsUI>;
 
-const Template: ComponentStory<typeof Tabs> = (args) => {
-  const data = ['Информация', 'Расписание', 'Встречи', 'Статистика'];
-  const [activeTabIndex, setActiveTabIndex] = useState(data[0]);
-  const onClick = (v: string) => {
-    setActiveTabIndex(v);
+const TAB_NAMES = ['Tab 1', 'Tab 2', 'Tab 3', 'Tab 4'];
+const Template: ComponentStory<typeof TabsUI> = () => {
+  const [activeTabIndex, setActiveTabIndex] = useState(TAB_NAMES[0]);
+
+  const handleTabChange = (_: any, v: number) => {
+    setActiveTabIndex(TAB_NAMES[v]);
   };
+
   return (
-    <Tabs tabNames={data} activeTabIndex={activeTabIndex} onChange={onClick} />
+    <TabsUI
+      tabNames={TAB_NAMES}
+      activeTabIndex={activeTabIndex}
+      onChange={handleTabChange}
+    />
   );
 };
 
-export const Primary = Template.bind({});
-Primary.args = {};
+export const Tabs = Template.bind({});
+Tabs.args = {};

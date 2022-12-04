@@ -8,7 +8,7 @@ import MatchesTab from '../components/profileTabs/Matches';
 import StatsTab from '../components/profileTabs/Stats';
 import { LEVEL_NUMBER_VALUES } from '../../constants/values';
 import styles from '../../styles/Profile.module.scss';
-import TabsMUI from 'ui-kit/Tabs';
+import Tabs from 'ui-kit/Tabs';
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
@@ -79,7 +79,7 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
         points={'1490'}
       />
       <section>
-        <TabsMUI
+        <Tabs
           activeTabIndex={activeTabIndex}
           onChange={handleTabChange}
           tabNames={PROFILE_TABS}
