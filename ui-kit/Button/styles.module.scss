@@ -1,3 +1,35 @@
+@import '../../styles/variables.scss';
+
 .button {
-  background-color: red;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1px solid;
+
+  &.primary {
+    background-color: $custom-aqua;
+    border-color: $custom-aqua;
+  }
+
+  &.ghost {
+    background-color: transparent;
+    border-color: $custom-black;
+    color: $custom-black;
+  }
+
+  &.circle {
+    height: 40px;
+    width: 40px;
+    background-color: $custom-white;
+    color: $custom-black;
+    padding: 8px;
+    border-radius: 50%;
+    border-color: $custom-black;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
