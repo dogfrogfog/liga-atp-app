@@ -1,0 +1,37 @@
+@import '../../styles/variables.scss';
+
+.searchInput {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
+  .searchIcon {
+    position: absolute;
+    left: 15px;
+    background: none;
+    color: $custom-white;
+    border: none;
+    outline: none;  
+  
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  // .filterButton {
+  //   right: 15px;
+  // }
+
+  .input {
+    width: 100%;
+    background-color: $custom-medium-dark;
+    border: none;
+    border-radius: 14px;
+    color: $custom-white;
+    outline: none;
+    padding: 10px 10px 10px 60px;
+    text-align: left;
+  }
+}
