@@ -1,20 +1,13 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import NotFoundMessage from '../ui-kit/NotFoundMessage';
+import NotFoundMessageUI from '../ui-kit/NotFoundMessage';
 
 export default {
-  title: 'NotFoundMessage/NotFoundMessage',
-  component: NotFoundMessage,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
-} as ComponentMeta<typeof NotFoundMessage>;
+  title: 'NotFoundMessage',
+  component: NotFoundMessageUI,
+} as ComponentMeta<typeof NotFoundMessageUI>;
 
-const Template: ComponentStory<typeof NotFoundMessage> = (args) => {
-  const message =
-    'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра';
-  return <NotFoundMessage message={message} />;
-};
+const Template: ComponentStory<typeof NotFoundMessageUI> = (args) => <NotFoundMessageUI {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {};
+export const NotFoundMessage = Template.bind({});
+NotFoundMessage.args = {};

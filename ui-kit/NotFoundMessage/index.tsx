@@ -7,7 +7,7 @@ interface INotFoundMessageProps {
 const NotFoundMessage = ({ message }: INotFoundMessageProps) => {
   return (
     <div className={styles.notFoundMessage}>
-      <p>{message}</p>
+      {message}
     </div>
   );
 };

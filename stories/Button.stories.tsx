@@ -1,16 +1,22 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Button from '../ui-kit/Button';
+import ButtonUI from '../ui-kit/Button';
 
 export default {
-  title: 'Button/Button',
-  component: Button,
-} as ComponentMeta<typeof Button>;
+  title: 'Button',
+  component: ButtonUI,
+} as ComponentMeta<typeof ButtonUI>;
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: ComponentStory<typeof ButtonUI> = (args) => {
+  return (
+    <div style={{ backgroundColor: 'grey' }}>
+      <ButtonUI {...args} />
+    </div>
+  );
+};
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Button = Template.bind({});
+Button.args = {
   children: 'primary',
   type: 'primary',
 };
