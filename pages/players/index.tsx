@@ -31,7 +31,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
     setSearch(e.target.value);
   };
 
-  const submitSearch = async (v) => {
+  const submitSearch = async () => {
     const response = await axios.get(`/api/players/search?name=${search}`);
 
     if (response.status === 200) {
