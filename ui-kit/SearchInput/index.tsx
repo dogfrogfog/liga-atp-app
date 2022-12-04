@@ -26,8 +26,8 @@ const SearchInput: FC<ISearchInputProps> = ({ handleSearch, placeholder }) => {
         onChange={handleInputChange}
         className={styles.input}
         placeholder={placeholder}
-      // value={search}
-      // onChange={handleSearch}
+        // value={search}
+        // onChange={handleSearch}
       />
       {/* <button
       onClick={() => setIsOpen(true)}
