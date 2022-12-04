@@ -106,6 +106,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                     first_name,
                     last_name,
                     level,
+                    // @ts-ignore
                     rankings_singles_current,
                     avatar,
                   }) => (
@@ -130,6 +131,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                             </p>
                           </div>
                         </td>
+                        {/* @ts-ignore */}
                         <td>{LEVEL_NUMBER_VALUES[level]}</td>
                         <td>1489</td>
                       </tr>
