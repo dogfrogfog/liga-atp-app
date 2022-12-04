@@ -7,11 +7,7 @@ interface IButtonProps {
 }
 
 const Button = ({ children }: IButtonProps) => {
-  return (
-    <button className={styles.button}>
-      {children}
-    </button>
-  );
-}
+  return <button className={styles.button}>{children}</button>;
+};
 
 export default Button;

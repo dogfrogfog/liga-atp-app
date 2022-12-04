@@ -22,11 +22,16 @@ const FORM_TITLES: { [k: string]: string } = {
 };
 
 const Tournaments: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [data, setData] = useState<TournamentT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [editingTournament, setEditingTournament] = useState<undefined | TournamentT>();
-  const { pagination, setPagination, ...tableProps } = useTable('tournaments', data);
+  const [editingTournament, setEditingTournament] = useState<
+    undefined | TournamentT
+  >();
+  const { pagination, setPagination, ...tableProps } = useTable(
+    'tournaments',
+    data
+  );
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -38,7 +43,7 @@ const Tournaments: NextPage = () => {
     };
 
     fetchWrapper();
-  }, [pagination])
+  }, [pagination]);
 
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
@@ -82,23 +87,27 @@ const Tournaments: NextPage = () => {
     };
 
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createTournament(normalizedNewTournament)
+      const { isOk, data, errorMessage } = await createTournament(
+        normalizedNewTournament
+      );
 
       if (isOk) {
         handleReset();
 
-        setData(v => [data as TournamentT].concat(v));
+        setData((v) => [data as TournamentT].concat(v));
       } else {
         console.warn(errorMessage);
       }
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updateTournament(newTournament);
+      const { isOk, data, errorMessage } = await updateTournament(
+        newTournament
+      );
       if (isOk) {
         handleReset();
 
-        setData(v => v.concat([data as TournamentT]));
+        setData((v) => v.concat([data as TournamentT]));
       } else {
         console.warn(errorMessage);
       }
@@ -108,9 +117,7 @@ const Tournaments: NextPage = () => {
   return (
     <div>
       <div>
-        <PageTitle>
-          Управление турнирами
-        </PageTitle>
+        <PageTitle>Управление турнирами</PageTitle>
       </div>
       <TableControls
         selectedRow={tableProps.selectedRow}
@@ -122,7 +129,7 @@ const Tournaments: NextPage = () => {
       />
       {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
-      {modalStatus.isOpen ?
+      {modalStatus.isOpen ? (
         <DataForm
           type="tournaments"
           formTitle={FORM_TITLES[modalStatus.type]}
@@ -130,9 +137,9 @@ const Tournaments: NextPage = () => {
           onClose={handleReset}
           editingRow={editingTournament}
         />
-        : null}
+      ) : null}
     </div>
   );
-}
+};
 
 export default Tournaments;

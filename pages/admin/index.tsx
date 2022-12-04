@@ -1,11 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
 
 const AdminHome: NextPage = () => {
-  return (
-    <div>
-      AdminHome 
-    </div>
-  )
-}
+  return <div>AdminHome</div>;
+};
 
-export default AdminHome
+export default AdminHome;

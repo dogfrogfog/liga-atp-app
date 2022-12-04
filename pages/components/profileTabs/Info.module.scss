@@ -1,7 +1,6 @@
 @import '../../../styles/variables';
 
 .infoRow {
-
   &:first-child {
     margin-top: 80px;
   }
@@ -10,7 +9,6 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 0.5px solid $custom-darkgray;
-
 
   span:last-child {
     font-weight: bold;
@@ -26,14 +24,14 @@
   }
 
   .infoRow {
-    background-color: #1B2223;
+    background-color: #1b2223;
     border-radius: 5px;
     color: white;
     padding: 5px 10px;
     margin-bottom: 10px;
 
     span:last-child {
-      color: #4CC4D1;
+      color: #4cc4d1;
     }
   }
 }

@@ -14,8 +14,12 @@ type ICreatePlayerResponse = PlayersResponse<PlayerT>;
 type IDeletePlayerResponse = PlayersResponse<Prisma.BatchPayload>;
 type IUpdatePlayerResponse = PlayersResponse<PlayerT>;
 
-export async function getPlayers(pagination: PaginationProps): Promise<IGetPlayersResponse> {
-  const url = `/api/players?take=${pagination.pageSize}&skip=${pagination.pageIndex * pagination.pageSize}`;
+export async function getPlayers(
+  pagination: PaginationProps
+): Promise<IGetPlayersResponse> {
+  const url = `/api/players?take=${pagination.pageSize}&skip=${
+    pagination.pageIndex * pagination.pageSize
+  }`;
   const response = await axios.get<PlayerT[]>(url);
 
   if (response.status === 200) {
@@ -25,7 +29,9 @@ export async function getPlayers(pagination: PaginationProps): Promise<IGetPlaye
   }
 }
 
-export async function createPlayer(player: PlayerT): Promise<ICreatePlayerResponse> {
+export async function createPlayer(
+  player: PlayerT
+): Promise<ICreatePlayerResponse> {
   const response = await axios.post<PlayerT>('/api/players', { data: player });
 
   if (response.status === 200) {
@@ -35,7 +41,9 @@ export async function createPlayer(player: PlayerT): Promise<ICreatePlayerRespon
   }
 }
 
-export async function updatePlayer (player: PlayerT): Promise<IUpdatePlayerResponse> {
+export async function updatePlayer(
+  player: PlayerT
+): Promise<IUpdatePlayerResponse> {
   const response = await axios.put<PlayerT>('/api/players', { data: player });
 
   if (response.status === 200) {
@@ -45,7 +53,9 @@ export async function updatePlayer (player: PlayerT): Promise<IUpdatePlayerRespo
   }
 }
 
-export async function deleteSelectedPlayer(id: number): Promise<IDeletePlayerResponse> {
+export async function deleteSelectedPlayer(
+  id: number
+): Promise<IDeletePlayerResponse> {
   const response = await axios.delete('/api/players', { data: id });
 
   if (response.status === 200) {

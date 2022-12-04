@@ -13,22 +13,24 @@ const PreviewComponent = ({ title }: IPreviewComponentProps) => (
     <div className={styles.blur}>
       <div className={styles.description}>
         <h3 className={styles.previeTitle}>{title}</h3>
-        <h6>Лига Тенниса <br />Твои возможности</h6>
+        <h6>
+          Лига Тенниса <br />
+          Твои возможности
+        </h6>
         <p>
-          Лига Тенниса - это турниры по теннису различной категории для новичков,
-          любителей и профессионалов в Минске
+          Лига Тенниса - это турниры по теннису различной категории для
+          новичков, любителей и профессионалов в Минске
         </p>
       </div>
       <div className={styles.buttons}>
         <Link href="/players">
           <span className={styles.back}>
-            <GiTennisRacket size='xl' />
+            <GiTennisRacket size="xl" />
           </span>
-
         </Link>
         <Link href="/players">
           <span className={styles.back}>
-            <GiTennisBall size='xl' />
+            <GiTennisBall size="xl" />
           </span>
         </Link>
       </div>

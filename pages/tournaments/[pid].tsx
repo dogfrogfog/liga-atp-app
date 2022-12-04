@@ -1,28 +1,28 @@
-import { useState } from 'react'
-import type { NextPage } from 'next'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import cl from 'classnames'
-import { useRouter } from 'next/router'
-import { AiOutlineArrowDown } from 'react-icons/ai'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import cl from 'classnames';
+import { useRouter } from 'next/router';
+import { AiOutlineArrowDown } from 'react-icons/ai';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import Typography from '@mui/material/Typography'
-import styles from '../../styles/Tournament.module.scss'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import styles from '../../styles/Tournament.module.scss';
 
 const PROFILE_TABS = ['Участники', 'Сетка турнира', 'Игровой день'];
 
 const TournamentPage: NextPage = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0])
-  const [stage, setStage] = useState('1/8')
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
+  const [stage, setStage] = useState('1/8');
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const activeTabContent = (() => {
     switch (activeTabIndex) {
@@ -67,12 +67,14 @@ const TournamentPage: NextPage = () => {
               </li>
             </ul>
           </div>
-        )
+        );
       case PROFILE_TABS[1]:
         return (
           <div className={styles.net}>
             <FormControl>
-              <InputLabel style={{ color: 'white', top: '-10px' }} id="stage">Стадия</InputLabel>
+              <InputLabel style={{ color: 'white', top: '-10px' }} id="stage">
+                Стадия
+              </InputLabel>
               <Select
                 style={{ color: 'white', border: '2px solid white' }}
                 labelId="stage"
@@ -87,47 +89,33 @@ const TournamentPage: NextPage = () => {
               </Select>
             </FormControl>
             <ul className={styles.playersList}>
-              {Array(parseInt(stage.split('/')[1])).fill(1).map((_, index) => (
-                <li key={index}>
-                  <span>Кравченко С/Веремей Д</span>
-                  <div>
-                    <span>6-3</span>
-                    <span>6-7</span>
-                  </div>
-                </li>
-              ))}
+              {Array(parseInt(stage.split('/')[1]))
+                .fill(1)
+                .map((_, index) => (
+                  <li key={index}>
+                    <span>Кравченко С/Веремей Д</span>
+                    <div>
+                      <span>6-3</span>
+                      <span>6-7</span>
+                    </div>
+                  </li>
+                ))}
             </ul>
           </div>
-        )
+        );
       case PROFILE_TABS[2]:
         return (
           <div>
-            <div>
-              Октябрь / Ноябрь
-            </div>
+            <div>Октябрь / Ноябрь</div>
             <br />
             <div>
-              <span>
-                пн | 26
-              </span>
-              <span>
-                вт | 27
-              </span>
-              <span>
-                пн | 28
-              </span>
-              <span>
-                пн | 29
-              </span>
-              <span>
-                пн | 30
-              </span>
-              <span>
-                пн | 1
-              </span>
-              <span>
-                пн | 2
-              </span>
+              <span>пн | 26</span>
+              <span>вт | 27</span>
+              <span>пн | 28</span>
+              <span>пн | 29</span>
+              <span>пн | 30</span>
+              <span>пн | 1</span>
+              <span>пн | 2</span>
             </div>
             <br />
             <ul className={styles.playersList}>
@@ -153,15 +141,15 @@ const TournamentPage: NextPage = () => {
               </li>
             </ul>
           </div>
-        )
+        );
       default:
-        return null
+        return null;
     }
   })();
 
   const handleTabChange = (_: any, value: number) => {
-    setActiveTabIndex(PROFILE_TABS[value])
-  }
+    setActiveTabIndex(PROFILE_TABS[value]);
+  };
 
   return (
     <div className={styles.tournamentContainer}>
@@ -176,9 +164,9 @@ const TournamentPage: NextPage = () => {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            <input type="text" placeholder='Введите имя' />
-            <input type="tel" placeholder='Введите номер телефона' />
-            <input type="submit" placeholder='Зарегистрироваться' />
+            <input type="text" placeholder="Введите имя" />
+            <input type="tel" placeholder="Введите номер телефона" />
+            <input type="submit" placeholder="Зарегистрироваться" />
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -216,7 +204,7 @@ const TournamentPage: NextPage = () => {
         {activeTabContent}
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default TournamentPage
+export default TournamentPage;

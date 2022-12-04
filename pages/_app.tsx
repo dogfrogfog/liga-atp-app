@@ -1,14 +1,14 @@
-import type { AppProps } from 'next/app'
-import '../styles/globals.css'
-import '@fontsource/roboto/300.css'
-import '@fontsource/roboto/400.css'
-import '@fontsource/roboto/500.css'
-import '@fontsource/roboto/700.css'
+import type { AppProps } from 'next/app';
+import '../styles/globals.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
-import PWALayout from '../layouts/PWALayout'
-import AdminLayout from '../layouts/AdminLayout'
-import MainAppLayout from '../layouts/MainAppLayout'
-import SecondaryPageLayout from '../layouts/SecondaryPageLayout'
+import PWALayout from '../layouts/PWALayout';
+import AdminLayout from '../layouts/AdminLayout';
+import MainAppLayout from '../layouts/MainAppLayout';
+import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <AdminLayout>
         <Component {...pageProps} />
       </AdminLayout>
-    )
+    );
   }
 
   // secondary pages with top circle back button <-
@@ -30,11 +30,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <Component {...pageProps} />
         </SecondaryPageLayout>
       </PWALayout>
-    )
+    );
   }
 
   // to show user once
-  // todo: add inavailable (WIP) routs here; 
+  // todo: add inavailable (WIP) routs here;
   if (router.pathname === '/' || router.pathname === '/preview') {
     return (
       <PWALayout>
@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <Component {...pageProps} />
       </MainAppLayout>
     </PWALayout>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

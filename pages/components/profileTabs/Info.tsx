@@ -1,6 +1,6 @@
-import { BsInstagram } from 'react-icons/bs'
+import { BsInstagram } from 'react-icons/bs';
 
-import styles from './Info.module.scss'
+import styles from './Info.module.scss';
 
 const InfoTab = ({
   // id,
@@ -20,10 +20,10 @@ const InfoTab = ({
   forehand,
   beckhand,
   insta_link,
-  // is_coach,
-  // medals,
-  // level
-}: any) => (
+}: // is_coach,
+// medals,
+// level
+any) => (
   <>
     <div className={styles.infoRow}>
       <span>Город</span>
@@ -59,7 +59,10 @@ const InfoTab = ({
     </div>
     <div className={styles.infoRow}>
       <span>Инстаграм</span>
-      <span><BsInstagram /> {insta_link && insta_link.split('https://www.instagram.com/')[1]}</span>
+      <span>
+        <BsInstagram />{' '}
+        {insta_link && insta_link.split('https://www.instagram.com/')[1]}
+      </span>
     </div>
     {/* be able to chose from one of the players  */}
     {/* <div className={styles.coaching}>
@@ -85,6 +88,6 @@ const InfoTab = ({
       </div>
     </div> */}
   </>
-)
+);
 
-export default InfoTab
+export default InfoTab;

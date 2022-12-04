@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { AiOutlineTrophy } from 'react-icons/ai'
-import { BiNews, BiSupport } from 'react-icons/bi'
-import { GiBabyfootPlayers } from 'react-icons/gi'
-import cl from 'classnames'
+import Link from 'next/link';
+import { AiOutlineTrophy } from 'react-icons/ai';
+import { BiNews, BiSupport } from 'react-icons/bi';
+import { GiBabyfootPlayers } from 'react-icons/gi';
+import cl from 'classnames';
 
-import styles from '../../styles/Sidebar.module.scss'
+import styles from '../../styles/Sidebar.module.scss';
 
 const Sidebar = () => {
   return (
@@ -12,21 +12,15 @@ const Sidebar = () => {
       <div className={styles.sidebarTop}>
         <div className={styles.menuItem}>
           <GiBabyfootPlayers />
-          <Link href="/admin/players">
-            Игроки
-          </Link>
+          <Link href="/admin/players">Игроки</Link>
         </div>
         <div className={styles.menuItem}>
           <AiOutlineTrophy />
-          <Link href="/admin/tournaments">
-            Турниры
-          </Link>
+          <Link href="/admin/tournaments">Турниры</Link>
         </div>
         <div className={styles.menuItem}>
           <BiNews />
-          <Link href="/admin/content">
-            Матчи
-          </Link>
+          <Link href="/admin/content">Матчи</Link>
         </div>
         {/* <div className={styles.menuItem}>
           <BiStats />
@@ -48,7 +42,7 @@ const Sidebar = () => {
         </div>
       </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

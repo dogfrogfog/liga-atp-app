@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "sb": "start-storybook -p 6006",
-    "build-sb": "build-storybook"
+    "build-sb": "build-storybook",
+    "all": "yarn lint && yarn format"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -54,6 +57,7 @@
     "eslint": "8.23.0",
     "eslint-config-next": "12.3.0",
     "eslint-plugin-storybook": "^0.6.7",
+    "prettier": "^2.8.0",
     "prisma": "^4.5.0",
     "sass-loader": "^13.2.0",
     "storybook-addon-sass-postcss": "^0.1.3",

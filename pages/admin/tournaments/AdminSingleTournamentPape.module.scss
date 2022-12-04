@@ -30,13 +30,13 @@
       margin-bottom: 35px;
 
       &.activeInput {
-        background-color: $custom-yellow; 
+        background-color: $custom-yellow;
       }
 
       .fields {
         select {
           min-width: 200px;
-          display: block;;
+          display: block;
           outline: none;
           color: $custom-white;
           background-color: $custom-black;
@@ -57,7 +57,7 @@
         background-color: $custom-darkgray;
         background-color: $custom-darkgray;
         color: $custom-white;
-        
+
         &[disabled] {
           background-color: $custom-olive;
           opacity: 0.8;
@@ -116,7 +116,7 @@
     background-color: $custom-scarlet;
     padding: 10px;
     text-align: center;
-    color: $custom-white
+    color: $custom-white;
   }
 
   .playersList {
@@ -166,7 +166,7 @@
         text-align: left;
         font-weight: 400;
       }
-      
+
       &:last-child {
         text-align: right;
         cursor: pointer;
