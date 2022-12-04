@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "sb": "start-storybook -p 6006",
-    "build-sb": "build-storybook",
+    "build-storybook": "build-storybook",
     "all": "yarn lint && yarn format"
   },
   "dependencies": {
