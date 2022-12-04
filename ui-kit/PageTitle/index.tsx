@@ -1,11 +1,12 @@
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
+
 import styles from './styles.module.scss';
 
-interface PageTitleProps {
-  children: ReactNode;
+interface IPageTitleProps {
+  children: string;
 }
 
-const PageTitle: FC<PageTitleProps> = ({ children }) => (
+const PageTitle: FC<IPageTitleProps> = ({ children }) => (
   <h1 className={styles.pageTitle}>{children}</h1>
 );
 

@@ -3,20 +3,19 @@ import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import ligaLogo from '../../public/180x180.png';
-
-import { PrismaClient } from '@prisma/client';
-
-import Input from 'ui-kit/Input';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
-import styles from 'styles/Players.module.scss';
 import { FiMenu, FiSearch } from 'react-icons/fi';
 import { BsFillPersonFill } from 'react-icons/bs';
+import { PrismaClient, player as PlayerT } from '@prisma/client';
+
+import ligaLogo from '../../public/180x180.png';
 import NotFoundMessage from '../../ui-kit/NotFoundMessage';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
+
+import styles from 'styles/Players.module.scss';
 
 // should be nested from schema
 interface PlayersPageProps {
-  players: any[];
+  players: PlayerT[];
 }
 
 const Players: NextPage<PlayersPageProps> = ({ players }) => {
@@ -47,7 +46,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
           <button onClick={submitSearch} className={styles.searchButton}>
             <FiSearch />
           </button>
-          <Input
+          <input
             placeholder="Введите имя игрока"
             value={search}
             onChange={handleSearch}
@@ -107,6 +106,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                     first_name,
                     last_name,
                     level,
+                    // @ts-ignore
                     rankings_singles_current,
                     avatar,
                   }) => (
@@ -131,6 +131,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                             </p>
                           </div>
                         </td>
+                        {/* @ts-ignore */}
                         <td>{LEVEL_NUMBER_VALUES[level]}</td>
                         <td>1489</td>
                       </tr>

@@ -8,6 +8,7 @@ interface IModalProps {
   handleClose: () => void;
 }
 
+// todo: add story
 const Modal = ({ title, children, handleClose }: IModalProps) => {
   const handleOverlayClick = (e: any) => {
     if (e.target.id === 'overlay') {
