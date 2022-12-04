@@ -18,7 +18,8 @@
       color: $custom-white;
 
       tr {
-        td:nth-child(2), td:last-child {
+        td:nth-child(2),
+        td:last-child {
           text-align: center;
         }
       }

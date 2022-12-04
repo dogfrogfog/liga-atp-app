@@ -10,8 +10,12 @@ interface MatchesResponse<D> {
 type ICreateMatchResponse = MatchesResponse<MatchT>;
 type IUpdateMatchResponse = MatchesResponse<MatchT>;
 
-export async function createMatch(tournament: MatchT): Promise<ICreateMatchResponse> {
-  const response = await axios.post<MatchT>('/api/matches', { data: tournament });
+export async function createMatch(
+  tournament: MatchT
+): Promise<ICreateMatchResponse> {
+  const response = await axios.post<MatchT>('/api/matches', {
+    data: tournament,
+  });
 
   if (response.status === 200) {
     return { isOk: true, data: response.data };
@@ -20,7 +24,9 @@ export async function createMatch(tournament: MatchT): Promise<ICreateMatchRespo
   }
 }
 
-export async function updateMatch(match: MatchT): Promise<IUpdateMatchResponse> {
+export async function updateMatch(
+  match: MatchT
+): Promise<IUpdateMatchResponse> {
   const response = await axios.put<MatchT>('/api/matches', { data: match });
 
   if (response.status === 200) {

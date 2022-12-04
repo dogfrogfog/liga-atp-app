@@ -1,12 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, player } from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { PrismaClient, player } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-export default async (
-  req: NextApiRequest,
-  res: NextApiResponse<player[]>
-) => {
+export default async (req: NextApiRequest, res: NextApiResponse<player[]>) => {
   if (req.method === 'GET') {
     const searchPlayers = await prisma.player.findMany({
       where: {
@@ -18,8 +15,8 @@ export default async (
       },
       // return only latest version
       // include: { rankings_singles_current: true }
-    })
+    });
 
-    res.json(searchPlayers)
+    res.json(searchPlayers);
   }
-}
+};

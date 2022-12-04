@@ -1,7 +1,7 @@
-import { flexRender } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table';
 
-import useTable, { ITableProps } from './useTable'
-import styles from './Table.module.scss'
+import useTable, { ITableProps } from './useTable';
+import styles from './Table.module.scss';
 
 const Table = ({
   table,
@@ -9,13 +9,12 @@ const Table = ({
   setSelectedRow,
 }: {
   table: ITableProps['table'];
-    selectedRow: ITableProps['selectedRow'],
-    setSelectedRow: ITableProps['setSelectedRow'],
+  selectedRow: ITableProps['selectedRow'];
+  setSelectedRow: ITableProps['setSelectedRow'];
 }) => {
-
   const handleCheckboxClick = (index: number) => {
-    setSelectedRow(v => v === index ? -1 : index)
-  }
+    setSelectedRow((v) => (v === index ? -1 : index));
+  };
 
   return (
     <div className={styles.table}>
@@ -30,10 +29,11 @@ const Table = ({
               <td key="checkbox">
                 <input
                   checked={selectedRow === index}
-                  onChange={() => handleCheckboxClick(index)} type="checkbox"
+                  onChange={() => handleCheckboxClick(index)}
+                  type="checkbox"
                 />
               </td>
-              {row.getVisibleCells().map(cell => (
+              {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -43,8 +43,8 @@ const Table = ({
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
 const TableHead = ({ table }: { table: ITableProps['table'] }) => (
   <thead>
@@ -52,14 +52,8 @@ const TableHead = ({ table }: { table: ITableProps['table'] }) => (
       <tr key={headerGroup.id + index}>
         <td />
         {headerGroup.headers.map((header) => (
-          <th
-            key={header.id}
-            onClick={header.column.getToggleSortingHandler()}
-          >
-            {flexRender(
-              header.column.columnDef.header,
-              header.getContext()
-            )}
+          <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
+            {flexRender(header.column.columnDef.header, header.getContext())}
             {{
               asc: ' 🔼',
               desc: ' 🔽',
@@ -69,7 +63,7 @@ const TableHead = ({ table }: { table: ITableProps['table'] }) => (
       </tr>
     ))}
   </thead>
-)
+);
 
-export default Table
-export { useTable }
+export default Table;
+export { useTable };

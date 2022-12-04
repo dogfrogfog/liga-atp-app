@@ -17,23 +17,23 @@
       font-size: 16px;
       padding: 5px 10px;
 
-      &:focus{
+      &:focus {
         outline: none;
         border: none;
       }
     }
 
-    input[type='checkbox']{
+    input[type='checkbox'] {
       width: 20px;
       height: 20px;
     }
 
-    select{
+    select {
       width: 80%;
       font-size: 16px;
       padding: 5px 10px;
 
-      &:focus{
+      &:focus {
         outline: none;
         border: none;
       }
@@ -51,7 +51,7 @@
     text-transform: uppercase;
   }
 
-  .reset{
+  .reset {
     width: 50%;
     padding: $padding;
     background-color: $custom-yellow;
@@ -62,7 +62,7 @@
     text-transform: uppercase;
   }
 
-  .container{
+  .container {
     width: 100%;
   }
 }

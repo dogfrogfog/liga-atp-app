@@ -1,15 +1,14 @@
 // eslint-disable import/no-anonymous-default-export
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, match } from '@prisma/client'
-
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { PrismaClient, match } from '@prisma/client';
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<match[] | match>
 ) => {
-  const prisma = new PrismaClient()
+  const prisma = new PrismaClient();
   if (req.method === 'GET') {
-    const intId = parseInt(req.query.id as string)
+    const intId = parseInt(req.query.id as string);
     const matches = await prisma.match.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
@@ -31,10 +30,10 @@ export default async (
         player_match_player1_idToplayer: true,
         player_match_player2_idToplayer: true,
         tournament: true,
-      }
-    })
+      },
+    });
 
-    res.json(matches)
+    res.json(matches);
   }
 
   if (req.method === 'POST') {
@@ -55,4 +54,4 @@ export default async (
 
     res.json(updatedMatch);
   }
-}
+};

@@ -20,17 +20,17 @@
     :global(.MuiTabs-indicator) {
       display: none;
     }
-      
+
     .tab {
       margin: 0;
       margin-right: 15px;
       padding: 5px 15px;
-      background-color: #1B2223;
+      background-color: #1b2223;
       border-radius: 5px;
       color: white;
 
       &.activeTab {
-        background-color: #4CC4D1;
+        background-color: #4cc4d1;
         color: black;
       }
     }
@@ -38,7 +38,7 @@
 
   // duplicdate
   .tournamentListItem {
-    background-color: #1B2223;
+    background-color: #1b2223;
     border-radius: 5px;
     margin-bottom: 15px;
     padding: 10px;
@@ -46,7 +46,7 @@
     .status {
       padding: 5px;
       background-color: black;
-      color: #4CC4D1;
+      color: #4cc4d1;
       font-weight: 500;
       font-size: 14px;
       align-self: baseline;
@@ -84,7 +84,7 @@
       justify-content: space-between;
       margin-bottom: 15px;
       border-radius: 5px;
-      border-bottom: 1px solid #1B2223;
+      border-bottom: 1px solid #1b2223;
 
       div {
         > span:first-child {
@@ -92,8 +92,8 @@
         }
 
         > span:last-child {
-          background-color: #1B2223;
-          color: #4CC4D1;
+          background-color: #1b2223;
+          color: #4cc4d1;
         }
       }
     }

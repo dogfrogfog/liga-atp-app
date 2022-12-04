@@ -1,6 +1,6 @@
-import type { FC } from 'react'
+import type { FC } from 'react';
 
-import styles from './TableControls.module.scss'
+import styles from './TableControls.module.scss';
 
 interface ITableControlsProps {
   selectedRow: number;
@@ -22,25 +22,41 @@ const TableControls: FC<ITableControlsProps> = ({
 }) => {
   return (
     <div className={styles.tableControls}>
-      {handlePickClick ?
-        <button disabled={selectedRow === -1} className={styles.pick} onClick={handlePickClick}>
+      {handlePickClick ? (
+        <button
+          disabled={selectedRow === -1}
+          className={styles.pick}
+          onClick={handlePickClick}
+        >
           Выбрать
         </button>
-        : null}
+      ) : null}
       <button className={styles.add} onClick={handleAddClick}>
         Добавить
       </button>
-      <button disabled={selectedRow === -1} className={styles.update} onClick={handleUpdateClick}>
+      <button
+        disabled={selectedRow === -1}
+        className={styles.update}
+        onClick={handleUpdateClick}
+      >
         Обновить
       </button>
-      <button disabled={selectedRow === -1} className={styles.delete} onClick={handleDeleteClick}>
+      <button
+        disabled={selectedRow === -1}
+        className={styles.delete}
+        onClick={handleDeleteClick}
+      >
         Удалить
       </button>
-      <button disabled={selectedRow === -1} className={styles.reset} onClick={handleResetClick}>
+      <button
+        disabled={selectedRow === -1}
+        className={styles.reset}
+        onClick={handleResetClick}
+      >
         Снять выделение
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default TableControls
+export default TableControls;

@@ -1,7 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
 
 const FiveZeroFive: NextPage = () => {
-  return <h1>404</h1>
-}
+  return <h1>404</h1>;
+};
 
-export default FiveZeroFive
+export default FiveZeroFive;

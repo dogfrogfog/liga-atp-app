@@ -45,7 +45,6 @@ export const DRAW_TYPE_NUMBER_VALUES: any = {
   16: {},
   17: {},
   18: {},
-}
+};
 
 // const Q8
-
