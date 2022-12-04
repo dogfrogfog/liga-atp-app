@@ -89,7 +89,7 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
             // @ts-ignore
             match.player_match_player2_idToplayer.first_name +
             ' ' +
-            match.player_match_player2_idToplayer.last_name
+            (match as any).player_match_player2_idToplayer.last_name
           }
           win={String(playerId) === match.winner_id}
         />

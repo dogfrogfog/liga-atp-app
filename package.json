@@ -8,8 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "sb": "start-storybook -p 6006",
-    "build-sb": "build-storybook"
+    "build-sb": "build-storybook",
+    "all": "yarn lint && yarn format"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
