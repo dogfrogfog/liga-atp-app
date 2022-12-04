@@ -31,5 +31,8 @@ const Template: ComponentStory<typeof SelectUI> = (args) => {
 export const Select = Template.bind({});
 Select.args = {
   name: 'select-name',
-  options: [[0, 'one'], [1, 'two' ]]
+  options: [
+    [0, 'one'],
+    [1, 'two'],
+  ],
 };
