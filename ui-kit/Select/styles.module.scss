@@ -1,0 +1,12 @@
+@import '../../styles/variables.scss';
+
+.selectInput {
+  border-radius: 14px;
+  cursor: pointer;
+  outline: none;
+  background-color: $custom-darkgray;
+  color: $custom-lightlightgray;
+  border: none;
+  font-size: 14px;
+  padding: 7px 12px;
+}
