@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type {
   player as PlayerT,
   tournament as TournamentT,
+  match as MatchT,
 } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +18,6 @@ interface IDataFormProps {
   onSubmit: any;
   onClose: any;
   editingRow?: PlayerT | TournamentT | MatchT | null;
-  // we need this prop to pass registered players to modal
   registeredPlayers?: PlayerT[];
 }
 
@@ -94,6 +94,7 @@ const DataForm = ({
   editingRow,
   type,
   formTitle,
+  registeredPlayers = [],
 }: IDataFormProps) => {
   const {
     register,
@@ -130,7 +131,7 @@ const DataForm = ({
                     })}
                   >
                     <option value="">not selected</option>
-                    {registeredPlayers?.map(({ id, first_name, last_name }) => (
+                    {registeredPlayers.map(({ id, first_name, last_name }) => (
                       <option key={id} value={id}>
                         {last_name + ' ' + first_name}
                       </option>
