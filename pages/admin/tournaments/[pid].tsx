@@ -1,6 +1,5 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import type { NextPage } from 'next';
-import { AiOutlineSave, AiFillEdit } from 'react-icons/ai';
 import cl from 'classnames';
 import { PrismaClient, tournament as TournamentT, player as PlayerT, match as MatchT } from '@prisma/client';
 import { MultiSelect, Option } from 'react-multi-select-component';
@@ -17,6 +16,7 @@ import {
 import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
 import { updateTournament } from 'services/tournaments';
+import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
 
@@ -33,25 +33,26 @@ interface IAdminSingleTournamentPapeProps {
   matches: MatchT[];
 }
 
-interface IBracketsUnit {
-  stageIndex?: number;
-  matchInStageIndex?: number;
-  matchId?: number;
-  player1?: number;
-  player2?: number;
-  player3?: number;
-  player4?: number;
-  team1Id?: number;
-}
-
 const getInitialBrackets = (drawType: number) => {
-  const { totalStages, firstStageMatches } = DRAW_TYPE_NUMBER_VALUES[drawType];
+  const { totalStages, firstStageMatches, withQual, groups } = DRAW_TYPE_NUMBER_VALUES[drawType];
   let stageMatches = firstStageMatches;
 
-  const result: MatchT[][] = [[]];
-  for (let i = 0; i < totalStages; i += 1) {
-    result[i] = Array(stageMatches).fill({});
-    stageMatches = stageMatches / 2;
+  let result: MatchT[][];
+
+  if (groups) {
+    // fill first round with groups
+    result = [new Array(groups).fill([])];
+
+    for (let i = 1; i < totalStages; i += 1) {
+      result.push(Array(stageMatches).fill({}));
+      stageMatches = stageMatches / 2;
+    }
+  } else {
+    result = withQual ? [Array(stageMatches).fill({})] : [];
+    for (let i = 0; i < totalStages; i += 1) {
+      result.push(Array(stageMatches).fill({}));
+      stageMatches = stageMatches / 2;
+    }
   }
 
   return result;
@@ -74,16 +75,24 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   players,
   matches: metchesOriginal,
 }) => {
+  // when match already exists we save passed match to have default values to form
+  // when match is not exists and we creating new match and updating tournament draw property ..
+  // .. so we same stage index(si) and match index(mi)
+  const [editingMatchData, setEditingMatchData] = useState<{ newMatch: MatchT, si?: number, mi?: number }>();
+
   const [matches, setMatches] = useState(metchesOriginal);
   const [activeTournament, setActiveTournament] = useState(tournament);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
-
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [editingMatch, setEditingMatch] = useState<undefined | MatchT>();
+
+  const handleReset = () => {
+    setEditingMatchData(undefined);
+    setModalStatus(DEFAULT_MODAL);
+  };
 
   const registeredPlayersIds = activeTournament.players_order ? JSON.parse(activeTournament?.players_order)?.players : [];
   const newSelectedPlayersIds = multiSelectFormatToPlayersIds(newSelectedPlayers);
-  const brackets = activeTournament.draw && JSON.parse(activeTournament?.draw)?.brackets;
+  const brackets = activeTournament.draw && JSON.parse(activeTournament?.draw)?.brackets as IBracketsUnit[][];
 
   // this regestered players array we use to get options for "edit match" players select inputs
   // also we use same data to get options for "draw unit" players select inputs (TournamentT)
@@ -115,157 +124,102 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       setActiveTournament(v as any);
       setNewSelectedPlayers([]);
     }
-  }
+  };
 
   const handleTournamentFieldChange = (key: string, value: any) => {
     setActiveTournament(v => ({ ...v, [key]: value }));
   };
 
-  // to create new match and draw when its not exists
-  // main work should be here
-  // this function should create or modify tournament
-  const createMatchAndUpdateBracket = async (newBracketUnit: IBracketsUnit) => {
-    const createdMatch = await createMatch({
-      tournament_id: activeTournament.id,
-      player1_id: newBracketUnit.player1 || null,
-      player2_id: newBracketUnit.player2 || null,
-      player3_id: newBracketUnit.player3 || null,
-      player4_id: newBracketUnit.player4 || null,
-      is_completed: false,
-      start_date: new Date(),
-    } as MatchT);
-
-    if (createdMatch.isOk) {
-      const match = createdMatch.data as MatchT;
-
-      setMatches(v => v.concat([match as MatchT]));
-
-      // todo: add helper to convert data
-      // or transform data in serverSideProps
-      const currentBrackets: IBracketsUnit[][] = JSON.parse(activeTournament.draw as string).brackets;
-      const newBrackets = currentBrackets.map((s, si) => (
-        s.map((m, mi) =>
-          si === newBracketUnit.stageIndex &&
-            mi === newBracketUnit.matchInStageIndex ?
-            { ...newBracketUnit, matchId: match.id } : m,
-        )
-      ));
-      const updatedTournament = await updateTournament({
-        id: activeTournament.id,
-        draw: JSON.stringify({
-          brackets: newBrackets,
-        }),
-      } as TournamentT);
-
-      if (updatedTournament.isOk) {
-        // @ts-ignore
-        const { match, ...v } = updatedTournament.data;
-
-        setActiveTournament(v);
-      }
-    }
-  };
-
-  const updateMatchAndBracket = async (newBracketUnit: IBracketsUnit, matchToUpdate: MatchT) => {
-    // todo refactor this part LATER!!!!
-    // prevent duplication
-    const currentBrackets: IBracketsUnit[][] = JSON.parse(activeTournament.draw as string).brackets;
-    const newBrackets = currentBrackets.map((s, si) => (
-      s.map((m, mi) =>
-        si === newBracketUnit.stageIndex &&
-          mi === newBracketUnit.matchInStageIndex ?
-          { ...m, ...newBracketUnit } : m,
-      )
-    ));
-    const updatedTournament = await updateTournament({
-      id: activeTournament.id,
-      draw: JSON.stringify({
-        brackets: newBrackets,
-      }),
-    } as TournamentT);
-
-    if (updatedTournament.isOk) {
-      // @ts-ignore
-      const { match, ...v } = updatedTournament.data;
-
-      setActiveTournament(v);
-    }
-
-    const updatedMatch = await updateMatch({
-      id: matchToUpdate.id,
-      player1_id: newBracketUnit.player1 || matchToUpdate.player1_id,
-      player2_id: newBracketUnit.player2 || matchToUpdate.player2_id,
-      player3_id: newBracketUnit.player3 || matchToUpdate.player3_id,
-      player4_id: newBracketUnit.player4 || matchToUpdate.player4_id,
-    } as MatchT);
-
-    if (updatedMatch.isOk) {
-      const { data } = updatedMatch;
-
-      setMatches(v => {
-        return v.map(v1 => v1.id === data?.id ? data : v1);
+  // create/update match and update tournaments.brackets values
+  const onSubmit = async (match: MatchT) => {
+    // console.log(editingMatchData);
+    if (editingMatchData?.si !== undefined && editingMatchData?.mi !== undefined) {
+      const createdMatch = await createMatch({
+        ...match,
+        tournament_id: activeTournament.id,
+        player1_id: match.player1_id || null,
+        player2_id: match.player2_id || null,
+        player3_id: match.player3_id || null,
+        player4_id: match.player4_id || null,
+        winner_id: match.winner_id + '' || null,
+        is_completed: false,
+        start_date: new Date(),
       });
-    }
-  };
 
-  console.log(activeTournament)
+      if (createdMatch.isOk) {
+        const { data } = createdMatch;
 
-  const submitEditMatchForm = async (match: MatchT) => {
-    const newMatch = { ...editingMatch, ...match };
+        setMatches(v => {
+          // update existed array element
+          // to prevent 2 versions of the same element (old + new one)
+          return v.map(v1 => v1.id === data?.id ? data : v1);
+        });
 
-    // we have to update tournament draw, because it should be inside tournament to render
-    const currentBrackets: IBracketsUnit[][] = JSON.parse(activeTournament.draw as string).brackets;
-    const newBrackets = currentBrackets.map((s) => (
-      s.map((m) => {
-        if (m.matchId === newMatch.id) {
-          return {
-            ...m,
-            player1: newMatch.player1_id || m.player1,
-            player2: newMatch.player2_id || m.player2,
-            player3: newMatch.player3_id || m.player3,
-            player4: newMatch.player4_id || m.player4,
-          }
+        const newBrackets = (brackets as IBracketsUnit[][]).map((s, si) => (
+          s.map((m, mi) =>
+            si === editingMatchData.si &&
+              mi === editingMatchData.mi ?
+              { stageIndex: si, matchId: data?.id } : m,
+          )
+        ));
+
+        const updatedTournament = await updateTournament({
+          id: activeTournament.id,
+          draw: JSON.stringify({
+            brackets: newBrackets,
+          }),
+        } as TournamentT);
+
+        if (updatedTournament.isOk) {
+          // @ts-ignore
+          const { match, ...v } = updatedTournament.data;
+
+          setActiveTournament(v);
         }
+      }
 
-        return m;
-      })
-    ));
-
-    const updatedTournament = await updateTournament({
-      id: activeTournament.id,
-      draw: JSON.stringify({
-        brackets: newBrackets,
-      }),
-    } as TournamentT);
-
-    if (updatedTournament.isOk) {
+    } else {
       // @ts-ignore
-      const { match, ...v } = updatedTournament.data;
+      const { newMatch } = editingMatchData;
 
-      setActiveTournament(v);
-    };
-
-    const updatedMatch = await updateMatch({
-      ...newMatch,
-      // should be string because we have to parse old values (bigint converted to string)
-      winner_id: newMatch.winner_id + '',
-      start_date: newMatch.start_date ? new Date(newMatch.start_date) : null
-    });
-
-    if (updatedMatch.isOk) {
-      const { data } = updatedMatch;
-
-      setMatches(v => {
-        // update existed array element
-        // to prevent 2 versions of the same element (old + new one)
-        return v.map(v1 => v1.id === data?.id ? data : v1);
+      const updatedMatch = await updateMatch({
+        ...newMatch,
+        ...match,
+        // should be string because we have to parse old values (bigint converted to string)
+        winner_id: match.winner_id + '',
+        start_date: newMatch.start_date ? new Date(newMatch.start_date) : null
       });
-    }
+
+      if (updatedMatch.isOk) {
+        const { data } = updatedMatch;
+
+        setMatches(v => {
+          // update existed array element
+          // to prevent 2 versions of the same element (old + new one)
+          return v.map(v1 => v1.id === data?.id ? data : v1);
+        });
+        setModalStatus(DEFAULT_MODAL);
+      }
+    };
   };
 
-  const openEditMatchModal = (match: any) => {
+  const openModalForNewMatch = (si: number, mi: number) => {
+    setModalStatus({ isOpen: true, type: 'create' });
+    setEditingMatchData({
+      newMatch: {
+        player1_id: '',
+        player2_id: '',
+        player3_id: '',
+        player4_id: '',
+      } as any,
+      si,
+      mi,
+    });
+  };
+
+  const openModalForExistingMatch = (match: MatchT) => {
     setModalStatus({ isOpen: true, type: 'update' });
-    setEditingMatch(match);
+    setEditingMatchData({ newMatch: match });
   };
 
   const isDisabled = 
@@ -370,7 +324,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                       // todo: fix date input/output
                       disabled
                       // values should be taken from activeTournament
-                      // value={activeTournament.start_date? format(activeTournament.start_date, 'yyyy-MM-dd')}
+                      // value={activeTournament.start_date ? format(activeTournament.start_date, 'yyyy-MM-dd') : ''}
                       // valueAsDate={activeTournament.start_date as any§§}
                       type="date"
                       onChange={(e) => setActiveTournament(v => ({ ...v, [key]: new Date(e.target.value) }))}
@@ -489,215 +443,30 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       </div>
       {activeTournament.draw_type ?
         <TournamentDraw
-          createMatchAndUpdateBracket={createMatchAndUpdateBracket}
-          updateMatchAndBracket={updateMatchAndBracket}
-          openEditMatchModal={openEditMatchModal}
           isDoubles={!!activeTournament.is_doubles}
-          brackets={brackets || [[]]}
-          matches={matches}
           isDisabled={isDisabled}
+          matches={matches}
+          brackets={brackets || [[]]}
           registeredPlayers={registeredPlayers}
+          // createMatchAndUpdateBracket={createMatchAndUpdateBracket}
+          // updateMatchAndBracket={updateMatchAndBracket}
+          openModalForNewMatch={openModalForNewMatch}
+          openModalForExistingMatch={openModalForExistingMatch}
         />
-        : 'Выбирите тип сетки турнира чтобы создать турнир'}
-      {modalStatus.isOpen ?
+        : (
+          'Выбирите тип сетки турнира чтобы создать турнир'
+        )
+      }
+      {modalStatus.isOpen &&
         <DataForm
           type="matches"
           formTitle="Обновить матч"
-          onSubmit={submitEditMatchForm}
-          onClose={() => setModalStatus(DEFAULT_MODAL)}
-          editingRow={editingMatch}
+        onSubmit={onSubmit}
+        onClose={handleReset}
+        editingRow={editingMatchData?.newMatch}
           registeredPlayers={registeredPlayers}
-        />
-        : null}
-    </div>
-  );
-}
-
-interface ITournamentDrawProps {
-  brackets: IBracketsUnit[][];
-  matches: MatchT[];
-  isDisabled: boolean;
-  registeredPlayers: PlayerT[];
-  createMatchAndUpdateBracket: (bracketsUnit: IBracketsUnit) => Promise<void>;
-  updateMatchAndBracket: (bracketsUnit: IBracketsUnit, match: MatchT) => Promise<void>;
-  openEditMatchModal: (m: MatchT) => void;
-  isDoubles: boolean;
-}
-
-const TournamentDraw = ({
-  matches, // array f matches, linked to this tournament
-  brackets,
-  isDisabled,
-  registeredPlayers,
-  createMatchAndUpdateBracket,
-  updateMatchAndBracket,
-  isDoubles,
-  openEditMatchModal,
-}: ITournamentDrawProps) => {
-  const [activeBracketsUnit, setActiveBracketsUnit] = useState<IBracketsUnit>({});
-
-  const findMatchRecordById = (targetMatchId: number) => matches.find(({ id }) => id === targetMatchId);
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>, si: number, mi: number) => {
-    const selectedValue = e.target.value ? parseInt(e.target.value, 10) : '';
-
-    setActiveBracketsUnit(v => {
-      // when set p1 and p2 in one bracket and then change p1 in another bracket
-      // leads to setting p2 from previous edited bracket to currently editing bracket 
-      if (v.stageIndex !== undefined && v.stageIndex === si && v.matchInStageIndex === mi) {
-        return {
-          ...v,
-          [e.target.name]: selectedValue,
-        };
-      } else {
-        return {
-          stageIndex: si,
-          matchInStageIndex: mi,
-          [e.target.name]: selectedValue,
-        }
+      />
       }
-    });
-  };
-
-  const save = ({
-    match,
-    bracketUnit,
-  }: { match: MatchT | null, bracketUnit: IBracketsUnit }) => {
-    if (match === null) {
-      createMatchAndUpdateBracket(bracketUnit);
-    } else {
-      updateMatchAndBracket(bracketUnit, match)
-    }
-  };
-
-  return (
-    <div className={styles.drawContainer}>
-      {brackets?.map((stage, si) => (
-        <div key={si} className={styles.stageWrapper}>
-          <div key={si} className={styles.stage}>
-            <p className={styles.stageTitle}>{si + 1}</p>
-            <div className={styles.matchesWrapper}>
-              {Array.isArray(stage) && stage?.map((bracketUnit, mi) => {
-                // render something for legacy draws (ideally remove this code)
-                // if (bracketUnit.team1Id) {
-                //   console.log(bracketUnit);
-                //   return (
-                //     <div>
-                //       <div>
-                //         hi
-                //       </div>
-                //     </div>
-                //   );
-                // }
-
-                const isChanged =
-                  activeBracketsUnit.stageIndex === si &&
-                  activeBracketsUnit.matchInStageIndex === mi;
-
-                const isP1Changed = !!(isChanged && activeBracketsUnit.player1);
-                const isP2Changed = !!(isChanged && activeBracketsUnit.player2);
-                const isP3Changed = !!(isChanged && activeBracketsUnit.player3);
-                const isP4Changed = !!(isChanged && activeBracketsUnit.player4);
-
-                const matchRecord = bracketUnit.matchId ? findMatchRecordById(bracketUnit.matchId) as MatchT : null;
-                // if select was changed we take data from state
-                // if select was not changed we take data from tournament.draw db field
-                const p1 = (isP1Changed ? activeBracketsUnit.player1 : bracketUnit.player1) || '';
-                const p2 = (isP2Changed ? activeBracketsUnit.player2 : bracketUnit.player2) || '';
-
-                const p3 = (isP3Changed ? activeBracketsUnit.player3 : bracketUnit.player3) || '';
-                const p4 = (isP4Changed ? activeBracketsUnit.player4 : bracketUnit.player4) || '';
-
-                const newBracket = {
-                  ...bracketUnit,
-                  ...activeBracketsUnit,
-                };
-
-                return (
-                  <div
-                    key={si + mi}
-                    className={styles.matchInputContainer}
-                  >
-                    {/* different type, so we use == */}
-                    <div className={cl(styles.playersRow, { [styles.winnerRow]: p1 == matchRecord?.winner_id })}>
-                      <select
-                        value={p1}
-                        name="player1"
-                        onChange={(e) => handleSelectChange(e, si, mi)}
-                      >
-                        <option value=''>not selected</option>
-                        {registeredPlayers.map(({ id, first_name, last_name }) => (
-                          <option key={id} value={id}>{last_name + ' ' + first_name}</option>
-                        ))}
-                      </select>
-                      {isDoubles && (
-                        <select
-                          value={p3}
-                          name="player3"
-                          onChange={(e) => handleSelectChange(e, si, mi)}
-                        >
-                          <option value=''>not selected</option>
-                          {registeredPlayers.map(({ id, first_name, last_name }) => (
-                            <option key={id} value={id}>{last_name + ' ' + first_name}</option>
-                          ))}
-                        </select>
-                      )}
-                    </div>
-                    <div className={cl(styles.playersRow, { [styles.winnerRow]: p2 == matchRecord?.winner_id })}>
-                      <select
-                        value={p2}
-                        name="player2"
-                        onChange={(e) => handleSelectChange(e, si, mi)}
-                      >
-                        <option value=''>not selected</option>
-                        {registeredPlayers.map(({ id, first_name, last_name }) => (
-                          <option key={id} value={id}>{last_name + ' ' + first_name}</option>
-                        ))}
-                      </select>
-                      {isDoubles && (
-                        <select
-                          value={p4}
-                          name="player4"
-                          onChange={(e) => handleSelectChange(e, si, mi)}
-                        >
-                          <option value=''>not selected</option>
-                          {registeredPlayers.map(({ id, first_name, last_name }) => (
-                            <option key={id} value={id}>{last_name + ' ' + first_name}</option>
-                          ))}
-                        </select>
-                      )}
-                    </div>
-                    {matchRecord?.score &&
-                      <div className={styles.score}>
-                        {matchRecord.score}
-                      </div>
-                    }
-                    <div className={styles.matchActionsButtons}>
-                      {matchRecord &&
-                        <button
-                          className={styles.editMatch}
-                          disabled={isDisabled}
-                          onClick={() => openEditMatchModal(matchRecord)}
-                        >
-                          <AiFillEdit />{' '}Обновить матч
-                        </button>
-                      }
-                      {isChanged &&
-                        <button
-                          className={styles.saveMatch}
-                          disabled={isDisabled}
-                          onClick={() => save({ bracketUnit: newBracket, match: matchRecord })}
-                        >
-                          <AiOutlineSave />{' '}Сохранить матч
-                        </button>
-                      }
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
@@ -726,4 +495,4 @@ export const getServerSideProps = async (ctx: any) => {
       matches: match,
     },
   };
-}
+};

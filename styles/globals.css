@@ -17,6 +17,12 @@ a {
   box-sizing: border-box;
 }
 
+button {
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: white) {
   html {
     color-scheme: white;

@@ -1,0 +1,98 @@
+@import '../../../styles/variables.scss';
+
+.drawContainer {
+  padding: 15px;
+  display: flex;
+  overflow: auto;
+  background-color: $custom-lightlightgray;
+  height: 750px;
+
+  .stage {
+    margin-right: 35px;
+
+    .stageTitle {
+      background-color: $custom-darkgray;
+      color: $custom-white;
+      text-align: center;
+      padding: 10px;
+      margin: 0 0 20px;
+    }
+  }
+}
+
+.matchContainer {
+  position: relative;
+  display: flex;
+  margin-bottom: 35px;
+  background-color: $custom-lightgray;
+  padding: 10px;
+}
+
+.matchId {
+  position: absolute;
+  font-weight: bold;
+  bottom: 5px;
+  right: 5px;
+}
+
+.playersPair {
+  background-color: $custom-lightlightgray;
+  width: 228px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 25px;
+
+  &:first-child {
+    margin-bottom: 5px;
+  }
+
+  &.winner {
+    background-color: rgba($custom-green, 0.5);
+  }
+
+  &.loser {
+    background-color: rgba($custom-red, 0.5);
+  }
+
+  .player {
+    padding: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.vs {
+  text-align: center;
+  font-size: 25px;
+  font-style: italic;
+}
+
+.score {
+  font-size: 20px;
+  align-self: center;
+}
+
+.drawUnitAction {
+  width: 140px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &.createMatch {
+    background-color: $custom-green;
+  }
+
+  &.editMatch {
+    background-color: $custom-yellow;
+  }
+
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+}
+

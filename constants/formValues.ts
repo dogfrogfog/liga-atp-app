@@ -35,12 +35,14 @@ const TournamentSchema = z.object({
   city: z.string().min(2),
 });
 
+// make this validation correct work with form
+// need refactor this part so as add some clean(prod version) code here
 const MatchSchema = z.object({
-  player1_id: z.number(),
-  player2_id: z.number(),
-  player3_id: z.number().nullable(),
-  player4_id: z.number().nullable(),
-  winner_id: z.number().nullable(),
+  player1_id: z.any(),
+  player2_id: z.any().nullable(),
+  player3_id: z.any().nullable(),
+  player4_id: z.any().nullable(),
+  winner_id: z.any().nullable(),
   score: z.string().nullable(),
   start_date: z.union([z.string(), z.date()]).nullable(),
 });
@@ -83,8 +85,8 @@ const TOURNAMENT_FORM_VALUES: any[] = [
 const MATCHES_FORM_VALUES: any[] = [
   { name: 'player1_id', required: true, type: 'select', placeholder: 'Игрок 1' },
   { name: 'player3_id', required: false, type: 'select', placeholder: 'Игрок 3 (пара игрока 1)' },
-  { name: 'start_date', required: true, type: 'date', placeholder: 'Дата матча' },
-  { name: 'player2_id', required: true, type: 'select', placeholder: 'Игрок 2' },
+  { name: 'start_date', required: false, type: 'date', placeholder: 'Дата матча' },
+  { name: 'player2_id', required: false, type: 'select', placeholder: 'Игрок 2' },
   { name: 'player4_id', required: false, type: 'select', placeholder: 'Игрок 4 (пара игрока 2)' },
   { name: 'score', required: false, type: 'text', placeholder: 'Счет' }, // should be regexped
   { name: 'winner_id', required: false, type: 'select', placeholder: 'Победитель (главный игрок 1 пары или главный игрок 2 пары)' },

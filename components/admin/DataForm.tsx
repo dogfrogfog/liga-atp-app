@@ -13,7 +13,7 @@ interface IDataFormProps {
   formTitle: string;
   onSubmit: any;
   onClose: any;
-  editingRow?: PlayerT | TournamentT | MatchT;
+  editingRow?: PlayerT | TournamentT | MatchT | null;
   // we need this prop to pass registered players to modal
   registeredPlayers?: PlayerT[]
 }
@@ -69,6 +69,8 @@ const getField = (props: any, register: any, errors: any) => {
   }
 }
 
+// todo: add checkbox for winner
+// will be checked if player/pair is a winner
 const REGISTERED_PLAYERS_FIELD_NAMES = ['player1_id', 'player2_id', 'player3_id', 'player4_id', 'winner_id']
 
 // todo: add validation + errors

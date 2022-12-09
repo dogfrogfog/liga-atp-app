@@ -23,7 +23,7 @@ const FORM_TITLES: { [k: string]: string } = {
 const Players: NextPage = () => {
   const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [editingUser, setEditingUser] = useState<undefined | PlayerT>();
+  const [editingPlayer, setEditingPlayer] = useState<undefined | PlayerT>();
   const { pagination, setPagination, ...tableProps } = useTable('players', data);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Players: NextPage = () => {
 
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
-    setEditingUser(undefined);
+    setEditingPlayer(undefined);
     setModalStatus(DEFAULT_MODAL);
   };
 
@@ -52,7 +52,7 @@ const Players: NextPage = () => {
     const updatingPlayerData = data[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
-    setEditingUser(updatingPlayerData);
+    setEditingPlayer(updatingPlayerData);
   };
 
   const handleDeleteClick = async () => {
@@ -121,7 +121,7 @@ const Players: NextPage = () => {
           formTitle={FORM_TITLES[modalStatus.type]}
           onSubmit={onSubmit}
           onClose={handleReset}
-          editingRow={editingUser}
+          editingRow={editingPlayer}
         />
         : null}
     </div>
