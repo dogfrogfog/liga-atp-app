@@ -2,7 +2,7 @@
   height: 175px;
   border-radius: 5px;
   padding: 10px;
-  background-color: #1B2223;
+  background-color: #1b2223;
   margin-bottom: 15px;
 }
 
@@ -11,14 +11,14 @@
   justify-content: right;
 
   svg {
-    color: #DBDBDB;
+    color: #dbdbdb;
   }
 
   :global(.MuiSelect-select) {
     background-color: red;
     padding: 5px 15px;
-    color: #DBDBDB;
-    background-color: #1B2223;
+    color: #dbdbdb;
+    background-color: #1b2223;
   }
 }
 
@@ -30,7 +30,7 @@
     border-bottom: 1px solid #121414;
 
     .valueName {
-      color: #DBDBDB;
+      color: #dbdbdb;
       font-weight: 100;
     }
 

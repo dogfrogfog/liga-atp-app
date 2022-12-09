@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent } from 'react';
 
 interface IInputProps {
   placeholder: string;
@@ -7,9 +7,7 @@ interface IInputProps {
 }
 
 const Input = (props: IInputProps) => {
-  return (
-    <input {...props} />
-  );
-}
+  return <input {...props} />;
+};
 
 export default Input;

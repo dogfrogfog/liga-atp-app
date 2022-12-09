@@ -1,12 +1,15 @@
-import type { ReactNode } from 'react'
-import type { player as PlayerT, tournament as TournamentT, match as MatchT } from '@prisma/client'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from "@hookform/resolvers/zod";
+import type { ReactNode } from 'react';
+import type {
+  player as PlayerT,
+  tournament as TournamentT,
+} from '@prisma/client';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import Modal from 'ui-kit/Modal'
-import { FORM_RESOLVERS, FORM_VALUES } from 'constants/formValues'
+import Modal from 'ui-kit/Modal';
+import { FORM_RESOLVERS, FORM_VALUES } from 'constants/formValues';
 
-import styles from './DataForm.module.scss'
+import styles from './DataForm.module.scss';
 
 interface IDataFormProps {
   type: 'players' | 'matches' | 'tournaments';
@@ -19,8 +22,8 @@ interface IDataFormProps {
 }
 
 interface IInputWithError {
-  errorMessage: string,
-  children: ReactNode
+  errorMessage: string;
+  children: ReactNode;
 }
 
 const InputWithError = ({ errorMessage, children }: IInputWithError) => {
@@ -43,17 +46,22 @@ const getField = (props: any, register: any, errors: any) => {
           />
         </InputWithError>
       );
-    };
+    }
     case 'select': {
       return (
         <InputWithError errorMessage={errors[props.name]?.message}>
-          <select name={props.name} {...register(props.name, { required: props.required })}>
+          <select
+            name={props.name}
+            {...register(props.name, { required: props.required })}
+          >
             {Object.entries(props.options).map(([key, value]) => (
-              <option key={key} value={key}>{value as ReactNode}</option>
+              <option key={key} value={key}>
+                {value as ReactNode}
+              </option>
             ))}
           </select>
         </InputWithError>
-      )
+      );
     }
     default: {
       return (
@@ -64,10 +72,10 @@ const getField = (props: any, register: any, errors: any) => {
             autoComplete="off"
           />
         </InputWithError>
-      )
-    };
+      );
+    }
   }
-}
+};
 
 // todo: add checkbox for winner
 // will be checked if player/pair is a winner
@@ -80,9 +88,13 @@ const DataForm = ({
   editingRow,
   type,
   formTitle,
-  registeredPlayers,
 }: IDataFormProps) => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<any>({
     resolver: zodResolver(FORM_RESOLVERS[type]),
     defaultValues: editingRow,
   });
@@ -126,6 +138,6 @@ const DataForm = ({
       </form>
     </Modal>
   );
-}
+};
 
-export default DataForm
+export default DataForm;

@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient, player as PlayerT } from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Prisma, PrismaClient, player as PlayerT } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>,
+  res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
     const paginatedPlayers = await prisma.player.findMany({
@@ -44,4 +44,4 @@ export default async (
 
     res.json(updatedPlayer);
   }
-}
+};

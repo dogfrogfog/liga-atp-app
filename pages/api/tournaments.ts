@@ -1,11 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient, tournament as TournamentT } from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import {
+  Prisma,
+  PrismaClient,
+  tournament as TournamentT,
+} from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<TournamentT[] | TournamentT | Prisma.BatchPayload>,
+  res: NextApiResponse<TournamentT[] | TournamentT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
     const paginatedTournaments = await prisma.tournament.findMany({
@@ -56,11 +60,11 @@ export default async (
             player_match_player2_idToplayer: true,
             player_match_player3_idToplayer: true,
             player_match_player4_idToplayer: true,
-          }
+          },
         },
       },
     });
 
     res.json(updatedTournamentFull as TournamentT);
   }
-}
+};

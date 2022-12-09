@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import styles from './styles.module.scss';
-import cl from 'classnames'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
+import cl from 'classnames';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 interface ITabsProps {
   tabNames: string[];
@@ -10,7 +10,11 @@ interface ITabsProps {
   activeTabIndex: string;
 }
 
-const TabsMUI: FC<ITabsProps> = ({ tabNames, activeTabIndex, onChange }: ITabsProps) => (
+const TabsMUI: FC<ITabsProps> = ({
+  tabNames,
+  activeTabIndex,
+  onChange,
+}: ITabsProps) => (
   <Tabs
     className={styles.container}
     value={tabNames.indexOf(activeTabIndex)}
@@ -19,14 +23,14 @@ const TabsMUI: FC<ITabsProps> = ({ tabNames, activeTabIndex, onChange }: ITabsPr
     scrollButtons="auto"
     TabIndicatorProps={{ children: null }}
   >
-    {tabNames.map(v => (
+    {tabNames.map((v) => (
       <Tab
         key={v}
         label={v}
         className={cl(styles.tab, activeTabIndex === v ? styles.activeTab : '')}
       />
-      ))}
+    ))}
   </Tabs>
-)
+);
 
-export default TabsMUI
+export default TabsMUI;

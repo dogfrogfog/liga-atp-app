@@ -10,19 +10,19 @@
   background: $custom-darkgray;
   background: linear-gradient(90deg, $custom-darkgray 0%, $custom-aqua 25%);
 
-  .settingsIcon svg, 
+  .settingsIcon svg,
   .image {
     width: 55px;
     height: 55px;
     cursor: pointer;
     transition: 0.3s;
   }
-  
+
   .image:hover {
     transition: 0.3s;
     transform: scale(1.2);
   }
-  
+
   .settingsIcon:hover svg {
     transition: 0.3s;
     cursor: pointer;

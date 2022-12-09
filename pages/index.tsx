@@ -1,9 +1,9 @@
-import type { NextPage } from 'next'
-import Link from 'next/link'
+import type { NextPage } from 'next';
+import Link from 'next/link';
 
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
 
-import PreviewComponent from 'components/PreviewComponent'
+import PreviewComponent from 'components/PreviewComponent';
 
 const Home: NextPage = () => {
   return (
@@ -25,8 +25,8 @@ const Home: NextPage = () => {
     //   <Link href="/other">other</Link>
     //   <br />
     // </div>
-    <PreviewComponent title='Work in progress' />
-  )
-}
+    <PreviewComponent title="Work in progress" />
+  );
+};
 
-export default Home
+export default Home;

@@ -35,8 +35,8 @@ const Players: NextPage = () => {
       }
     };
 
-    fetchWrapper()
-  }, [pagination])
+    fetchWrapper();
+  }, [pagination]);
 
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
@@ -76,23 +76,27 @@ const Players: NextPage = () => {
     };
 
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createPlayer(normalizedNewPlayer)
+      const { isOk, data, errorMessage } = await createPlayer(
+        normalizedNewPlayer
+      );
 
       if (isOk) {
         handleReset();
 
-        setData(v => [data as PlayerT].concat(v));
+        setData((v) => [data as PlayerT].concat(v));
       } else {
         console.warn(errorMessage);
       }
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updatePlayer(normalizedNewPlayer);
+      const { isOk, data, errorMessage } = await updatePlayer(
+        normalizedNewPlayer
+      );
       if (isOk) {
         handleReset();
 
-        setData(v => v.concat([data as PlayerT]));
+        setData((v) => v.concat([data as PlayerT]));
       } else {
         console.warn(errorMessage);
       }
@@ -102,9 +106,7 @@ const Players: NextPage = () => {
   return (
     <div>
       <div>
-        <PageTitle>
-          Управление игроками
-        </PageTitle>
+        <PageTitle>Управление игроками</PageTitle>
       </div>
       <TableControls
         selectedRow={tableProps.selectedRow}
@@ -115,7 +117,7 @@ const Players: NextPage = () => {
       />
       {data.length > 0 ? <Table {...tableProps} /> : null}
       <Pagination pagination={pagination} setPagination={setPagination} />
-      {modalStatus.isOpen ?
+      {modalStatus.isOpen ? (
         <DataForm
           type="players"
           formTitle={FORM_TITLES[modalStatus.type]}
@@ -123,9 +125,9 @@ const Players: NextPage = () => {
           onClose={handleReset}
           editingRow={editingPlayer}
         />
-        : null}
+      ) : null}
     </div>
   );
-}
+};
 
 export default Players;

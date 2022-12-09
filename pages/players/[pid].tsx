@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import type { NextPage } from 'next'
-import { FaMedal } from 'react-icons/fa'
-import { PrismaClient, player } from '@prisma/client'
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import { FaMedal } from 'react-icons/fa';
+import { PrismaClient, player } from '@prisma/client';
 
-import InfoTab from '../components/profileTabs/Info'
-import MatchesTab from '../components/profileTabs/Matches'
-import StatsTab from '../components/profileTabs/Stats'
-import { LEVEL_NUMBER_VALUES } from '../../constants/values'
-import styles from '../../styles/Profile.module.scss'
-import TabsMUI from 'ui-kit/Tabs'
+import InfoTab from '../components/profileTabs/Info';
+import MatchesTab from '../components/profileTabs/Matches';
+import StatsTab from '../components/profileTabs/Stats';
+import { LEVEL_NUMBER_VALUES } from '../../constants/values';
+import styles from '../../styles/Profile.module.scss';
+import TabsMUI from 'ui-kit/Tabs';
 
 const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
 
@@ -62,38 +62,47 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
   })();
 
   const handleTabChange = (_: any, value: number) => {
-    setActiveTabIndex(PROFILE_TABS[value])
-  }
+    setActiveTabIndex(PROFILE_TABS[value]);
+  };
 
   // get last node from db
   // @ts-ignore
   // const { position, points } = rankingssinglescurrent[rankingssinglescurrent.length - 1]
-  
+
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
         is_coach={is_coach as boolean}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as number).toString()]}
-         // todo: add real elo rank
+        // todo: add real elo rank
         points={'1490'}
       />
       <section>
-        <TabsMUI activeTabIndex={activeTabIndex} onChange={handleTabChange} tabNames={PROFILE_TABS}/>
+        <TabsMUI
+          activeTabIndex={activeTabIndex}
+          onChange={handleTabChange}
+          tabNames={PROFILE_TABS}
+        />
         {activeTabContent}
       </section>
     </div>
   );
-}
+};
 
 interface IProfileHeaderProps {
-  name: string
-  level: string
-  points: string
-  is_coach: boolean
+  name: string;
+  level: string;
+  points: string;
+  is_coach: boolean;
 }
 
-const ProfileHeader = ({ name, level, points, is_coach }: IProfileHeaderProps) => {
+const ProfileHeader = ({
+  name,
+  level,
+  points,
+  is_coach,
+}: IProfileHeaderProps) => {
   return (
     <div className={styles.profileHeader}>
       <span className={styles.status}>{is_coach ? 'Тренер' : 'Игрок'}</span>
@@ -106,7 +115,7 @@ const ProfileHeader = ({ name, level, points, is_coach }: IProfileHeaderProps) =
               <span className={styles.positionName}>{level}</span>
             </div>
             <div className={styles.medal}>
-              <FaMedal color='yellow' />
+              <FaMedal color="yellow" />
               {'<3>'}
             </div>
             {/* <div className={styles.medal}>
@@ -119,7 +128,7 @@ const ProfileHeader = ({ name, level, points, is_coach }: IProfileHeaderProps) =
       </div>
     </div>
   );
-}
+};
 
 export const getServerSideProps = async (ctx: any) => {
   const prisma = new PrismaClient();
@@ -133,8 +142,8 @@ export const getServerSideProps = async (ctx: any) => {
   return {
     props: {
       player,
-    }
+    },
   };
-}
+};
 
 export default SingleProfilePage;

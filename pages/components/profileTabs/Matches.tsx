@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { match } from '@prisma/client';
 import { format } from 'date-fns/fp';
-
 import styles from './Matches.module.scss';
 
 // comment: ""
@@ -26,18 +25,20 @@ interface IMatchProps {
   win: boolean;
 }
 
-const Match = ({ tournamentName, startDate, opponent, score , win }: IMatchProps) => (
+const Match = ({
+  tournamentName,
+  startDate,
+  opponent,
+  score,
+  win,
+}: IMatchProps) => (
   <div className={styles.match}>
     <span className={styles.time}>
       {format('dd.MM.yyyy', new Date(startDate))}
-      </span>
+    </span>
     <div className={styles.row}>
-      <span className={styles.tournamentName}>
-        {tournamentName}
-      </span>
-      <span className={win ? styles.win : styles.lose}>
-        {score}
-      </span>
+      <span className={styles.tournamentName}>{tournamentName}</span>
+      <span className={win ? styles.win : styles.lose}>{score}</span>
     </div>
     <div className={styles.row}>
       <span className={styles.pair}>{opponent}</span>
@@ -47,30 +48,32 @@ const Match = ({ tournamentName, startDate, opponent, score , win }: IMatchProps
       <div className={styles.button}>H2H</div>
     </div>
   </div>
-)
+);
 
 interface IMatchesTabProps {
-  playerId: number
+  playerId: number;
 }
 
 const MatchesTab = ({ playerId }: IMatchesTabProps) => {
-  const [data, setData] = useState<match[]>([])
-  const [pagination, setPagination] = useState({ take: 10, skip: 0 })
+  const [data, setData] = useState<match[]>([]);
+  const [pagination, setPagination] = useState({ take: 10, skip: 0 });
 
-  // todo: move fetch to upper component and pass data as props 
+  // todo: move fetch to upper component and pass data as props
   useEffect(() => {
     const fetchWrapper = async () => {
       // todo: refactor
       // should be real pages
-      const response = await axios.get(`/api/matches?take=${pagination.take}&skip=${pagination.skip}&id=${playerId}`)
+      const response = await axios.get(
+        `/api/matches?take=${pagination.take}&skip=${pagination.skip}&id=${playerId}`
+      );
 
       if (response.status === 200) {
-        setData(response.data)
+        setData(response.data);
       }
-    }
+    };
 
-    fetchWrapper()
-  }, [playerId, pagination])
+    fetchWrapper();
+  }, [playerId, pagination]);
   return (
     <>
       {data.map((match, index) => (
@@ -84,13 +87,15 @@ const MatchesTab = ({ playerId }: IMatchesTabProps) => {
           score={match.score}
           opponent={
             // @ts-ignore
-            match.player_match_player2_idToplayer.first_name + ' ' + match.player_match_player2_idToplayer.last_name
+            match.player_match_player2_idToplayer.first_name +
+            ' ' +
+            (match as any).player_match_player2_idToplayer.last_name
           }
           win={String(playerId) === match.winner_id}
         />
       ))}
-  </>
-  )
-}
+    </>
+  );
+};
 
-export default MatchesTab
+export default MatchesTab;

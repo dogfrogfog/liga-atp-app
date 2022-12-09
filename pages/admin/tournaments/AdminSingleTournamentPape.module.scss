@@ -18,7 +18,7 @@
     background-color: $custom-scarlet;
     padding: 10px;
     text-align: center;
-    color: $custom-white
+    color: $custom-white;
   }
 
   .playersList {
@@ -68,7 +68,7 @@
         text-align: left;
         font-weight: 400;
       }
-      
+
       &:last-child {
         text-align: right;
         cursor: pointer;

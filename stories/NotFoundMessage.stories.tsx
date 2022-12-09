@@ -11,9 +11,10 @@ export default {
 } as ComponentMeta<typeof NotFoundMessage>;
 
 const Template: ComponentStory<typeof NotFoundMessage> = (args) => {
-  const message = 'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра'
+  const message =
+    'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра';
   return <NotFoundMessage message={message} />;
-}
+};
 
 export const Primary = Template.bind({});
 Primary.args = {};

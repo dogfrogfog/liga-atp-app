@@ -9,7 +9,6 @@
     display: none;
   }
 
-
   .tab {
     text-transform: capitalize;
     margin-right: 4px;
@@ -21,6 +20,6 @@
 
   .activeTab {
     background-color: $custom-aqua;
-    color: $custom-black
+    color: $custom-black;
   }
 }

@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import cl from 'classnames';
-import { PrismaClient, tournament as TournamentT, player as PlayerT, match as MatchT } from '@prisma/client';
+import {
+  PrismaClient,
+  tournament as TournamentT,
+  player as PlayerT,
+  match as MatchT,
+} from '@prisma/client';
 import { MultiSelect, Option } from 'react-multi-select-component';
 
 import DataForm from 'components/admin/DataForm';
@@ -100,8 +105,8 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   const updateActiveTournament = async () => {
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
-      (acc, v) => ([...acc, v.value]),
-      [] as Option[],
+      (acc, v) => [...acc, v.value],
+      [] as Option[]
     );
 
     const newTournament = await updateTournament({
@@ -109,14 +114,20 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
-      draw: activeTournament.draw_type ? JSON.stringify({
-        // @ts-ignore
-        brackets: brackets || getInitialBrackets(activeTournament.draw_type),
-      }) : null,
+      draw: activeTournament.draw_type
+        ? JSON.stringify({
+            // @ts-ignore
+            brackets:
+              brackets || getInitialBrackets(activeTournament.draw_type),
+          })
+        : null,
       draw_type: parseInt(activeTournament.draw_type as any as string, 10),
-      tournament_type: parseInt(activeTournament.tournament_type as any as string, 10)
+      tournament_type: parseInt(
+        activeTournament.tournament_type as any as string,
+        10
+      ),
     });
-    
+
     if (newTournament.isOk) {
       // @ts-ignore
       const { match, ...v } = newTournament.data;
@@ -127,7 +138,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   };
 
   const handleTournamentFieldChange = (key: string, value: any) => {
-    setActiveTournament(v => ({ ...v, [key]: value }));
+    setActiveTournament((v) => ({ ...v, [key]: value }));
   };
 
   // create/update match and update tournaments.brackets values
@@ -222,7 +233,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     setEditingMatchData({ newMatch: match });
   };
 
-  const isDisabled = 
+  const isDisabled =
     // OLD db records has is_finished prop...so we check it
     // (activeTournament.is_finished !== null && activeTournament.is_finished) ||
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
@@ -231,9 +242,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   return (
     <div>
-      <PageTitle>
-        Управление турниром
-      </PageTitle>
+      <PageTitle>Управление турниром</PageTitle>
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
           {Object.entries(tournament).map(([key, value]) => {
@@ -241,82 +250,125 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               case 'draw_type': {
                 return (
                   <div className={cl(styles.field, styles.drawType)} key={key}>
-                    <span>
-                      Тип сетки в турнире
-                    </span>
+                    <span>Тип сетки в турнире</span>
                     <select
                       onChange={(e) => {
-                        handleTournamentFieldChange('draw', JSON.stringify({ brackets: getInitialBrackets(parseInt(e.target.value, 10)) }));
-                        handleTournamentFieldChange('draw_type', e.target.value);
+                        handleTournamentFieldChange(
+                          'draw',
+                          JSON.stringify({
+                            brackets: getInitialBrackets(
+                              parseInt(e.target.value, 10)
+                            ),
+                          })
+                        );
+                        handleTournamentFieldChange(
+                          'draw_type',
+                          e.target.value
+                        );
                       }}
                       value={activeTournament.draw_type as number}
                       disabled={isDisabled}
                       name="drawType"
                     >
                       <option value={0}>not selected</option>
-                      {Object.entries(TOURNAMENT_DRAW_TYPE_NUMBER_VALUES).map(([key, name]) => {
-                        return <option key={key} value={key}>{name as string}</option>
-                      })}
+                      {Object.entries(TOURNAMENT_DRAW_TYPE_NUMBER_VALUES).map(
+                        ([key, name]) => {
+                          return (
+                            <option key={key} value={key}>
+                              {name as string}
+                            </option>
+                          );
+                        }
+                      )}
                     </select>
                   </div>
-                )
+                );
               }
               case 'tournament_type': {
                 return (
                   <div className={cl(styles.field, styles.type)} key={key}>
-                    <span>
-                      Тип турнира
-                    </span>
+                    <span>Тип турнира</span>
                     <select
-                      onChange={(e) => handleTournamentFieldChange('tournament_type', parseInt(e.target.value, 10))}
+                      onChange={(e) =>
+                        handleTournamentFieldChange(
+                          'tournament_type',
+                          parseInt(e.target.value, 10)
+                        )
+                      }
                       value={activeTournament.tournament_type as number}
                       disabled={isDisabled}
                       name="type"
                     >
                       <option value={0}>not selected</option>
-                      {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(([key, name]) => {
-                        return <option key={key} value={key}>{name as string}</option>
-                      })}
+                      {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
+                        ([key, name]) => {
+                          return (
+                            <option key={key} value={key}>
+                              {name as string}
+                            </option>
+                          );
+                        }
+                      )}
                     </select>
                   </div>
-                )
+                );
               }
               case 'status': {
                 return (
                   <div key={key} className={cl(styles.field, styles.status)}>
-                    <span>
-                      Статус
-                    </span>
+                    <span>Статус</span>
                     <select
-                      onChange={(e) => handleTournamentFieldChange('status', parseInt(e.target.value, 10))}
+                      onChange={(e) =>
+                        handleTournamentFieldChange(
+                          'status',
+                          parseInt(e.target.value, 10)
+                        )
+                      }
                       value={activeTournament.status as number}
                       disabled={isDisabled}
                       name="type"
                     >
-                      <option value={1}>{TOURNAMENT_STATUS_NUMBER_VALUES[1]}</option>
-                      <option value={2}>{TOURNAMENT_STATUS_NUMBER_VALUES[2]}</option>
-                      <option value={3}>{TOURNAMENT_STATUS_NUMBER_VALUES[3]}</option>
+                      <option value={1}>
+                        {TOURNAMENT_STATUS_NUMBER_VALUES[1]}
+                      </option>
+                      <option value={2}>
+                        {TOURNAMENT_STATUS_NUMBER_VALUES[2]}
+                      </option>
+                      <option value={3}>
+                        {TOURNAMENT_STATUS_NUMBER_VALUES[3]}
+                      </option>
                     </select>
                   </div>
-                )
+                );
               }
               case 'city':
               case 'address':
               case 'name': {
                 return (
-                  <div key={key} className={cl(styles.field, styles.inputField)}>
+                  <div
+                    key={key}
+                    className={cl(styles.field, styles.inputField)}
+                  >
                     <span>{translation[key]}</span>
                     <input
                       value={activeTournament[key] as string}
                       type="text"
-                      onChange={(e) => setActiveTournament(v => ({ ...v, [key]: e.target.value }))}
+                      onChange={(e) =>
+                        setActiveTournament((v) => ({
+                          ...v,
+                          [key]: e.target.value,
+                        }))
+                      }
                     />
                   </div>
-                )
+                );
               }
               case 'start_date': {
                 return (
-                  <div key={key} className={cl(styles.field, styles.inputField)}>
+                  <div
+                    key={key}
+                    className={cl(styles.field, styles.inputField)}
+                  >
                     <span>Дата начала</span>
                     {/* FIXME: types and date format */}
                     {/* @ts-ignore  */}
@@ -340,17 +392,23 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               }
               case 'is_doubles': {
                 return (
-                  <div key={key} className={cl(styles.field, styles.is_doubles)}>
+                  <div
+                    key={key}
+                    className={cl(styles.field, styles.is_doubles)}
+                  >
                     <span>Парный турнир</span>
                     <input
                       checked={!!activeTournament.is_doubles}
                       type="checkbox"
                       onChange={(e) => {
-                        setActiveTournament(v => ({ ...v, [key]: e.target.checked }))
+                        setActiveTournament((v) => ({
+                          ...v,
+                          [key]: e.target.checked,
+                        }));
                       }}
                     />
                   </div>
-                )
+                );
               }
               case 'surface': {
                 return (
@@ -376,13 +434,17 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           })}
           <div className={styles.controlButtons}>
             <button
-              disabled={JSON.stringify(tournament) === JSON.stringify(activeTournament)}
+              disabled={
+                JSON.stringify(tournament) === JSON.stringify(activeTournament)
+              }
               onClick={() => updateActiveTournament()}
             >
               Сохранить
             </button>
             <button
-              disabled={JSON.stringify(tournament) === JSON.stringify(activeTournament)}
+              disabled={
+                JSON.stringify(tournament) === JSON.stringify(activeTournament)
+              }
               onClick={() => setActiveTournament(tournament)}
             >
               Отменить
@@ -414,34 +476,33 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           <div className={styles.playersListContainer}>
             {newSelectedPlayersIds.length > 0 ? (
               <>
-                <p className={styles.playersListTitle}>
-                  Новые игроки
-                </p>
+                <p className={styles.playersListTitle}>Новые игроки</p>
                 <div className={cl(styles.playersList, styles.new)}>
-                  {players.map((v) => (
+                  {players.map((v) =>
                     newSelectedPlayersIds.indexOf(v.id) !== -1 ? (
                       <div key={v.id} className={styles.player}>
                         <span>{`${v.first_name} ${v.last_name}`}</span>
-                      </div>) : null
-                  ))}
+                      </div>
+                    ) : null
+                  )}
                 </div>
               </>
             ) : null}
-            <p className={styles.playersListTitle}>
-              Уже зарегестрировавшиеся
-            </p>
+            <p className={styles.playersListTitle}>Уже зарегестрировавшиеся</p>
             <div className={styles.playersList}>
-              {registeredPlayersIds && players.map((v) => (
-                registeredPlayersIds.indexOf(v.id) !== -1 ? (
-                  <div key={v.id} className={styles.player}>
-                    <span>{`${v.first_name} ${v.last_name}`}</span>
-                  </div>) : null
-              ))}
+              {registeredPlayersIds &&
+                players.map((v) =>
+                  registeredPlayersIds.indexOf(v.id) !== -1 ? (
+                    <div key={v.id} className={styles.player}>
+                      <span>{`${v.first_name} ${v.last_name}`}</span>
+                    </div>
+                  ) : null
+                )}
             </div>
           </div>
         </div>
       </div>
-      {activeTournament.draw_type ?
+      {activeTournament.draw_type ? 
         <TournamentDraw
           isDoubles={!!activeTournament.is_doubles}
           isDisabled={isDisabled}
@@ -469,7 +530,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       }
     </div>
   );
-}
+};
 
 export default AdminSingleTournamentPape;
 

@@ -1,13 +1,13 @@
-import type { NextPage } from 'next'
-import Link from 'next/link'
+import type { NextPage } from 'next';
+import Link from 'next/link';
 
-import styles from '../../styles/Tournaments.module.scss'
+import styles from '../../styles/Tournaments.module.scss';
 
 function createData(
   title: string,
   status: string,
   date: string,
-  winners?: string,
+  winners?: string
 ) {
   return { title, status, date, winners };
 }
@@ -17,7 +17,12 @@ const tournamentData = [
   createData('SUPER MASTERS ROLAND GARROS | 2022', 'Запись', '01.09.2022'),
   createData('US OPEN SUPERMASTERS | 2022', 'Идет', '01.09.2022'),
   createData('LEGGER - 12 | 2022', '', '01.09.2022', 'Карлашов А, Радькова Т'),
-  createData('SUPER CHALLENGER 8| 2022', '', '01.09.2022', 'Карлашов А, Радькова Т'),
+  createData(
+    'SUPER CHALLENGER 8| 2022',
+    '',
+    '01.09.2022',
+    'Карлашов А, Радькова Т'
+  ),
 ];
 
 const TournamentsPage: NextPage = () => {
@@ -38,7 +43,7 @@ const TournamentsPage: NextPage = () => {
         </Link>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default TournamentsPage
+export default TournamentsPage;
