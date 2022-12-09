@@ -1,103 +1,5 @@
 @import '../../../styles/variables.scss';
 
-.drawContainer {
-  padding: 15px;
-  display: flex;
-  overflow: auto;
-  background-color: $custom-lightgray;
-  height: 750px;
-
-  .stageWrapper {
-    min-width: 325px;
-
-    .stageTitle {
-      background-color: $custom-darkgray;
-      color: $custom-white;
-      text-align: center;
-      padding: 10px;
-      margin: 0 0 20px;
-    }
-
-    .stage {
-      border-right: 1px solid $custom-yellow;
-    }
-  }
-
-  .matchesWrapper {
-    .matchInputContainer {
-      display: flex;
-      align-items: center;
-      margin-bottom: 35px;
-
-      &.activeInput {
-        background-color: $custom-yellow;
-      }
-
-      .fields {
-        select {
-          min-width: 200px;
-          display: block;
-          outline: none;
-          color: $custom-white;
-          background-color: $custom-black;
-          padding: 5px;
-          margin-right: 25px;
-          margin-bottom: 10px;
-          font-size: 16px;
-        }
-      }
-
-      .plusButton {
-        // height: 30px;
-        // width: 30px;
-        padding: 0;
-        outline: 0;
-        cursor: pointer;
-        font-size: 20px;
-        background-color: $custom-darkgray;
-        background-color: $custom-darkgray;
-        color: $custom-white;
-
-        &[disabled] {
-          background-color: $custom-olive;
-          opacity: 0.8;
-          color: $custom-darkgray;
-          border-color: $custom-darkgray;
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    .match {
-      padding: 10px;
-      position: relative;
-
-      .player {
-        background-color: $custom-white;
-        display: block;
-        margin-bottom: 5px;
-        padding: 5px;
-
-        &.loser {
-          background-color: $custom-lightlightgray;
-          color: $custom-lightgray;
-        }
-      }
-
-      select {
-        background-color: $custom-white;
-        margin-bottom: 5px;
-        padding: 5px;
-      }
-
-      .score {
-        position: absolute;
-        bottom: 5px;
-      }
-    }
-  }
-}
-
 .twoSides {
   display: flex;
   flex: 1;
@@ -243,7 +145,7 @@
 
   button {
     width: 50%;
-    margin: 10px;
+    margin: 5px;
     cursor: pointer;
 
     &:first-child {
@@ -259,6 +161,49 @@
     &:last-child {
       background-color: $custom-lightlightgray;
       font-size: 18px;
+    }
+  }
+}
+
+// start groups
+
+.singleGroup {
+  margin-bottom: 40px;
+}
+
+.groupTitle {
+  background-color: $custom-darkgray;
+  color: $custom-white;
+  padding: 5px;
+  margin: 0;
+  height: 30px;
+}
+
+.matchesList {
+  background-color: $custom-olive;
+  min-height: 100px;
+}
+
+.groupControlButtons {
+  display: flex;
+
+  button {
+    height: 30px;
+    width: 50%;
+    color: $custom-white;
+
+    &:first-child {
+      background-color: $custom-aqua;
+    }
+
+    &:last-child {
+      background-color: $custom-scarlet;
+    }
+
+    svg {
+      margin-right: 10px;
+      width: 30px;
+      height: 30px;
     }
   }
 }

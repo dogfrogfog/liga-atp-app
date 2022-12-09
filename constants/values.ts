@@ -52,10 +52,10 @@ export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: any = {
 
   // groups net (doubles types)
   14: 'G6',
-  15: 'G10',
-  16: 'G12',
-  17: 'G16',
-  18: 'G6',
+  15: 'G8',
+  16: 'G10',
+  17: 'G12',
+  18: 'G16',
 };
 
 export const SURFACE_TYPE_NUMBER_VALUES: any = {
