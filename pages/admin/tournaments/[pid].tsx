@@ -39,7 +39,8 @@ interface IAdminSingleTournamentPapeProps {
 }
 
 const getInitialBrackets = (drawType: number) => {
-  const { totalStages, firstStageMatches, withQual, groups } = DRAW_TYPE_NUMBER_VALUES[drawType];
+  const { totalStages, firstStageMatches, withQual, groups } =
+    DRAW_TYPE_NUMBER_VALUES[drawType];
   let stageMatches = firstStageMatches;
 
   let result: MatchT[][];
@@ -83,7 +84,11 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   // when match already exists we save passed match to have default values to form
   // when match is not exists and we creating new match and updating tournament draw property ..
   // .. so we same stage index(si) and match index(mi)
-  const [editingMatchData, setEditingMatchData] = useState<{ newMatch: MatchT, si?: number, mi?: number }>();
+  const [editingMatchData, setEditingMatchData] = useState<{
+    newMatch: MatchT;
+    si?: number;
+    mi?: number;
+  }>();
 
   const [matches, setMatches] = useState(metchesOriginal);
   const [activeTournament, setActiveTournament] = useState(tournament);
@@ -95,13 +100,20 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     setModalStatus(DEFAULT_MODAL);
   };
 
-  const registeredPlayersIds = activeTournament.players_order ? JSON.parse(activeTournament?.players_order)?.players : [];
-  const newSelectedPlayersIds = multiSelectFormatToPlayersIds(newSelectedPlayers);
-  const brackets = activeTournament.draw && JSON.parse(activeTournament?.draw)?.brackets as IBracketsUnit[][];
+  const registeredPlayersIds = activeTournament.players_order
+    ? JSON.parse(activeTournament?.players_order)?.players
+    : [];
+  const newSelectedPlayersIds =
+    multiSelectFormatToPlayersIds(newSelectedPlayers);
+  const brackets =
+    activeTournament.draw &&
+    (JSON.parse(activeTournament?.draw)?.brackets as IBracketsUnit[][]);
 
   // this regestered players array we use to get options for "edit match" players select inputs
   // also we use same data to get options for "draw unit" players select inputs (TournamentT)
-  const registeredPlayers = players.filter(({ id }) => registeredPlayersIds.indexOf(id) !== -1);
+  const registeredPlayers = players.filter(
+    ({ id }) => registeredPlayersIds.indexOf(id) !== -1
+  );
 
   const updateActiveTournament = async () => {
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
@@ -144,7 +156,10 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   // create/update match and update tournaments.brackets values
   const onSubmit = async (match: MatchT) => {
     // console.log(editingMatchData);
-    if (editingMatchData?.si !== undefined && editingMatchData?.mi !== undefined) {
+    if (
+      editingMatchData?.si !== undefined &&
+      editingMatchData?.mi !== undefined
+    ) {
       const createdMatch = await createMatch({
         ...match,
         tournament_id: activeTournament.id,
@@ -160,19 +175,19 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       if (createdMatch.isOk) {
         const { data } = createdMatch;
 
-        setMatches(v => {
+        setMatches((v) => {
           // update existed array element
           // to prevent 2 versions of the same element (old + new one)
-          return v.map(v1 => v1.id === data?.id ? data : v1);
+          return v.map((v1) => (v1.id === data?.id ? data : v1));
         });
 
-        const newBrackets = (brackets as IBracketsUnit[][]).map((s, si) => (
+        const newBrackets = (brackets as IBracketsUnit[][]).map((s, si) =>
           s.map((m, mi) =>
-            si === editingMatchData.si &&
-              mi === editingMatchData.mi ?
-              { stageIndex: si, matchId: data?.id } : m,
+            si === editingMatchData.si && mi === editingMatchData.mi
+              ? { stageIndex: si, matchId: data?.id }
+              : m
           )
-        ));
+        );
 
         const updatedTournament = await updateTournament({
           id: activeTournament.id,
@@ -188,7 +203,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           setActiveTournament(v);
         }
       }
-
     } else {
       // @ts-ignore
       const { newMatch } = editingMatchData;
@@ -198,20 +212,20 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         ...match,
         // should be string because we have to parse old values (bigint converted to string)
         winner_id: match.winner_id + '',
-        start_date: newMatch.start_date ? new Date(newMatch.start_date) : null
+        start_date: newMatch.start_date ? new Date(newMatch.start_date) : null,
       });
 
       if (updatedMatch.isOk) {
         const { data } = updatedMatch;
 
-        setMatches(v => {
+        setMatches((v) => {
           // update existed array element
           // to prevent 2 versions of the same element (old + new one)
-          return v.map(v1 => v1.id === data?.id ? data : v1);
+          return v.map((v1) => (v1.id === data?.id ? data : v1));
         });
         setModalStatus(DEFAULT_MODAL);
       }
-    };
+    }
   };
 
   const openModalForNewMatch = (si: number, mi: number) => {
@@ -379,7 +393,12 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                       // value={activeTournament.start_date ? format(activeTournament.start_date, 'yyyy-MM-dd') : ''}
                       // valueAsDate={activeTournament.start_date as any§§}
                       type="date"
-                      onChange={(e) => setActiveTournament(v => ({ ...v, [key]: new Date(e.target.value) }))}
+                      onChange={(e) =>
+                        setActiveTournament((v) => ({
+                          ...v,
+                          [key]: new Date(e.target.value),
+                        }))
+                      }
                     />
                   </div>
                 );
@@ -502,7 +521,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           </div>
         </div>
       </div>
-      {activeTournament.draw_type ? 
+      {activeTournament.draw_type ? (
         <TournamentDraw
           isDoubles={!!activeTournament.is_doubles}
           isDisabled={isDisabled}
@@ -514,20 +533,19 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           openModalForNewMatch={openModalForNewMatch}
           openModalForExistingMatch={openModalForExistingMatch}
         />
-        : (
-          'Выбирите тип сетки турнира чтобы создать турнир'
-        )
-      }
-      {modalStatus.isOpen &&
+      ) : (
+        'Выбирите тип сетки турнира чтобы создать турнир'
+      )}
+      {modalStatus.isOpen && (
         <DataForm
           type="matches"
           formTitle="Обновить матч"
-        onSubmit={onSubmit}
-        onClose={handleReset}
-        editingRow={editingMatchData?.newMatch}
+          onSubmit={onSubmit}
+          onClose={handleReset}
+          editingRow={editingMatchData?.newMatch}
           registeredPlayers={registeredPlayers}
-      />
-      }
+        />
+      )}
     </div>
   );
 };

@@ -24,7 +24,10 @@ const Players: NextPage = () => {
   const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<undefined | PlayerT>();
-  const { pagination, setPagination, ...tableProps } = useTable('players', data);
+  const { pagination, setPagination, ...tableProps } = useTable(
+    'players',
+    data
+  );
 
   useEffect(() => {
     const fetchWrapper = async () => {

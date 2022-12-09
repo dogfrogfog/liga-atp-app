@@ -18,7 +18,7 @@ interface IDataFormProps {
   onClose: any;
   editingRow?: PlayerT | TournamentT | MatchT | null;
   // we need this prop to pass registered players to modal
-  registeredPlayers?: PlayerT[]
+  registeredPlayers?: PlayerT[];
 }
 
 interface IInputWithError {
@@ -79,7 +79,13 @@ const getField = (props: any, register: any, errors: any) => {
 
 // todo: add checkbox for winner
 // will be checked if player/pair is a winner
-const REGISTERED_PLAYERS_FIELD_NAMES = ['player1_id', 'player2_id', 'player3_id', 'player4_id', 'winner_id']
+const REGISTERED_PLAYERS_FIELD_NAMES = [
+  'player1_id',
+  'player2_id',
+  'player3_id',
+  'player4_id',
+  'winner_id',
+];
 
 // todo: add validation + errors
 const DataForm = ({
@@ -103,20 +109,31 @@ const DataForm = ({
     <Modal title={formTitle} handleClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         {FORM_VALUES[type].map((props) => {
-          // to have ability to explicitly pass options to select fields 
-          if (type === 'matches' && REGISTERED_PLAYERS_FIELD_NAMES.indexOf(props.name) !== -1) {
+          // to have ability to explicitly pass options to select fields
+          if (
+            type === 'matches' &&
+            REGISTERED_PLAYERS_FIELD_NAMES.indexOf(props.name) !== -1
+          ) {
             return (
               <div key={props.name} className={styles.input}>
                 <span>{props.placeholder}</span>
-                <InputWithError key={'trick' + props.name} errorMessage={errors[props.name]?.message as any}>
+                <InputWithError
+                  key={'trick' + props.name}
+                  errorMessage={errors[props.name]?.message as any}
+                >
                   <select
                     // @ts-ignore
                     name={props.name}
-                    {...register(props.name, { required: props.required, valueAsNumber: true })}
+                    {...register(props.name, {
+                      required: props.required,
+                      valueAsNumber: true,
+                    })}
                   >
-                    <option value=''>not selected</option>
+                    <option value="">not selected</option>
                     {registeredPlayers?.map(({ id, first_name, last_name }) => (
-                      <option key={id} value={id}>{last_name + ' ' + first_name}</option>
+                      <option key={id} value={id}>
+                        {last_name + ' ' + first_name}
+                      </option>
                     ))}
                   </select>
                 </InputWithError>
