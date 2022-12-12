@@ -29,6 +29,14 @@
       tr {
         border-bottom: 10px solid transparent;
 
+        td {
+          width: 20%;
+
+          &:first-child {
+            width: 60%;
+          }
+        }
+
         td:nth-child(2) {
           font-weight: 500;
           font-size: 14px;
@@ -43,29 +51,6 @@
           letter-spacing: -0.165px;
           color: $custom-aqua;
           text-align: center;
-        }
-
-        td {
-          .userInfo {
-            display: flex;
-            align-items: center;
-
-            .userImage {
-              width: 42px;
-              height: 42px;
-              border: 1px solid $custom-lightgray;
-              border-radius: 50%;
-
-              svg {
-                width: 40px;
-                height: 40px;
-              }
-            }
-
-            p {
-              margin: 0 0 0 10px;
-            }
-          }
         }
       }
     }
@@ -84,12 +69,6 @@
       width: 20px;
       height: 20px;
     }
-  }
-
-  :global(.MuiFormControl-root) {
-    background-color: $custom-white;
-    margin-bottom: 15px;
-    width: 70%;
   }
 
   .header {
@@ -161,8 +140,9 @@
 
   .listTitle {
     display: block;
-    padding: 15px;
-    font-size: 20px;
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: 30px;
   }
 
   :global(.MuiTableContainer-root) {
@@ -174,3 +154,25 @@
     width: 100%;
   }
 }
+
+.playerRow {
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+
+  .image {
+    border: 1px solid $custom-lightgray;
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    border-radius: 50%;
+
+  }
+
+  svg, img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+

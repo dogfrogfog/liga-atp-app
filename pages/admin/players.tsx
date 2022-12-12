@@ -68,6 +68,7 @@ const Players: NextPage = () => {
   // todo: add notifications
   const onSubmit = async (newPlayer: PlayerT) => {
     const normalizedNewPlayer = {
+      ...editingPlayer,
       ...newPlayer,
       age: parseInt(newPlayer.age as any as string),
       level: parseInt(newPlayer.level as any as string),
@@ -75,7 +76,7 @@ const Players: NextPage = () => {
       in_tennis_from: new Date(newPlayer.in_tennis_from as any),
       date_of_birth: new Date(newPlayer.date_of_birth as any),
       // todo: handle image
-      avatar: null,
+      avatar: newPlayer.avatar || null,
     };
 
     if (modalStatus.type === 'add') {
@@ -86,7 +87,7 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((v) => [data as PlayerT].concat(v));
+        setData((prevV) => prevV.map(v => v.id === data?.id ? data : v));
       } else {
         console.warn(errorMessage);
       }
@@ -99,7 +100,7 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((v) => v.concat([data as PlayerT]));
+        setData((prevV) => prevV.map(v => v.id === data?.id ? data : v));
       } else {
         console.warn(errorMessage);
       }

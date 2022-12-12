@@ -8,6 +8,7 @@ import {
 } from './values';
 
 const PlayerSchema = z.object({
+  avatar: z.string().min(2),
   first_name: z.string().min(2),
   last_name: z.string().min(2),
   date_of_birth: z.string().min(2),
@@ -48,6 +49,7 @@ const MatchSchema = z.object({
 });
 
 const PLAYER_FORM_VALUES = [
+  { name: 'avatar', required: true, type: 'text', placeholder: 'Ссылка на аватар' },
   { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
   { name: 'last_name', required: true, type: 'text', placeholder: 'Фамилия' },
   {
