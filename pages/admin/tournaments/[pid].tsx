@@ -24,8 +24,6 @@ import { updateTournament } from 'services/tournaments';
 import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
-import { min } from 'date-fns/esm';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
 
 // todo: https://github.com/dogfrogfog/liga-atp-app/issues/49
 const translation = {
@@ -83,6 +81,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   players,
   matches: metchesOriginal,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   // when match already exists we save passed match to have default values to form
   // when match is not exists and we creating new match and updating tournament draw property ..
   // .. so we same stage index(si) and match index(mi)
@@ -119,6 +118,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   );
 
   const updateActiveTournament = async () => {
+    setIsLoading(true);
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
       (acc, v) => [...acc, v.value],
       [] as Option[]
@@ -150,6 +150,8 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       setActiveTournament(v as any);
       setNewSelectedPlayers([]);
     }
+
+    setIsLoading(false)
   };
 
   const handleTournamentFieldChange = (key: string, value: any) => {
@@ -158,6 +160,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   // create/update match and update tournaments.brackets values
   const onSubmit = async (match: MatchT) => {
+    setIsLoading(true);
     if (
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined
@@ -239,6 +242,8 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         setModalStatus(DEFAULT_MODAL);
       }
     }
+
+    setIsLoading(false);
   };
 
   const openModalForNewMatch = (
@@ -270,11 +275,14 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     // (activeTournament.is_finished !== null && activeTournament.is_finished) ||
     // NEW db records has status prop...one of statuses is finished (equal to 3)....so we check it
     // (activeTournament.status === 3);
-    false;
+    false || isLoading;
 
   return (
-    <div>
+    <div className={styles.container}>
       <PageTitle>Управление турниром</PageTitle>
+      {isLoading && <div className={styles.isLoading}>
+        идет сохранение ...
+      </div>}
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
           {Object.entries(tournament).map(([key, value]) => {

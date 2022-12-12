@@ -18,10 +18,10 @@ const Sidebar = () => {
           <AiOutlineTrophy />
           <Link href="/admin/tournaments">Турниры</Link>
         </div>
-        <div className={styles.menuItem}>
+        {/* <div className={styles.menuItem}>
           <BiNews />
           <Link href="/admin/content">Матчи</Link>
-        </div>
+        </div> */}
         {/* <div className={styles.menuItem}>
           <BiStats />
           <Link href="/admin/stats">
