@@ -87,16 +87,18 @@ const TournamentDraw = ({
                             matches,
                             v.matchId
                           );
-                          return matchRecord && (
-                            <Match
-                              isDoubles={isDoubles}
-                              isDisabled={isDisabled}
-                              matchRecord={matchRecord}
-                              playersNames={playersNames}
-                              handleUpdateClick={() =>
-                                openModalForExistingMatch(matchRecord)
-                              }
-                            />
+                          return (
+                            matchRecord && (
+                              <Match
+                                isDoubles={isDoubles}
+                                isDisabled={isDisabled}
+                                matchRecord={matchRecord}
+                                playersNames={playersNames}
+                                handleUpdateClick={() =>
+                                  openModalForExistingMatch(matchRecord)
+                                }
+                              />
+                            )
                           );
                         })}
                         <button
@@ -176,31 +178,29 @@ const Match = ({
   }
 
   const firstPairIsWinner =
-    matchRecord.score &&
     matchRecord.player1_id === parseInt(matchRecord?.winner_id as any, 10);
 
   return (
     <div className={styles.match}>
       <p
-        className={cl(
-          styles.players,
-          firstPairIsWinner ? styles.winner : styles.loser
-        )}
+        className={cl(styles.players, {
+          [firstPairIsWinner ? styles.winner : styles.loser]: matchRecord.score,
+        })}
       >
         {playersNames.get(matchRecord.player1_id as number)}
         {isDoubles &&
-          ` / ${playersNames.get(matchRecord.player3_id as number)}`}
+          ` / ${playersNames.get(matchRecord.player3_id as number) || ''}`}
       </p>
       <p className={styles.vs}>VS</p>
       <p
-        className={cl(
-          styles.players,
-          !firstPairIsWinner ? styles.winner : styles.loser
-        )}
+        className={cl(styles.players, {
+          [!firstPairIsWinner ? styles.winner : styles.loser]:
+            matchRecord.score,
+        })}
       >
         {playersNames.get(matchRecord.player2_id as number)}
         {isDoubles &&
-          ` / ${playersNames.get(matchRecord.player4_id as number)}`}
+          ` / ${playersNames.get(matchRecord.player4_id as number) || ''}`}
       </p>
       <div className={styles.matchInfo}>
         <span>
