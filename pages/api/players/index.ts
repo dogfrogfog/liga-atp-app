@@ -11,6 +11,9 @@ export default async (
     const paginatedPlayers = await prisma.player.findMany({
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
+      orderBy: {
+        id: 'desc',
+      },
     });
 
     res.json(paginatedPlayers);

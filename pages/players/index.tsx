@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import ligaLogo from '../../public/180x180.png';
 
 import { PrismaClient } from '@prisma/client';
 
@@ -83,14 +82,10 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
         </div>
       )}
       {data.length === 0 ? (
-        <NotFoundMessage
-          message={
-            'Введите поисковой запрос в строку поиска или воспользуйтесь категориями из Фильтра'
-          }
-        />
+        <NotFoundMessage message="Результаты по вашему запросу не найдены" />
       ) : (
         <>
-          <span className={styles.listTitle}>Список игроков</span>
+          <p className={styles.listTitle}>Игроки лиги</p>
           <div className={styles.playersTable}>
             <table className={styles.table}>
               <thead>
@@ -101,42 +96,31 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.map(
-                  ({
-                    id,
-                    first_name,
-                    last_name,
-                    level,
-                    rankings_singles_current,
-                    avatar,
-                  }) => (
-                    <Link key={id} href={'/players/' + id}>
-                      <tr key={id}>
-                        <td>
-                          <div className={styles.userInfo}>
-                            <div className={styles.userImage}>
-                              {avatar ? (
-                                <Image
-                                  src={ligaLogo}
-                                  alt={first_name + ' ' + last_name}
-                                />
-                              ) : (
-                                <BsFillPersonFill />
-                              )}
-                            </div>
-                            <p>
-                              {first_name}
-                              <br />
-                              {last_name}
-                            </p>
+                {data.map(({ id, first_name, last_name, level, avatar }) => (
+                  <Link key={id} href={'/players/' + id}>
+                    <tr key={id}>
+                      <td>
+                        <div className={styles.playerRow}>
+                          <div className={styles.image}>
+                            {avatar ? (
+                              <Image
+                                width={40}
+                                height={40}
+                                src={avatar}
+                                alt={first_name + ' ' + last_name}
+                              />
+                            ) : (
+                              <BsFillPersonFill />
+                            )}
                           </div>
-                        </td>
-                        <td>{LEVEL_NUMBER_VALUES[level]}</td>
-                        <td>1489</td>
-                      </tr>
-                    </Link>
-                  )
-                )}
+                          <span>{last_name + ` ${first_name[0]}.`}</span>
+                        </div>
+                      </td>
+                      <td>{LEVEL_NUMBER_VALUES[level]}</td>
+                      <td>1489</td>
+                    </tr>
+                  </Link>
+                ))}
               </tbody>
             </table>
           </div>
@@ -150,8 +134,10 @@ export const getServerSideProps = async () => {
   const prisma = new PrismaClient();
 
   const players = await prisma.player.findMany({
-    take: 5,
-    // include: { tournament_players: true }
+    take: 15,
+    orderBy: {
+      id: 'desc',
+    },
   });
 
   return {

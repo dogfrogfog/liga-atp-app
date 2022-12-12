@@ -1,5 +1,15 @@
 @import '../../../styles/variables.scss';
 
+.container {
+  position: relative;
+}
+
+.isLoading {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .twoSides {
   display: flex;
   flex: 1;
