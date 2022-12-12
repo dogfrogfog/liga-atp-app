@@ -96,33 +96,31 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.map(
-                  ({ id, first_name, last_name, level, avatar }) => (
-                    <Link key={id} href={'/players/' + id}>
-                      <tr key={id}>
-                        <td>
-                          <div className={styles.playerRow}>
-                            <div className={styles.image}>
-                              {avatar ? (
-                                <Image
-                                  width={40}
-                                  height={40}
-                                  src={avatar}
-                                  alt={first_name + ' ' + last_name}
-                                />
-                              ) : (
-                                <BsFillPersonFill />
-                              )}
-                            </div>
-                            <span>{last_name + ` ${first_name[0]}.`}</span>
+                {data.map(({ id, first_name, last_name, level, avatar }) => (
+                  <Link key={id} href={'/players/' + id}>
+                    <tr key={id}>
+                      <td>
+                        <div className={styles.playerRow}>
+                          <div className={styles.image}>
+                            {avatar ? (
+                              <Image
+                                width={40}
+                                height={40}
+                                src={avatar}
+                                alt={first_name + ' ' + last_name}
+                              />
+                            ) : (
+                              <BsFillPersonFill />
+                            )}
                           </div>
-                        </td>
-                        <td>{LEVEL_NUMBER_VALUES[level]}</td>
-                        <td>1489</td>
-                      </tr>
-                    </Link>
-                  )
-                )}
+                          <span>{last_name + ` ${first_name[0]}.`}</span>
+                        </div>
+                      </td>
+                      <td>{LEVEL_NUMBER_VALUES[level]}</td>
+                      <td>1489</td>
+                    </tr>
+                  </Link>
+                ))}
               </tbody>
             </table>
           </div>

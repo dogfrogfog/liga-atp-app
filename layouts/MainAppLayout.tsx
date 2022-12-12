@@ -18,9 +18,7 @@ function MainAppLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <div className={styles.pageContainer}>
-        {children}
-      </div>
+      <div className={styles.pageContainer}>{children}</div>
       <div className={styles.bottomMenu}>
         <Link href="/players">
           <div

@@ -87,7 +87,7 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((prevV) => prevV.map(v => v.id === data?.id ? data : v));
+        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
       } else {
         console.warn(errorMessage);
       }
@@ -100,7 +100,7 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((prevV) => prevV.map(v => v.id === data?.id ? data : v));
+        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
       } else {
         console.warn(errorMessage);
       }

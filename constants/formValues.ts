@@ -49,7 +49,12 @@ const MatchSchema = z.object({
 });
 
 const PLAYER_FORM_VALUES = [
-  { name: 'avatar', required: true, type: 'text', placeholder: 'Ссылка на аватар' },
+  {
+    name: 'avatar',
+    required: true,
+    type: 'text',
+    placeholder: 'Ссылка на аватар',
+  },
   { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
   { name: 'last_name', required: true, type: 'text', placeholder: 'Фамилия' },
   {

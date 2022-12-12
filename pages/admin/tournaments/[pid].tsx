@@ -151,7 +151,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       setNewSelectedPlayers([]);
     }
 
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   const handleTournamentFieldChange = (key: string, value: any) => {
@@ -280,9 +280,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   return (
     <div className={styles.container}>
       <PageTitle>Управление турниром</PageTitle>
-      {isLoading && <div className={styles.isLoading}>
-        идет сохранение ...
-      </div>}
+      {isLoading && <div className={styles.isLoading}>идет сохранение ...</div>}
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
           {Object.entries(tournament).map(([key, value]) => {
