@@ -24,6 +24,8 @@ import { updateTournament } from 'services/tournaments';
 import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
+import { min } from 'date-fns/esm';
+import { AiOutlineConsoleSql } from 'react-icons/ai';
 
 // todo: https://github.com/dogfrogfog/liga-atp-app/issues/49
 const translation = {
@@ -88,6 +90,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     newMatch: MatchT;
     si?: number;
     mi?: number;
+    isGroupMatch?: boolean;
   }>();
 
   const [matches, setMatches] = useState(metchesOriginal);
@@ -155,7 +158,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   // create/update match and update tournaments.brackets values
   const onSubmit = async (match: MatchT) => {
-    // console.log(editingMatchData);
     if (
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined
@@ -176,17 +178,27 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         const { data } = createdMatch;
 
         setMatches((v) => {
-          // update existed array element
-          // to prevent 2 versions of the same element (old + new one)
-          return v.map((v1) => (v1.id === data?.id ? data : v1));
+          v.push(data as MatchT);
+
+          return v;
         });
 
         const newBrackets = (brackets as IBracketsUnit[][]).map((s, si) =>
-          s.map((m, mi) =>
-            si === editingMatchData.si && mi === editingMatchData.mi
-              ? { stageIndex: si, matchId: data?.id }
-              : m
-          )
+          s.map((m, mi) => {
+            const isTargetMatch =
+              si === editingMatchData.si && mi === editingMatchData.mi;
+            // to handle brackets with groups
+            if (editingMatchData.isGroupMatch && isTargetMatch) {
+              // @ts-ignore
+              return [...m, { matchId: data?.id }];
+            }
+
+            if (isTargetMatch) {
+              return { matchId: data?.id };
+            }
+
+            return m;
+          })
         );
 
         const updatedTournament = await updateTournament({
@@ -201,6 +213,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           const { match, ...v } = updatedTournament.data;
 
           setActiveTournament(v);
+          setModalStatus(DEFAULT_MODAL);
         }
       }
     } else {
@@ -228,7 +241,11 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     }
   };
 
-  const openModalForNewMatch = (si: number, mi: number) => {
+  const openModalForNewMatch = (
+    si: number,
+    mi: number,
+    isGroupMatch?: boolean
+  ) => {
     setModalStatus({ isOpen: true, type: 'create' });
     setEditingMatchData({
       newMatch: {
@@ -239,6 +256,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       } as any,
       si,
       mi,
+      isGroupMatch,
     });
   };
 

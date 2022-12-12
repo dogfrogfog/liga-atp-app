@@ -20,58 +20,13 @@
   }
 }
 
+// continer for singles and groups
 .matchContainer {
   position: relative;
   display: flex;
   margin-bottom: 35px;
   background-color: $custom-lightgray;
   padding: 10px;
-}
-
-.matchId {
-  position: absolute;
-  font-weight: bold;
-  bottom: 5px;
-  right: 5px;
-}
-
-.playersPair {
-  background-color: $custom-lightlightgray;
-  width: 228px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  font-size: 25px;
-
-  &:first-child {
-    margin-bottom: 5px;
-  }
-
-  &.winner {
-    background-color: rgba($custom-green, 0.5);
-  }
-
-  &.loser {
-    background-color: rgba($custom-red, 0.5);
-  }
-
-  .player {
-    padding: 5px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-
-.vs {
-  text-align: center;
-  font-size: 25px;
-  font-style: italic;
-}
-
-.score {
-  font-size: 20px;
-  align-self: center;
 }
 
 .drawUnitAction {
@@ -95,3 +50,73 @@
     width: 30px;
   }
 }
+
+.singleGroup {
+  display: block;
+}
+
+.singleGroup,
+.singleGroup .match {
+  margin-bottom: 40px;
+}
+
+.groupTitle {
+  background-color: $custom-darkgray;
+  color: $custom-white;
+  padding: 5px;
+  margin: -10px -10px 20px;
+  height: 30px;
+}
+
+// MATCH COMPONENT START
+
+.match {
+  background-color: $custom-lightlightgray;
+  position: relative;
+}
+
+.players {
+  width: 300px;
+  font-size: 18px;
+  padding: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0;
+
+  &.winner {
+    background-color: rgba($custom-green, 0.5);
+  }
+
+  &.loser {
+    background-color: rgba($custom-red, 0.5);
+  }
+}
+
+.vs {
+  text-align: center;
+  font-size: 18px;
+  font-style: italic;
+  margin: 5px 0;
+}
+
+.matchInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.score {
+  font-size: 20px;
+  align-self: center;
+}
+
+.matchId {
+  font-weight: bold;
+  position: absolute;
+  top: -12px;
+  font-size: 12px;
+}
+
+// MATCH COMPONENT END
