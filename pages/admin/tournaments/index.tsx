@@ -8,6 +8,7 @@ import Table, { useTable } from 'components/admin/Table';
 import Pagination from 'components/admin/Pagination';
 import DataForm from 'components/admin/DataForm';
 import PageTitle from 'ui-kit/PageTitle';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import { DEFAULT_MODAL } from 'constants/values';
 import {
   getTournaments,
@@ -23,6 +24,7 @@ const FORM_TITLES: { [k: string]: string } = {
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
+  const [isLoading, setLoadingStatus] = useState(false);
   const [data, setData] = useState<TournamentT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingTournament, setEditingTournament] = useState<
@@ -35,10 +37,12 @@ const Tournaments: NextPage = () => {
 
   useEffect(() => {
     const fetchWrapper = async () => {
+      setLoadingStatus(true);
       const res = await getTournaments(pagination);
 
       if (res.isOk) {
         setData(res.data as TournamentT[]);
+        setLoadingStatus(false);
       }
     };
 
@@ -127,7 +131,11 @@ const Tournaments: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length > 0 ? <Table {...tableProps} /> : null}
+      {data.length === 0 || isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Table {...tableProps} />
+      )}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <DataForm

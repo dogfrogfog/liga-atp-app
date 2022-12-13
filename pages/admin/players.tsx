@@ -7,6 +7,7 @@ import Table, { useTable } from 'components/admin/Table';
 import DataForm from 'components/admin/DataForm';
 import Pagination from 'components/admin/Pagination';
 import PageTitle from 'ui-kit/PageTitle';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import { DEFAULT_MODAL } from 'constants/values';
 import {
   getPlayers,
@@ -21,6 +22,7 @@ const FORM_TITLES: { [k: string]: string } = {
 };
 
 const Players: NextPage = () => {
+  const [isLoading, setLoadingStatus] = useState(false);
   const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<undefined | PlayerT>();
@@ -31,10 +33,12 @@ const Players: NextPage = () => {
 
   useEffect(() => {
     const fetchWrapper = async () => {
+      setLoadingStatus(true);
       const res = await getPlayers(pagination);
 
       if (res.isOk) {
         setData(res.data as PlayerT[]);
+        setLoadingStatus(false);
       }
     };
 
@@ -118,7 +122,11 @@ const Players: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length > 0 ? <Table {...tableProps} /> : null}
+      {data.length === 0 || isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Table {...tableProps} />
+      )}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <DataForm
