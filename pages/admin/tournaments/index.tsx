@@ -24,7 +24,7 @@ const FORM_TITLES: { [k: string]: string } = {
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
-  const [isLoading, setLoadingStatus] = useState(false)
+  const [isLoading, setLoadingStatus] = useState(false);
   const [data, setData] = useState<TournamentT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingTournament, setEditingTournament] = useState<
@@ -131,7 +131,11 @@ const Tournaments: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length === 0 || isLoading ? <LoadingSpinner /> : <Table {...tableProps} />}
+      {data.length === 0 || isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Table {...tableProps} />
+      )}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <DataForm
