@@ -27,7 +27,10 @@ const Players: NextPage = () => {
   const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
-  const { pagination, setPagination, ...tableProps } = useTable(data, PLAYER_COLUMNS);
+  const { pagination, setPagination, ...tableProps } = useTable(
+    data,
+    PLAYER_COLUMNS
+  );
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -112,10 +115,7 @@ const Players: NextPage = () => {
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <Modal handleClose={handleReset} title="Редактировать игроока">
-          <PlayerForm
-            player={editingPlayer}
-            onSubmit={onSubmit}
-          />
+          <PlayerForm player={editingPlayer} onSubmit={onSubmit} />
         </Modal>
       ) : null}
     </div>
@@ -146,8 +146,12 @@ const PlayerForm = ({
       // serve: null,
       // behaviour: null,
       ...player,
-      in_tennis_from: player?.in_tennis_from ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') : null,
-      date_of_birth: player?.date_of_birth ? format(new Date(player?.date_of_birth), 'yyyy-MM-dd') : null,
+      in_tennis_from: player?.in_tennis_from
+        ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
+        : null,
+      date_of_birth: player?.date_of_birth
+        ? format(new Date(player?.date_of_birth), 'yyyy-MM-dd')
+        : null,
     },
   });
 

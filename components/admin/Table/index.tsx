@@ -50,7 +50,7 @@ const TableHead = ({ table }: { table: ITableProps['table'] }) => (
   <thead>
     {table.getHeaderGroups().map((headerGroup, index) => (
       <tr key={headerGroup.id + index}>
-      <td />
+        <td />
         {headerGroup.headers.map((header) => (
           <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
             {flexRender(header.column.columnDef.header, header.getContext())}

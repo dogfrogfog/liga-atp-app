@@ -24,17 +24,16 @@ export interface ITableProps {
 
 const useTable = (
   data: player[] | tournament[] | match[],
-  columnsNames?: string[],
+  columnsNames?: string[]
 ): ITableProps => {
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
   const [selectedRow, setSelectedRow] = useState(-1);
 
-  const columns = ['id', ...columnsNames as any[]].map(
-    (name) =>
-      columnHelper.accessor(name, {
-        header: name,
-        cell: (props) => props.getValue(),
-      })
+  const columns = ['id', ...(columnsNames as any[])].map((name) =>
+    columnHelper.accessor(name, {
+      header: name,
+      cell: (props) => props.getValue(),
+    })
   );
 
   const table = useReactTable({

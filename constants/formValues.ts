@@ -65,7 +65,7 @@ export const PLAYER_COLUMNS = [
   'insta_link',
   'job_description',
   'in_tennis_from',
-  'is_coach'
+  'is_coach',
 ];
 
 const TOURNAMENT_FORM_VALUES: any[] = [
