@@ -7,6 +7,8 @@ import type {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import InputWithError from 'ui-kit/InputWithError';
+
 import Modal from 'ui-kit/Modal';
 import { FORM_RESOLVERS, FORM_VALUES } from 'constants/formValues';
 
@@ -20,20 +22,6 @@ interface IDataFormProps {
   editingRow?: PlayerT | TournamentT | MatchT | null;
   registeredPlayers?: PlayerT[];
 }
-
-interface IInputWithError {
-  errorMessage: string;
-  children: ReactNode;
-}
-
-const InputWithError = ({ errorMessage, children }: IInputWithError) => {
-  return (
-    <>
-      {children}
-      <p className={styles.errorMessage}>{errorMessage}</p>
-    </>
-  );
-};
 
 const getField = (props: any, register: any, errors: any) => {
   switch (props.type) {
@@ -68,7 +56,10 @@ const getField = (props: any, register: any, errors: any) => {
         <InputWithError errorMessage={errors[props.name]?.message}>
           <input
             type={props.type}
-            {...register(props.name, { required: props.required })}
+            {...register(props.name, {
+              required: props.required,
+              valueAsNumber: props.type === 'number',
+            })}
             autoComplete="off"
           />
         </InputWithError>
@@ -106,6 +97,8 @@ const DataForm = ({
     defaultValues: editingRow,
   });
 
+  console.log(editingRow);
+
   return (
     <Modal title={formTitle} handleClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -126,7 +119,10 @@ const DataForm = ({
                     // @ts-ignore
                     name={props.name}
                     {...register(props.name, {
-                      required: props.required,
+                      required: {
+                        value: props.required,
+                        message: 'wefwefwefwef',
+                      },
                       valueAsNumber: true,
                     })}
                   >

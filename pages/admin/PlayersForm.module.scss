@@ -1,0 +1,11 @@
+.formActions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  .submitButton {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid;
+  }
+}

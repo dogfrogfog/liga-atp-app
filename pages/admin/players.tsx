@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
+import { useForm, Controller } from 'react-hook-form';
+import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
 import Table, { useTable } from 'components/admin/Table';
-import DataForm from 'components/admin/DataForm';
 import Pagination from 'components/admin/Pagination';
 import PageTitle from 'ui-kit/PageTitle';
+import Modal from 'ui-kit/Modal';
+import InputWithError from 'ui-kit/InputWithError';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
-import { DEFAULT_MODAL } from 'constants/values';
+import { DEFAULT_MODAL, LEVEL_NUMBER_VALUES } from 'constants/values';
+import { PLAYER_COLUMNS } from 'constants/formValues';
 import {
   getPlayers,
   createPlayer,
@@ -16,20 +20,14 @@ import {
   deleteSelectedPlayer,
 } from 'services/players';
 
-const FORM_TITLES: { [k: string]: string } = {
-  add: 'Добавить игрока',
-  update: 'Изменить игрока',
-};
+import formStyles from './PlayersForm.module.scss';
 
 const Players: NextPage = () => {
   const [isLoading, setLoadingStatus] = useState(false);
   const [data, setData] = useState<PlayerT[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [editingPlayer, setEditingPlayer] = useState<undefined | PlayerT>();
-  const { pagination, setPagination, ...tableProps } = useTable(
-    'players',
-    data
-  );
+  const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
+  const { pagination, setPagination, ...tableProps } = useTable(data, PLAYER_COLUMNS);
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -56,10 +54,10 @@ const Players: NextPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const updatingPlayerData = data[tableProps.selectedRow];
+    const editingPlayerData = data[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
-    setEditingPlayer(updatingPlayerData);
+    setEditingPlayer(editingPlayerData);
   };
 
   const handleDeleteClick = async () => {
@@ -69,37 +67,21 @@ const Players: NextPage = () => {
     // deleteSelectedPlayer(id);
   };
 
-  // todo: add notifications
   const onSubmit = async (newPlayer: PlayerT) => {
-    const normalizedNewPlayer = {
-      ...editingPlayer,
-      ...newPlayer,
-      age: parseInt(newPlayer.age as any as string),
-      level: parseInt(newPlayer.level as any as string),
-      is_coach: newPlayer.is_coach || false,
-      in_tennis_from: new Date(newPlayer.in_tennis_from as any),
-      date_of_birth: new Date(newPlayer.date_of_birth as any),
-      avatar: newPlayer.avatar || null,
-    };
-
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createPlayer(
-        normalizedNewPlayer
-      );
+      const { isOk, data, errorMessage } = await createPlayer(newPlayer);
 
       if (isOk) {
         handleReset();
 
-        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
+        setData((prevV) => [data as PlayerT, ...prevV]);
       } else {
         console.warn(errorMessage);
       }
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updatePlayer(
-        normalizedNewPlayer
-      );
+      const { isOk, data, errorMessage } = await updatePlayer(newPlayer);
       if (isOk) {
         handleReset();
 
@@ -129,14 +111,215 @@ const Players: NextPage = () => {
       )}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
-        <DataForm
-          type="players"
-          formTitle={FORM_TITLES[modalStatus.type]}
-          onSubmit={onSubmit}
-          onClose={handleReset}
-          editingRow={editingPlayer}
-        />
+        <Modal handleClose={handleReset} title="Редактировать игроока">
+          <PlayerForm
+            player={editingPlayer}
+            onSubmit={onSubmit}
+          />
+        </Modal>
       ) : null}
+    </div>
+  );
+};
+
+const PlayerForm = ({
+  player,
+  onSubmit,
+}: {
+  player?: PlayerT;
+  onSubmit: (v: PlayerT) => Promise<void>;
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<any>({
+    defaultValues: {
+      level: null,
+      age: null,
+      is_coach: false,
+      // technique: null,
+      // tactics: null,
+      // power: null,
+      // shakes: null,
+      // serve: null,
+      // behaviour: null,
+      ...player,
+      in_tennis_from: player?.in_tennis_from ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') : null,
+      date_of_birth: player?.date_of_birth ? format(new Date(player?.date_of_birth), 'yyyy-MM-dd') : null,
+    },
+  });
+
+  return (
+    <div className={formStyles.formContainer}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputWithError errorMessage={errors.avatar?.message}>
+          <input
+            placeholder="Ссылка на авку"
+            type="text"
+            {...register('avatar', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.first_name?.message}>
+          <input
+            placeholder="Имя"
+            {...register('first_name', { required: true })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.last_name?.message}>
+          <input
+            placeholder="Фамилия"
+            {...register('last_name', { required: true })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.date_of_birth?.message}>
+          <input
+            placeholder="Дата рождения"
+            type="date"
+            {...register('date_of_birth', {
+              required: false,
+              valueAsDate: true,
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.city?.message}>
+          <input
+            placeholder="Город"
+            {...register('city', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.country?.message}>
+          <input
+            placeholder="Страна"
+            {...register('country', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.phone?.message}>
+          <input
+            placeholder="Номер телефона"
+            {...register('phone', {
+              pattern: {
+                value: /^375\d{9}$/,
+                message: 'correct format: 375291234567',
+              },
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.email?.message}>
+          <input
+            placeholder="E-mail"
+            {...register('email', {
+              pattern: {
+                value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                message: 'correct format: emailname@address.com',
+              },
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.age?.message}>
+          <input
+            placeholder="Возраст"
+            {...register('age', { required: false, valueAsNumber: true })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.level?.message}>
+          Уровень
+          <select
+            {...register('level', { required: true, valueAsNumber: true })}
+          >
+            {Object.entries(LEVEL_NUMBER_VALUES).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.gameplay_style?.message}>
+          <input
+            placeholder="Стиль игры"
+            {...register('gameplay_style', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.forehand?.message}>
+          <input
+            placeholder="Форхэнд"
+            {...register('forehand', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.beckhand?.message}>
+          <input
+            placeholder="Бэкхэнд"
+            {...register('beckhand', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.job_description?.message}>
+          <input
+            placeholder="Род деятельности"
+            {...register('job_description', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.in_tennis_from?.message}>
+          <input
+            placeholder="Когда начал играть"
+            type="date"
+            {...register('in_tennis_from', {
+              required: false,
+              valueAsDate: true,
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.insta_link?.message}>
+          <input
+            placeholder="Ссылка на инсту"
+            {...register('insta_link', {
+              pattern: {
+                value: /(?:(?:https):\/\/)?(?:www.)?(?:instagram.com)\//,
+                message:
+                  'correct format: https://www.instagram.com/it.familyy/',
+              },
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.in_tennis_from?.message}>
+          Является тренером:
+          <Controller
+            name="is_coach"
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <input
+                placeholder="Когда начал играть"
+                type="checkbox"
+                {...field}
+              />
+            )}
+          />
+        </InputWithError>
+        {/* need to add columns to the db */}
+        <h3>Характеристики</h3>
+        {/* <InputWithError errorMessage={errors.technique?.message}>
+          <input placeholder='Техника' {...register('technique', { required: false, valueAsNumber: true })} />
+        </InputWithError>
+        <InputWithError errorMessage={errors.tactics?.message}>
+          <input placeholder='Тактика' {...register('tactics', { required: false, valueAsNumber: true })} />
+        </InputWithError>
+        <InputWithError errorMessage={errors.power?.message}>
+          <input placeholder='Мощь' {...register('power', { required: false, valueAsNumber: true })} />
+        </InputWithError>
+        <InputWithError errorMessage={errors.shakes?.message}>
+          <input placeholder='Кач' {...register('shakes', { required: false, valueAsNumber: true })} />
+        </InputWithError>
+        <InputWithError errorMessage={errors.serve?.message}>
+          <input placeholder='Подача' {...register('serve', { required: false, valueAsNumber: true })} />
+        </InputWithError>
+        <InputWithError errorMessage={errors.behaviour?.message}>
+          <input placeholder='Поведение' {...register('behaviour', { required: false, valueAsNumber: true })} />
+        </InputWithError> */}
+        <div className={formStyles.formActions}>
+          <input className={formStyles.submitButton} type="submit" />
+        </div>
+      </form>
     </div>
   );
 };

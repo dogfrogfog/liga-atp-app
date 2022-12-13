@@ -16,7 +16,7 @@ const PlayerSchema = z.object({
   country: z.string().min(2),
   email: z.string().email(),
   phone: z.string().min(2),
-  age: z.string().min(2),
+  age: z.number().min(2),
   gameplay_style: z.string().min(2),
   forehand: z.string().min(2),
   beckhand: z.string().min(2),
@@ -48,70 +48,24 @@ const MatchSchema = z.object({
   start_date: z.union([z.string(), z.date()]).nullable(),
 });
 
-const PLAYER_FORM_VALUES = [
-  {
-    name: 'avatar',
-    required: true,
-    type: 'text',
-    placeholder: 'Ссылка на аватар',
-  },
-  { name: 'first_name', required: true, type: 'text', placeholder: 'Имя' },
-  { name: 'last_name', required: true, type: 'text', placeholder: 'Фамилия' },
-  {
-    name: 'date_of_birth',
-    required: true,
-    type: 'date',
-    placeholder: 'Дата рождения',
-  },
-  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
-  { name: 'country', required: true, type: 'text', placeholder: 'Страна' },
-  { name: 'email', required: true, type: 'email', placeholder: 'E-mail' },
-  {
-    name: 'phone',
-    required: true,
-    type: 'phone',
-    placeholder: 'Номер телефона',
-  },
-  {
-    name: 'level',
-    required: true,
-    type: 'select',
-    placeholder: 'Уровень',
-    options: LEVEL_NUMBER_VALUES,
-  },
-  { name: 'age', required: true, type: 'number', placeholder: 'Возраст' },
-  {
-    name: 'gameplay_style',
-    required: true,
-    type: 'text',
-    placeholder: 'Стиль игры',
-  },
-  { name: 'forehand', required: true, type: 'text', placeholder: 'Форхэнд' },
-  { name: 'beckhand', required: true, type: 'text', placeholder: 'Бэкэнд' },
-  {
-    name: 'insta_link',
-    required: true,
-    type: 'text',
-    placeholder: 'Ссылка на инст',
-  },
-  {
-    name: 'job_description',
-    required: true,
-    type: 'text',
-    placeholder: 'Род деятельности',
-  },
-  {
-    name: 'in_tennis_from',
-    required: true,
-    type: 'date',
-    placeholder: 'Начал играть',
-  },
-  {
-    name: 'is_coach',
-    required: false,
-    type: 'checkbox',
-    placeholder: 'Является тренером',
-  },
+export const PLAYER_COLUMNS = [
+  'avatar',
+  'first_name',
+  'last_name',
+  'date_of_birth',
+  'city',
+  'country',
+  'email',
+  'phone',
+  'level',
+  'age',
+  'gameplay_style',
+  'forehand',
+  'beckhand',
+  'insta_link',
+  'job_description',
+  'in_tennis_from',
+  'is_coach'
 ];
 
 const TOURNAMENT_FORM_VALUES: any[] = [
@@ -203,7 +157,6 @@ const MATCHES_FORM_VALUES: any[] = [
 ];
 
 export const FORM_VALUES = {
-  players: PLAYER_FORM_VALUES,
   tournaments: TOURNAMENT_FORM_VALUES,
   matches: MATCHES_FORM_VALUES,
 };
