@@ -23,10 +23,6 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
   const [data, setData] = useState(players);
   const [isOpen, setIsOpen] = useState(false);
 
-  if (data.length > 0) {
-    console.log(data);
-  }
-
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
