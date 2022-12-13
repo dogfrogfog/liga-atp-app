@@ -1,6 +1,6 @@
 type NumberValuesT = {
   [k: number]: string;
-}
+};
 
 export const LEVEL_NUMBER_VALUES: NumberValuesT = {
   4: 'leger',
@@ -23,9 +23,9 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
   6: 'Леджер',
   7: 'Тайбрейк',
   12: 'Парный Сателлит',
-  13: 'Парный Суперсателлит', 
+  13: 'Парный Суперсателлит',
   14: 'Парный Фьючерс',
-  15: 'Парный Леджер', 
+  15: 'Парный Леджер',
   18: 'Парный Челенджер',
   20: 'Парный Мастерс',
   22: 'Парный Про',
@@ -33,7 +33,7 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
   101: 'Парный ProAm',
 };
 
-// previously used indexes: 22, 5, 7, 6, 8, 9 
+// previously used indexes: 22, 5, 7, 6, 8, 9
 export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: NumberValuesT = {
   // olympic net
   10: 'D8',
