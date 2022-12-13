@@ -75,7 +75,6 @@ const Players: NextPage = () => {
       is_coach: newPlayer.is_coach || false,
       in_tennis_from: new Date(newPlayer.in_tennis_from as any),
       date_of_birth: new Date(newPlayer.date_of_birth as any),
-      // todo: handle image
       avatar: newPlayer.avatar || null,
     };
 

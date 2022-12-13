@@ -65,16 +65,16 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
     setActiveTabIndex(PROFILE_TABS[value]);
   };
 
-  // get last node from db
-  // @ts-ignore
-  // const { position, points } = rankingssinglescurrent[rankingssinglescurrent.length - 1]
+  // todo: fix level valiue passing to the form
+  // should be number but right now it's  NaN or null..
 
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
         is_coach={is_coach as boolean}
         name={first_name + ' ' + last_name}
-        level={LEVEL_NUMBER_VALUES[(level as number).toString()]}
+        // @ts-ignore
+        level={LEVEL_NUMBER_VALUES[(level as number)?.toString()]}
         // todo: add real elo rank
         points={'1490'}
       />

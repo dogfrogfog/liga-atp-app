@@ -72,7 +72,6 @@ const PLAYER_FORM_VALUES = [
     type: 'phone',
     placeholder: 'Номер телефона',
   },
-  // { name: 'avatar', required: true, type: 'file', placeholder: 'Ава' },
   {
     name: 'level',
     required: true,
