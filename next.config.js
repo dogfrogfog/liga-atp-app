@@ -7,8 +7,6 @@ module.exports = withPWA({
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: [
-      "upload.wikimedia.org",
-    ],
+    domains: ['upload.wikimedia.org'],
   },
 });

@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import { withPasswordProtect } from 'next-password-protect';
 import '../styles/globals.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -19,7 +20,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
-  // secondary pages with top circle back button <-
   if (
     router.pathname.startsWith('/players/') ||
     router.pathname.startsWith('/tournaments/')
@@ -53,4 +53,16 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 }
 
-export default MyApp;
+// todo: add only for /admin route
+// https://github.com/instantcommerce/next-password-protect
+// Step 3
+export default withPasswordProtect(MyApp, {
+  bypassProtection: ({ route }) => {
+    return !route.startsWith('/admin');
+  },
+  loginApiUrl: '/api/login',
+  loginComponentProps: {
+    backUrl: 'https://github.com/instantcommerce/next-password-protect',
+    logo: 'https://avatars.githubusercontent.com/u/93975473',
+  },
+});
