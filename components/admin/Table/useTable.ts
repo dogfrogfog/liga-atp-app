@@ -9,10 +9,9 @@ import {
 import type { player, tournament, match } from '@prisma/client';
 
 import { DEFAULT_PAGINATION } from 'constants/values';
-import { FORM_VALUES } from 'constants/formValues';
 import type { PaginationProps } from '../Pagination';
 
-const columnHelper = createColumnHelper();
+const columnHelper = createColumnHelper<player | tournament | match>();
 
 export interface ITableProps {
   table: Table<player[] | tournament[] | match[]>;
@@ -23,19 +22,18 @@ export interface ITableProps {
 }
 
 const useTable = (
-  type: 'tournaments' | 'players' | 'matches',
-  data: player[] | tournament[] | match[]
+  data: player[] | tournament[] | match[],
+  columnsNames?: string[]
 ): ITableProps => {
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
   const [selectedRow, setSelectedRow] = useState(-1);
 
-  const columns = [{ name: 'id' }, ...FORM_VALUES[type]].map(
-    ({ name, options }) =>
-      columnHelper.accessor(name, {
-        header: name,
-        cell: (props) =>
-          options ? options[props.getValue() as number] : props.getValue(),
-      })
+  const columns = ['id', ...(columnsNames as any[])].map((name) =>
+    columnHelper.accessor(name, {
+      id: name,
+      header: name,
+      cell: (props) => props.getValue()?.toString() || '',
+    })
   );
 
   const table = useReactTable({

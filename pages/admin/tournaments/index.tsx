@@ -2,14 +2,24 @@ import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
+import { useForm, Controller } from 'react-hook-form';
+import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
 import Table, { useTable } from 'components/admin/Table';
 import Pagination from 'components/admin/Pagination';
-import DataForm from 'components/admin/DataForm';
+import {
+  DEFAULT_MODAL,
+  TOURNAMENT_TYPE_NUMBER_VALUES,
+  SURFACE_TYPE_NUMBER_VALUES,
+  TOURNAMENT_STATUS_NUMBER_VALUES,
+  TOURNAMENT_COLUMNS,
+} from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
-import { DEFAULT_MODAL } from 'constants/values';
+import InputWithError from 'ui-kit/InputWithError';
+import Modal from 'ui-kit/Modal';
+
 import {
   getTournaments,
   createTournament,
@@ -17,10 +27,7 @@ import {
   deleteSelectedTournament,
 } from 'services/tournaments';
 
-const FORM_TITLES: { [k: string]: string } = {
-  add: 'Добавить турнир',
-  update: 'Изменить турнир',
-};
+import formStyles from '../Form.module.scss';
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
@@ -31,8 +38,8 @@ const Tournaments: NextPage = () => {
     undefined | TournamentT
   >();
   const { pagination, setPagination, ...tableProps } = useTable(
-    'tournaments',
-    data
+    data,
+    TOURNAMENT_COLUMNS
   );
 
   useEffect(() => {
@@ -98,7 +105,7 @@ const Tournaments: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((v) => [data as TournamentT].concat(v));
+        setData((prevV) => [data as TournamentT, ...prevV]);
       } else {
         console.warn(errorMessage);
       }
@@ -111,7 +118,7 @@ const Tournaments: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((v) => v.concat([data as TournamentT]));
+        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
       } else {
         console.warn(errorMessage);
       }
@@ -138,14 +145,129 @@ const Tournaments: NextPage = () => {
       )}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
-        <DataForm
-          type="tournaments"
-          formTitle={FORM_TITLES[modalStatus.type]}
-          onSubmit={onSubmit}
-          onClose={handleReset}
-          editingRow={editingTournament}
-        />
+        <Modal handleClose={handleReset} title="Редактировать турнир">
+          <TournamentForm tournament={editingTournament} onSubmit={onSubmit} />
+        </Modal>
       ) : null}
+    </div>
+  );
+};
+
+const TournamentForm = ({
+  tournament,
+  onSubmit,
+}: {
+  tournament?: TournamentT;
+  onSubmit: (v: TournamentT) => Promise<void>;
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<any>({
+    defaultValues: {
+      tournament_type: null,
+      surface: null,
+      status: 1,
+      is_doubles: false,
+      ...tournament,
+      start_date: tournament?.start_date
+        ? format(new Date(tournament?.start_date), 'yyyy-MM-dd')
+        : null,
+    },
+  });
+
+  return (
+    <div className={formStyles.formContainer}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputWithError errorMessage={errors.name?.message}>
+          <input
+            placeholder="Название турнира"
+            {...register('name', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.address?.message}>
+          <input
+            placeholder="Адрес"
+            {...register('address', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.city?.message}>
+          <input
+            placeholder="Город"
+            {...register('city', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.tournament_type?.message}>
+          <br />
+          Тип турнира:
+          <select
+            {...register('tournament_type', {
+              required: true,
+              valueAsNumber: true,
+            })}
+          >
+            {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
+              ([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              )
+            )}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.surface?.message}>
+          <br />
+          Поверхность:
+          <select
+            {...register('surface', { required: true, valueAsNumber: true })}
+          >
+            {Object.entries(SURFACE_TYPE_NUMBER_VALUES).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.status?.message}>
+          <br />
+          Статус:
+          <select
+            {...register('status', { required: true, valueAsNumber: true })}
+          >
+            {Object.entries(TOURNAMENT_STATUS_NUMBER_VALUES).map(
+              ([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              )
+            )}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.start_date?.message}>
+          <input
+            placeholder="Начало турнира"
+            type="date"
+            {...register('start_date', { required: false, valueAsDate: true })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.is_doubles?.message}>
+          <br />
+          Парный разряд:
+          <Controller
+            name="is_doubles"
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <input type="checkbox" {...field} checked={field.value} />
+            )}
+          />
+        </InputWithError>
+        <div className={formStyles.formActions}>
+          <input className={formStyles.submitButton} type="submit" />
+        </div>
+      </form>
     </div>
   );
 };

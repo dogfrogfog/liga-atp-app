@@ -12,8 +12,8 @@ const Table = ({
   selectedRow: ITableProps['selectedRow'];
   setSelectedRow: ITableProps['setSelectedRow'];
 }) => {
-  const handleCheckboxClick = (index: number) => {
-    setSelectedRow((v) => (v === index ? -1 : index));
+  const handleCheckboxClick = (i: number) => {
+    setSelectedRow((v) => (v === i ? -1 : i));
   };
 
   return (

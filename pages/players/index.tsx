@@ -99,12 +99,14 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                         <div className={styles.playerRow}>
                           <div className={styles.image}>
                             {avatar ? (
-                              <Image
-                                width={40}
-                                height={40}
-                                src={avatar}
-                                alt={first_name + ' ' + last_name}
-                              />
+                              // todo: fix image
+                              // <Image
+                              //   width={40}
+                              //   height={40}
+                              //   src={avatar}
+                              //   alt={first_name + ' ' + last_name}
+                              // />
+                              'image'
                             ) : (
                               <BsFillPersonFill />
                             )}
