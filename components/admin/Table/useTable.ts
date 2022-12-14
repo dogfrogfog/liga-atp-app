@@ -12,7 +12,7 @@ import { DEFAULT_PAGINATION } from 'constants/values';
 import { FORM_VALUES } from 'constants/formValues';
 import type { PaginationProps } from '../Pagination';
 
-const columnHelper = createColumnHelper();
+const columnHelper = createColumnHelper<player | tournament | match>();
 
 export interface ITableProps {
   table: Table<player[] | tournament[] | match[]>;
@@ -31,8 +31,9 @@ const useTable = (
 
   const columns = ['id', ...(columnsNames as any[])].map((name) =>
     columnHelper.accessor(name, {
+      id: name,
       header: name,
-      cell: (props) => props.getValue(),
+      cell: (props) => props.getValue()?.toString() || '',
     })
   );
 

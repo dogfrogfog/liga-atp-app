@@ -285,18 +285,15 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.in_tennis_from?.message}>
+        <InputWithError errorMessage={errors.is_coach?.message}>
+          <br />
           Является тренером:
           <Controller
             name="is_coach"
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <input
-                placeholder="Когда начал играть"
-                type="checkbox"
-                {...field}
-              />
+              <input type="checkbox" {...field} checked={field.value} />
             )}
           />
         </InputWithError>
