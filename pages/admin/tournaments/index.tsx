@@ -13,8 +13,8 @@ import {
   TOURNAMENT_TYPE_NUMBER_VALUES,
   SURFACE_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
+  TOURNAMENT_COLUMNS,
 } from 'constants/values';
-import { TOURNAMENT_COLUMNS } from 'constants/formValues';
 import PageTitle from 'ui-kit/PageTitle';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import InputWithError from 'ui-kit/InputWithError';

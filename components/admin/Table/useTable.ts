@@ -9,7 +9,6 @@ import {
 import type { player, tournament, match } from '@prisma/client';
 
 import { DEFAULT_PAGINATION } from 'constants/values';
-import { FORM_VALUES } from 'constants/formValues';
 import type { PaginationProps } from '../Pagination';
 
 const columnHelper = createColumnHelper<player | tournament | match>();

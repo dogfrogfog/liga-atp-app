@@ -11,8 +11,11 @@ import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
 import InputWithError from 'ui-kit/InputWithError';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
-import { DEFAULT_MODAL, LEVEL_NUMBER_VALUES } from 'constants/values';
-import { PLAYER_COLUMNS } from 'constants/formValues';
+import {
+  DEFAULT_MODAL,
+  LEVEL_NUMBER_VALUES,
+  PLAYER_COLUMNS,
+} from 'constants/values';
 import {
   getPlayers,
   createPlayer,

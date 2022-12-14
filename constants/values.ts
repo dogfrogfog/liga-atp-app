@@ -66,3 +66,37 @@ export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
 
 export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
+
+export const PLAYER_COLUMNS = [
+  'avatar',
+  'first_name',
+  'last_name',
+  'date_of_birth',
+  'city',
+  'country',
+  'email',
+  'phone',
+  'level',
+  'age',
+  'gameplay_style',
+  'forehand',
+  'beckhand',
+  'insta_link',
+  'job_description',
+  'in_tennis_from',
+  'is_coach',
+];
+
+export const TOURNAMENT_COLUMNS = [
+  'name',
+  'address',
+  'tournament_type',
+  'draw',
+  'start_date',
+  'surface',
+  'status',
+  'city',
+  'is_doubles',
+  'draw_type',
+  'players_order',
+];

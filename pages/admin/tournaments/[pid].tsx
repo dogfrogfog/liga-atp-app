@@ -8,8 +8,9 @@ import {
   match as MatchT,
 } from '@prisma/client';
 import { MultiSelect, Option } from 'react-multi-select-component';
+import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
 
-import DataForm from 'components/admin/DataForm';
 import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
   TOURNAMENT_TYPE_NUMBER_VALUES,
@@ -20,10 +21,13 @@ import {
 } from 'constants/values';
 import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
+import Modal from 'ui-kit/Modal';
+import InputWithError from 'ui-kit/InputWithError';
 import { updateTournament } from 'services/tournaments';
 import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
 import styles from './AdminSingleTournamentPape.module.scss';
+import formStyles from '../Form.module.scss';
 
 // todo: https://github.com/dogfrogfog/liga-atp-app/issues/49
 const translation = {
@@ -86,7 +90,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   // when match is not exists and we creating new match and updating tournament draw property ..
   // .. so we same stage index(si) and match index(mi)
   const [editingMatchData, setEditingMatchData] = useState<{
-    newMatch: MatchT;
+    newMatch?: MatchT;
     si?: number;
     mi?: number;
     isGroupMatch?: boolean;
@@ -94,7 +98,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
   const [matches, setMatches] = useState(metchesOriginal);
   const [activeTournament, setActiveTournament] = useState(tournament);
-  const [newSelectedPlayers, setNewSelectedPlayers] = useState([] as Option[]);
+  const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
 
   const handleReset = () => {
@@ -131,7 +135,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       }),
       draw: activeTournament.draw_type
         ? JSON.stringify({
-            // @ts-ignore
             brackets:
               brackets || getInitialBrackets(activeTournament.draw_type),
           })
@@ -147,7 +150,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       // @ts-ignore
       const { match, ...v } = newTournament.data;
 
-      setActiveTournament(v as any);
+      setActiveTournament(v);
       setNewSelectedPlayers([]);
     }
 
@@ -158,24 +161,24 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     setActiveTournament((v) => ({ ...v, [key]: value }));
   };
 
-  // create/update match and update tournaments.brackets values
   const onSubmit = async (match: MatchT) => {
     setIsLoading(true);
     if (
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined
     ) {
+      const { player1_id, player2_id, player3_id, player4_id, winner_id } =
+        match;
       const createdMatch = await createMatch({
-        ...match,
         tournament_id: activeTournament.id,
-        player1_id: match.player1_id || null,
-        player2_id: match.player2_id || null,
-        player3_id: match.player3_id || null,
-        player4_id: match.player4_id || null,
-        winner_id: match.winner_id + '' || null,
+        player1_id,
+        player2_id,
+        player3_id,
+        player4_id,
+        winner_id,
         is_completed: false,
         start_date: new Date(),
-      });
+      } as MatchT);
 
       if (createdMatch.isOk) {
         const { data } = createdMatch;
@@ -220,24 +223,15 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         }
       }
     } else {
-      // @ts-ignore
-      const { newMatch } = editingMatchData;
-
-      const updatedMatch = await updateMatch({
-        ...newMatch,
-        ...match,
-        // should be string because we have to parse old values (bigint converted to string)
-        winner_id: match.winner_id + '',
-        start_date: newMatch.start_date ? new Date(newMatch.start_date) : null,
-      });
+      const updatedMatch = await updateMatch(match);
 
       if (updatedMatch.isOk) {
         const { data } = updatedMatch;
 
-        setMatches((v) => {
+        setMatches((prevV) => {
           // update existed array element
           // to prevent 2 versions of the same element (old + new one)
-          return v.map((v1) => (v1.id === data?.id ? data : v1));
+          return prevV.map((v) => (v.id === data?.id ? data : v));
         });
         setModalStatus(DEFAULT_MODAL);
       }
@@ -253,12 +247,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   ) => {
     setModalStatus({ isOpen: true, type: 'create' });
     setEditingMatchData({
-      newMatch: {
-        player1_id: '',
-        player2_id: '',
-        player3_id: '',
-        player4_id: '',
-      } as any,
       si,
       mi,
       isGroupMatch,
@@ -552,8 +540,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           matches={matches}
           brackets={brackets || [[]]}
           registeredPlayers={registeredPlayers}
-          // createMatchAndUpdateBracket={createMatchAndUpdateBracket}
-          // updateMatchAndBracket={updateMatchAndBracket}
           openModalForNewMatch={openModalForNewMatch}
           openModalForExistingMatch={openModalForExistingMatch}
         />
@@ -561,15 +547,155 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         'Выбирите тип сетки турнира чтобы создать турнир'
       )}
       {modalStatus.isOpen && (
-        <DataForm
-          type="matches"
-          formTitle="Обновить матч"
-          onSubmit={onSubmit}
-          onClose={handleReset}
-          editingRow={editingMatchData?.newMatch}
-          registeredPlayers={registeredPlayers}
-        />
+        <Modal title="Редактировать матч" handleClose={handleReset}>
+          <MatchForm
+            isDoubles={!!activeTournament.is_doubles}
+            match={editingMatchData?.newMatch as MatchT}
+            onSubmit={onSubmit}
+            registeredPlayers={registeredPlayers}
+          />
+        </Modal>
       )}
+    </div>
+  );
+};
+
+const MatchForm = ({
+  isDoubles,
+  match,
+  onSubmit,
+  registeredPlayers,
+}: {
+  registeredPlayers: PlayerT[];
+  match?: MatchT;
+  onSubmit: (v: MatchT) => Promise<void>;
+  isDoubles: boolean;
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<any>({
+    defaultValues: {
+      player1_id: null,
+      player2_id: null,
+      player3_id: null,
+      player4_id: null,
+      ...match,
+      start_date: match?.start_date
+        ? format(new Date(match?.start_date), 'yyyy-MM-dd')
+        : null,
+    },
+  });
+
+  return (
+    <div className={formStyles.formContainer}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputWithError errorMessage={errors.player1_id?.message}>
+          <br />
+          Игрок 1:
+          <select
+            {...register('player1_id', {
+              required: true,
+              valueAsNumber: true,
+            })}
+          >
+            {registeredPlayers.map((p) => (
+              <option key={p.id} value={p.id}>
+                {`${p.last_name} ${(p.first_name as string)[0]}`}
+              </option>
+            ))}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.player2_id?.message}>
+          <br />
+          Игрок 2:
+          <select
+            {...register('player2_id', {
+              required: false,
+              valueAsNumber: true,
+            })}
+          >
+            {registeredPlayers.map((p) => (
+              <option key={p.id} value={p.id}>
+                {`${p.last_name} ${(p.first_name as string)[0]}`}
+              </option>
+            ))}
+          </select>
+        </InputWithError>
+        {isDoubles && (
+          <>
+            <InputWithError errorMessage={errors.player3_id?.message}>
+              <br />
+              Пара игрока 1 - игрок 3:
+              <select
+                {...register('player3_id', {
+                  required: true,
+                  valueAsNumber: true,
+                })}
+              >
+                {registeredPlayers.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {`${p.last_name} ${(p.first_name as string)[0]}`}
+                  </option>
+                ))}
+              </select>
+            </InputWithError>
+            <InputWithError errorMessage={errors.player4_id?.message}>
+              <br />
+              Пара игрока 2 - игрок 4:
+              <select
+                {...register('player4_id', {
+                  required: true,
+                  valueAsNumber: true,
+                })}
+              >
+                {registeredPlayers.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {`${p.last_name} ${(p.first_name as string)[0]}`}
+                  </option>
+                ))}
+              </select>
+            </InputWithError>
+          </>
+        )}
+        <InputWithError errorMessage={errors.winner_id?.message}>
+          <br />
+          Победитель - игрок 1 или игрок 2:
+          <select
+            {...register('winner_id', {
+              required: true,
+            })}
+          >
+            {registeredPlayers.map((p) => (
+              <option key={p.id} value={p.id}>
+                {`${p.last_name} ${(p.first_name as string)[0]}`}
+              </option>
+            ))}
+          </select>
+        </InputWithError>
+        <InputWithError errorMessage={errors.start_date?.message}>
+          <input
+            placeholder="Начало матча"
+            type="date"
+            {...register('start_date', { required: false, valueAsDate: true })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.score?.message}>
+          <input
+            placeholder="Счет"
+            {...register('score', {
+              pattern: {
+                value: /^(\d{1,2}-\d{1,2} ){1,5}/,
+                message: 'correct format: 6-2 2-6 10-2',
+              },
+            })}
+          />
+        </InputWithError>
+        <div className={formStyles.formActions}>
+          <input className={formStyles.submitButton} type="submit" />
+        </div>
+      </form>
     </div>
   );
 };
