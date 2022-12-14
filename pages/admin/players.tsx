@@ -20,7 +20,7 @@ import {
   deleteSelectedPlayer,
 } from 'services/players';
 
-import formStyles from './PlayersForm.module.scss';
+import formStyles from './Form.module.scss';
 
 const Players: NextPage = () => {
   const [isLoading, setLoadingStatus] = useState(false);
@@ -161,7 +161,6 @@ const PlayerForm = ({
         <InputWithError errorMessage={errors.avatar?.message}>
           <input
             placeholder="Ссылка на авку"
-            type="text"
             {...register('avatar', { required: false })}
           />
         </InputWithError>

@@ -7,35 +7,6 @@ import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
 } from './values';
 
-const PlayerSchema = z.object({
-  avatar: z.string().min(2),
-  first_name: z.string().min(2),
-  last_name: z.string().min(2),
-  date_of_birth: z.string().min(2),
-  city: z.string().min(2),
-  country: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().min(2),
-  age: z.number().min(2),
-  gameplay_style: z.string().min(2),
-  forehand: z.string().min(2),
-  beckhand: z.string().min(2),
-  insta_link: z.string().min(2),
-  is_coach: z.boolean(),
-  in_tennis_from: z.string().min(2),
-  job_description: z.string().min(2),
-});
-
-const TournamentSchema = z.object({
-  name: z.string().min(2),
-  is_doubles: z.boolean(),
-  tournament_type: z.string(),
-  start_date: z.string().min(2),
-  surface: z.string(),
-  status: z.string(),
-  city: z.string().min(2),
-});
-
 // make this validation correct work with form
 // need refactor this part so as add some clean(prod version) code here
 const MatchSchema = z.object({
@@ -68,52 +39,18 @@ export const PLAYER_COLUMNS = [
   'is_coach',
 ];
 
-const TOURNAMENT_FORM_VALUES: any[] = [
-  {
-    name: 'name',
-    required: true,
-    type: 'text',
-    placeholder: 'Название турнира',
-  },
-  { name: 'city', required: true, type: 'text', placeholder: 'Город' },
-  {
-    name: 'tournament_type',
-    required: true,
-    type: 'select',
-    placeholder: 'Тип турнира',
-    options: TOURNAMENT_TYPE_NUMBER_VALUES,
-  },
-
-  // players //
-
-  {
-    name: 'start_date',
-    required: true,
-    type: 'date',
-    placeholder: 'Дата начала турнира',
-  },
-  {
-    name: 'surface',
-    required: true,
-    type: 'select',
-    placeholder: 'Тип покрытия',
-    options: SURFACE_TYPE_NUMBER_VALUES,
-  },
-  {
-    name: 'status',
-    required: true,
-    type: 'select',
-    placeholder: 'Статус',
-    options: TOURNAMENT_STATUS_NUMBER_VALUES,
-  },
-  {
-    name: 'is_doubles',
-    required: false,
-    type: 'checkbox',
-    placeholder: 'Парный турнир',
-  },
-
-  // draw_type on the seconds page
+export const TOURNAMENT_COLUMNS = [
+  'name',
+  'address',
+  'tournament_type',
+  'draw',
+  'start_date',
+  'surface',
+  'status',
+  'city',
+  'is_doubles',
+  'draw_type',
+  'players_order',
 ];
 
 const MATCHES_FORM_VALUES: any[] = [
@@ -157,13 +94,10 @@ const MATCHES_FORM_VALUES: any[] = [
 ];
 
 export const FORM_VALUES = {
-  tournaments: TOURNAMENT_FORM_VALUES,
   matches: MATCHES_FORM_VALUES,
 };
 
 // todo: put resolvers in separate file
 export const FORM_RESOLVERS: any = {
-  players: PlayerSchema,
-  tournaments: TournamentSchema,
   matches: MatchSchema,
 };
