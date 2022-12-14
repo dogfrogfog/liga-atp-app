@@ -68,9 +68,20 @@ const Players: NextPage = () => {
 
   const handleDeleteClick = async () => {
     const { id } = data[tableProps.selectedRow];
+    const res = await deleteSelectedPlayer(id);
 
-    // todo: add delete operation
-    // deleteSelectedPlayer(id);
+    if (res.isOk) {
+      setData((prevData) => {
+        return prevData.reduce((acc, p) => {
+          if (p.id !== id) {
+            acc.push(p);
+          }
+
+          return acc;
+        }, [] as PlayerT[]);
+      });
+      handleReset();
+    }
   };
 
   const onSubmit = async (newPlayer: PlayerT) => {

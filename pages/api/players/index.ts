@@ -30,7 +30,7 @@ export default async (
   if (req.method === 'DELETE') {
     const deletedPlayer = await prisma.player.delete({
       where: {
-        id: req.body.data,
+        id: parseInt(req.body, 10),
       },
     });
 
