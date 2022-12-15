@@ -313,22 +313,40 @@ const PlayerForm = ({
         {/* need to add columns to the db */}
         <h3>Характеристики</h3>
         <InputWithError errorMessage={errors.technique?.message}>
-          <input placeholder='Техника' {...register('technique', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Техника"
+            {...register('technique', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
-          <input placeholder='Тактика' {...register('tactics', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Тактика"
+            {...register('tactics', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.power?.message}>
-          <input placeholder='Мощь' {...register('power', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Мощь"
+            {...register('power', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.shakes?.message}>
-          <input placeholder='Кач' {...register('shakes', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Кач"
+            {...register('shakes', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.serve?.message}>
-          <input placeholder='Подача' {...register('serve', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Подача"
+            {...register('serve', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
-          <input placeholder='Поведение' {...register('behaviour', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Поведение"
+            {...register('behaviour', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <div className={formStyles.formActions}>
           <input className={formStyles.submitButton} type="submit" />

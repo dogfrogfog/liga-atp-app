@@ -167,8 +167,14 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined
     ) {
-      const { player1_id, player2_id, player3_id, player4_id, winner_id, score } =
-        match;
+      const {
+        player1_id,
+        player2_id,
+        player3_id,
+        player4_id,
+        winner_id,
+        score,
+      } = match;
       const createdMatch = await createMatch({
         tournament_id: activeTournament.id,
         player1_id,
