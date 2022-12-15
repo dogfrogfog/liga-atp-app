@@ -404,9 +404,21 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                   >
                     <span>Дата начала-использовать пикер</span>
                     <input
-                      value={activeTournament?.start_date ? format(new Date(activeTournament.start_date), 'yyyy-MM-dd') : ''}
+                      value={
+                        activeTournament?.start_date
+                          ? format(
+                              new Date(activeTournament.start_date),
+                              'yyyy-MM-dd'
+                            )
+                          : ''
+                      }
                       type="date"
-                      onChange={(e) => handleTournamentFieldChange('start_date', new Date(e.target.value))}
+                      onChange={(e) =>
+                        handleTournamentFieldChange(
+                          'start_date',
+                          new Date(e.target.value)
+                        )
+                      }
                     />
                   </div>
                 );
