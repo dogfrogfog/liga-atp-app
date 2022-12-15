@@ -77,7 +77,6 @@ export const PLAYER_COLUMNS = [
   'email',
   'phone',
   'level',
-  'age',
   'gameplay_style',
   'forehand',
   'beckhand',
@@ -85,6 +84,12 @@ export const PLAYER_COLUMNS = [
   'job_description',
   'in_tennis_from',
   'is_coach',
+  'technique',
+  'tactics',
+  'power',
+  'shakes',
+  'serve',
+  'behaviour',
 ];
 
 export const TOURNAMENT_COLUMNS = [

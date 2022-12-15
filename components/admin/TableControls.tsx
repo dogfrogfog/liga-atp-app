@@ -42,7 +42,7 @@ const TableControls: FC<ITableControlsProps> = ({
         Обновить
       </button>
       <button
-        disabled={selectedRow === -1}
+        disabled={true}
         className={styles.delete}
         onClick={handleDeleteClick}
       >

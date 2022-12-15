@@ -153,12 +153,12 @@ const PlayerForm = ({
       level: null,
       age: null,
       is_coach: false,
-      // technique: null,
-      // tactics: null,
-      // power: null,
-      // shakes: null,
-      // serve: null,
-      // behaviour: null,
+      technique: null,
+      tactics: null,
+      power: null,
+      shakes: null,
+      serve: null,
+      behaviour: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
@@ -312,7 +312,7 @@ const PlayerForm = ({
         </InputWithError>
         {/* need to add columns to the db */}
         <h3>Характеристики</h3>
-        {/* <InputWithError errorMessage={errors.technique?.message}>
+        <InputWithError errorMessage={errors.technique?.message}>
           <input placeholder='Техника' {...register('technique', { required: false, valueAsNumber: true })} />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
@@ -329,7 +329,7 @@ const PlayerForm = ({
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
           <input placeholder='Поведение' {...register('behaviour', { required: false, valueAsNumber: true })} />
-        </InputWithError> */}
+        </InputWithError>
         <div className={formStyles.formActions}>
           <input className={formStyles.submitButton} type="submit" />
         </div>
