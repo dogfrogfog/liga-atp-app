@@ -167,8 +167,14 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined
     ) {
-      const { player1_id, player2_id, player3_id, player4_id, winner_id } =
-        match;
+      const {
+        player1_id,
+        player2_id,
+        player3_id,
+        player4_id,
+        winner_id,
+        score,
+      } = match;
       const createdMatch = await createMatch({
         tournament_id: activeTournament.id,
         player1_id,
@@ -178,6 +184,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         winner_id,
         is_completed: false,
         start_date: new Date(),
+        score,
       } as MatchT);
 
       if (createdMatch.isOk) {
@@ -395,21 +402,22 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                     key={key}
                     className={cl(styles.field, styles.inputField)}
                   >
-                    <span>Дата начала</span>
-                    {/* FIXME: types and date format */}
-                    {/* @ts-ignore  */}
+                    <span>Дата начала-использовать пикер</span>
                     <input
-                      // todo: fix date input/output
-                      disabled
-                      // values should be taken from activeTournament
-                      // value={activeTournament.start_date ? format(activeTournament.start_date, 'yyyy-MM-dd') : ''}
-                      // valueAsDate={activeTournament.start_date as any§§}
+                      value={
+                        activeTournament?.start_date
+                          ? format(
+                              new Date(activeTournament.start_date),
+                              'yyyy-MM-dd'
+                            )
+                          : ''
+                      }
                       type="date"
                       onChange={(e) =>
-                        setActiveTournament((v) => ({
-                          ...v,
-                          [key]: new Date(e.target.value),
-                        }))
+                        handleTournamentFieldChange(
+                          'start_date',
+                          new Date(e.target.value)
+                        )
                       }
                     />
                   </div>

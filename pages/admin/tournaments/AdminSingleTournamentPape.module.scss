@@ -94,8 +94,7 @@
         height: 30px;
         font-size: 16px;
         border: none;
-        background: $custom-darkgray;
-        color: $custom-white;
+        background-color: $custom-olive;
         cursor: pointer;
         outline: none;
         padding: 0 5px;
@@ -122,8 +121,7 @@
     &.inputField input {
       width: 50%;
       outline: none;
-      background-color: $custom-darkgray;
-      color: $custom-white;
+      background-color: $custom-olive;
       height: 30px;
       font-size: 16px;
       border: none;

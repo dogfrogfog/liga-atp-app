@@ -68,9 +68,20 @@ const Players: NextPage = () => {
 
   const handleDeleteClick = async () => {
     const { id } = data[tableProps.selectedRow];
+    const res = await deleteSelectedPlayer(id);
 
-    // todo: add delete operation
-    // deleteSelectedPlayer(id);
+    if (res.isOk) {
+      setData((prevData) => {
+        return prevData.reduce((acc, p) => {
+          if (p.id !== id) {
+            acc.push(p);
+          }
+
+          return acc;
+        }, [] as PlayerT[]);
+      });
+      handleReset();
+    }
   };
 
   const onSubmit = async (newPlayer: PlayerT) => {
@@ -142,12 +153,12 @@ const PlayerForm = ({
       level: null,
       age: null,
       is_coach: false,
-      // technique: null,
-      // tactics: null,
-      // power: null,
-      // shakes: null,
-      // serve: null,
-      // behaviour: null,
+      technique: null,
+      tactics: null,
+      power: null,
+      shakes: null,
+      serve: null,
+      behaviour: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
@@ -301,24 +312,42 @@ const PlayerForm = ({
         </InputWithError>
         {/* need to add columns to the db */}
         <h3>Характеристики</h3>
-        {/* <InputWithError errorMessage={errors.technique?.message}>
-          <input placeholder='Техника' {...register('technique', { required: false, valueAsNumber: true })} />
+        <InputWithError errorMessage={errors.technique?.message}>
+          <input
+            placeholder="Техника"
+            {...register('technique', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
-          <input placeholder='Тактика' {...register('tactics', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Тактика"
+            {...register('tactics', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.power?.message}>
-          <input placeholder='Мощь' {...register('power', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Мощь"
+            {...register('power', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.shakes?.message}>
-          <input placeholder='Кач' {...register('shakes', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Кач"
+            {...register('shakes', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.serve?.message}>
-          <input placeholder='Подача' {...register('serve', { required: false, valueAsNumber: true })} />
+          <input
+            placeholder="Подача"
+            {...register('serve', { required: false, valueAsNumber: true })}
+          />
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
-          <input placeholder='Поведение' {...register('behaviour', { required: false, valueAsNumber: true })} />
-        </InputWithError> */}
+          <input
+            placeholder="Поведение"
+            {...register('behaviour', { required: false, valueAsNumber: true })}
+          />
+        </InputWithError>
         <div className={formStyles.formActions}>
           <input className={formStyles.submitButton} type="submit" />
         </div>
