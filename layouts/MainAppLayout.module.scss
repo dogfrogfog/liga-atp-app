@@ -6,7 +6,9 @@
 }
 
 .bottomMenu {
-  background-color: black;
+  border-top: 1.5px solid $custom-white;
+  padding-top: 10px;
+  background-color: $custom-black;
   height: 50px;
   margin-bottom: 34px;
   width: 100%;
