@@ -191,8 +191,9 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError errorMessage={errors.date_of_birth?.message}>
+          <br />
+          Дата рождения:
           <input
-            placeholder="Дата рождения"
             type="date"
             {...register('date_of_birth', {
               required: false,
@@ -234,12 +235,6 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.age?.message}>
-          <input
-            placeholder="Возраст"
-            {...register('age', { required: false, valueAsNumber: true })}
-          />
-        </InputWithError>
         <InputWithError errorMessage={errors.level?.message}>
           Уровень
           <select
@@ -277,8 +272,9 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError errorMessage={errors.in_tennis_from?.message}>
+          <br />
+          Когда начал играть:
           <input
-            placeholder="Когда начал играть"
             type="date"
             {...register('in_tennis_from', {
               required: false,
