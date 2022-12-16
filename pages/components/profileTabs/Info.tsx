@@ -1,37 +1,41 @@
+import Link from 'next/link';
 import { BsInstagram } from 'react-icons/bs';
 
 import styles from './Info.module.scss';
 
+type InfoTabProps = {
+  country: string;
+  city: string;
+  age: number;
+  height: number | string;
+  yearsInTennis: number | null;
+  jobDescription: string;
+  gameplayStyle: string;
+  forehand: string;
+  beckhand: string;
+  instaLink: string;
+}
+
 const InfoTab = ({
-  // id,
-  // first_name,
-  // last_name,
-  // date_of_birth,
-  // country,
-  // email,
-  // phone,
-  // avatar,
-  age,
+  country,
   city,
+  age,
   height,
-  job_description,
-  years_in_tennis,
-  gameplay_style,
+  jobDescription,
+  yearsInTennis,
+  gameplayStyle,
   forehand,
   beckhand,
-  insta_link,
-}: // is_coach,
-// medals,
-// level
-any) => (
+  instaLink,
+}: InfoTabProps) => (
   <>
     <div className={styles.infoRow}>
       <span>Город</span>
-      <span>{city}</span>
+      <span>{country}, {city}</span>
     </div>
     <div className={styles.infoRow}>
       <span>Возраст</span>
-      <span>{age} года</span>
+      <span>{age}</span>
     </div>
     <div className={styles.infoRow}>
       <span>Рост</span>
@@ -39,15 +43,15 @@ any) => (
     </div>
     <div className={styles.infoRow}>
       <span>Сфера деятельности</span>
-      <span>{job_description}</span>
+      <span>{jobDescription}</span>
     </div>
-    <div className={styles.infoRow}>
+    {yearsInTennis && <div className={styles.infoRow}>
       <span>Лет в теннисе</span>
-      <span>{years_in_tennis} года</span>
-    </div>
+      <span>{yearsInTennis}</span>
+    </div>}
     <div className={styles.infoRow}>
       <span>Стиль игры</span>
-      <span>{gameplay_style}</span>
+      <span>{gameplayStyle}</span>
     </div>
     <div className={styles.infoRow}>
       <span>Форхэнд</span>
@@ -60,33 +64,16 @@ any) => (
     <div className={styles.infoRow}>
       <span>Инстаграм</span>
       <span>
-        <BsInstagram />{' '}
-        {insta_link && insta_link.split('https://www.instagram.com/')[1]}
+        {instaLink && (
+          <Link href={instaLink}>
+            <span>
+              <BsInstagram />{' '}
+              {instaLink.split('https://www.instagram.com/')[1]}
+            </span>
+          </Link>
+        )}
       </span>
     </div>
-    {/* be able to chose from one of the players  */}
-    {/* <div className={styles.coaching}>
-      <span className={styles.title}>
-        Тренер
-      </span>
-      <div className={styles.infoRow}>
-        <span>Город</span>
-        <span>1444</span>
-      </div>
-    </div>
-    <div className={styles.coaching}>
-      <span className={styles.title}>
-        Тренер
-      </span>
-      <div className={styles.infoRow}>
-        <span>Город</span>
-        <span>1444</span>
-      </div>
-      <div className={styles.infoRow}>
-        <span>Город</span>
-        <span>1444</span>
-      </div>
-    </div> */}
   </>
 );
 

@@ -1,0 +1,33 @@
+@import '../../../styles/variables';
+
+.newsTabContainer {
+  margin-top: 20px;
+}
+
+.article {
+  background-color: $custom-black;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 14px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    margin-bottom: 20px;
+
+    span {
+      display: block;
+
+      &:last-child {
+        text-align: right;
+        width: 130px;
+      }
+    }
+  }
+
+  .preview {
+    margin: 0;
+    letter-spacing: 1px;
+  }
+}

@@ -4,6 +4,7 @@
   overflow: auto;
   white-space: nowrap;
   height: 32px;
+  margin-bottom: 10px;
 
   :global(.MuiTabs-indicator) {
     display: none;
@@ -20,6 +21,7 @@
 
   .activeTab {
     background-color: $custom-aqua;
-    color: $custom-black;
+    // :(
+    color: $custom-black !important;
   }
 }

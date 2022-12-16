@@ -8,10 +8,10 @@ export default async (
 ) => {
   const prisma = new PrismaClient();
   if (req.method === 'GET') {
-    const intId = parseInt(req.query.id as string);
+    const intId = parseInt(req.query.id as string, 10);
     const matches = await prisma.match.findMany({
-      take: parseInt(req.query.take as string),
-      skip: parseInt(req.query.skip as string),
+      take: parseInt(req?.query?.take as string) || undefined,
+      skip: parseInt(req?.query?.skip as string) || undefined,
       where: {
         OR: [
           {
@@ -21,6 +21,16 @@ export default async (
           },
           {
             player2_id: {
+              equals: intId,
+            },
+          },
+          {
+            player3_id: {
+              equals: intId,
+            },
+          },
+          {
+            player4_id: {
               equals: intId,
             },
           },

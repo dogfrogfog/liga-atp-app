@@ -5,30 +5,7 @@
 
   section {
     padding: 15px;
-    background-color: $custom-black;
     color: $custom-lightgray;
-  }
-
-  .tabsContainer {
-    margin-bottom: 30px;
-
-    :global(.MuiTabs-indicator) {
-      display: none;
-    }
-
-    .tab {
-      margin: 0;
-      margin-right: 15px;
-      padding: 5px 15px;
-      background-color: #1b2223;
-      border-radius: 5px;
-      color: white;
-
-      &.activeTab {
-        background-color: #4cc4d1;
-        color: black;
-      }
-    }
   }
 
   .info {
@@ -36,7 +13,7 @@
       display: flex;
       justify-content: space-between;
       padding: 8px 0;
-      border-bottom: 0.2px solid darkgray;
+      border-bottom: 0.2px solid $custom-gray;
 
       &.coachRow {
         display: block;

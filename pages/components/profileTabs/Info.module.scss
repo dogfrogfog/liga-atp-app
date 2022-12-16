@@ -12,6 +12,7 @@
 
   span:last-child {
     font-weight: bold;
+    line-height: 24px;
   }
 }
 
@@ -24,14 +25,14 @@
   }
 
   .infoRow {
-    background-color: #1b2223;
+    background-color: $custom-darkgray;
     border-radius: 5px;
-    color: white;
+    color: $custom-white;
     padding: 5px 10px;
     margin-bottom: 10px;
 
     span:last-child {
-      color: #4cc4d1;
+      color: $custom-aqua;
     }
   }
 }

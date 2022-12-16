@@ -1,0 +1,46 @@
+@import '../../../styles/variables';
+
+.match {
+  margin-bottom: 20px;
+  background-color: $custom-darkgray;
+  padding: 15px;
+  border-radius: 14px;
+
+  .time {
+    font-weight: 600;
+    display: inline-block;
+    font-size: 14px;
+  }
+
+  .win {
+    color: $custom-aqua;
+  }
+
+  .lose {
+    color: $custom-red;
+  }
+
+  .opponent {
+    font-weight: 600;
+    margin: 8px 0;
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  // todo: implement in ui kit and remove tjhis styles
+  .button {
+    border: 1px solid $custom-aqua;
+    border-radius: 14px;
+    color: $custom-aqua;
+    padding: 4px 6px;
+    margin-left: 10px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

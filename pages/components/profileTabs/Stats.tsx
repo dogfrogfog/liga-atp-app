@@ -7,14 +7,36 @@ import styles from './Stats.module.scss';
 // todo: make global lvl values
 const LEVELS = ['Челленджер', 'Леджер', 'Фьючерс', 'Мастерс', 'Сеттелит'];
 
-const StatsTab = ({ playerId }: { playerId: number }) => {
+const trans: { [k: string]: string } = {
+  technique: 'Техника',
+  tactics: 'Тактика',
+  power: 'Мощь',
+  shakes: 'Кач',
+  serve: 'Подача',
+  behaviour: 'Поведение',
+};
+
+type StatsTabProps = {
+  playerId: number;
+
+  // specs
+  technique: number
+  tactics: number
+  power: number
+  shakes: number
+  serve: number
+  behaviour: number;
+}
+
+const StatsTab = (props: StatsTabProps) => {
   const [selectedLvl, setSelectedLvl] = useState(LEVELS[0]);
   const [statsData, setStatsData] = useState();
+
+  const { playerId, ...specs } = props;
 
   const handleLevelChange = (e: SelectChangeEvent) => {
     setSelectedLvl(e.target.value);
   };
-  console.log(statsData);
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -32,7 +54,19 @@ const StatsTab = ({ playerId }: { playerId: number }) => {
 
   return (
     <>
-      <div className={styles.eloContainer}>график рейтинга ЭЛО</div>
+      <h1>Характеристики</h1>
+      <i>будет график: шестиугольник</i>
+      <br />
+      <br />
+      {Object.entries(specs).map(([k, v]) => (
+        <div className={styles.row}>
+          <span className={styles.valueName}>{trans[k]}: </span>
+          <span className={styles.value}>{v}</span>
+        </div>
+      ))}
+      <br />
+      <i>будет график: рейтинг эло за период</i>
+      {/* <div className={styles.eloContainer}>график рейтинга ЭЛО</div> */}
       <div className={styles.lvlSelectContainer}>
         <Select value={selectedLvl} onChange={handleLevelChange} displayEmpty>
           <MenuItem value={LEVELS[0]}>{LEVELS[0]}</MenuItem>
