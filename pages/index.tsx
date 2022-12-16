@@ -1,32 +1,34 @@
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import Link from 'next/link';
+import { GiTennisBall } from 'react-icons/gi';
+import { GiTennisRacket } from 'react-icons/gi';
 
-import styles from '../styles/Home.module.css';
+import styles from './Home.module.scss';
 
-import PreviewComponent from 'components/PreviewComponent';
-
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
-    // <div className={styles.container}>
-    //   <h1>home page</h1>
-    //   <h3>available links</h3>
-    //   <Link href="/admin">admin panel</Link>
-    //   <br />
-    //   <Link href="/profile">profile</Link>
-    //   <br />
-    //   <Link href="/tournaments">tournaments</Link>
-    //   <br />
-    //   <Link href="/digest">digest</Link>
-    //   <br />
-    //   <Link href="/elo">elo</Link>
-    //   <br />
-    //   <Link href="/h2h">head to head</Link>
-    //   <br />
-    //   <Link href="/other">other</Link>
-    //   <br />
-    // </div>
-    <PreviewComponent title="Work in progress" />
+    <div className={styles.homePageContainer}>
+      <div className={styles.description}>
+        <h3 className={styles.previeTitle}>Лига тенниса</h3>
+        <h6>
+          Лига Тенниса <br />
+          Твои возможности
+        </h6>
+        <p className={styles.secondaryDesc}>
+          Лига Тенниса - это турниры по теннису различной категории для
+          новичков, любителей и профессионалов в Минске
+        </p>
+        <div className={styles.buttons}>
+          <Link href="/players">
+            <span>Список игроков</span>
+          </Link>
+          <Link href="/tournaments">
+            <span>Список турниров</span>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Home;
+export default HomePage;
