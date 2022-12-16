@@ -10,6 +10,7 @@ import PWALayout from '../layouts/PWALayout';
 import AdminLayout from '../layouts/AdminLayout';
 import MainAppLayout from '../layouts/MainAppLayout';
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
+import PreviewLayout from '../layouts/PreviewLayout';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
@@ -33,12 +34,12 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
-  // to show user once
-  // todo: add inavailable (WIP) routs here;
   if (router.pathname === '/' || router.pathname === '/preview') {
     return (
       <PWALayout>
-        <Component {...pageProps} />
+        <PreviewLayout>
+          <Component {...pageProps} />
+        </PreviewLayout>
       </PWALayout>
     );
   }
