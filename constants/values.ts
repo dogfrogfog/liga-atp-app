@@ -68,15 +68,16 @@ export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
 export const PLAYER_COLUMNS = [
-  'avatar',
+  'level',
   'first_name',
   'last_name',
   'date_of_birth',
+  'height',
   'city',
   'country',
+  'avatar',
   'email',
   'phone',
-  'level',
   'gameplay_style',
   'forehand',
   'beckhand',

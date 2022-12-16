@@ -159,6 +159,7 @@ const PlayerForm = ({
       shakes: null,
       serve: null,
       behaviour: null,
+      height: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
@@ -257,6 +258,12 @@ const PlayerForm = ({
           <input
             placeholder="Форхэнд"
             {...register('forehand', { required: false })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.height?.message}>
+          <input
+            placeholder="Рост"
+            {...register('height', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.beckhand?.message}>
