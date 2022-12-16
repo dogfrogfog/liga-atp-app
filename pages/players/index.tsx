@@ -37,25 +37,52 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
   return (
     <div className={styles.playersContainer}>
       <div className={styles.header}>LIGA TENNISA APP</div>
-      {!isOpen && (
-        <div className={styles.search}>
-          <button onClick={submitSearch} className={styles.searchButton}>
-            <FiSearch />
-          </button>
-          <Input
-            placeholder="Введите имя игрока"
-            value={search}
-            onChange={handleSearch}
-          />
-          <button
-            onClick={() => setIsOpen(true)}
-            className={styles.filterButton}
-          >
-            <FiMenu />
-          </button>
-        </div>
+      {data.length === 0 ? (
+        <NotFoundMessage message="Результаты по вашему запросу не найдены" />
+      ) : (
+        <>
+          <p className={styles.listTitle}>Рейтинг</p>
+          <div className={styles.playersTable}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <td>Игрок</td>
+                  <td>Уровень</td>
+                  <td>Рейтинг</td>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map(({ id, first_name, last_name, level, avatar }) => (
+                  <Link key={id} href={'/players/' + id}>
+                    <tr key={id}>
+                      <td>
+                        <div className={styles.playerRow}>
+                          <div className={styles.image}>
+                            {avatar ? // todo: fix image
+                            // <Image
+                            //   width={40}
+                            //   height={40}
+                            //   src={avatar}
+                            //   alt={first_name + ' ' + last_name}
+                            // />
+                            null : (
+                              <BsFillPersonFill />
+                            )}
+                          </div>
+                          <span>{`${first_name[0].toUpperCase()}. ${last_name}`}</span>
+                        </div>
+                      </td>
+                      <td>{LEVEL_NUMBER_VALUES[level]}</td>
+                      <td>1489</td>
+                    </tr>
+                  </Link>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
-      {isOpen && (
+      {isOpen ? (
         <div className={styles.popupContainer}>
           <button
             onClick={() => setIsOpen(false)}
@@ -76,53 +103,23 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
             ))}
           </ul>
         </div>
-      )}
-      {data.length === 0 ? (
-        <NotFoundMessage message="Результаты по вашему запросу не найдены" />
       ) : (
-        <>
-          <p className={styles.listTitle}>Игроки лиги</p>
-          <div className={styles.playersTable}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <td>Игрок</td>
-                  <td>Уровень</td>
-                  <td>Рейтинг</td>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map(({ id, first_name, last_name, level, avatar }) => (
-                  <Link key={id} href={'/players/' + id}>
-                    <tr key={id}>
-                      <td>
-                        <div className={styles.playerRow}>
-                          <div className={styles.image}>
-                            {avatar ? (
-                              // todo: fix image
-                              // <Image
-                              //   width={40}
-                              //   height={40}
-                              //   src={avatar}
-                              //   alt={first_name + ' ' + last_name}
-                              // />
-                              'image'
-                            ) : (
-                              <BsFillPersonFill />
-                            )}
-                          </div>
-                          <span>{last_name + ` ${first_name[0]}.`}</span>
-                        </div>
-                      </td>
-                      <td>{LEVEL_NUMBER_VALUES[level]}</td>
-                      <td>1489</td>
-                    </tr>
-                  </Link>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+        <div className={styles.search}>
+          <button onClick={submitSearch} className={styles.searchButton}>
+            <FiSearch />
+          </button>
+          <Input
+            placeholder="Введите имя игрока"
+            value={search}
+            onChange={handleSearch}
+          />
+          <button
+            onClick={() => setIsOpen(true)}
+            className={styles.filterButton}
+          >
+            <FiMenu />
+          </button>
+        </div>
       )}
     </div>
   );

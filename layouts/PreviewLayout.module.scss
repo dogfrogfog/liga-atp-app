@@ -5,12 +5,13 @@
   // https://medium.com/quick-code/100vh-problem-with-ios-safari-92ab23c852a8
   // fixes problem only for iphone
   height: 100vh;
-  // height: -webkit-fill-available;
+  // should be uncommented
+  height: -webkit-fill-available;
   position: relative;
   background-image: url('../public/previewBGImage.png');
   background-repeat: no-repeat;
   background-size: cover;
-  
+
   .blurBlock {
     width: 100%;
     height: 300px;
