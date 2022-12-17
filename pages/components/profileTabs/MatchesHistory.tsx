@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { match as MatchT } from '@prisma/client';
+import type {
+  match as MatchT,
+  tournament as TournamentT,
+  player as PlayerT,
+} from '@prisma/client';
+import Link from 'next/link';
 import { format } from 'date-fns';
+import { AiOutlineYoutube } from 'react-icons/ai';
+import { GiTabletopPlayers } from 'react-icons/gi';
+
 import styles from './MatchesHistory.module.scss';
 
 type MatchProps = {
@@ -10,7 +16,7 @@ type MatchProps = {
   opponent: string;
   score: string;
   win: boolean;
-}
+};
 
 const Match = ({
   tournamentName,
@@ -26,8 +32,12 @@ const Match = ({
     <div className={styles.row}>
       <span className={styles.tournamentName}>{tournamentName}</span>
       <div className={styles.buttons}>
-        <div className={styles.button}>YouTube</div>
-        <div className={styles.button}>H2H</div>
+        <Link href="/">
+          <AiOutlineYoutube />
+        </Link>
+        <Link href="/">
+          <GiTabletopPlayers />
+        </Link>
       </div>
     </div>
     <div className={styles.row}>
@@ -37,45 +47,49 @@ const Match = ({
   </div>
 );
 
-type MatchesHistoryTabProps = {
+type MatchWithTournament = MatchT & {
+  tournament: TournamentT;
+  player_match_player1_idToplayer: PlayerT;
+  player_match_player2_idToplayer: PlayerT;
+  player_match_player3_idToplayer: PlayerT;
+  player_match_player4_idToplayer: PlayerT;
+};
+
+const getOpponents = (playerId: number, players: PlayerT[]) => {
+  if (players[0].id === playerId) {
+    return `${(players[1].first_name as string)[0]}. ${players[1].last_name}`;
+  } else {
+    return `${(players[0].first_name as string)[0]}. ${players[0].last_name}`;
+  }
+};
+
+const MatchesHistoryTab = ({
+  playerId,
+  playedMatches,
+}: {
   playerId: number;
-}
-
-const MatchesHistoryTab = ({ playerId }: MatchesHistoryTabProps) => {
-  const [data, setData] = useState<MatchT[]>([]);
-
-  // todo: move fetch to upper component and pass data as props
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      const response = await axios.get(`/api/matches?id=${playerId}`);
-
-      if (response.status === 200) {
-        setData(response.data);
-      }
-    };
-
-    fetchWrapper();
-  }, [playerId]);
-
-  console.log(data);
-
+  playedMatches: MatchWithTournament[];
+}) => {
   return (
-    <>
-      {data.map((match, index) => (
+    <div className={styles.matchesList}>
+      {playedMatches.map((match, index) => (
         <Match
           key={index}
-          tournamentName={match.tournament.name}
-          startDate={match.start_date}
-          score={match.score}
-          opponent={
-            match.player_match_player2_idToplayer.first_name +
-            ' ' +
-            (match as any).player_match_player2_idToplayer.last_name
+          tournamentName={match.tournament.name || ''}
+          startDate={
+            match?.start_date
+              ? format(new Date(match.start_date), 'yyyy-MM-dd')
+              : ''
           }
-          win={String(playerId) === match.winner_id}
+          score={match?.score || ''}
+          opponent={getOpponents(playerId, [
+            match?.player_match_player1_idToplayer,
+            match?.player_match_player2_idToplayer,
+          ])}
+           win={String(playerId) === match.winner_id}
         />
       ))}
-    </>
+    </div>
   );
 };
 

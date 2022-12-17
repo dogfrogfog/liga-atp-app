@@ -1,15 +1,27 @@
 @import '../../../styles/variables';
 
+.matchesList {
+  margin-top: 10px;
+}
+
+.tournamentName {
+  color: $custom-lightgray;
+}
+
 .match {
-  margin-bottom: 20px;
-  background-color: $custom-darkgray;
-  padding: 15px;
+  position: relative;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid $border-color;
   border-radius: 14px;
 
   .time {
+    position: absolute;
     font-weight: 600;
     display: inline-block;
-    font-size: 14px;
+    font-size: 10px;
+    top: -4px;
+    left: 0;
   }
 
   .win {
@@ -27,15 +39,13 @@
 
   .buttons {
     display: flex;
-  }
 
-  // todo: implement in ui kit and remove tjhis styles
-  .button {
-    border: 1px solid $custom-aqua;
-    border-radius: 14px;
-    color: $custom-aqua;
-    padding: 4px 6px;
-    margin-left: 10px;
+    svg {
+      width: 30px;
+      height: 30px;
+      color: $custom-aqua;
+      margin-right: 5px;
+    }
   }
 
   .row {

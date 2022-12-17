@@ -3,39 +3,6 @@
   min-height: 100vh;
   position: relative;
 
-  // .registration {
-  //   z-index: 3;
-  //   position: absolute;
-  //   top: 30px;
-  //   right: 30px;
-  //   background-color: white;
-  //   color: black;
-  //   padding: 10px;
-  //   border-radius: 5px;
-  // }
-
-  .tabsContainer {
-    margin-bottom: 30px;
-
-    :global(.MuiTabs-indicator) {
-      display: none;
-    }
-
-    .tab {
-      margin: 0;
-      margin-right: 15px;
-      padding: 5px 15px;
-      background-color: #1b2223;
-      border-radius: 5px;
-      color: white;
-
-      &.activeTab {
-        background-color: #4cc4d1;
-        color: black;
-      }
-    }
-  }
-
   // duplicdate
   .tournamentListItem {
     background-color: #1b2223;

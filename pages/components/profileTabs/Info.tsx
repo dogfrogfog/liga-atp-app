@@ -6,7 +6,7 @@ import styles from './Info.module.scss';
 type InfoTabProps = {
   country: string;
   city: string;
-  age: number;
+  age: number | null;
   height: number | string;
   yearsInTennis: number | null;
   jobDescription: string;
@@ -14,7 +14,7 @@ type InfoTabProps = {
   forehand: string;
   beckhand: string;
   instaLink: string;
-}
+};
 
 const InfoTab = ({
   country,
@@ -31,12 +31,16 @@ const InfoTab = ({
   <>
     <div className={styles.infoRow}>
       <span>Город</span>
-      <span>{country}, {city}</span>
+      <span>
+        {country}, {city}
+      </span>
     </div>
-    <div className={styles.infoRow}>
-      <span>Возраст</span>
-      <span>{age}</span>
-    </div>
+    {age && (
+      <div className={styles.infoRow}>
+        <span>Возраст</span>
+        <span>{age}</span>
+      </div>
+    )}
     <div className={styles.infoRow}>
       <span>Рост</span>
       <span>{height} см</span>
@@ -45,10 +49,12 @@ const InfoTab = ({
       <span>Сфера деятельности</span>
       <span>{jobDescription}</span>
     </div>
-    {yearsInTennis && <div className={styles.infoRow}>
-      <span>Лет в теннисе</span>
-      <span>{yearsInTennis}</span>
-    </div>}
+    {yearsInTennis && (
+      <div className={styles.infoRow}>
+        <span>Лет в теннисе</span>
+        <span>{yearsInTennis}</span>
+      </div>
+    )}
     <div className={styles.infoRow}>
       <span>Стиль игры</span>
       <span>{gameplayStyle}</span>
@@ -67,8 +73,7 @@ const InfoTab = ({
         {instaLink && (
           <Link href={instaLink}>
             <span>
-              <BsInstagram />{' '}
-              {instaLink.split('https://www.instagram.com/')[1]}
+              <BsInstagram /> {instaLink.split('https://www.instagram.com/')[1]}
             </span>
           </Link>
         )}

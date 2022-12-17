@@ -3,12 +3,12 @@ type NumberValuesT = {
 };
 
 export const LEVEL_NUMBER_VALUES: NumberValuesT = {
-  4: 'leger',
-  3: 'pro',
-  2: 'masters',
-  1: 'challenger',
-  0: 'futures',
-  [-1]: 'Satellite',
+  4: 'Леджер',
+  3: 'Про',
+  2: 'Мастерс',
+  1: 'Челленджер',
+  0: 'Фьючерс',
+  [-1]: 'Сателлит',
 };
 
 // previously used indexes: 8, 9, 10, 16

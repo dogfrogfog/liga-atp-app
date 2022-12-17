@@ -20,13 +20,13 @@ type StatsTabProps = {
   playerId: number;
 
   // specs
-  technique: number
-  tactics: number
-  power: number
-  shakes: number
-  serve: number
+  technique: number;
+  tactics: number;
+  power: number;
+  shakes: number;
+  serve: number;
   behaviour: number;
-}
+};
 
 const StatsTab = (props: StatsTabProps) => {
   const [selectedLvl, setSelectedLvl] = useState(LEVELS[0]);

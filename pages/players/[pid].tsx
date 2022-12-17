@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import { FaMedal } from 'react-icons/fa';
-import { PrismaClient, player } from '@prisma/client';
+import {
+  PrismaClient,
+  player as PlayerT,
+  match as MatchT,
+  tournament as TournamentT,
+} from '@prisma/client';
+import axios from 'axios';
 
 import InfoTab from '../components/profileTabs/Info';
 import ScheduleTab from '../components/profileTabs/Schedule';
@@ -9,10 +15,16 @@ import MatchesHistoryTab from '../components/profileTabs/MatchesHistory';
 import StatsTab from '../components/profileTabs/Stats';
 import NewsTab from '../components/profileTabs/News';
 import { LEVEL_NUMBER_VALUES } from '../../constants/values';
-import styles from '../../styles/Profile.module.scss';
 import TabsMUI from 'ui-kit/Tabs';
+import styles from '../../styles/Profile.module.scss';
 
-const PROFILE_TABS = ['Информация', 'Расписание', 'История матчей', 'Статистика', 'Новости'];
+const PROFILE_TABS = [
+  'Информация',
+  'Расписание',
+  'История матчей',
+  'Статистика',
+  'Новости',
+];
 
 const calculateYearsFromDate = (date: Date) => {
   var diff_ms = Date.now() - date.getTime();
@@ -21,8 +33,29 @@ const calculateYearsFromDate = (date: Date) => {
   return Math.abs(age_dt.getUTCFullYear() - 1970);
 };
 
-const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
+export type MatchWithTournamentType = MatchT & {
+  tournament: TournamentT;
+  player_match_player1_idToplayer: PlayerT;
+  player_match_player2_idToplayer: PlayerT;
+  player_match_player3_idToplayer: PlayerT;
+  player_match_player4_idToplayer: PlayerT;
+};
+
+const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
+  const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
+
+  useEffect(() => {
+    const fetchWrapper = async () => {
+      const response = await axios.get(`/api/matches?id=${player.id}`);
+
+      if (response.status === 200) {
+        setMatches(response.data);
+      }
+    };
+
+    fetchWrapper();
+  }, [player.id]);
 
   const {
     id,
@@ -55,19 +88,30 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
     behaviour,
   } = player;
 
+  const { upcomingMatches, playedMatches } = matches.reduce((acc, match) => {
+    const isMatchPlayed = !!(match.winner_id && match.score) || match.is_completed === true;
 
-  console.log(player)
+    if(isMatchPlayed) {
+      acc.playedMatches.push(match);
+    } else {
+      acc.upcomingMatches.push(match);
+    }
+    return acc;
+  }, { upcomingMatches: [] as MatchWithTournamentType[], playedMatches: [] as MatchWithTournamentType[] })
+
   const activeTabContent = (() => {
     switch (activeTabIndex) {
       case PROFILE_TABS[0]:
         return (
           <InfoTab
-            age={calculateYearsFromDate(date_of_birth as Date)}
+            age={date_of_birth && calculateYearsFromDate(date_of_birth)}
             country={country || ''}
             city={city || ''}
             height={height || ''}
             jobDescription={job_description || ''}
-            yearsInTennis={in_tennis_from && calculateYearsFromDate(in_tennis_from)}
+            yearsInTennis={
+              in_tennis_from && calculateYearsFromDate(in_tennis_from)
+            }
             gameplayStyle={gameplay_style || ''}
             forehand={forehand || ''}
             beckhand={beckhand || ''}
@@ -75,9 +119,14 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
           />
         );
       case PROFILE_TABS[1]:
-        return <ScheduleTab />
+        return <ScheduleTab upcomingMatches={upcomingMatches} />;
       case PROFILE_TABS[2]:
-        return <MatchesHistoryTab playerId={id} />;
+        return (
+          <MatchesHistoryTab
+            playerId={player.id}
+            playedMatches={playedMatches}
+          />
+        );
       case PROFILE_TABS[3]:
         return (
           <StatsTab
@@ -147,13 +196,11 @@ const ProfileHeader = ({
               <span className={styles.positionName}>{level}</span>
             </div>
             <div className={styles.medal}>
-              <FaMedal color="yellow" />
-              {'<3>'}
+              <FaMedal color="yellow" />3
             </div>
-            {/* <div className={styles.medal}>
-              <FaMedal color='lightgrey' />
-              {'<6>'}
-            </div> */}
+            <div className={styles.medal}>
+              <FaMedal color="lightgrey" />6
+            </div>
           </div>
           <span className={styles.elo}>{points}</span>
         </div>

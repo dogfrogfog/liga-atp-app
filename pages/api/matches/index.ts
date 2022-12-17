@@ -39,6 +39,8 @@ export default async (
       include: {
         player_match_player1_idToplayer: true,
         player_match_player2_idToplayer: true,
+        player_match_player3_idToplayer: true,
+        player_match_player4_idToplayer: true,
         tournament: true,
       },
     });

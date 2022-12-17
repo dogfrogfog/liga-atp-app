@@ -1,21 +1,19 @@
-import type { NextPage } from 'next';
-import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
+import type { NextPage } from 'next';
 import Link from 'next/link';
 import axios from 'axios';
-
-import { PrismaClient } from '@prisma/client';
-
-import Input from 'ui-kit/Input';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
-import styles from 'styles/Players.module.scss';
 import { FiMenu, FiSearch } from 'react-icons/fi';
 import { BsFillPersonFill } from 'react-icons/bs';
-import NotFoundMessage from '../../ui-kit/NotFoundMessage';
+import { PrismaClient, player as PlayerT } from '@prisma/client';
+
+import Input from 'ui-kit/Input';
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import styles from 'styles/Players.module.scss';
 
 // should be nested from schema
 interface PlayersPageProps {
-  players: any[];
+  players: PlayerT[];
 }
 
 const Players: NextPage<PlayersPageProps> = ({ players }) => {
@@ -58,8 +56,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                       <td>
                         <div className={styles.playerRow}>
                           <div className={styles.image}>
-                            {avatar ? // todo: fix image
-                            // <Image
+                            {avatar ? // <Image
                             //   width={40}
                             //   height={40}
                             //   src={avatar}
@@ -69,10 +66,12 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                               <BsFillPersonFill />
                             )}
                           </div>
-                          <span>{`${first_name[0].toUpperCase()}. ${last_name}`}</span>
+                          <span>{`${(
+                            first_name as string
+                          )[0].toUpperCase()}. ${last_name}`}</span>
                         </div>
                       </td>
-                      <td>{LEVEL_NUMBER_VALUES[level]}</td>
+                      <td>{LEVEL_NUMBER_VALUES[level as number]}</td>
                       <td>1489</td>
                     </tr>
                   </Link>

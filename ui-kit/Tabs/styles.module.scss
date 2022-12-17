@@ -4,7 +4,6 @@
   overflow: auto;
   white-space: nowrap;
   height: 32px;
-  margin-bottom: 10px;
 
   :global(.MuiTabs-indicator) {
     display: none;
@@ -17,11 +16,12 @@
     border-radius: 14px;
     color: $custom-white;
     cursor: pointer;
+    height: 34px !important;
+    min-height: 34px !important;
   }
 
   .activeTab {
     background-color: $custom-aqua;
-    // :(
     color: $custom-black !important;
   }
 }
