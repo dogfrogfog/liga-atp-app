@@ -25,6 +25,7 @@ const Match = ({
   score,
   win,
 }: MatchProps) => (
+  // need to have all players' id here to set id to query params of link
   <div className={styles.match}>
     <span className={styles.time}>
       {format(new Date(startDate), 'dd.MM.yyyy')}
@@ -35,7 +36,7 @@ const Match = ({
         <Link href="/">
           <AiOutlineYoutube />
         </Link>
-        <Link href="/">
+        <Link href={`/h2h?player1Id=${1}&player2Id=${2}`}>
           <GiTabletopPlayers />
         </Link>
       </div>
