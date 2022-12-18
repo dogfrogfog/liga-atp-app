@@ -40,7 +40,7 @@ const Match = ({ tournamentName, startDate, opponent }: MatchProps) => (
     </div>
     <div className={styles.row}>
       <span className={styles.opponent}>vs {opponent}</span>
-      <span>{'<место>'}</span>
+      <span><i>{'<место>'}</i></span>
     </div>
   </div>
 );

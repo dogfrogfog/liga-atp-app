@@ -6,7 +6,7 @@ const NewsTab = (props: NewsTabProps) => {
   return (
     <div className={styles.newsTabContainer}>
       {[1, 2, 3].map((v) => (
-        <div className={styles.article}>
+        <div key={v} className={styles.article}>
           <div className={styles.header}>
             <span>Вторая травма ахила за выходные</span>
             <span>12.0{v * 3}.2022</span>
