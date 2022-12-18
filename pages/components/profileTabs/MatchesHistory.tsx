@@ -72,7 +72,7 @@ const MatchesHistoryTab = ({
   playedMatches: MatchWithTournament[];
 }) => {
   return (
-    <div className={styles.matchesList}>
+    <>
       {playedMatches.map((match, index) => (
         <Match
           key={index}
@@ -90,7 +90,7 @@ const MatchesHistoryTab = ({
           win={String(playerId) === match.winner_id}
         />
       ))}
-    </div>
+    </>
   );
 };
 

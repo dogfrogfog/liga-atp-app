@@ -140,6 +140,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
         return (
           <StatsTab
             playerId={id}
+            level={level}
             technique={technique}
             tactics={tactics}
             power={power as number}

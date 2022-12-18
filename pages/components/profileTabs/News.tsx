@@ -4,7 +4,7 @@ type NewsTabProps = {};
 
 const NewsTab = (props: NewsTabProps) => {
   return (
-    <div className={styles.newsTabContainer}>
+    <>
       {[1, 2, 3].map((v) => (
         <div key={v} className={styles.article}>
           <div className={styles.header}>
@@ -19,7 +19,7 @@ const NewsTab = (props: NewsTabProps) => {
           </p>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

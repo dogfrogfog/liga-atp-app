@@ -40,7 +40,9 @@ const Match = ({ tournamentName, startDate, opponent }: MatchProps) => (
     </div>
     <div className={styles.row}>
       <span className={styles.opponent}>vs {opponent}</span>
-      <span><i>{'<место>'}</i></span>
+      <span>
+        <i>{'<место>'}</i>
+      </span>
     </div>
   </div>
 );
@@ -56,6 +58,7 @@ const ScheduleTab = ({
     <div className={styles.matchesList}>
       {upcomingMatches.map((v) => (
         <Match
+          key={v.id}
           tournamentName={v.tournament.name || ''}
           startDate={
             v.start_date ? format(new Date(v.start_date), 'dd.MM hh:mm') : ''

@@ -39,7 +39,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
         <NotFoundMessage message="Результаты по вашему запросу не найдены" />
       ) : (
         <>
-          <p className={styles.listTitle}>Рейтинг</p>
+          <p className={styles.listTitle}>Игроки</p>
           <div className={styles.playersTable}>
             <table className={styles.table}>
               <thead>
@@ -56,10 +56,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                       <td>
                         <div className={styles.playerRow}>
                           <div className={styles.image}>
-                            {avatar ? //   height={40} //   width={40} // <Image
-                            //   src={avatar}
-                            //   alt={first_name + ' ' + last_name}
-                            // />
+                            {avatar ?
                             null : (
                               <BsFillPersonFill />
                             )}

@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 
 type TabsProps = {
   tabNames: string[];
-  onChange: (_: unknown, value: number) => void;
+  onChange: (_: any, value: number) => void;
   activeTabIndex: string;
 };
 
