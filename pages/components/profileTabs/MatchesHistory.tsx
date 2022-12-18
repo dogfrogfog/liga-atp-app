@@ -86,7 +86,7 @@ const MatchesHistoryTab = ({
             match?.player_match_player1_idToplayer,
             match?.player_match_player2_idToplayer,
           ])}
-           win={String(playerId) === match.winner_id}
+          win={String(playerId) === match.winner_id}
         />
       ))}
     </div>

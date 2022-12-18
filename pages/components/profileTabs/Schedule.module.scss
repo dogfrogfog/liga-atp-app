@@ -1,0 +1,36 @@
+@import '../../../styles/variables';
+
+.matchesList {
+  margin-top: 10px;
+}
+
+.tournamentName {
+  color: $custom-lightgray;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.match {
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid $border-color;
+
+  &:last-child {
+    border: none;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .matchTime {
+    font-weight: bold;
+  }
+
+  .opponent {
+    font-weight: 600;
+    margin: 8px 0;
+  }
+}

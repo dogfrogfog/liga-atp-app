@@ -1,10 +1,10 @@
 // eslint-disable import/no-anonymous-default-export
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, match } from '@prisma/client';
+import { PrismaClient, match as MatchT } from '@prisma/client';
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<match[] | match>
+  res: NextApiResponse<MatchT[] | MatchT>
 ) => {
   const prisma = new PrismaClient();
   if (req.method === 'GET') {

@@ -6,14 +6,18 @@
 
 .tournamentName {
   color: $custom-lightgray;
+  text-transform: uppercase;
+  font-weight: 300;
 }
 
 .match {
   position: relative;
   margin-bottom: 5px;
-  padding-bottom: 5px;
   border-bottom: 2px solid $border-color;
-  border-radius: 14px;
+
+  &:last-child {
+    border: none;
+  }
 
   .time {
     position: absolute;

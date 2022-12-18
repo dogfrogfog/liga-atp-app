@@ -88,16 +88,23 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
     behaviour,
   } = player;
 
-  const { upcomingMatches, playedMatches } = matches.reduce((acc, match) => {
-    const isMatchPlayed = !!(match.winner_id && match.score) || match.is_completed === true;
+  const { upcomingMatches, playedMatches } = matches.reduce(
+    (acc, match) => {
+      const isMatchPlayed =
+        !!(match.winner_id && match.score) || match.is_completed === true;
 
-    if(isMatchPlayed) {
-      acc.playedMatches.push(match);
-    } else {
-      acc.upcomingMatches.push(match);
+      if (isMatchPlayed) {
+        acc.playedMatches.push(match);
+      } else {
+        acc.upcomingMatches.push(match);
+      }
+      return acc;
+    },
+    {
+      upcomingMatches: [] as MatchWithTournamentType[],
+      playedMatches: [] as MatchWithTournamentType[],
     }
-    return acc;
-  }, { upcomingMatches: [] as MatchWithTournamentType[], playedMatches: [] as MatchWithTournamentType[] })
+  );
 
   const activeTabContent = (() => {
     switch (activeTabIndex) {
@@ -119,7 +126,9 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
           />
         );
       case PROFILE_TABS[1]:
-        return <ScheduleTab upcomingMatches={upcomingMatches} />;
+        return (
+          <ScheduleTab playerId={player.id} upcomingMatches={upcomingMatches} />
+        );
       case PROFILE_TABS[2]:
         return (
           <MatchesHistoryTab

@@ -56,9 +56,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                       <td>
                         <div className={styles.playerRow}>
                           <div className={styles.image}>
-                            {avatar ? // <Image
-                            //   width={40}
-                            //   height={40}
+                            {avatar ? //   height={40} //   width={40} // <Image
                             //   src={avatar}
                             //   alt={first_name + ' ' + last_name}
                             // />

@@ -9,7 +9,7 @@ type TabsProps = {
   tabNames: string[];
   onChange: (_: unknown, value: number) => void;
   activeTabIndex: string;
-}
+};
 
 const TabsMUI: FC<TabsProps> = ({
   tabNames,
