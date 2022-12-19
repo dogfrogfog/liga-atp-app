@@ -56,10 +56,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
                       <td>
                         <div className={styles.playerRow}>
                           <div className={styles.image}>
-                            {avatar ?
-                            null : (
-                              <BsFillPersonFill />
-                            )}
+                            {avatar ? null : <BsFillPersonFill />}
                           </div>
                           <span>{`${(
                             first_name as string
