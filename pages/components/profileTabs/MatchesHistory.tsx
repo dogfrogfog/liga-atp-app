@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { AiOutlineYoutube } from 'react-icons/ai';
 import { GiTabletopPlayers } from 'react-icons/gi';
 
+import { getOpponents } from 'utils/getOpponents';
 import styles from './MatchesHistory.module.scss';
 
 type MatchProps = {
@@ -56,14 +57,6 @@ type MatchWithTournament = MatchT & {
   player_match_player4_idToplayer: PlayerT;
 };
 
-const getOpponents = (playerId: number, players: PlayerT[]) => {
-  if (players[0].id === playerId) {
-    return `${(players[1].first_name as string)[0]}. ${players[1].last_name}`;
-  } else {
-    return `${(players[0].first_name as string)[0]}. ${players[0].last_name}`;
-  }
-};
-
 const MatchesHistoryTab = ({
   playerId,
   playedMatches,
@@ -83,10 +76,7 @@ const MatchesHistoryTab = ({
               : ''
           }
           score={match?.score || ''}
-          opponent={getOpponents(playerId, [
-            match?.player_match_player1_idToplayer,
-            match?.player_match_player2_idToplayer,
-          ])}
+          opponent={getOpponents(playerId, match)}
           win={String(playerId) === match.winner_id}
         />
       ))}
