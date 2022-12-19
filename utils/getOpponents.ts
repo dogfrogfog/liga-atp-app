@@ -34,13 +34,13 @@ export const getOpponents = (
       return `${p2 ? `${p2.first_name[0]}. ${p2.last_name}` : 'tbd'} / ${
         // @ts-ignore
         p4 ? `${p4.first_name[0]}. ${p4.last_name}` : 'tbd'
-        }`;
+      }`;
     } else {
       // @ts-ignore
       return `${p1 ? `${p1.first_name[0]}. ${p1.last_name}` : 'tbd'} / ${
         // @ts-ignore
         p1 ? `${p3.first_name[0]}. ${p3.last_name}` : 'tbd'
-        }`;
+      }`;
     }
   } else {
     if (isFirstPlayer) {
