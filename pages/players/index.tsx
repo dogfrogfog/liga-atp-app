@@ -2,24 +2,21 @@ import { ChangeEvent, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import axios from 'axios';
-import { FiMenu, FiSearch } from 'react-icons/fi';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { PrismaClient, player as PlayerT } from '@prisma/client';
 
-import Input from 'ui-kit/Input';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import SearchInput from 'components/SearchInput';
 import styles from 'styles/Players.module.scss';
 
-// should be nested from schema
-interface PlayersPageProps {
+type PlayersPageProps = {
   players: PlayerT[];
-}
+};
 
 const Players: NextPage<PlayersPageProps> = ({ players }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState(players);
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -32,9 +29,10 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
       setData(response.data);
     }
   };
+
   return (
     <div className={styles.playersContainer}>
-      <div className={styles.header}>LIGA TENNISA APP</div>
+      <div className={styles.header}></div>
       {data.length === 0 ? (
         <NotFoundMessage message="Результаты по вашему запросу не найдены" />
       ) : (
@@ -73,45 +71,11 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
           </div>
         </>
       )}
-      {isOpen ? (
-        <div className={styles.popupContainer}>
-          <button
-            onClick={() => setIsOpen(false)}
-            className={styles.filterButton}
-          >
-            <FiMenu />
-          </button>
-          <ul>
-            <p>Фильтр по категориям</p>
-            {[
-              'Топ 10 игроков Лиги',
-              'Рейтинг ЭЛО',
-              'Количество сыгранных матчей',
-              'Процент выигранных тай-брейков',
-              'Среднее число ударов',
-            ].map((v) => (
-              <li key={v}>{v}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className={styles.search}>
-          <button onClick={submitSearch} className={styles.searchButton}>
-            <FiSearch />
-          </button>
-          <Input
-            placeholder="Введите имя игрока"
-            value={search}
-            onChange={handleSearch}
-          />
-          <button
-            onClick={() => setIsOpen(true)}
-            className={styles.filterButton}
-          >
-            <FiMenu />
-          </button>
-        </div>
-      )}
+      <SearchInput
+        value={search}
+        handleChange={handleSearch}
+        submitSearch={submitSearch}
+      />
     </div>
   );
 };
