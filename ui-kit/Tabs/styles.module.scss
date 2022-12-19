@@ -16,10 +16,12 @@
     border-radius: 14px;
     color: $custom-white;
     cursor: pointer;
+    height: 34px !important;
+    min-height: 34px !important;
   }
 
   .activeTab {
     background-color: $custom-aqua;
-    color: $custom-black;
+    color: $custom-black !important;
   }
 }

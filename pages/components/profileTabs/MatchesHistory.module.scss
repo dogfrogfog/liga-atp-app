@@ -1,0 +1,56 @@
+@import '../../../styles/variables';
+
+.tournamentName {
+  color: $custom-lightgray;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.match {
+  position: relative;
+  margin-bottom: 5px;
+  border-bottom: 2px solid $border-color;
+
+  &:last-child {
+    border: none;
+  }
+
+  .time {
+    position: absolute;
+    font-weight: 600;
+    display: inline-block;
+    font-size: 10px;
+    top: -4px;
+    left: 0;
+  }
+
+  .win {
+    color: $custom-aqua;
+  }
+
+  .lose {
+    color: $custom-red;
+  }
+
+  .opponent {
+    font-weight: 600;
+    margin: 8px 0;
+  }
+
+  .buttons {
+    display: flex;
+
+    svg {
+      width: 30px;
+      height: 30px;
+      color: $custom-aqua;
+      margin-right: 5px;
+    }
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

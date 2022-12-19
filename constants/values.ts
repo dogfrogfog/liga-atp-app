@@ -3,12 +3,12 @@ type NumberValuesT = {
 };
 
 export const LEVEL_NUMBER_VALUES: NumberValuesT = {
-  4: 'leger',
-  3: 'pro',
-  2: 'masters',
-  1: 'challenger',
-  0: 'futures',
-  [-1]: 'Satellite',
+  4: 'Леджер',
+  3: 'Про',
+  2: 'Мастерс',
+  1: 'Челленджер',
+  0: 'Фьючерс',
+  [-1]: 'Сателлит',
 };
 
 // previously used indexes: 8, 9, 10, 16
@@ -68,15 +68,16 @@ export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
 export const PLAYER_COLUMNS = [
-  'avatar',
+  'level',
   'first_name',
   'last_name',
   'date_of_birth',
+  'height',
   'city',
   'country',
+  'avatar',
   'email',
   'phone',
-  'level',
   'gameplay_style',
   'forehand',
   'beckhand',

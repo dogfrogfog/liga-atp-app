@@ -159,6 +159,7 @@ const PlayerForm = ({
       shakes: null,
       serve: null,
       behaviour: null,
+      height: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
@@ -259,6 +260,12 @@ const PlayerForm = ({
             {...register('forehand', { required: false })}
           />
         </InputWithError>
+        <InputWithError errorMessage={errors.height?.message}>
+          <input
+            placeholder="Рост"
+            {...register('height', { required: false, valueAsNumber: true })}
+          />
+        </InputWithError>
         <InputWithError errorMessage={errors.beckhand?.message}>
           <input
             placeholder="Бэкхэнд"
@@ -309,38 +316,44 @@ const PlayerForm = ({
         {/* need to add columns to the db */}
         <h3>Характеристики</h3>
         <InputWithError errorMessage={errors.technique?.message}>
+          <br />
+          Техника:
           <input
-            placeholder="Техника"
             {...register('technique', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
+          <br />
+          Тактика:
           <input
-            placeholder="Тактика"
             {...register('tactics', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.power?.message}>
+          <br />
+          Мощь:
           <input
-            placeholder="Мощь"
             {...register('power', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.shakes?.message}>
+          <br />
+          Кач:
           <input
-            placeholder="Кач"
             {...register('shakes', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.serve?.message}>
+          <br />
+          Подача:
           <input
-            placeholder="Подача"
             {...register('serve', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
+          <br />
+          Поведение:
           <input
-            placeholder="Поведение"
             {...register('behaviour', { required: false, valueAsNumber: true })}
           />
         </InputWithError>

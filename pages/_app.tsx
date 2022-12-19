@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
-  if (router.pathname === '/' || router.pathname === '/preview') {
+  if (router.pathname === '/') {
     return (
       <PWALayout>
         <PreviewLayout>

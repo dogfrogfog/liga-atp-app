@@ -1,20 +1,21 @@
 import type { FC } from 'react';
-import styles from './styles.module.scss';
 import cl from 'classnames';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-interface ITabsProps {
+import styles from './styles.module.scss';
+
+type TabsProps = {
   tabNames: string[];
   onChange: (_: any, value: number) => void;
   activeTabIndex: string;
-}
+};
 
-const TabsMUI: FC<ITabsProps> = ({
+const TabsMUI: FC<TabsProps> = ({
   tabNames,
   activeTabIndex,
   onChange,
-}: ITabsProps) => (
+}: TabsProps) => (
   <Tabs
     className={styles.container}
     value={tabNames.indexOf(activeTabIndex)}

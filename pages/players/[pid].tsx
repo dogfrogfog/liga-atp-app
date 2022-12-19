@@ -1,32 +1,76 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import { FaMedal } from 'react-icons/fa';
-import { PrismaClient, player } from '@prisma/client';
+import {
+  PrismaClient,
+  player as PlayerT,
+  match as MatchT,
+  tournament as TournamentT,
+} from '@prisma/client';
+import axios from 'axios';
 
 import InfoTab from '../components/profileTabs/Info';
-import MatchesTab from '../components/profileTabs/Matches';
+import ScheduleTab from '../components/profileTabs/Schedule';
+import MatchesHistoryTab from '../components/profileTabs/MatchesHistory';
 import StatsTab from '../components/profileTabs/Stats';
+import NewsTab from '../components/profileTabs/News';
 import { LEVEL_NUMBER_VALUES } from '../../constants/values';
-import styles from '../../styles/Profile.module.scss';
 import TabsMUI from 'ui-kit/Tabs';
+import styles from '../../styles/Profile.module.scss';
 
-const PROFILE_TABS = ['Информация', 'История матчей', 'Статистика'];
+const PROFILE_TABS = [
+  'Информация',
+  'Расписание',
+  'История матчей',
+  'Статистика',
+  'Новости',
+];
 
-const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
+const calculateYearsFromDate = (date: Date) => {
+  var diff_ms = Date.now() - date.getTime();
+  var age_dt = new Date(diff_ms);
+
+  return Math.abs(age_dt.getUTCFullYear() - 1970);
+};
+
+export type MatchWithTournamentType = MatchT & {
+  tournament: TournamentT;
+  player_match_player1_idToplayer: PlayerT;
+  player_match_player2_idToplayer: PlayerT;
+  player_match_player3_idToplayer: PlayerT;
+  player_match_player4_idToplayer: PlayerT;
+};
+
+const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
+  const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
+
+  useEffect(() => {
+    const fetchWrapper = async () => {
+      const response = await axios.get(`/api/matches?id=${player.id}`);
+
+      if (response.status === 200) {
+        setMatches(response.data);
+      }
+    };
+
+    fetchWrapper();
+  }, [player.id]);
 
   const {
     id,
-    first_name,
-    last_name,
     date_of_birth,
     city,
+    first_name,
+    last_name,
     country,
-    email,
-    phone,
-    avatar,
+    // email,
+    // phone,
+
+    // todo: work on avatar
+    // avatar,
+
     level,
-    age,
     gameplay_style,
     forehand,
     beckhand,
@@ -34,28 +78,79 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
     is_coach,
     in_tennis_from,
     job_description,
+    height,
+
+    technique,
+    tactics,
+    power,
+    shakes,
+    serve,
+    behaviour,
   } = player;
+
+  const { upcomingMatches, playedMatches } = matches.reduce(
+    (acc, match) => {
+      const isMatchPlayed =
+        !!(match.winner_id && match.score) || match.is_completed === true;
+
+      if (isMatchPlayed) {
+        acc.playedMatches.push(match);
+      } else {
+        acc.upcomingMatches.push(match);
+      }
+      return acc;
+    },
+    {
+      upcomingMatches: [] as MatchWithTournamentType[],
+      playedMatches: [] as MatchWithTournamentType[],
+    }
+  );
 
   const activeTabContent = (() => {
     switch (activeTabIndex) {
       case PROFILE_TABS[0]:
         return (
           <InfoTab
-            age={age}
-            city={city}
-            height={170}
-            job_description={job_description}
-            in_tennis_from={in_tennis_from}
-            gameplay_style={gameplay_style}
-            forehand={forehand}
-            beckhand={beckhand}
-            insta_link={insta_link}
+            age={date_of_birth && calculateYearsFromDate(date_of_birth)}
+            country={country || ''}
+            city={city || ''}
+            height={height || ''}
+            jobDescription={job_description || ''}
+            yearsInTennis={
+              in_tennis_from && calculateYearsFromDate(in_tennis_from)
+            }
+            gameplayStyle={gameplay_style || ''}
+            forehand={forehand || ''}
+            beckhand={beckhand || ''}
+            instaLink={insta_link || ''}
           />
         );
       case PROFILE_TABS[1]:
-        return <MatchesTab playerId={id} />;
+        return (
+          <ScheduleTab playerId={player.id} upcomingMatches={upcomingMatches} />
+        );
       case PROFILE_TABS[2]:
-        return <StatsTab playerId={id} />;
+        return (
+          <MatchesHistoryTab
+            playerId={player.id}
+            playedMatches={playedMatches}
+          />
+        );
+      case PROFILE_TABS[3]:
+        return (
+          <StatsTab
+            playerId={id}
+            level={level}
+            technique={technique}
+            tactics={tactics}
+            power={power as number}
+            shakes={shakes}
+            serve={serve}
+            behaviour={behaviour}
+          />
+        );
+      case PROFILE_TABS[4]:
+        return <NewsTab />;
       default:
         return null;
     }
@@ -65,16 +160,12 @@ const SingleProfilePage: NextPage<{ player: player }> = ({ player }) => {
     setActiveTabIndex(PROFILE_TABS[value]);
   };
 
-  // todo: fix level valiue passing to the form
-  // should be number but right now it's  NaN or null..
-
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
         is_coach={is_coach as boolean}
         name={first_name + ' ' + last_name}
-        // @ts-ignore
-        level={LEVEL_NUMBER_VALUES[(level as number)?.toString()]}
+        level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
         points={'1490'}
       />
@@ -115,13 +206,11 @@ const ProfileHeader = ({
               <span className={styles.positionName}>{level}</span>
             </div>
             <div className={styles.medal}>
-              <FaMedal color="yellow" />
-              {'<3>'}
+              <FaMedal color="yellow" />3
             </div>
-            {/* <div className={styles.medal}>
-              <FaMedal color='lightgrey' />
-              {'<6>'}
-            </div> */}
+            <div className={styles.medal}>
+              <FaMedal color="lightgrey" />6
+            </div>
           </div>
           <span className={styles.elo}>{points}</span>
         </div>

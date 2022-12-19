@@ -1,7 +1,5 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { GiTennisBall } from 'react-icons/gi';
-import { GiTennisRacket } from 'react-icons/gi';
 
 import styles from './Home.module.scss';
 
