@@ -21,12 +21,12 @@ import styles from '../../styles/Tournament.module.scss';
 const PROFILE_TABS = ['Участники', 'Сетка турнира', 'Игровой день'];
 
 const TournamentPage: NextPage = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
+  const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [stage, setStage] = useState('1/8');
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const activeTabContent = (() => {
-    switch (activeTabIndex) {
+    switch (activeTab) {
       case PROFILE_TABS[0]:
         return (
           <div>
@@ -149,7 +149,7 @@ const TournamentPage: NextPage = () => {
   })();
 
   const handleTabChange = (_: any, value: number) => {
-    setActiveTabIndex(PROFILE_TABS[value]);
+    setActiveTab(PROFILE_TABS[value]);
   };
 
   return (
@@ -184,7 +184,7 @@ const TournamentPage: NextPage = () => {
       </div>
       <section>
         <Tabs
-          value={PROFILE_TABS.indexOf(activeTabIndex)}
+          value={PROFILE_TABS.indexOf(activeTab)}
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons="auto"
@@ -196,7 +196,7 @@ const TournamentPage: NextPage = () => {
               key={tab}
               className={cl(
                 styles.tab,
-                tab === activeTabIndex ? styles.activeTab : ''
+                tab === activeTab ? styles.activeTab : ''
               )}
               label={tab}
             />
