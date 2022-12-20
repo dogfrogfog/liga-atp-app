@@ -79,14 +79,24 @@ const TournamentsPage: NextPage = () => {
       <NotFoundMessage message="В категории пока нет турниров" />
     ) : (
       <>
-        {filteredTournaments.map((v, index) => (
-          <Link key={index} href={'/tournaments/' + index}>
-            <TournamentListItem
-              name={v.name || 'tbd'}
-              status={v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'}
-              startDate={v.start_date ? format(new Date(v.start_date), 'dd.MM.yyyy') : 'tbd'}
-              winnerName={v.status === 3 || v.is_finished ? '<имя победителя>' : ''}
-            />
+        {filteredTournaments.map((v) => (
+          <Link key={v.id} href={'/tournaments/' + v.id}>
+            <span>
+              <TournamentListItem
+                name={v.name || 'tbd'}
+                status={
+                  v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'
+                }
+                startDate={
+                  v.start_date
+                    ? format(new Date(v.start_date), 'dd.MM.yyyy')
+                    : 'tbd'
+                }
+                winnerName={
+                  v.status === 3 || v.is_finished ? '<имя победителя>' : ''
+                }
+              />
+            </span>
           </Link>
         ))}
       </>

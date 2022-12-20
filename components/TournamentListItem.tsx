@@ -7,7 +7,12 @@ type TournamentListItemsProps = {
   winnerName: string;
 };
 
-const TournamentListItems = ({ name, status, startDate, winnerName }: TournamentListItemsProps) => (
+const TournamentListItems = ({
+  name,
+  status,
+  startDate,
+  winnerName,
+}: TournamentListItemsProps) => (
   <div className={styles.container}>
     <div className={styles.row}>
       <span className={styles.name}>{name}</span>
