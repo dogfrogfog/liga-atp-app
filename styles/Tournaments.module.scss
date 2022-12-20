@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .container {
   padding: 15px;
 }
@@ -5,6 +7,16 @@
 .header {
   margin-top: 60px;
   margin-bottom: 40px;
+}
+
+.tournamentName {
+  text-transform: uppercase;
+}
+
+.startDate {
+  color: $custom-lightgray;
+  font-weight: 200;
+  font-size: 12px;
 }
 
 .listTitle {
@@ -16,19 +28,19 @@
 }
 
 .tournamentListItem {
-  background-color: #1b2223;
-  border-radius: 5px;
+  background-color: $custom-darkgray;
+  border-radius: 14px;
   margin-bottom: 15px;
   padding: 10px;
 
   .status {
-    padding: 5px;
-    background-color: black;
-    color: #4cc4d1;
+    padding: 5px 10px;
+    background-color: $custom-black;
+    color: $custom-aqua;
     font-weight: 500;
     font-size: 14px;
     align-self: baseline;
-    border-radius: 5px;
+    border-radius: 14px;
   }
 
   > div {
@@ -36,7 +48,6 @@
     justify-content: space-between;
 
     &:first-child {
-      margin-bottom: 10px;
       font-weight: 200;
 
       span {

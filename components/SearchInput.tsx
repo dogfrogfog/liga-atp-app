@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { FiMenu, FiSearch } from 'react-icons/fi';
+import { AiOutlineClose } from 'react-icons/ai';
 
 import Input from 'ui-kit/Input';
 import styles from './SearchInput.module.scss';
@@ -17,6 +18,8 @@ const SearchInput = ({
 }: SearchInputProps) => {
   const [isDropdownOpen, setDropdownStatus] = useState(false);
 
+  const toggleDropdown = () => setDropdownStatus((v) => !v);
+
   return (
     <div className={styles.container}>
       <div className={styles.searchInput}>
@@ -24,37 +27,28 @@ const SearchInput = ({
           <FiSearch />
         </button>
         <Input
+          className={isDropdownOpen ? styles.inputWithDropdown : ''}
           placeholder="Введите имя игрока"
           value={value}
           onChange={handleChange}
         />
-        <button
-          onClick={() => setDropdownStatus(true)}
-          className={styles.filterButton}
-        >
-          <FiMenu />
+        <button onClick={toggleDropdown} className={styles.filterButton}>
+          {isDropdownOpen ? <AiOutlineClose /> : <FiMenu />}
         </button>
       </div>
       {isDropdownOpen && (
         <div className={styles.searchDropdown}>
-          <button
-            onClick={() => setDropdownStatus(false)}
-            className={styles.filterButton}
-          >
-            <FiMenu />
-          </button>
-          <ul>
-            <p>Фильтр по категориям</p>
-            {[
-              'Топ 10 игроков Лиги',
-              'Рейтинг ЭЛО',
-              'Количество сыгранных матчей',
-              'Процент выигранных тай-брейков',
-              'Среднее число ударов',
-            ].map((v) => (
-              <li key={v}>{v}</li>
-            ))}
-          </ul>
+          {[
+            '<фильтр 1>',
+            '<фильтр 2>',
+            '<фильтр 3>',
+            '<фильтр 4>',
+            '<фильтр 5>',
+          ].map((v) => (
+            <p className={styles.filter} key={v}>
+              {v}
+            </p>
+          ))}
         </div>
       )}
     </div>

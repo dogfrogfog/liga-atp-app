@@ -1,11 +1,13 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect, useMemo } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { tournament as TournamentT } from '@prisma/client';
+import { format } from 'date-fns';
 
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SearchInput from 'components/SearchInput';
+import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
 import { getTournaments } from 'services/tournaments';
 import styles from '../../styles/Tournaments.module.scss';
 
@@ -32,36 +34,76 @@ const TournamentsPage: NextPage = () => {
     fetchWrapper();
   }, []);
 
+  const { active, recording, finished } = useMemo(
+    () =>
+      tournaments.reduce(
+        (acc, v) => {
+          if (v.status === 1) {
+            acc.recording.push(v);
+          }
+          if (v.status === 2) {
+            acc.active.push(v);
+          }
+          if (v.status === 3 || v.is_finished) {
+            acc.finished.push(v);
+          }
+          return acc;
+        },
+        {
+          active: [] as TournamentT[],
+          recording: [] as TournamentT[],
+          finished: [] as TournamentT[],
+        }
+      ),
+    [tournaments]
+  );
+
   const activeTabContent = (() => {
+    let filteredTournaments: TournamentT[];
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
-        return tournaments.length === 0 ? (
-          <NotFoundMessage message="Результаты по вашему запросу не найдены" />
-        ) : (
-          <>
-            <p className={styles.listTitle}>Турниры </p>
-            {tournaments.map((v, index) => (
-              <Link key={index} href={'/tournaments/' + index}>
-                <span>{v.name}</span>
-                {/* <div className={styles.tournamentListItem}>
-              <div>
-                <span>{title}</span>
-                {status && <span className={styles.status}>{status}</span>}
-              </div>
-              <div>
-                <span>{date}</span>
-                {winners && <span>{winners}</span>}
-              </div>
-            </div> */}
-              </Link>
-            ))}
-          </>
-        );
+        filteredTournaments = active;
+        break;
       case TOURNAMENT_TABS[1]:
-        return null;
+        filteredTournaments = recording;
+        break;
       case TOURNAMENT_TABS[2]:
-        return null;
+        filteredTournaments = finished;
+        break;
+      default:
+        filteredTournaments = [];
     }
+
+    return tournaments.length === 0 ? (
+      <NotFoundMessage message="В категории пока нет турниров" />
+    ) : (
+      <>
+        {filteredTournaments.map((v, index) => (
+          <Link key={index} href={'/tournaments/' + index}>
+            <div className={styles.tournamentListItem}>
+              <div>
+                <span className={styles.tournamentName}>{v.name}</span>
+                {v.status && (
+                  <span className={styles.status}>
+                    {TOURNAMENT_STATUS_NUMBER_VALUES[v.status]}
+                  </span>
+                )}
+              </div>
+              <div>
+                <span className={styles.startDate}>
+                  {v.start_date && format(new Date(v.start_date), 'dd.MM.yyyy')}
+                </span>
+                {v.status === 3 || v.is_finished ? (
+                  <span>{'<имя победителя>'}</span>
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </>
+    );
   })();
 
   const submitSearch = async () => {
@@ -85,6 +127,7 @@ const TournamentsPage: NextPage = () => {
           submitSearch={submitSearch}
         />
       </div>
+      <p className={styles.listTitle}>Турниры </p>
       <Tabs
         activeTab={activeTab}
         tabNames={TOURNAMENT_TABS}
