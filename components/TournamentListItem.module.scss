@@ -1,0 +1,44 @@
+@import '../styles/variables.scss';
+
+.container {
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  margin-bottom: 8px;
+  padding: 10px;
+}
+
+.status {
+  padding: 5px 10px;
+  background-color: $custom-black;
+  color: $custom-aqua;
+  font-weight: 500;
+  font-size: 14px;
+  align-self: baseline;
+  border-radius: 14px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+
+  &:first-child {
+    margin-bottom: 5px;
+  }
+}
+
+.name {
+  display: inline-block;
+  max-width: 70%;
+  font-weight: 500;
+  color: $custom-lightlightgray;
+}
+
+.startDate {
+  font-weight: 200;
+  font-size: 12px;
+}
+
+.winnerName {
+  font-size: 14px;
+  color: $custom-lightlightgray;
+}

@@ -1,45 +1,7 @@
-.tournamentContainer {
+.сontainer {
   padding: 50px 15px 15px;
   min-height: 100vh;
   position: relative;
-
-  // duplicdate
-  // todo: investigate when implementing single tournament page
-  // .tournamentListItem {
-  //   background-color: #1b2223;
-  //   border-radius: 5px;
-  //   margin-bottom: 15px;
-  //   padding: 10px;
-
-  //   .status {
-  //     padding: 5px;
-  //     background-color: black;
-  //     color: #4cc4d1;
-  //     font-weight: 500;
-  //     font-size: 14px;
-  //     align-self: baseline;
-  //     border-radius: 5px;
-  //   }
-
-  //   > div {
-  //     display: flex;
-  //     justify-content: space-between;
-
-  //     &:first-child {
-  //       margin-bottom: 10px;
-  //       font-weight: 200;
-
-  //       span {
-  //         display: inline-block;
-
-  //         &:first-child {
-  //           max-width: 70%;
-  //           font-weight: 500;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 
   .playersList {
     padding: 0;

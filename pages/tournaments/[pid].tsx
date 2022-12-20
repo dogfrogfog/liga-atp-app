@@ -18,7 +18,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import styles from '../../styles/Tournament.module.scss';
 
-const PROFILE_TABS = ['Участники', 'Сетка турнира', 'Игровой день'];
+const PROFILE_TABS = ['Расписание', 'Список игроков', 'Скачать сетку'];
 
 const TournamentPage: NextPage = () => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
@@ -153,7 +153,7 @@ const TournamentPage: NextPage = () => {
   };
 
   return (
-    <div className={styles.tournamentContainer}>
+    <div className={styles.сontainer}>
       {/* <span onClick={handleOpen} className={styles.registration}>Записаться</span> */}
       <br />
       <br />

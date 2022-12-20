@@ -26,38 +26,3 @@
   font-size: 30px;
   font-weight: 600;
 }
-
-.tournamentListItem {
-  background-color: $custom-darkgray;
-  border-radius: 14px;
-  margin-bottom: 15px;
-  padding: 10px;
-
-  .status {
-    padding: 5px 10px;
-    background-color: $custom-black;
-    color: $custom-aqua;
-    font-weight: 500;
-    font-size: 14px;
-    align-self: baseline;
-    border-radius: 14px;
-  }
-
-  > div {
-    display: flex;
-    justify-content: space-between;
-
-    &:first-child {
-      font-weight: 200;
-
-      span {
-        display: inline-block;
-
-        &:first-child {
-          max-width: 70%;
-          font-weight: 500;
-        }
-      }
-    }
-  }
-}

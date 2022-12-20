@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SearchInput from 'components/SearchInput';
+import TournamentListItem from 'components/TournamentListItem';
 import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
 import { getTournaments } from 'services/tournaments';
 import styles from '../../styles/Tournaments.module.scss';
@@ -80,26 +81,12 @@ const TournamentsPage: NextPage = () => {
       <>
         {filteredTournaments.map((v, index) => (
           <Link key={index} href={'/tournaments/' + index}>
-            <div className={styles.tournamentListItem}>
-              <div>
-                <span className={styles.tournamentName}>{v.name}</span>
-                {v.status && (
-                  <span className={styles.status}>
-                    {TOURNAMENT_STATUS_NUMBER_VALUES[v.status]}
-                  </span>
-                )}
-              </div>
-              <div>
-                <span className={styles.startDate}>
-                  {v.start_date && format(new Date(v.start_date), 'dd.MM.yyyy')}
-                </span>
-                {v.status === 3 || v.is_finished ? (
-                  <span>{'<имя победителя>'}</span>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
+            <TournamentListItem
+              name={v.name || 'tbd'}
+              status={v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'}
+              startDate={v.start_date ? format(new Date(v.start_date), 'dd.MM.yyyy') : 'tbd'}
+              winnerName={v.status === 3 || v.is_finished ? '<имя победителя>' : ''}
+            />
           </Link>
         ))}
       </>
