@@ -1,31 +1,21 @@
 .сontainer {
-  padding: 50px 15px 15px;
+  padding: 15px;
   min-height: 100vh;
   position: relative;
+}
 
-  .playersList {
-    padding: 0;
-    margin: 0;
-    list-style: none;
+.header {
+  height: 100px;
 
-    li {
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border-bottom: 1px solid #1b2223;
-
-      div {
-        > span:first-child {
-          margin-right: 15px;
-        }
-
-        > span:last-child {
-          background-color: #1b2223;
-          color: #4cc4d1;
-        }
-      }
-    }
+  .tournamentItem {
+    position: absolute;
+    top: 37px;
+    left: 15px;
+    padding-left: 80px;
+    width: calc(100% - 30px);
   }
+}
+
+.tabsContainer {
+  margin-top: 20px;
 }

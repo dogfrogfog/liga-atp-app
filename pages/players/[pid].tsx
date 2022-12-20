@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import { FaMedal } from 'react-icons/fa';
 import {
   PrismaClient,
@@ -219,12 +219,12 @@ const ProfileHeader = ({
   );
 };
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
   const prisma = new PrismaClient();
 
   const player = await prisma.player.findUnique({
     where: {
-      id: parseInt(ctx.query.pid),
+      id: parseInt(ctx.query.pid as string),
     },
   });
 

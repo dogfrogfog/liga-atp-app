@@ -1,10 +1,13 @@
+import cl from 'classnames';
+
 import styles from './TournamentListItem.module.scss';
 
 type TournamentListItemsProps = {
   name: string;
   status: string;
   startDate: string;
-  winnerName: string;
+  winnerName?: string;
+  className?: string;
 };
 
 const TournamentListItems = ({
@@ -12,8 +15,9 @@ const TournamentListItems = ({
   status,
   startDate,
   winnerName,
+  className,
 }: TournamentListItemsProps) => (
-  <div className={styles.container}>
+  <div className={cl(styles.container, className)}>
     <div className={styles.row}>
       <span className={styles.name}>{name}</span>
       <span className={styles.status}>{status}</span>

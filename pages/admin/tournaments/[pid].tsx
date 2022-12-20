@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import cl from 'classnames';
 import {
   PrismaClient,
@@ -710,12 +710,12 @@ const MatchForm = ({
 
 export default AdminSingleTournamentPape;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
   const prisma = new PrismaClient();
 
   const tournament = await prisma.tournament.findUnique({
     where: {
-      id: parseInt(ctx.query.pid),
+      id: parseInt(ctx.query.pid as string),
     },
     include: {
       match: true,
