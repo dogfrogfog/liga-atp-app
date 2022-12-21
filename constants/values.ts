@@ -52,6 +52,10 @@ export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: NumberValuesT = {
   18: 'G16',
 };
 
+export const GROUPS_DRAW_TYPES = [14, 15, 16, 17, 18];
+export const singleStagesNames = ['R64', 'R32', 'R16', 'QF', 'SF', 'F'];
+export const groupStagesNames = ['QF', 'SF', 'F'];
+
 export const SURFACE_TYPE_NUMBER_VALUES: NumberValuesT = {
   0: 'Хард',
   1: 'Грунт',

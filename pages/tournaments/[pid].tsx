@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
-import { PrismaClient, tournament as TournamentT } from '@prisma/client';
+import {
+  PrismaClient,
+  tournament as TournamentT,
+  match as MatchT,
+  player as PlayerT,
+} from '@prisma/client';
 import { format } from 'date-fns';
 
 import Tabs from 'ui-kit/Tabs';
@@ -8,20 +13,48 @@ import TournamentListItem from 'components/TournamentListItem';
 import Schedule from 'components/tournamentTabs/Schedule';
 import PlayersList from 'components/tournamentTabs/PlayersList';
 import Download from 'components/tournamentTabs/Download';
-import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
+import {
+  TOURNAMENT_STATUS_NUMBER_VALUES,
+  GROUPS_DRAW_TYPES,
+} from 'constants/values';
 import styles from 'styles/Tournament.module.scss';
+import { IBracketsUnit } from 'components/admin/TournamentDraw';
 
 const TOURNAMENT_TAB = ['Расписание', 'Список игроков', 'Скачать сетку'];
 
-const TournamentPage: NextPage<{ tournament: TournamentT }> = ({
-  tournament,
-}) => {
+const TournamentPage: NextPage<{
+  brackets: IBracketsUnit[][];
+  tournament: TournamentT;
+  tournamentMatches: MatchT[];
+  registeredPlayers: PlayerT[];
+}> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
+
+  const handleStageChange = (stageIndex: number) => {
+    setActiveStageIndex(stageIndex);
+  };
 
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TAB[0]:
-        return <Schedule />;
+        return brackets ? (
+          <Schedule
+            hasGroups={
+              tournament.draw_type
+                ? GROUPS_DRAW_TYPES.includes(tournament.draw_type)
+                : false
+            }
+            isDoubles={!!tournament.is_doubles}
+            activeStageIndex={activeStageIndex}
+            handleStageChange={handleStageChange}
+            brackets={brackets}
+            tournamentMatches={tournamentMatches}
+            registeredPlayers={registeredPlayers}
+          />
+        ) : (
+          'Расписание отсутствует в настоящий момент'
+        );
       case TOURNAMENT_TAB[1]:
         return <PlayersList />;
       case TOURNAMENT_TAB[2]:
@@ -40,7 +73,7 @@ const TournamentPage: NextPage<{ tournament: TournamentT }> = ({
       <div className={styles.header}>
         <TournamentListItem
           className={styles.tournamentItem}
-          name={tournament.name || ''}
+          name={tournament.name || 'tbd'}
           status={
             tournament.status
               ? TOURNAMENT_STATUS_NUMBER_VALUES[tournament.status]
@@ -72,11 +105,34 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     where: {
       id: parseInt(ctx.query.pid as string),
     },
+    include: {
+      match: true,
+    },
+  });
+
+  const { match, ...rest } = tournament || {};
+
+  const brackets = tournament?.draw
+    ? JSON.parse(tournament.draw)?.brackets
+    : null;
+  const registeredPlayersIds = tournament?.players_order
+    ? JSON.parse(tournament.players_order)?.players
+    : null;
+
+  const registeredPlayers = await prisma.player.findMany({
+    where: {
+      id: {
+        in: registeredPlayersIds,
+      },
+    },
   });
 
   return {
     props: {
-      tournament,
+      tournament: rest,
+      tournamentMatches: match,
+      brackets,
+      registeredPlayers,
     },
   };
 };
