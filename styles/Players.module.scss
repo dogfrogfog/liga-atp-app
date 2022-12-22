@@ -2,59 +2,6 @@
 
 .playersContainer {
   padding: 15px;
-  position: relative;
-
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-
-    thead {
-      border-bottom: 20px solid transparent;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 30px;
-      letter-spacing: -0.165px;
-      color: $custom-white;
-
-      tr {
-        td:nth-child(2),
-        td:last-child {
-          text-align: center;
-        }
-      }
-    }
-
-    tbody {
-      tr {
-        border-bottom: 10px solid transparent;
-
-        td {
-          width: 20%;
-
-          &:first-child {
-            width: 60%;
-          }
-        }
-
-        td:nth-child(2) {
-          font-weight: 500;
-          font-size: 14px;
-          line-height: 18px;
-          text-align: center;
-        }
-
-        td:last-child {
-          font-weight: 600;
-          font-size: 14px;
-          line-height: 18px;
-          letter-spacing: -0.165px;
-          color: $custom-aqua;
-          text-align: center;
-        }
-      }
-    }
-  }
 
   .header {
     height: 60px;
@@ -66,35 +13,5 @@
     margin: 0 0 10px;
     font-size: 30px;
     font-weight: 600;
-  }
-
-  :global(.MuiTableContainer-root) {
-    th,
-    td {
-      color: $custom-white;
-    }
-
-    width: 100%;
-  }
-}
-
-.playerRow {
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-
-  .image {
-    border: 1px solid $custom-lightgray;
-    width: 25px;
-    height: 25px;
-    margin-right: 20px;
-    border-radius: 50%;
-  }
-
-  svg,
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
   }
 }

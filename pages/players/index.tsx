@@ -1,20 +1,18 @@
 import { ChangeEvent, useState } from 'react';
 import type { NextPage } from 'next';
-import Link from 'next/link';
 import axios from 'axios';
-import { BsFillPersonFill } from 'react-icons/bs';
 import { PrismaClient, player as PlayerT } from '@prisma/client';
 
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import SearchInput from 'components/SearchInput';
+import PlayersList from 'components/PlayersList';
 import styles from 'styles/Players.module.scss';
 
-type PlayersPageProps = {
+type PlayersIndexPageProps = {
   players: PlayerT[];
 };
 
-const Players: NextPage<PlayersPageProps> = ({ players }) => {
+const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState(players);
 
@@ -38,37 +36,7 @@ const Players: NextPage<PlayersPageProps> = ({ players }) => {
       ) : (
         <>
           <p className={styles.listTitle}>Игроки</p>
-          <div className={styles.playersTable}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <td>Игрок</td>
-                  <td>Уровень</td>
-                  <td>Рейтинг</td>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map(({ id, first_name, last_name, level, avatar }) => (
-                  <Link key={id} href={'/players/' + id}>
-                    <tr key={id}>
-                      <td>
-                        <div className={styles.playerRow}>
-                          <div className={styles.image}>
-                            {avatar ? null : <BsFillPersonFill />}
-                          </div>
-                          <span>{`${(
-                            first_name as string
-                          )[0].toUpperCase()}. ${last_name}`}</span>
-                        </div>
-                      </td>
-                      <td>{LEVEL_NUMBER_VALUES[level as number]}</td>
-                      <td>1489</td>
-                    </tr>
-                  </Link>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PlayersList players={data} />
         </>
       )}
       <SearchInput
@@ -97,4 +65,4 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default Players;
+export default PlayersIndexPage;
