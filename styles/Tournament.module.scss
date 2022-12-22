@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .сontainer {
   padding: 15px;
   min-height: 100vh;
@@ -18,4 +20,19 @@
 
 .tabsContainer {
   margin-top: 20px;
+  position: relative;
+}
+
+.downloadButton {
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: $custom-white;
+
+  svg {
+    width: 34px;
+    height: 34px;
+  }
 }

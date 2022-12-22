@@ -7,6 +7,7 @@ import {
   player as PlayerT,
 } from '@prisma/client';
 import { format } from 'date-fns';
+import { AiOutlineDownload } from 'react-icons/ai';
 
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
@@ -20,7 +21,7 @@ import {
 import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 
-const TOURNAMENT_TAB = ['Расписание', 'Список игроков', 'Скачать сетку'];
+const TOURNAMENT_TAB = ['Расписание', 'Список игроков'];
 
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];
@@ -80,6 +81,9 @@ const TournamentPage: NextPage<{
         />
       </div>
       <section className={styles.tabsContainer}>
+        <button onClick={() => ({})} className={styles.downloadButton}>
+          <AiOutlineDownload />
+        </button>
         <Tabs
           tabNames={TOURNAMENT_TAB}
           activeTab={activeTab}
