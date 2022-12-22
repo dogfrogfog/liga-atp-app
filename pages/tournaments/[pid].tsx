@@ -8,6 +8,7 @@ import {
 } from '@prisma/client';
 import { format } from 'date-fns';
 import { AiOutlineDownload } from 'react-icons/ai';
+import { AiOutlineUserAdd } from 'react-icons/ai';
 
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
@@ -59,6 +60,8 @@ const TournamentPage: NextPage<{
     setActiveTab(TOURNAMENT_TAB[value]);
   };
 
+  const isFinished = tournament.is_finished || tournament.status === 3;
+
   return (
     <div className={styles.сontainer}>
       <div className={styles.header}>
@@ -78,15 +81,27 @@ const TournamentPage: NextPage<{
         />
       </div>
       <section className={styles.tabsContainer}>
-        <button onClick={() => ({})} className={styles.downloadButton}>
-          <AiOutlineDownload />
-        </button>
-        <Tabs
-          tabNames={TOURNAMENT_TAB}
-          activeTab={activeTab}
-          onChange={handleTabChange}
-        />
-        {activeTabContent}
+        {!isFinished ? (
+          <>
+            {tournament.status === 2 ? (
+              <button onClick={() => ({})} className={styles.downloadButton}>
+                <AiOutlineDownload />
+              </button>
+            ) : (
+              <button onClick={() => ({})} className={styles.downloadButton}>
+                <AiOutlineUserAdd />
+              </button>
+            )}
+            <Tabs
+              tabNames={TOURNAMENT_TAB}
+              activeTab={activeTab}
+              onChange={handleTabChange}
+            />
+            {activeTabContent}
+          </>
+        ) : (
+          <div>Турнир прошел</div>
+        )}
       </section>
     </div>
   );
