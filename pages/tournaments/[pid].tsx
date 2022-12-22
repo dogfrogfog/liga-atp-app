@@ -11,8 +11,8 @@ import { format } from 'date-fns';
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
 import Schedule from 'components/tournamentTabs/Schedule';
-import PlayersList from 'components/tournamentTabs/PlayersList';
 import Download from 'components/tournamentTabs/Download';
+import PlayersList from 'components/PlayersList';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
   GROUPS_DRAW_TYPES,
@@ -49,7 +49,7 @@ const TournamentPage: NextPage<{
           'Расписание отсутствует в настоящий момент'
         );
       case TOURNAMENT_TAB[1]:
-        return <PlayersList />;
+        return <PlayersList players={registeredPlayers} />;
       case TOURNAMENT_TAB[2]:
         return <Download />;
       default:
