@@ -112,13 +112,16 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     ? JSON.parse(tournament.players_order)?.players
     : null;
 
-  const registeredPlayers = await prisma.player.findMany({
-    where: {
-      id: {
-        in: registeredPlayersIds,
+  let registeredPlayers = [] as PlayerT[];
+  if (registeredPlayersIds) {
+    registeredPlayers = await prisma.player.findMany({
+      where: {
+        id: {
+          in: registeredPlayersIds,
+        },
       },
-    },
-  });
+    });
+  }
 
   return {
     props: {

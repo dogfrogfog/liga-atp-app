@@ -31,6 +31,9 @@
   max-width: 70%;
   font-weight: 500;
   color: $custom-lightlightgray;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .startDate {

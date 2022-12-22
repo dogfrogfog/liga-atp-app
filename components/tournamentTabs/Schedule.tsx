@@ -4,11 +4,7 @@ import { format } from 'date-fns';
 import { useSpringCarousel } from 'react-spring-carousel';
 
 import type { IBracketsUnit } from 'components/admin/TournamentDraw';
-import {
-  singleStagesNames,
-  groupStagesNames,
-  GROUPS_DRAW_TYPES,
-} from 'constants/values';
+import { singleStagesNames, groupStagesNames } from 'constants/values';
 import styles from './Schedule.module.scss';
 
 type ScheculeTabProps = {
