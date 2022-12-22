@@ -12,7 +12,6 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
 import Schedule from 'components/tournamentTabs/Schedule';
-import Download from 'components/tournamentTabs/Download';
 import PlayersList from 'components/PlayersList';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
@@ -51,8 +50,6 @@ const TournamentPage: NextPage<{
         );
       case TOURNAMENT_TAB[1]:
         return <PlayersList players={registeredPlayers} />;
-      case TOURNAMENT_TAB[2]:
-        return <Download />;
       default:
         return null;
     }
