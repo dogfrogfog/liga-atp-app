@@ -1,6 +1,7 @@
 import cl from 'classnames';
 import { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
+import { useSpringCarousel } from 'react-spring-carousel';
 
 import type { IBracketsUnit } from 'components/admin/TournamentDraw';
 import {
@@ -11,8 +12,6 @@ import {
 import styles from './Schedule.module.scss';
 
 type ScheculeTabProps = {
-  activeStageIndex: number;
-  handleStageChange: (v: number) => void;
   brackets: IBracketsUnit[][];
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
@@ -21,8 +20,6 @@ type ScheculeTabProps = {
 };
 
 const ScheculeTab = ({
-  activeStageIndex,
-  handleStageChange,
   brackets,
   tournamentMatches,
   registeredPlayers,
@@ -47,77 +44,92 @@ const ScheculeTab = ({
     return acc;
   }, new Map<number, PlayerT>());
 
+  const { carouselFragment, thumbsFragment, slideToItem, getIsActiveItem } =
+    useSpringCarousel({
+      withThumbs: true,
+      items: brackets.map((stage, i, arr) => ({
+        id: i + '',
+        renderItem: (
+          <Stage
+            stage={stage}
+            isFinal={arr.length - 1 === i}
+            isDoubles={isDoubles}
+            matchesMap={matchesMap}
+            playersMap={playersMap}
+          />
+        ),
+        renderThumb: (
+          <button onClick={() => slideToItem(i)} className={styles.stageButton}>
+            {stages[i]}
+          </button>
+        ),
+      })),
+    });
+
   return (
     <div className={styles.container}>
       <div className={styles.bracketContainer}>
-        <div className={styles.stageButtons}>
-          {stages.map((stage, i) => (
-            <button
-              key={stage}
-              className={cl(
-                styles.stageButton,
-                activeStageIndex === i ? styles.active : ''
-              )}
-              onClick={() => handleStageChange(i)}
-            >
-              {stage}
-            </button>
-          ))}
-        </div>
-        <div className={styles.bracket}>
-          {brackets.map((stage, si, arr) =>
-            // todo: each stage should be a slide
-            si === activeStageIndex ? (
-              <div key={si} className={styles.stage}>
-                {stage.map((bracketUnit, mi) => {
-                  if (Array.isArray(bracketUnit)) {
-                    return (
-                      <div key={mi} className={styles.groupWrapper}>
-                        <p className={styles.groupTitle}>Группа {mi + 1}</p>
-                        {bracketUnit.length > 0
-                          ? bracketUnit.map((v, gmi) => (
-                              <Match
-                                key={gmi}
-                                isFinal={isFinal}
-                                isDoubles={isDoubles}
-                                match={matchesMap.get(v.matchId)}
-                                playersMap={playersMap}
-                              />
-                            ))
-                          : 'В группе пока нет матчей'}
-                      </div>
-                    );
-                  }
-
-                  if (!bracketUnit.matchId) {
-                    return (
-                      <div key={mi} className={styles.matchDoesntExists}>
-                        Матч не зарегестрирован
-                      </div>
-                    );
-                  }
-
-                  const match = matchesMap.get(bracketUnit.matchId);
-                  const isFinal = arr.length - 1 === si;
-
-                  return (
-                    <Match
-                      key={mi}
-                      isFinal={isFinal}
-                      isDoubles={isDoubles}
-                      match={match}
-                      playersMap={playersMap}
-                    />
-                  );
-                })}
-              </div>
-            ) : null
-          )}
-        </div>
+        <div className={styles.stageButtons}>{thumbsFragment}</div>
+        <div className={styles.bracket}>{carouselFragment}</div>
       </div>
     </div>
   );
 };
+
+type StageProps = {
+  stage: IBracketsUnit[];
+  isDoubles: boolean;
+  isFinal: boolean;
+  matchesMap: Map<number, MatchT>;
+  playersMap: Map<number, PlayerT>;
+};
+
+const Stage = ({
+  stage,
+  isDoubles,
+  matchesMap,
+  playersMap,
+  isFinal,
+}: StageProps) => (
+  <div className={styles.stage}>
+    {stage.map((bracketUnit, mi) => {
+      if (Array.isArray(bracketUnit)) {
+        return (
+          <div key={mi} className={styles.groupWrapper}>
+            <p className={styles.groupTitle}>Группа {mi + 1}</p>
+            {bracketUnit.length > 0
+              ? bracketUnit.map((v, gmi) => (
+                  <Match
+                    key={gmi}
+                    isFinal={isFinal}
+                    isDoubles={isDoubles}
+                    match={matchesMap.get(v.matchId)}
+                    playersMap={playersMap}
+                  />
+                ))
+              : 'В группе пока нет матчей'}
+          </div>
+        );
+      }
+
+      const match = bracketUnit?.matchId && matchesMap.get(bracketUnit.matchId);
+
+      return match ? (
+        <Match
+          key={mi}
+          isFinal={isFinal}
+          isDoubles={isDoubles}
+          match={match}
+          playersMap={playersMap}
+        />
+      ) : (
+        <div key={mi} className={styles.matchDoesntExists}>
+          Матч не зарегестрирован
+        </div>
+      );
+    })}
+  </div>
+);
 
 const Match = ({
   isDoubles,
@@ -156,7 +168,8 @@ const Match = ({
           <span
             className={cl(
               styles.name,
-              isPlayed && parseInt(match?.winner_id as string, 10) === p1?.id
+              isPlayed &&
+                parseInt(match?.winner_id as string, 10) === match?.player1_id
                 ? styles.winner
                 : ''
             )}
@@ -179,7 +192,8 @@ const Match = ({
           <span
             className={cl(
               styles.name,
-              isPlayed && parseInt(match?.winner_id as string, 10) === p2?.id
+              isPlayed &&
+                parseInt(match?.winner_id as string, 10) === match?.player2_id
                 ? styles.winner
                 : ''
             )}

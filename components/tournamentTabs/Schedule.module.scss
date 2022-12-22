@@ -5,6 +5,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+
+  // slider thumbs
+  > div {
+    justify-content: space-between;
+  }
 }
 
 .stageButton {
@@ -33,6 +38,7 @@
 .right {
   width: 30%;
   display: flex;
+  justify-content: flex-end;
 }
 
 .groupWrapper {
@@ -54,7 +60,7 @@
   padding: 15px;
   border: 1px solid $custom-white;
   border-radius: 10px;
-  width: 100%;
+  width: 300px;
   margin-bottom: 20px;
 
   &:last-child {
@@ -93,6 +99,10 @@
   overflow: hidden;
 }
 
+.name.winner {
+  color: $custom-aqua;
+}
+
 .img {
   display: inline-block;
   width: 20px;
@@ -100,4 +110,8 @@
   border-radius: 50%;
   border: 1px solid $custom-white;
   margin-right: 10px;
+}
+
+.use-spring-carousel-thumbs-wrapper {
+  background-color: red;
 }

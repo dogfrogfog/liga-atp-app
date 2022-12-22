@@ -29,11 +29,6 @@ const TournamentPage: NextPage<{
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
-  const [activeStageIndex, setActiveStageIndex] = useState(0);
-
-  const handleStageChange = (stageIndex: number) => {
-    setActiveStageIndex(stageIndex);
-  };
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -46,8 +41,6 @@ const TournamentPage: NextPage<{
                 : false
             }
             isDoubles={!!tournament.is_doubles}
-            activeStageIndex={activeStageIndex}
-            handleStageChange={handleStageChange}
             brackets={brackets}
             tournamentMatches={tournamentMatches}
             registeredPlayers={registeredPlayers}
