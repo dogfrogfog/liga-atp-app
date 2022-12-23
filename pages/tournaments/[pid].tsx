@@ -31,6 +31,7 @@ const TournamentPage: NextPage<{
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
+  const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -63,6 +64,11 @@ const TournamentPage: NextPage<{
 
   const isFinished = tournament.is_finished || tournament.status === 3;
 
+  const handleDownloadClick = () => { };
+  const toggleAddPlayerModal = () => {
+    setAddPlayerModalStatus(v => !v);
+  };
+
   return (
     <div className={styles.сontainer}>
       <div className={styles.header}>
@@ -85,13 +91,13 @@ const TournamentPage: NextPage<{
         {!isFinished ? (
           <>
             {tournament.status === 2 ? (
-              <button onClick={() => ({})} className={styles.downloadButton}>
+              <button onClick={handleDownloadClick} className={styles.nearTabButton}>
                 <AiOutlineDownload />
               </button>
             ) : (
-              <button onClick={() => ({})} className={styles.downloadButton}>
-                <AiOutlineUserAdd />
-              </button>
+                <button onClick={toggleAddPlayerModal} className={styles.nearTabButton}>
+                  <AiOutlineUserAdd />
+                </button>
             )}
             <Tabs
               tabNames={TOURNAMENT_TAB}
@@ -102,6 +108,20 @@ const TournamentPage: NextPage<{
           </>
         ) : (
           <div>Турнир прошел</div>
+        )}
+        {isAddPlayerModalOpen && (
+          <>
+            <div className={styles.addPlayerForm}>
+              <p className={styles.formTitle}>Форма регистрации игрока</p>
+              <form>
+                <input />
+                <input />
+                <input />
+                <input type="submit" />
+              </form>
+            </div>
+            <div onClick={toggleAddPlayerModal} className={styles.addPlayerFormOverlay}></div>
+          </>
         )}
       </section>
     </div>

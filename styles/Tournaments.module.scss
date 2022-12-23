@@ -35,6 +35,7 @@
 }
 
 .week {
+  width: 25%;
   padding: 5px 10px;
   border-radius: 10px;
   color: $custom-white;
@@ -47,7 +48,12 @@
   }
 
   .weekNumber {
-    font-size: 14px;
+    font-size: 12px;
+  }
+
+  .weekRange {
+    text-align: center;
+    font-size: 10px;
   }
 
   p {

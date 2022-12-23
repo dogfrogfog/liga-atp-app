@@ -67,7 +67,7 @@ const TournamentsPage: NextPage = () => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
         if (active.length === 0) {
-          return <NotFoundMessage message="В категории пока нет турниров" />;
+          return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
         return active.map((v) => (
@@ -92,7 +92,7 @@ const TournamentsPage: NextPage = () => {
         ));
       case TOURNAMENT_TABS[1]:
         if (recording.length === 0) {
-          return <NotFoundMessage message="В категории пока нет турниров" />;
+          return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
         let weeksFilterData: {
@@ -132,8 +132,8 @@ const TournamentsPage: NextPage = () => {
 
           weeksFilterData.push({
             weekNumber: firstWeekNumber + i,
-            startDateStr: format(tennisWeekStart, 'dd-MM'),
-            endDateStr: format(tennisWeekEnd, 'dd-MM'),
+            startDateStr: format(tennisWeekStart, 'dd.MM'),
+            endDateStr: format(tennisWeekEnd, 'dd.MM'),
           });
         }
 
@@ -151,7 +151,7 @@ const TournamentsPage: NextPage = () => {
                     )}
                   >
                     <p className={styles.weekNumber}>{weekNumber} неделя</p>
-                    <p>
+                    <p className={styles.weekRange}>
                       <i>
                         {startDateStr}-{endDateStr}
                       </i>
@@ -160,7 +160,7 @@ const TournamentsPage: NextPage = () => {
                 )
               )}
             </div>
-            {filteredTournaments.map((v) => (
+            {filteredTournaments.length > 0 ? filteredTournaments.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
                 <span>
                   <TournamentListItem
@@ -181,12 +181,14 @@ const TournamentsPage: NextPage = () => {
                   />
                 </span>
               </Link>
-            ))}
+            )) : (
+              <NotFoundMessage message='Нет доступных турниров' />
+            )}
           </div>
         );
       case TOURNAMENT_TABS[2]:
         if (finished.length === 0) {
-          return <NotFoundMessage message="В категории пока нет турниров" />;
+          return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
         return finished.map((v) => (
