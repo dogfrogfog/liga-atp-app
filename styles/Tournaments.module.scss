@@ -26,3 +26,40 @@
   font-size: 30px;
   font-weight: 600;
 }
+
+.weekFiltersContainer {
+  margin-bottom: 15px;
+  color: $custom-white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.week {
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: $custom-white;
+  background-color: $custom-darkgray;
+  border: none;
+  font-size: 12px;
+
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+
+  .weekNumber {
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0;
+
+    &:first-child {
+      margin-bottom: 5px;
+    }
+  }
+
+  &.active {
+    color: $custom-darkgray;
+    background-color: $custom-aqua;
+  }
+}

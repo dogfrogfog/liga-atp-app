@@ -120,7 +120,7 @@ const Stage = ({
         />
       ) : (
         <div key={mi} className={styles.matchDoesntExists}>
-          Матч не зарегестрирован
+          tbd / tbd
         </div>
       );
     })}

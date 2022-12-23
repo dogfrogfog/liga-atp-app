@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
 import Schedule from 'components/tournamentTabs/Schedule';
@@ -47,7 +48,7 @@ const TournamentPage: NextPage<{
             registeredPlayers={registeredPlayers}
           />
         ) : (
-          'Расписание отсутствует в настоящий момент'
+          <NotFoundMessage message="Сетка не сформирована" />
         );
       case TOURNAMENT_TAB[1]:
         return <PlayersList players={registeredPlayers} />;
