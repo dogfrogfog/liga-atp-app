@@ -82,6 +82,7 @@ model tournament {
   tournament_type          Int?
   is_doubles               Boolean?
   status                   Int?
+  unregistered_players     String?              @default("")
   tournament               tournament?          @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
   match                    match[]
   other_tournament         tournament?          @relation("tournamentTotournament")
