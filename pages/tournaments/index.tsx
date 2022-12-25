@@ -160,29 +160,33 @@ const TournamentsPage: NextPage = () => {
                 )
               )}
             </div>
-            {filteredTournaments.length > 0 ? filteredTournaments.map((v) => (
-              <Link key={v.id} href={'/tournaments/' + v.id}>
-                <span>
-                  <TournamentListItem
-                    name={v.name || 'tbd'}
-                    status={
-                      v.status
-                        ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
-                        : 'tbd'
-                    }
-                    startDate={
-                      v.start_date
-                        ? format(new Date(v.start_date), 'dd.MM.yyyy')
-                        : 'tbd'
-                    }
-                    winnerName={
-                      v.status === 3 || v.is_finished ? '<имя победителя>' : ''
-                    }
-                  />
-                </span>
-              </Link>
-            )) : (
-              <NotFoundMessage message='Нет доступных турниров' />
+            {filteredTournaments.length > 0 ? (
+              filteredTournaments.map((v) => (
+                <Link key={v.id} href={'/tournaments/' + v.id}>
+                  <span>
+                    <TournamentListItem
+                      name={v.name || 'tbd'}
+                      status={
+                        v.status
+                          ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
+                          : 'tbd'
+                      }
+                      startDate={
+                        v.start_date
+                          ? format(new Date(v.start_date), 'dd.MM.yyyy')
+                          : 'tbd'
+                      }
+                      winnerName={
+                        v.status === 3 || v.is_finished
+                          ? '<имя победителя>'
+                          : ''
+                      }
+                    />
+                  </span>
+                </Link>
+              ))
+            ) : (
+              <NotFoundMessage message="Нет доступных турниров" />
             )}
           </div>
         );

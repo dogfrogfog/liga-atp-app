@@ -9,7 +9,10 @@ import {
 import { format } from 'date-fns';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { AiOutlineUserAdd } from 'react-icons/ai';
+import cl from 'classnames';
+import { useForm } from 'react-hook-form';
 
+import InputWithError from 'ui-kit/InputWithError';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
@@ -32,6 +35,12 @@ const TournamentPage: NextPage<{
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
   const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm();
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -64,9 +73,13 @@ const TournamentPage: NextPage<{
 
   const isFinished = tournament.is_finished || tournament.status === 3;
 
-  const handleDownloadClick = () => { };
+  const handleDownloadClick = () => {};
   const toggleAddPlayerModal = () => {
-    setAddPlayerModalStatus(v => !v);
+    setAddPlayerModalStatus((v) => !v);
+  };
+
+  const submitPlayerRegistration = async (data: any) => {
+    console.log(data);
   };
 
   return (
@@ -91,13 +104,19 @@ const TournamentPage: NextPage<{
         {!isFinished ? (
           <>
             {tournament.status === 2 ? (
-              <button onClick={handleDownloadClick} className={styles.nearTabButton}>
+              <button
+                onClick={handleDownloadClick}
+                className={styles.nearTabButton}
+              >
                 <AiOutlineDownload />
               </button>
             ) : (
-                <button onClick={toggleAddPlayerModal} className={styles.nearTabButton}>
-                  <AiOutlineUserAdd />
-                </button>
+              <button
+                onClick={toggleAddPlayerModal}
+                className={styles.nearTabButton}
+              >
+                <AiOutlineUserAdd />
+              </button>
             )}
             <Tabs
               tabNames={TOURNAMENT_TAB}
@@ -113,14 +132,48 @@ const TournamentPage: NextPage<{
           <>
             <div className={styles.addPlayerForm}>
               <p className={styles.formTitle}>Форма регистрации игрока</p>
-              <form>
-                <input />
-                <input />
-                <input />
-                <input type="submit" />
+              <form onSubmit={handleSubmit(submitPlayerRegistration)}>
+                <InputWithError errorMessage={errors.first_name?.message}>
+                  <input
+                    className={styles.input}
+                    placeholder="Имя"
+                    {...register('first_name', { required: true })}
+                  />
+                </InputWithError>
+                <InputWithError errorMessage={errors.last_name?.message}>
+                  <input
+                    className={styles.input}
+                    placeholder="Фамилия"
+                    {...register('last_name', { required: true })}
+                  />
+                </InputWithError>
+                <InputWithError errorMessage={errors.phone?.message}>
+                  <input
+                    className={cl(styles.input, styles.phone)}
+                    placeholder="Номер телефона"
+                    {...register('phone', {
+                      pattern: {
+                        value: /^375\d{9}$/,
+                        message: 'Некорректный формат (прим. 375291234567)',
+                      },
+                    })}
+                  />
+                </InputWithError>
+                <span className={styles.phoneNote}>
+                  если вы впервые учавствуете в турнире - заполните поле{' '}
+                  <b>номер телефона</b>
+                </span>
+                <input
+                  className={cl(styles.input, styles.submit)}
+                  type="submit"
+                  value="Записаться"
+                />
               </form>
             </div>
-            <div onClick={toggleAddPlayerModal} className={styles.addPlayerFormOverlay}></div>
+            <div
+              onClick={toggleAddPlayerModal}
+              className={styles.addPlayerFormOverlay}
+            ></div>
           </>
         )}
       </section>
