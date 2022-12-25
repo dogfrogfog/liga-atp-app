@@ -3,7 +3,7 @@ import type { tournament as TournamentT, Prisma } from '@prisma/client';
 
 import type { PaginationProps } from '../components/admin/Pagination';
 
-interface TournamentsResponse<D> {
+interface TournamentsResponse<D = any> {
   data?: D;
   isOk: boolean;
   errorMessage?: string;
@@ -62,6 +62,22 @@ export async function deleteSelectedTournament(
 ): Promise<IDeleteTournamentResponse> {
   // todo: match { data } with beckend
   const response = await axios.delete('/api/tournaments', { data: ids });
+
+  if (response.status === 200) {
+    return { isOk: true };
+  } else {
+    return { isOk: false, errorMessage: response.statusText };
+  }
+}
+
+export async function addPlayerToTheTournament(
+  id: number,
+  firstName: string,
+  lastName: string
+): Promise<TournamentsResponse> {
+  const response = await axios.post('/api/tournaments/addPlayer', {
+    data: { id, first_name: firstName, last_name: lastName },
+  });
 
   if (response.status === 200) {
     return { isOk: true };
