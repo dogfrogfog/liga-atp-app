@@ -8,7 +8,7 @@ export default async (
   res: NextApiResponse<TournamentT>
 ) => {
   if (req.method === 'POST') {
-    const { id, dataToUpdate } = req.body.data;
+    const { id, ...dataToUpdate } = req.body.data;
     const updatedTournament = await prisma.tournament.update({
       where: {
         id: id,

@@ -70,14 +70,11 @@ export async function deleteSelectedTournament(
   }
 }
 
-export async function addPlayerToTheTournament(
-  id: number,
-  firstName: string,
-  lastName: string
-): Promise<TournamentsResponse> {
-  const response = await axios.post('/api/tournaments/addPlayer', {
-    data: { id, first_name: firstName, last_name: lastName },
-  });
+export async function addPlayerToTheTournament(data: {
+  id: number;
+  unregistered_players: string;
+}): Promise<TournamentsResponse> {
+  const response = await axios.post('/api/tournaments/addPlayer', { data });
 
   if (response.status === 200) {
     return { isOk: true };

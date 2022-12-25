@@ -12,6 +12,7 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import cl from 'classnames';
 import { useForm } from 'react-hook-form';
 
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import InputWithError from 'ui-kit/InputWithError';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
@@ -24,6 +25,7 @@ import {
 } from 'constants/values';
 import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
+import { addPlayerToTheTournament } from 'services/tournaments';
 
 const TOURNAMENT_TAB = ['Расписание', 'Список игроков'];
 
@@ -35,11 +37,12 @@ const TournamentPage: NextPage<{
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
   const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
+  const [isPlayerLoading, setPlayerLoadingStatus] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    control,
+    reset,
   } = useForm();
 
   const activeTabContent = (() => {
@@ -78,8 +81,33 @@ const TournamentPage: NextPage<{
     setAddPlayerModalStatus((v) => !v);
   };
 
-  const submitPlayerRegistration = async (data: any) => {
-    console.log(data);
+  const submitPlayerRegistration = async (
+    data: { first_name: string; last_name: string; phone?: string } & any
+  ) => {
+    setPlayerLoadingStatus(true);
+
+    let newUnregisteredPlayers;
+    if (tournament.unregistered_players) {
+      const prevUnregisteredPlayers = JSON.parse(
+        tournament.unregistered_players
+      );
+
+      newUnregisteredPlayers = prevUnregisteredPlayers.concat([data]);
+    } else {
+      newUnregisteredPlayers = [data];
+    }
+
+    const { isOk } = await addPlayerToTheTournament({
+      id: tournament.id,
+      unregistered_players: JSON.stringify(newUnregisteredPlayers),
+    });
+
+    if (isOk) {
+      setAddPlayerModalStatus(false);
+      reset();
+    }
+
+    setPlayerLoadingStatus(false);
   };
 
   return (
@@ -132,43 +160,47 @@ const TournamentPage: NextPage<{
           <>
             <div className={styles.addPlayerForm}>
               <p className={styles.formTitle}>Форма регистрации игрока</p>
-              <form onSubmit={handleSubmit(submitPlayerRegistration)}>
-                <InputWithError errorMessage={errors.first_name?.message}>
+              {!isPlayerLoading ? (
+                <form onSubmit={handleSubmit(submitPlayerRegistration)}>
+                  <InputWithError errorMessage={errors.first_name?.message}>
+                    <input
+                      className={styles.input}
+                      placeholder="Имя"
+                      {...register('first_name', { required: true })}
+                    />
+                  </InputWithError>
+                  <InputWithError errorMessage={errors.last_name?.message}>
+                    <input
+                      className={styles.input}
+                      placeholder="Фамилия"
+                      {...register('last_name', { required: true })}
+                    />
+                  </InputWithError>
+                  <InputWithError errorMessage={errors.phone?.message}>
+                    <input
+                      className={cl(styles.input, styles.phone)}
+                      placeholder="Номер телефона"
+                      {...register('phone', {
+                        pattern: {
+                          value: /^375\d{9}$/,
+                          message: 'Некорректный формат (прим. 375291234567)',
+                        },
+                      })}
+                    />
+                  </InputWithError>
+                  <span className={styles.phoneNote}>
+                    если вы впервые учавствуете в турнире - заполните поле{' '}
+                    <b>номер телефона</b>
+                  </span>
                   <input
-                    className={styles.input}
-                    placeholder="Имя"
-                    {...register('first_name', { required: true })}
+                    className={cl(styles.input, styles.submit)}
+                    type="submit"
+                    value="Записаться"
                   />
-                </InputWithError>
-                <InputWithError errorMessage={errors.last_name?.message}>
-                  <input
-                    className={styles.input}
-                    placeholder="Фамилия"
-                    {...register('last_name', { required: true })}
-                  />
-                </InputWithError>
-                <InputWithError errorMessage={errors.phone?.message}>
-                  <input
-                    className={cl(styles.input, styles.phone)}
-                    placeholder="Номер телефона"
-                    {...register('phone', {
-                      pattern: {
-                        value: /^375\d{9}$/,
-                        message: 'Некорректный формат (прим. 375291234567)',
-                      },
-                    })}
-                  />
-                </InputWithError>
-                <span className={styles.phoneNote}>
-                  если вы впервые учавствуете в турнире - заполните поле{' '}
-                  <b>номер телефона</b>
-                </span>
-                <input
-                  className={cl(styles.input, styles.submit)}
-                  type="submit"
-                  value="Записаться"
-                />
-              </form>
+                </form>
+              ) : (
+                <LoadingSpinner />
+              )}
             </div>
             <div
               onClick={toggleAddPlayerModal}
