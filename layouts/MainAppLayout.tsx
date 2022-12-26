@@ -70,7 +70,7 @@ function MainAppLayout({ children }: { children: ReactNode }) {
             <HeadToHead />
           </div>
         </Link>
-        <Link href="/other">
+        {/* <Link href="/other">
           <div
             className={cl(
               styles.menuItem,
@@ -80,7 +80,7 @@ function MainAppLayout({ children }: { children: ReactNode }) {
             <HiViewList />
             Прочее
           </div>
-        </Link>
+        </Link> */}
       </div>
     </>
   );
