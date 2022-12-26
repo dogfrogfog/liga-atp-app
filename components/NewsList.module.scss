@@ -1,10 +1,11 @@
-@import '../../styles/variables';
+@import '../styles/variables';
 
 .article {
   background-color: $custom-black;
   margin-bottom: 15px;
   padding: 15px;
-  border-radius: 14px;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
 
   .header {
     display: flex;
@@ -26,4 +27,11 @@
     margin: 0;
     letter-spacing: 1px;
   }
+}
+
+.imagePreview {
+  height: 120px;
+  background-color: #6a6a6a;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
 }

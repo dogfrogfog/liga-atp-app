@@ -13,7 +13,7 @@ import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
-import NewsTab from 'components/profileTabs/News';
+import NewsList from 'components/NewsList';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import Tabs from 'ui-kit/Tabs';
 import styles from 'styles/Profile.module.scss';
@@ -150,7 +150,15 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
           />
         );
       case PROFILE_TABS[4]:
-        return <NewsTab />;
+        return (
+          <NewsList
+            news={new Array(3).fill({
+              title: 'Вторая травма ахила за неделю',
+              date: '11.11.2022',
+              desc: 'Lorem ipsum dolor sit amet, con',
+            })}
+          />
+        );
       default:
         return null;
     }
