@@ -10,16 +10,16 @@ type NewsListProps = {
 const NewsList = ({ news }: NewsListProps) => (
   <>
     {news.map((v) => (
-      <Link key={v.title} href={`digest/${v.id}`}>
-        <Fragment>
-          <div className={styles.imagePreview}></div>
-          <div key={v.title} className={styles.article}>
+      <Fragment key={v.id}>
+        <div className={styles.imagePreview}></div>
+        <div key={v.title} className={styles.article}>
+          <Link href={`digest/${v.id}`}>
             <p className={styles.title}>{v.title}</p>
-            <p className={styles.desc}>{v.desc}</p>
-            <span className={styles.date}>{v.date}</span>
-          </div>
-        </Fragment>
-      </Link>
+          </Link>
+          <p className={styles.desc}>{v.desc}</p>
+          <span className={styles.date}>{v.date}</span>
+        </div>
+      </Fragment>
     ))}
   </>
 );

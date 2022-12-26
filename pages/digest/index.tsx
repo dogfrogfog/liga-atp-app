@@ -12,7 +12,7 @@ const DigestPage: NextPage = () => {
           title: 'Вторая травма ахила за неделю',
           date: '11.11.2022',
           desc: 'Lorem ipsum dolor sit amet, con',
-          id: 2222,
+          id: Math.round(Math.random() * 100),
         })}
       />
     </div>
