@@ -6,27 +6,18 @@
   padding: 15px;
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
+  position: relative;
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 500;
-    margin-bottom: 20px;
+.title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
 
-    span {
-      display: block;
-
-      &:last-child {
-        text-align: right;
-        width: 130px;
-      }
-    }
-  }
-
-  .preview {
-    margin: 0;
-    letter-spacing: 1px;
-  }
+.desc {
+  margin: 0;
+  letter-spacing: 1px;
 }
 
 .imagePreview {
@@ -34,4 +25,15 @@
   background-color: #6a6a6a;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
+}
+
+.date {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  position: absolute;
+  right: 10px;
+  top: -35px;
+  background-color: $custom-lightgray;
+  color: $custom-black;
 }
