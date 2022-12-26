@@ -1,0 +1,61 @@
+@import '../styles/variables.scss';
+
+.table {
+  width: 100%;
+}
+
+.titles {
+  display: flex;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.nameColumn {
+  width: 60%;
+  display: inline-block;
+}
+
+.levelColumn,
+.rankColumn {
+  display: inline-block;
+  width: 20%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listItem {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.rankValue {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.165px;
+  color: $custom-aqua;
+  text-align: center;
+}
+
+.playerName {
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+
+  .image {
+    border: 1px solid $custom-lightgray;
+    width: 25px;
+    height: 25px;
+    margin-right: 20px;
+    border-radius: 50%;
+  }
+
+  svg,
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}

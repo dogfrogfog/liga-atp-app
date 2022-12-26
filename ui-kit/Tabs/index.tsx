@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import cl from 'classnames';
-import Tabs from '@mui/material/Tabs';
+import TabsMUI from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import styles from './styles.module.scss';
@@ -8,17 +8,13 @@ import styles from './styles.module.scss';
 type TabsProps = {
   tabNames: string[];
   onChange: (_: any, value: number) => void;
-  activeTabIndex: string;
+  activeTab: string;
 };
 
-const TabsMUI: FC<TabsProps> = ({
-  tabNames,
-  activeTabIndex,
-  onChange,
-}: TabsProps) => (
-  <Tabs
+const Tabs: FC<TabsProps> = ({ tabNames, activeTab, onChange }: TabsProps) => (
+  <TabsMUI
     className={styles.container}
-    value={tabNames.indexOf(activeTabIndex)}
+    value={tabNames.indexOf(activeTab)}
     onChange={onChange}
     variant="scrollable"
     scrollButtons="auto"
@@ -28,10 +24,10 @@ const TabsMUI: FC<TabsProps> = ({
       <Tab
         key={v}
         label={v}
-        className={cl(styles.tab, activeTabIndex === v ? styles.activeTab : '')}
+        className={cl(styles.tab, activeTab === v ? styles.activeTab : '')}
       />
     ))}
-  </Tabs>
+  </TabsMUI>
 );
 
-export default TabsMUI;
+export default Tabs;

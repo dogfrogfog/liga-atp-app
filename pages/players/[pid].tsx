@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import { FaMedal } from 'react-icons/fa';
 import {
   PrismaClient,
@@ -9,14 +9,14 @@ import {
 } from '@prisma/client';
 import axios from 'axios';
 
-import InfoTab from '../components/profileTabs/Info';
-import ScheduleTab from '../components/profileTabs/Schedule';
-import MatchesHistoryTab from '../components/profileTabs/MatchesHistory';
-import StatsTab from '../components/profileTabs/Stats';
-import NewsTab from '../components/profileTabs/News';
-import { LEVEL_NUMBER_VALUES } from '../../constants/values';
-import TabsMUI from 'ui-kit/Tabs';
-import styles from '../../styles/Profile.module.scss';
+import InfoTab from 'components/profileTabs/Info';
+import ScheduleTab from 'components/profileTabs/Schedule';
+import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
+import StatsTab from 'components/profileTabs/Stats';
+import NewsTab from 'components/profileTabs/News';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import Tabs from 'ui-kit/Tabs';
+import styles from 'styles/Profile.module.scss';
 
 const PROFILE_TABS = [
   'Информация',
@@ -43,7 +43,7 @@ export type MatchWithTournamentType = MatchT & {
 
 const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
   const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
-  const [activeTabIndex, setActiveTabIndex] = useState(PROFILE_TABS[0]);
+  const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -107,7 +107,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
   );
 
   const activeTabContent = (() => {
-    switch (activeTabIndex) {
+    switch (activeTab) {
       case PROFILE_TABS[0]:
         return (
           <InfoTab
@@ -157,7 +157,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
   })();
 
   const handleTabChange = (_: any, value: number) => {
-    setActiveTabIndex(PROFILE_TABS[value]);
+    setActiveTab(PROFILE_TABS[value]);
   };
 
   return (
@@ -170,8 +170,8 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
         points={'1490'}
       />
       <section>
-        <TabsMUI
-          activeTabIndex={activeTabIndex}
+        <Tabs
+          activeTab={activeTab}
           onChange={handleTabChange}
           tabNames={PROFILE_TABS}
         />
@@ -219,12 +219,12 @@ const ProfileHeader = ({
   );
 };
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
   const prisma = new PrismaClient();
 
   const player = await prisma.player.findUnique({
     where: {
-      id: parseInt(ctx.query.pid),
+      id: parseInt(ctx.query.pid as string),
     },
   });
 

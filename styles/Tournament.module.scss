@@ -1,68 +1,104 @@
-.tournamentContainer {
-  padding: 50px 15px 15px;
+@import './variables.scss';
+
+.сontainer {
+  padding: 15px;
   min-height: 100vh;
   position: relative;
+  overflow: hidden;
+}
 
-  // duplicdate
-  .tournamentListItem {
-    background-color: #1b2223;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    padding: 10px;
+.header {
+  height: 100px;
 
-    .status {
-      padding: 5px;
-      background-color: black;
-      color: #4cc4d1;
-      font-weight: 500;
-      font-size: 14px;
-      align-self: baseline;
-      border-radius: 5px;
-    }
+  .tournamentItem {
+    position: absolute;
+    top: 37px;
+    left: 15px;
+    padding-left: 80px;
+    width: calc(100% - 30px);
+  }
+}
 
-    > div {
-      display: flex;
-      justify-content: space-between;
+.tabsContainer {
+  margin-top: 20px;
+  position: relative;
+}
 
-      &:first-child {
-        margin-bottom: 10px;
-        font-weight: 200;
+.nearTabButton {
+  z-index: 3;
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: $custom-white;
 
-        span {
-          display: inline-block;
+  svg {
+    width: 34px;
+    height: 34px;
+  }
+}
 
-          &:first-child {
-            max-width: 70%;
-            font-weight: 500;
-          }
-        }
-      }
+.addPlayerForm {
+  z-index: 5;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  padding: 15px;
+
+  .input {
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 16px;
+    border-bottom: 1px solid $custom-medium-dark;
+    color: $custom-lightgray;
+    background-color: $custom-darkgray;
+    margin-bottom: 25px;
+
+    &.phone {
+      margin-bottom: 10px;
     }
   }
 
-  .playersList {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-
-    li {
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border-bottom: 1px solid #1b2223;
-
-      div {
-        > span:first-child {
-          margin-right: 15px;
-        }
-
-        > span:last-child {
-          background-color: #1b2223;
-          color: #4cc4d1;
-        }
-      }
-    }
+  .submit {
+    background-color: $custom-aqua;
+    border-radius: 14px;
+    color: $custom-black;
+    border: none;
+    padding: 8px;
+    margin: 40px 0 18px;
   }
+}
+
+.phoneNote {
+  color: $custom-gray;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.addPlayerFormOverlay {
+  z-index: 4;
+  background-color: rgba($custom-darkgray, 0.75);
+  backdrop-filter: blur(3px);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.formTitle {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.input {
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: $custom-white;
 }

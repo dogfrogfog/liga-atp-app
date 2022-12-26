@@ -1,0 +1,114 @@
+@import '../../styles/variables.scss';
+
+.stageButtons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+
+  // slider thumbs
+  > div {
+    justify-content: space-between;
+  }
+}
+
+.stageButton {
+  color: $custom-white;
+  background-color: $custom-darkgray;
+  width: 44px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+
+  &.active {
+    background-color: $custom-aqua;
+    color: $custom-black;
+  }
+}
+
+.left {
+  width: 70%;
+  display: flex;
+}
+
+.right {
+  width: 30%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.groupWrapper {
+  padding: 10px;
+  background-color: $custom-darkgray;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  width: 350px;
+}
+
+.stage {
+  width: 100%;
+}
+
+.matchDoesntExists,
+.match {
+  text-align: center;
+  padding: 15px;
+  border: 1px solid $custom-white;
+  border-radius: 10px;
+  width: 330px;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.groupTitle {
+  margin-top: 0;
+  color: $custom-white;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:first-child {
+    margin-bottom: 15px;
+  }
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+}
+
+.name,
+.place,
+.date {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.name.winner {
+  color: $custom-aqua;
+}
+
+.img {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid $custom-white;
+  margin-right: 10px;
+}

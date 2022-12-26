@@ -13,13 +13,11 @@ export default {
 
 const Template: ComponentStory<typeof Tabs> = (args) => {
   const data = ['Информация', 'Расписание', 'Встречи', 'Статистика'];
-  const [activeTabIndex, setActiveTabIndex] = useState(data[0]);
-  const onClick = (v: string) => {
-    setActiveTabIndex(v);
+  const [activeTab, setActiveTab] = useState(data[0]);
+  const handleChange = (v: string) => {
+    setActiveTab(v);
   };
-  return (
-    <Tabs tabNames={data} activeTabIndex={activeTabIndex} onChange={onClick} />
-  );
+  return <Tabs tabNames={data} activeTab={activeTab} onChange={handleChange} />;
 };
 
 export const Primary = Template.bind({});

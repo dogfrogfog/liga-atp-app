@@ -9,7 +9,9 @@ const InputWithError = ({ errorMessage, children }: InputWithErrorProps) => {
   return (
     <>
       {children}
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && (
+        <p style={{ margin: '5px 0', color: 'red' }}>{errorMessage}</p>
+      )}
     </>
   );
 };
