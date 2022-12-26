@@ -1,0 +1,39 @@
+@import '../styles/variables';
+
+.article {
+  background-color: $custom-black;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  position: relative;
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.desc {
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.imagePreview {
+  height: 120px;
+  background-color: #6a6a6a;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.date {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  position: absolute;
+  right: 10px;
+  top: -35px;
+  background-color: $custom-lightgray;
+  color: $custom-black;
+}
