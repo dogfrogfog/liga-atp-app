@@ -86,15 +86,23 @@ const TournamentPage: NextPage<{
   ) => {
     setPlayerLoadingStatus(true);
 
+    const cleanData = {
+      ...data,
+      phone: data.phone || undefined,
+    };
+
     let newUnregisteredPlayers;
     if (tournament.unregistered_players) {
       const prevUnregisteredPlayers = JSON.parse(
         tournament.unregistered_players
       );
 
-      newUnregisteredPlayers = prevUnregisteredPlayers.concat([data]);
+      console.log('concat');
+
+      newUnregisteredPlayers = prevUnregisteredPlayers.concat([cleanData]);
     } else {
-      newUnregisteredPlayers = [data];
+      console.log('new');
+      newUnregisteredPlayers = [cleanData];
     }
 
     const { isOk } = await addPlayerToTheTournament({

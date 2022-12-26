@@ -177,7 +177,7 @@ const Match = ({
           <span className={styles.date}>
             {isPlayed ? match.score : ''}
             {!isPlayed && match?.start_date
-              ? format(new Date(match.start_date), 'dd.MM.yyyy HH:mm')
+              ? format(new Date(match.start_date), 'dd.MM-HH:mm')
               : ''}
           </span>
         </div>

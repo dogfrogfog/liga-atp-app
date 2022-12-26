@@ -114,6 +114,13 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   const brackets =
     activeTournament.draw &&
     (JSON.parse(activeTournament?.draw)?.brackets as IBracketsUnit[][]);
+  const unregPlayers: {
+    first_name: string;
+    last_name: string;
+    phone?: string;
+  }[] = activeTournament.unregistered_players
+    ? JSON.parse(activeTournament.unregistered_players)
+    : [];
 
   // this regestered players array we use to get options for "edit match" players select inputs
   // also we use same data to get options for "draw unit" players select inputs (TournamentT)
@@ -303,7 +310,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                       disabled={isDisabled}
                       name="drawType"
                     >
-                      <option value={0}>not selected</option>
+                      <option>not selected</option>
                       {Object.entries(TOURNAMENT_DRAW_TYPE_NUMBER_VALUES).map(
                         ([key, name]) => {
                           return (
@@ -332,7 +339,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                       disabled={isDisabled}
                       name="type"
                     >
-                      <option value={0}>not selected</option>
+                      <option>not selected</option>
                       {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
                         ([key, name]) => {
                           return (
@@ -425,6 +432,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               }
               case 'associated_tournament_id':
               case 'players_order':
+              case 'unregistered_players':
               case 'draw':
               case 'is_finished': {
                 return null;
@@ -454,7 +462,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                   <div key={key} className={cl(styles.field, styles.surface)}>
                     <span>Покрытие</span>
                     <select name="surface">
-                      <option value={0}>{SURFACE_TYPE_NUMBER_VALUES[0]}</option>
+                      <option>{SURFACE_TYPE_NUMBER_VALUES[0]}</option>
                       <option value={1}>{SURFACE_TYPE_NUMBER_VALUES[1]}</option>
                       <option value={2}>{SURFACE_TYPE_NUMBER_VALUES[2]}</option>
                     </select>
@@ -491,6 +499,18 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           </div>
         </div>
         <div className={cl(styles.side, styles.addPlayersContainer)}>
+          <h3>
+            <b>Игроки, зарегестрировавшиеся через приложение:</b>
+          </h3>
+          {unregPlayers.map(({ first_name, last_name, phone }) => (
+            <p key={first_name + last_name}>
+              <span>
+                Имя: {first_name} {last_name}
+              </span>
+              {phone && <span>Телефон: {phone}</span>}
+            </p>
+          ))}
+          <br />
           <MultiSelect
             disabled={isDisabled}
             options={playersToMultiSelectFormat(players)}
@@ -608,6 +628,7 @@ const MatchForm = ({
               valueAsNumber: true,
             })}
           >
+            <option>не выбран</option>
             {registeredPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
@@ -620,10 +641,10 @@ const MatchForm = ({
           Игрок 2:
           <select
             {...register('player2_id', {
-              required: false,
               valueAsNumber: true,
             })}
           >
+            <option>не выбран</option>
             {registeredPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
@@ -636,12 +657,8 @@ const MatchForm = ({
             <InputWithError errorMessage={errors.player3_id?.message}>
               <br />
               Пара игрока 1 - игрок 3:
-              <select
-                {...register('player3_id', {
-                  required: true,
-                  valueAsNumber: true,
-                })}
-              >
+              <select {...register('player3_id', { valueAsNumber: true })}>
+                <option>не выбран</option>
                 {registeredPlayers.map((p) => (
                   <option key={p.id} value={p.id}>
                     {`${p.last_name} ${(p.first_name as string)[0]}`}
@@ -652,12 +669,8 @@ const MatchForm = ({
             <InputWithError errorMessage={errors.player4_id?.message}>
               <br />
               Пара игрока 2 - игрок 4:
-              <select
-                {...register('player4_id', {
-                  required: true,
-                  valueAsNumber: true,
-                })}
-              >
+              <select {...register('player4_id', { valueAsNumber: true })}>
+                <option>не выбран</option>
                 {registeredPlayers.map((p) => (
                   <option key={p.id} value={p.id}>
                     {`${p.last_name} ${(p.first_name as string)[0]}`}
@@ -670,11 +683,8 @@ const MatchForm = ({
         <InputWithError errorMessage={errors.winner_id?.message}>
           <br />
           Победитель - игрок 1 или игрок 2:
-          <select
-            {...register('winner_id', {
-              required: true,
-            })}
-          >
+          <select {...register('winner_id')}>
+            <option value="">не выбран</option>
             {registeredPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
