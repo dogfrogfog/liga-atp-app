@@ -156,6 +156,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
               title: 'Вторая травма ахила за неделю',
               date: '11.11.2022',
               desc: 'Lorem ipsum dolor sit amet, con',
+              id: Math.round(Math.random() * 100),
             })}
           />
         );
