@@ -1,25 +1,41 @@
 import Link from 'next/link';
 import type { player as PlayerT } from '@prisma/client';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import cl from 'classnames';
 
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './PlayersList.module.scss';
 
 type PlayersListProps = {
   players: PlayerT[];
+  shouldShowPlace?: boolean;
 };
 
-const PlayersList = ({ players }: PlayersListProps) => (
+const PlayersList = ({
+  players,
+  shouldShowPlace = false,
+}: PlayersListProps) => (
   <div className={styles.playersTable}>
     <div className={styles.titles}>
+      {shouldShowPlace && <span className={styles.placeColumn}>Топ</span>}
       <span className={styles.nameColumn}>Имя</span>
       <span className={styles.levelColumn}>Уровень</span>
       <span className={styles.rankColumn}>Рейтинг</span>
     </div>
     <div className={styles.list}>
-      {players.map(({ id, first_name, last_name, level, avatar }) => (
+      {players.map(({ id, first_name, last_name, level, avatar }, i) => (
         <Link key={id} href={'/players/' + id}>
-          <div className={styles.listItem}>
+          <div
+            className={cl(
+              styles.listItem,
+              shouldShowPlace ? styles.withPlace : ''
+            )}
+          >
+            {shouldShowPlace && (
+              <div className={styles.placeColumn}>
+                <span className={styles.place}>{i + 1}</span>
+              </div>
+            )}
             <div className={styles.nameColumn}>
               <div className={styles.playerName}>
                 <div className={styles.image}>

@@ -17,25 +17,26 @@ const RANKING_TABS = [
   'Сателлит',
 ];
 
+// todo: add bilter by tabs
+// maybe add cloud tags
 const RankingPage: NextPage = () => {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
-  // const [data, setData] = useState<PlayerT[]>([]);
+  const [data, setData] = useState<PlayerT[]>([]);
 
-  // useEffect(() => {
-  //   const fetchWrapper = async () => {
-  //     const res = await getPlayers({ pa });
+  useEffect(() => {
+    const fetchWrapper = async () => {
+      const res = await getPlayers({ pageIndex: 0, pageSize: 50 });
 
-  //     if (res.isOk) {
-  //       setData(res.data as PlayerT[]);
-  //       setLoadingStatus(false);
-  //     }
-  //   };
+      if (res.isOk) {
+        setData(res.data as PlayerT[]);
+      }
+    };
 
-  //   fetchWrapper();
-  // }, [pagination]);
+    fetchWrapper();
+  }, []);
 
   const activeTabContent = (() => {
-    return null;
+    return <PlayersList players={data} shouldShowPlace />;
   })();
 
   const handleTabChange = (_: any, value: number) => {
