@@ -17,9 +17,21 @@ const Template: ComponentStory<typeof SuggestionsInput> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   placeholder: 'Placeholder',
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  placeholder: 'Placeholder',
+  players: [
+    // @ts-ignore
+    {
+      first_name: 'John',
+      last_name: 'Lennon',
+    },
+    // @ts-ignore
+    {
+      first_name: 'Max',
+      last_name: 'Lemon',
+    },
+    // @ts-ignore
+    {
+      first_name: 'John',
+      last_name: 'Lenn22on',
+    },
+  ],
 };
