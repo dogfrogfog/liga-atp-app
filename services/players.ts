@@ -13,6 +13,7 @@ type IGetPlayersResponse = PlayersResponse<PlayerT[]>;
 type ICreatePlayerResponse = PlayersResponse<PlayerT>;
 type IDeletePlayerResponse = PlayersResponse<Prisma.BatchPayload>;
 type IUpdatePlayerResponse = PlayersResponse<PlayerT>;
+type IH2hPlayersResponse = PlayersResponse<PlayerT[]>;
 
 export async function getPlayers(
   pagination: PaginationProps
@@ -64,3 +65,18 @@ export async function deleteSelectedPlayer(
     return { isOk: false, errorMessage: response.statusText };
   }
 }
+
+export const getH2hPlayers = async (
+  player1Id: number,
+  player2Id: number
+): Promise<IH2hPlayersResponse> => {
+  const response = await axios.get(
+    `/api/players/h2h?player1Id=${player1Id}&player2Id=${player2Id}`
+  );
+
+  if (response.status === 200) {
+    return { isOk: true };
+  } else {
+    return { isOk: false, errorMessage: response.statusText };
+  }
+};

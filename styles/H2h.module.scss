@@ -1,0 +1,43 @@
+@import './variables.scss';
+
+.container {
+  padding: 15px;
+}
+
+.pageTitle {
+  display: block;
+  padding: 0;
+  margin: 90px 0 40px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.selection {
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  padding: 10px;
+}
+
+// .selectName {
+//   color: $custom-white;
+//   margin: 0 0 10px;
+//   font-size: 18px;
+// }
+
+.input {
+  outline: none;
+  background-color: $custom-black;
+  color: $custom-white;
+  padding: 5px 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  height: 45px;
+}
+
+.selectedPlayer {
+  &:last-child {
+    margin-bottom: 50px;
+  }
+}
