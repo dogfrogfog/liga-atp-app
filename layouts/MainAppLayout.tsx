@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import cl from 'classnames';
 import { useRouter } from 'next/router';
-import { HiViewList } from 'react-icons/hi';
 
 import styles from './MainAppLayout.module.scss';
 import {
@@ -50,11 +49,11 @@ function MainAppLayout({ children }: { children: ReactNode }) {
             <Digest />
           </div>
         </Link>
-        <Link href="/elo">
+        <Link href="/ranking">
           <div
             className={cl(
               styles.menuItem,
-              currentRoute === '/elo' ? styles.active : ''
+              currentRoute === '/ranking' ? styles.active : ''
             )}
           >
             <Rating />
@@ -70,17 +69,6 @@ function MainAppLayout({ children }: { children: ReactNode }) {
             <HeadToHead />
           </div>
         </Link>
-        {/* <Link href="/other">
-          <div
-            className={cl(
-              styles.menuItem,
-              currentRoute === '/other' ? styles.active : ''
-            )}
-          >
-            <HiViewList />
-            Прочее
-          </div>
-        </Link> */}
       </div>
     </>
   );
