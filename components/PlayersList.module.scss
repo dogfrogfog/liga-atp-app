@@ -17,13 +17,10 @@
 
 .nameColumn {
   width: 60%;
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  display: flex;
 }
 .titles .nameColumn {
-  padding-left: 45px;
+  padding-left: 35px;
 }
 .withPlace .nameColumn {
   width: 50%;
@@ -64,18 +61,20 @@
   text-align: center;
 }
 
-.playerName {
-  max-width: 100%;
-  display: flex;
-  align-items: center;
+.name {
+  padding-left: 10px;
+  // 25 is image and 10 is margin between image and name
+  width: calc(100% - 35px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
-  .image {
-    border: 1px solid $custom-lightgray;
-    width: 25px;
-    height: 25px;
-    margin-right: 20px;
-    border-radius: 50%;
-  }
+.image {
+  border: 1px solid $custom-lightgray;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
 
   svg,
   img {

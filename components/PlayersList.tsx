@@ -37,14 +37,12 @@ const PlayersList = ({
               </div>
             )}
             <div className={styles.nameColumn}>
-              <div className={styles.playerName}>
-                <div className={styles.image}>
-                  {avatar ? null : <BsFillPersonFill />}
-                </div>
-                <span>{`${(
-                  first_name as string
-                )[0].toUpperCase()}. ${last_name}`}</span>
+              <div className={styles.image}>
+                {avatar ? null : <BsFillPersonFill />}
               </div>
+              <span className={styles.name}>{`${(
+                first_name as string
+              )[0].toUpperCase()}. ${last_name}`}</span>
             </div>
             <div className={styles.levelColumn}>
               {level ? LEVEL_NUMBER_VALUES[level] : ''}
