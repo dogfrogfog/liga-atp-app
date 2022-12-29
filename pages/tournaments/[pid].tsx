@@ -12,6 +12,7 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import cl from 'classnames';
 import { useForm } from 'react-hook-form';
 
+import { prisma } from 'services/db';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import InputWithError from 'ui-kit/InputWithError';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
@@ -222,11 +223,9 @@ const TournamentPage: NextPage<{
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const prisma = new PrismaClient();
-
   const tournament = await prisma.tournament.findUnique({
     where: {
-      id: parseInt(ctx.query.pid as string),
+      id: parseInt(ctx.query.pid as string, 10),
     },
     include: {
       match: true,

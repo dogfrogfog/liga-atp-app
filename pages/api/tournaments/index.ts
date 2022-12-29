@@ -1,11 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  Prisma,
-  PrismaClient,
-  tournament as TournamentT,
-} from '@prisma/client';
+import { Prisma, tournament as TournamentT } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { prisma } from 'services/db';
 
 export default async (
   req: NextApiRequest,
@@ -42,7 +38,7 @@ export default async (
   }
 
   if (req.method === 'PUT') {
-    const updatedTournament = await prisma.tournament.update({
+    await prisma.tournament.update({
       where: {
         id: req.body.data.id,
       },
