@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, tournament as TournamentT } from '@prisma/client';
+import { tournament as TournamentT } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { prisma } from 'services/db';
 
 export default async (
   req: NextApiRequest,

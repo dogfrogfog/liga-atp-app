@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import { FaMedal } from 'react-icons/fa';
 import {
-  PrismaClient,
   player as PlayerT,
   match as MatchT,
   tournament as TournamentT,
 } from '@prisma/client';
 import axios from 'axios';
 
+import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
@@ -229,8 +229,6 @@ const ProfileHeader = ({
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const prisma = new PrismaClient();
-
   const player = await prisma.player.findUnique({
     where: {
       id: parseInt(ctx.query.pid as string),
