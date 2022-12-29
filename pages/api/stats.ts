@@ -2,8 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, player } from '@prisma/client';
 import { AiOutlineConsoleSql } from 'react-icons/ai';
 
-const prisma = new PrismaClient();
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<player[] | player>

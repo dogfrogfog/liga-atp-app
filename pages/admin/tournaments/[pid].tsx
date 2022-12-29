@@ -2,11 +2,11 @@ import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import cl from 'classnames';
 import {
-  PrismaClient,
   tournament as TournamentT,
   player as PlayerT,
   match as MatchT,
 } from '@prisma/client';
+import { prisma } from 'services/db';
 import { MultiSelect, Option } from 'react-multi-select-component';
 import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
@@ -721,8 +721,6 @@ const MatchForm = ({
 export default AdminSingleTournamentPape;
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const prisma = new PrismaClient();
-
   const tournament = await prisma.tournament.findUnique({
     where: {
       id: parseInt(ctx.query.pid as string),

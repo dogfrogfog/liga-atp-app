@@ -1,8 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import type { NextPage } from 'next';
 import axios from 'axios';
-import { PrismaClient, player as PlayerT } from '@prisma/client';
+import { player as PlayerT } from '@prisma/client';
 
+import { prisma } from 'services/db';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SearchInput from 'components/SearchInput';
 import PlayersList from 'components/PlayersList';
@@ -49,8 +50,6 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
 };
 
 export const getServerSideProps = async () => {
-  const prisma = new PrismaClient();
-
   const players = await prisma.player.findMany({
     take: 15,
     orderBy: {
