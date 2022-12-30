@@ -3,8 +3,8 @@ import Autosuggest, {
   ChangeEvent,
   SuggestionsFetchRequestedParams,
 } from 'react-autosuggest';
-import type { player as PlayerT } from 'services/db';
 
+import type { player as PlayerT } from 'services/db';
 import styles from './styles.module.scss';
 
 type SuggestionsInputProps = {

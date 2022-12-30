@@ -12,7 +12,7 @@
     "format:check": "prettier --check .",
     "sb": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "all": "yarn lint && yarn format"
+    "all": "yarn format && yarn lint"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
