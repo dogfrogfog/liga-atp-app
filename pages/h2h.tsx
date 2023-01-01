@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import type { player as PlayerT } from '@prisma/client';
@@ -31,12 +31,12 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
         {selectedPlayers.length > 0 && (
           <div>
             {selectedPlayers.map((p, i) => (
-              <>
-                <div key={p.id} className={styles.selectedPlayer}>
+              <Fragment key={p.id}>
+                <div className={styles.selectedPlayer}>
                   {(p.first_name as string)[0]}. {p.last_name}
                 </div>
                 {i === 0 && <span className={styles.vs}>vs.</span>}
-              </>
+              </Fragment>
             ))}
           </div>
         )}
@@ -51,8 +51,19 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
             />
           )}
           <div className={styles.buttons}>
-            <Link href="/">
-              <span className={styles.compare}>Сравнить</span>
+            <Link
+              href={`/h2h/compare?p1Id=${selectedPlayers[0]?.id}&p2Id=${selectedPlayers[1]?.id}`}
+            >
+              <span
+                className={cl(
+                  styles.compare,
+                  !selectedPlayers[0]?.id && !selectedPlayers[1]?.id
+                    ? styles.disabled
+                    : ''
+                )}
+              >
+                Сравнить
+              </span>
             </Link>
             <button onClick={reset} className={styles.reset}>
               Сбросить
