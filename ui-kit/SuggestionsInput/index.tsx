@@ -10,9 +10,14 @@ import styles from './styles.module.scss';
 type SuggestionsInputProps = {
   placeholder: string;
   players: PlayerT[];
+  onSuggestionClick: (p: PlayerT) => void;
 };
 
-const SuggestionsInput = ({ players, placeholder }: SuggestionsInputProps) => {
+const SuggestionsInput = ({
+  players,
+  placeholder,
+  onSuggestionClick,
+}: SuggestionsInputProps) => {
   const [inputValue, setInputValue] = useState('');
   const [inputSuggestions, setInputSuggestions] = useState<PlayerT[]>([]);
 
@@ -43,9 +48,16 @@ const SuggestionsInput = ({ players, placeholder }: SuggestionsInputProps) => {
     setInputSuggestions([]);
   };
 
+  const onSuggestionSelected = (_: any, v: any) => {
+    setInputValue('');
+    setInputSuggestions([]);
+
+    onSuggestionClick(v.suggestion);
+  };
+
   const renderSuggestion = (s: PlayerT) => (
     <div>
-      {(s?.first_name as string)[0]} {s?.last_name}
+      {(s?.first_name as string)[0]}. {s?.last_name}
     </div>
   );
 
@@ -68,6 +80,7 @@ const SuggestionsInput = ({ players, placeholder }: SuggestionsInputProps) => {
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
+        onSuggestionSelected={onSuggestionSelected}
       />
     </div>
   );
