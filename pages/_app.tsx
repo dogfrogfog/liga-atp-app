@@ -24,7 +24,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   if (
     router.pathname.startsWith('/players/') ||
     router.pathname.startsWith('/tournaments/') ||
-    router.pathname.startsWith('/digest/')
+    router.pathname.startsWith('/digest/') ||
+    router.pathname.startsWith('/h2h/compare')
   ) {
     return (
       <PWALayout>

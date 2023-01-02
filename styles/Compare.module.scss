@@ -1,0 +1,88 @@
+@import './variables.scss';
+
+.container {
+  // display: flex;
+  position: relative;
+}
+
+.side {
+  width: 50%;
+}
+
+.images,
+.mainInfo {
+  display: flex;
+  width: 100%;
+}
+
+.images {
+  margin-bottom: 20px;
+}
+
+.img {
+  height: 350px;
+  background-color: $custom-lightgray;
+}
+
+.score {
+  text-align: center;
+  width: 200px;
+  background-color: rgba($custom-black, 0.8);
+  padding: 10px;
+  font-size: 40px;
+  font-weight: 600;
+  position: absolute;
+  border-radius: 14px;
+  top: 250px;
+  left: calc(50% - 100px);
+}
+
+.playerInfo {
+  padding: 10px;
+}
+
+.name {
+  text-align: center;
+  margin: 0 0 10px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.playerInfo:last-child .info {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+.lvl {
+  text-transform: uppercase;
+  margin: 0 10px;
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  height: 30px;
+  width: 30px;
+  background-color: $custom-aqua;
+  border-radius: 50%;
+  color: $custom-black;
+}
+
+.rank {
+  margin: 0 10px;
+  color: $custom-aqua;
+  font-weight: 600;
+}
+
+.tabsContainer {
+  padding: 15px;
+}
