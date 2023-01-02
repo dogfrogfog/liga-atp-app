@@ -1,0 +1,95 @@
+@import './variables.scss';
+
+.container {
+  padding: 15px;
+}
+
+.pageTitle {
+  display: block;
+  padding: 0;
+  margin: 90px 0 40px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.selection {
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  padding: 15px;
+  height: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &.initialSelection {
+    justify-content: flex-end;
+  }
+}
+
+.input {
+  outline: none;
+  background-color: $custom-black;
+  color: $custom-white;
+  padding: 5px 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  height: 45px;
+}
+
+.selectedPlayer {
+  font-size: 24px;
+  font-weight: 100;
+  text-align: center;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+
+  .compare,
+  .reset {
+    outline: none;
+    border: none;
+    color: $custom-black;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 20px;
+    padding: 10px 15px;
+    margin: 0 10px;
+  }
+
+  .compare {
+    background-color: $custom-aqua;
+  }
+
+  .reset {
+    background-color: $custom-lightgray;
+  }
+}
+.vs {
+  display: inline-block;
+  width: 100%;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.disabled {
+  pointer-events: none;
+  touch-action: none;
+  opacity: 0.2;
+}
+
+.initial {
+  display: flex;
+  height: 225px;
+  justify-content: space-between;
+  flex-direction: column;
+}

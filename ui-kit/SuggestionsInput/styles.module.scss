@@ -1,16 +1,18 @@
 @import '../../styles/variables.scss';
 
 .container {
+  margin-bottom: 20px;
+
   :global(.react-autosuggest__input) {
     outline: none;
     background-color: $custom-black;
     color: $custom-white;
-    height: 30px;
+    // height: 30px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 18px;
     width: calc(100% - 20px);
-    padding: 5px 10px;
+    padding: 10px 15px;
   }
 
   :global(.react-autosuggest__input--open) {
