@@ -40,7 +40,7 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
             ))}
           </div>
         )}
-        <div>
+        <div className={cl(selectedPlayers.length === 0 ? styles.initial : '')}>
           {selectedPlayers.length !== 2 && (
             <SuggestionsInput
               placeholder={`Введите имя ${
