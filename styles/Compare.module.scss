@@ -1,8 +1,11 @@
 @import './variables.scss';
 
 .container {
-  // display: flex;
   position: relative;
+
+  :global(.MuiTabs-flexContainer) {
+    justify-content: center;
+  }
 }
 
 .side {
@@ -85,4 +88,10 @@
 
 .tabsContainer {
   padding: 15px;
+}
+
+.tabContentWrapper {
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  padding: 20px;
 }

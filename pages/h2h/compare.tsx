@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import type { NextPage, NextPageContext } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
@@ -41,7 +42,9 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
   return (
     <div className={styles.container}>
       <div className={styles.images}>
+        {/* add styles for actual image */}
         <div className={cl(styles.img, styles.side)}></div>
+        {/* add styles for actual image */}
         <div className={cl(styles.img, styles.side)}></div>
       </div>
       <div className={styles.score}>8 VS 11</div>
@@ -69,7 +72,7 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
           onChange={handleTabChange}
           tabNames={STATS_TABS}
         />
-        {activeTabContent}
+        <div className={styles.tabContentWrapper}>{activeTabContent}</div>
       </div>
     </div>
   );
