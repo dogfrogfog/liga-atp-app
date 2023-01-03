@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import type { NextPage, NextPageContext } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
 
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
-import StatsTab from 'components/statsTabs/StatsTab';
+import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchesTab from 'components/statsTabs/Matches';
 import styles from 'styles/Compare.module.scss';

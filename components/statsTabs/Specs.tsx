@@ -20,7 +20,6 @@ const trans: { [k: string]: string } = {
   behaviour: 'Поведение',
 };
 
-// container
 const Specs = (props: SpecsProps) => {
   const [p1Specs, p2Specs] = Object.entries(props).reduce(
     (acc, [k, v]) => {

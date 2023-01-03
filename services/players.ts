@@ -66,17 +66,18 @@ export async function deleteSelectedPlayer(
   }
 }
 
-export const getH2hPlayers = async (
-  player1Id: number,
-  player2Id: number
-): Promise<IH2hPlayersResponse> => {
-  const response = await axios.get(
-    `/api/players/h2h?player1Id=${player1Id}&player2Id=${player2Id}`
-  );
+// TODO: fix
+// export const getH2hPlayers = async (
+//   player1Id: number,
+//   player2Id: number
+// ): Promise<IH2hPlayersResponse> => {
+//   // const response = await axios.get(
+//   //   // `/api/players/h2h?player1Id=${player1Id}&player2Id=${player2Id}`
+//   // );
 
-  if (response.status === 200) {
-    return { isOk: true };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-};
+//   // if (response.status === 200) {
+//   //   return { isOk: true };
+//   // } else {
+//   //   return { isOk: false, errorMessage: response.statusText };
+//   // }
+// };

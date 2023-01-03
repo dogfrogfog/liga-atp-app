@@ -1,6 +1,6 @@
 import styles from './Stats.module.scss';
 
-const StatsTab = () => {
+const Stats = () => {
   return (
     <>
       {[
@@ -23,4 +23,4 @@ const StatsTab = () => {
   );
 };
 
-export default StatsTab;
+export default Stats;
