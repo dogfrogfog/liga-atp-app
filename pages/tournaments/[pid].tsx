@@ -28,7 +28,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 
-const TOURNAMENT_TAB = ['Расписание', 'Список игроков'];
+const TOURNAMENT_TABS = ['Расписание', 'Список игроков'];
 
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];
@@ -36,7 +36,7 @@ const TournamentPage: NextPage<{
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
-  const [activeTab, setActiveTab] = useState(TOURNAMENT_TAB[0]);
+  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
   const [isPlayerLoading, setPlayerLoadingStatus] = useState(false);
   const {
@@ -48,7 +48,7 @@ const TournamentPage: NextPage<{
 
   const activeTabContent = (() => {
     switch (activeTab) {
-      case TOURNAMENT_TAB[0]:
+      case TOURNAMENT_TABS[0]:
         return brackets ? (
           <Schedule
             hasGroups={
@@ -64,7 +64,7 @@ const TournamentPage: NextPage<{
         ) : (
           <NotFoundMessage message="Сетка не сформирована" />
         );
-      case TOURNAMENT_TAB[1]:
+      case TOURNAMENT_TABS[1]:
         return <PlayersList players={registeredPlayers} />;
       default:
         return null;
@@ -72,7 +72,7 @@ const TournamentPage: NextPage<{
   })();
 
   const handleTabChange = (_: any, value: number) => {
-    setActiveTab(TOURNAMENT_TAB[value]);
+    setActiveTab(TOURNAMENT_TABS[value]);
   };
 
   const isFinished = tournament.is_finished || tournament.status === 3;
@@ -156,7 +156,7 @@ const TournamentPage: NextPage<{
               </button>
             )}
             <Tabs
-              tabNames={TOURNAMENT_TAB}
+              tabNames={TOURNAMENT_TABS}
               activeTab={activeTab}
               onChange={handleTabChange}
             />

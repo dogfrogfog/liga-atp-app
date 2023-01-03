@@ -4,7 +4,7 @@ import type {
   player as PlayerT,
 } from '@prisma/client';
 
-type MatchWithTournamentType = MatchT & {
+export type MatchWithTournamentType = MatchT & {
   tournament: TournamentT;
   player_match_player1_idToplayer: PlayerT;
   player_match_player2_idToplayer: PlayerT;

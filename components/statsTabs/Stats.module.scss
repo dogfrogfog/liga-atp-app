@@ -1,0 +1,30 @@
+@import '../../styles/variables.scss';
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $custom-black;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  color: $custom-lightgray;
+  font-weight: 600;
+  font-size: 16px;
+
+  &:last-child {
+    border: none;
+  }
+}
+
+.value {
+  width: 20%;
+  text-align: left;
+
+  &:last-child {
+    text-align: right;
+  }
+}
+
+.centerName {
+  width: 50%;
+  text-align: center;
+}
