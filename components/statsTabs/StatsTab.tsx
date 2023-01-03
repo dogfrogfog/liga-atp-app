@@ -1,4 +1,4 @@
-import styles from './StatsTab.module.scss';
+import styles from './Stats.module.scss';
 
 const StatsTab = () => {
   return (

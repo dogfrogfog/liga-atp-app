@@ -7,8 +7,8 @@ import cl from 'classnames';
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
 import StatsTab from 'components/statsTabs/StatsTab';
-import SpecsTab from 'components/statsTabs/SpecsTab';
-import MatchesTab from 'components/statsTabs/MatchesTab';
+import SpecsTab from 'components/statsTabs/Specs';
+import MatchesTab from 'components/statsTabs/Matches';
 import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
@@ -29,7 +29,16 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
         return <StatsTab />;
       }
       case STATS_TABS[1]: {
-        return <SpecsTab />;
+        return (
+          <SpecsTab
+            technique={[10, 30]}
+            tactics={[10, 30]}
+            power={[10, 30]}
+            shakes={[10, 30]}
+            serve={[10, 30]}
+            behaviour={[10, 30]}
+          />
+        );
       }
       case STATS_TABS[2]: {
         return <MatchesTab />;
