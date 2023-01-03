@@ -10,8 +10,9 @@ type MatchProps = {
   startDate: string;
   opponent: string;
   score: string;
-  win: boolean;
+  isp1win: boolean;
   withCompareLink?: boolean;
+  playerName?: string;
 };
 
 const Match = ({
@@ -19,8 +20,9 @@ const Match = ({
   startDate,
   opponent,
   score,
-  win,
+  isp1win,
   withCompareLink = false,
+  playerName = '',
 }: MatchProps) => (
   // need to have all players' id here to set id to query params of link
   <div className={styles.match}>
@@ -41,8 +43,12 @@ const Match = ({
       </div>
     </div>
     <div className={styles.row}>
-      <span className={styles.opponent}>vs {opponent}</span>
-      <span className={win ? styles.win : styles.lose}>{score}</span>
+      <span className={styles.players}>
+        <span className={isp1win ? styles.win : styles.lose}>{playerName}</span>
+        <i> vs. </i>
+        <span className={!isp1win ? styles.win : styles.lose}>{opponent}</span>
+      </span>
+      <span className={isp1win ? styles.win : styles.lose}>{score}</span>
     </div>
   </div>
 );

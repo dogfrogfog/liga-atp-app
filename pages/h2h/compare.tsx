@@ -10,14 +10,16 @@ import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
-const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
-  p1,
-  p2,
-}) => {
+const CompareTwoPlayersPage: NextPage<{
+  p1: PlayerT;
+  p2: PlayerT;
+  matches: MatchWithTournamentType[];
+}> = ({ p1, p2, matches }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
 
   const handleTabChange = (_: any, value: number) => {
@@ -32,31 +34,31 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
       case STATS_TABS[1]: {
         return (
           <SpecsTab
-            technique={[10, 30]}
-            tactics={[10, 30]}
-            power={[10, 30]}
-            shakes={[10, 30]}
-            serve={[10, 30]}
-            behaviour={[10, 30]}
+            technique={[p1.technique, p2.technique]}
+            tactics={[p1.tactics, p2.tactics]}
+            power={[p1.power as number, p2.power as number]}
+            shakes={[p1.shakes, p2.shakes]}
+            serve={[p1.serve, p2.serve]}
+            behaviour={[p1.behaviour, p2.behaviour]}
           />
         );
       }
       case STATS_TABS[2]: {
         return (
           <>
-            {([{}, {}, {}, {}] as MatchWithTournamentType[]).map((match, i) => (
+            {matches.map((match, i) => (
               <MatchListElement
                 key={i}
                 tournamentName={match.tournament.name || ''}
                 startDate={
-                  ''
-                  // match?.start_date
-                  //   ? format(new Date(match.start_date), 'yyyy-MM-dd')
-                  //   : ''
+                  match?.start_date
+                    ? format(new Date(match.start_date), 'yyyy-MM-dd')
+                    : ''
                 }
                 score={match?.score || ''}
+                playerName={(p1.first_name as string)[0] + '. ' + p1.last_name}
                 opponent={getOpponents(p1.id, match)}
-                win={String(p1.id) === match?.winner_id}
+                isp1win={String(p1.id) === match?.winner_id}
               />
             ))}
           </>
@@ -78,19 +80,27 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
       <div className={styles.score}>8 VS 11</div>
       <div className={styles.mainInfo}>
         <div className={cl(styles.playerInfo, styles.side)}>
-          <p className={styles.name}>Иван Пирогов</p>
+          <p className={styles.name}>
+            {p1.first_name} {p1.last_name}
+          </p>
           <div className={styles.info}>
-            <span className={styles.lvl}>Мастерс</span>
-            <span className={styles.top}>11</span>
+            <span className={styles.lvl}>
+              {LEVEL_NUMBER_VALUES[p1.level as number]}
+            </span>
+            {/* <span className={styles.top}>{'<318>'}</span> */}
             <span className={styles.rank}>1434</span>
           </div>
         </div>
         <div className={cl(styles.playerInfo, styles.side)}>
-          <p className={styles.name}>Иван Пирогов</p>
+          <p className={styles.name}>
+            {p2.first_name} {p2.last_name}
+          </p>
           <div className={styles.info}>
-            <span className={styles.lvl}>Мастерс</span>
-            <span className={styles.top}>11</span>
-            <span className={styles.rank}>1434</span>
+            <span className={styles.lvl}>
+              {LEVEL_NUMBER_VALUES[p2.level as number]}
+            </span>
+            {/* <span className={styles.top}>{'<39>'}</span> */}
+            <span className={styles.rank}>188</span>
           </div>
         </div>
       </div>
@@ -108,16 +118,35 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const { p1Id, p2Id } = ctx.query;
+  const p1IdInt = parseInt(p1Id as string, 10);
+  const p2IdInt = parseInt(p2Id as string, 10);
 
   const p1 = await prisma.player.findUnique({
     where: {
-      id: parseInt(p1Id as string, 10),
+      id: p1IdInt,
     },
   });
 
   const p2 = await prisma.player.findUnique({
     where: {
-      id: parseInt(p2Id as string, 10),
+      id: p2IdInt,
+    },
+  });
+
+  // matches of two selected players
+  const matches = await prisma.match.findMany({
+    where: {
+      OR: [
+        { player1_id: p1IdInt, player2_id: p2IdInt },
+        { player1_id: p2IdInt, player2_id: p1IdInt },
+      ],
+    },
+    include: {
+      tournament: true,
+      player_match_player1_idToplayer: true,
+      player_match_player2_idToplayer: true,
+      player_match_player3_idToplayer: true,
+      player_match_player4_idToplayer: true,
     },
   });
 
@@ -125,6 +154,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     props: {
       p1,
       p2,
+      matches,
     },
   };
 };
