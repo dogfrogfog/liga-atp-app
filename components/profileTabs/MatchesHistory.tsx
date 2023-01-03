@@ -36,8 +36,8 @@ const MatchesHistoryTab = ({
               : ''
           }
           score={match?.score || ''}
-          opponent={getOpponents(playerId, match)}
-          win={String(playerId) === match.winner_id}
+          p2Name={getOpponents(playerId, match)}
+          isMainPlayerWin={String(playerId) === match.winner_id}
         />
       ))}
     </>

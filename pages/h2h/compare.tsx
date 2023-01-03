@@ -10,6 +10,7 @@ import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
+import { calculateMatchesForP1Score } from 'utils/calculateMatchesScore';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Compare.module.scss';
 
@@ -46,21 +47,23 @@ const CompareTwoPlayersPage: NextPage<{
       case STATS_TABS[2]: {
         return (
           <>
-            {matches.map((match, i) => (
-              <MatchListElement
-                key={i}
-                tournamentName={match.tournament.name || ''}
-                startDate={
-                  match?.start_date
-                    ? format(new Date(match.start_date), 'yyyy-MM-dd')
-                    : ''
-                }
-                score={match?.score || ''}
-                playerName={(p1.first_name as string)[0] + '. ' + p1.last_name}
-                opponent={getOpponents(p1.id, match)}
-                isp1win={String(p1.id) === match?.winner_id}
-              />
-            ))}
+            {matches.length > 0
+              ? matches.map((match, i) => (
+                  <MatchListElement
+                    key={i}
+                    tournamentName={match.tournament.name || ''}
+                    startDate={
+                      match?.start_date
+                        ? format(new Date(match.start_date), 'yyyy-MM-dd')
+                        : ''
+                    }
+                    score={match?.score || ''}
+                    p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
+                    p2Name={getOpponents(p1.id, match)}
+                    isMainPlayerWin={String(p1.id) === match?.winner_id}
+                  />
+                ))
+              : 'У игроков еще нет матчей против друг друга'}
           </>
         );
       }
@@ -77,7 +80,11 @@ const CompareTwoPlayersPage: NextPage<{
         {/* add styles for actual image */}
         <div className={cl(styles.img, styles.side)}></div>
       </div>
-      <div className={styles.score}>8 VS 11</div>
+      {matches.length > 0 && (
+        <div className={styles.score}>
+          {calculateMatchesForP1Score(matches)}
+        </div>
+      )}
       <div className={styles.mainInfo}>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>

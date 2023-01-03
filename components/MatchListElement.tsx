@@ -8,21 +8,21 @@ import styles from './MatchListElement.module.scss';
 type MatchProps = {
   tournamentName: string;
   startDate: string;
-  opponent: string;
+  p2Name: string;
   score: string;
-  isp1win: boolean;
+  isMainPlayerWin: boolean;
   withCompareLink?: boolean;
-  playerName?: string;
+  p1Name?: string;
 };
 
 const Match = ({
   tournamentName,
   startDate,
-  opponent,
+  p2Name,
   score,
-  isp1win,
+  isMainPlayerWin,
   withCompareLink = false,
-  playerName = '',
+  p1Name = '',
 }: MatchProps) => (
   // need to have all players' id here to set id to query params of link
   <div className={styles.match}>
@@ -44,11 +44,19 @@ const Match = ({
     </div>
     <div className={styles.row}>
       <span className={styles.players}>
-        <span className={isp1win ? styles.win : styles.lose}>{playerName}</span>
+        <span className={isMainPlayerWin ? styles.win : styles.lose}>
+          {p1Name}
+        </span>
         <i> vs. </i>
-        <span className={!isp1win ? styles.win : styles.lose}>{opponent}</span>
+        <span className={!isMainPlayerWin ? styles.win : styles.lose}>
+          {p2Name}
+        </span>
       </span>
-      <span className={isp1win ? styles.win : styles.lose}>{score}</span>
+      <span
+        className={!p1Name ? (isMainPlayerWin ? styles.win : styles.lose) : ''}
+      >
+        {score}
+      </span>
     </div>
   </div>
 );
