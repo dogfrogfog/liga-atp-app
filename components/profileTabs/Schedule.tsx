@@ -5,16 +5,8 @@ import type {
 } from '@prisma/client';
 import { format } from 'date-fns';
 
-import { getOpponents } from 'utils/getOpponents';
+import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
 import styles from './Schedule.module.scss';
-
-type MatchWithTournamentType = MatchT & {
-  tournament: TournamentT;
-  player_match_player1_idToplayer: PlayerT;
-  player_match_player2_idToplayer: PlayerT;
-  player_match_player3_idToplayer: PlayerT;
-  player_match_player4_idToplayer: PlayerT;
-};
 
 type MatchProps = {
   tournamentName: string;

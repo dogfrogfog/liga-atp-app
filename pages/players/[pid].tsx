@@ -15,6 +15,7 @@ import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
 import NewsList from 'components/NewsList';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import type { MatchWithTournamentType } from 'utils/getOpponents';
 import Tabs from 'ui-kit/Tabs';
 import styles from 'styles/Profile.module.scss';
 
@@ -31,14 +32,6 @@ const calculateYearsFromDate = (date: Date) => {
   var age_dt = new Date(diff_ms);
 
   return Math.abs(age_dt.getUTCFullYear() - 1970);
-};
-
-export type MatchWithTournamentType = MatchT & {
-  tournament: TournamentT;
-  player_match_player1_idToplayer: PlayerT;
-  player_match_player2_idToplayer: PlayerT;
-  player_match_player3_idToplayer: PlayerT;
-  player_match_player4_idToplayer: PlayerT;
 };
 
 const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {

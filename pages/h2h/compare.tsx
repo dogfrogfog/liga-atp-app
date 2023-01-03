@@ -2,12 +2,14 @@ import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
+import { format } from 'date-fns';
 
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
 import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
-import MatchesTab from 'components/statsTabs/Matches';
+import MatchListElement from 'components/MatchListElement';
+import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
 import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
@@ -40,7 +42,25 @@ const CompareTwoPlayersPage: NextPage<{ p1: PlayerT; p2: PlayerT }> = ({
         );
       }
       case STATS_TABS[2]: {
-        return <MatchesTab />;
+        return (
+          <>
+            {([{}, {}, {}, {}] as MatchWithTournamentType[]).map((match, i) => (
+              <MatchListElement
+                key={i}
+                tournamentName={match.tournament.name || ''}
+                startDate={
+                  ''
+                  // match?.start_date
+                  //   ? format(new Date(match.start_date), 'yyyy-MM-dd')
+                  //   : ''
+                }
+                score={match?.score || ''}
+                opponent={getOpponents(p1.id, match)}
+                win={String(p1.id) === match?.winner_id}
+              />
+            ))}
+          </>
+        );
       }
       default:
         return null;
