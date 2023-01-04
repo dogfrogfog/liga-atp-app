@@ -9,8 +9,8 @@ type NewsListProps = {
 
 const NewsList = ({ news }: NewsListProps) => (
   <>
-    {news.map((v) => (
-      <Fragment key={v.id}>
+    {news.map((v, i) => (
+      <Fragment key={v.id + i}>
         <div className={styles.imagePreview}></div>
         <div key={v.title} className={styles.article}>
           <Link href={`digest/${v.id}`}>
