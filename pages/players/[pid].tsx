@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import { FaMedal } from 'react-icons/fa';
-import {
-  player as PlayerT,
-  match as MatchT,
-  tournament as TournamentT,
-} from '@prisma/client';
+import { player as PlayerT } from '@prisma/client';
 import axios from 'axios';
 
+import type { StatsDataType } from 'pages/api/stats';
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
@@ -37,6 +34,10 @@ const calculateYearsFromDate = (date: Date) => {
 const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
   const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
+  const [statsData, setStatsData] = useState<StatsDataType | undefined>();
+  const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(
+    player.level || undefined
+  );
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -45,10 +46,18 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
       if (response.status === 200) {
         setMatches(response.data);
       }
+
+      const statsResp = await axios.get(
+        `/api/stats?playerId=${player.id}&level=${statsTabLvlDropdown}`
+      );
+
+      if (statsResp.status === 200) {
+        setStatsData(statsResp.data);
+      }
     };
 
     fetchWrapper();
-  }, [player.id]);
+  }, [player.id, statsTabLvlDropdown]);
 
   const {
     id,
@@ -133,13 +142,15 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
         return (
           <StatsTab
             playerId={id}
-            level={level}
+            selectedLvl={statsTabLvlDropdown}
+            setSelectedLvl={setStatsTabLvlDropdown}
             technique={technique}
             tactics={tactics}
             power={power as number}
             shakes={shakes}
             serve={serve}
             behaviour={behaviour}
+            statsData={statsData}
           />
         );
       case PROFILE_TABS[4]:

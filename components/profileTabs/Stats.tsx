@@ -1,8 +1,10 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
 import axios from 'axios';
 
+import type { StatsDataType } from 'pages/api/stats';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './Stats.module.scss';
+import { GiConsoleController } from 'react-icons/gi';
 
 const trans: { [k: string]: string } = {
   technique: 'Техника',
@@ -15,7 +17,10 @@ const trans: { [k: string]: string } = {
 
 type StatsTabProps = {
   playerId: number;
-  level: number | null;
+  selectedLvl: number | undefined;
+  setSelectedLvl: Dispatch<SetStateAction<number | undefined>>;
+
+  statsData?: StatsDataType;
 
   // specs
   technique: number;
@@ -26,29 +31,18 @@ type StatsTabProps = {
   behaviour: number;
 };
 
-const StatsTab = ({ playerId, level, ...rest }: StatsTabProps) => {
-  const [selectedLvl, setSelectedLvl] = useState(
-    LEVEL_NUMBER_VALUES[level || 0]
-  );
-  const [statsData, setStatsData] = useState<unknown>();
-
+const StatsTab = ({
+  playerId,
+  selectedLvl,
+  setSelectedLvl,
+  statsData,
+  ...rest
+}: StatsTabProps) => {
   const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLvl(e.target.value);
+    setSelectedLvl(parseInt(e.target.value, 10));
   };
 
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      const response = await axios.get(
-        `/api/stats?playerId=${playerId}&level=${selectedLvl}`
-      );
-
-      if (response.status === 200) {
-        setStatsData(response.data);
-      }
-    };
-
-    // fetchWrapper()
-  }, [selectedLvl, playerId]);
+  console.log(selectedLvl, statsData);
 
   return (
     <div className={styles.statsTabContainer}>
@@ -74,7 +68,7 @@ const StatsTab = ({ playerId, level, ...rest }: StatsTabProps) => {
         <i>{'<График изменение рейтинга Эло>'}</i>
       </div>
       <div className={styles.levelContainer}>
-        <select name="level">
+        <select value={selectedLvl} onChange={handleLevelChange} name="level">
           {Object.entries(LEVEL_NUMBER_VALUES).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
@@ -86,33 +80,31 @@ const StatsTab = ({ playerId, level, ...rest }: StatsTabProps) => {
       <div>
         <div className={styles.row}>
           <span className={styles.valueName}>Сыгранных турниров</span>
-          <span className={styles.value}>14</span>
+          <span className={styles.value}>{statsData?.tournaments_played}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество титулов</span>
-          <span className={styles.value}>2</span>
-        </div>
-        <div className={styles.row}>
-          <span className={styles.valueName}>
-            Количество сыгранных матчей в уровне
-          </span>
-          <span className={styles.value}>45 %</span>
+          <span className={styles.value}>{statsData?.tournaments_wins}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество финалов</span>
-          <span className={styles.value}>4</span>
+          <span className={styles.value}>{statsData?.finals_number}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>
             Количество сыгранных матчей в уровне
           </span>
-          <span className={styles.value}>45 %</span>
+          <span className={styles.value}>
+            {statsData?.matches_played_in_level}
+          </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>W/L в своем уровне</span>
-          <span className={styles.value}>3</span>
+          <span className={styles.valueName}>W/L</span>
+          <span className={styles.value}>
+            {statsData?.win_lose_in_level_proportion}
+          </span>
         </div>
-        <div className={styles.row}>
+        {/* <div className={styles.row}>
           <span className={styles.valueName}>
             Процент выигрыша в тай-брейков до 7
           </span>
@@ -123,32 +115,34 @@ const StatsTab = ({ playerId, level, ...rest }: StatsTabProps) => {
             Процент выигрыша решающих тай-брейков
           </span>
           <span className={styles.value}>3</span>
-        </div>
+        </div> */}
         <div className={styles.row}>
           <span className={styles.valueName}>
             Процент побед после поражения в первом сете
           </span>
-          <span className={styles.value}>3</span>
-        </div>
-        <div className={styles.row}>
-          <span className={styles.valueName}>
-            Процент выигрыша 1 и 2 сетов в трехсетовике
+          <span className={styles.value}>
+            {statsData?.win_lose_with_first_set_lose_proportion}
           </span>
-          <span className={styles.value}>3</span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 0-6 0-6</span>
-          <span className={styles.value}>1</span>
+          <span className={styles.value}>
+            {statsData?.lose_matches_with_zero_points}
+          </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 6-0 6-0</span>
-          <span className={styles.value}>1</span>
+          <span className={styles.value}>
+            {statsData?.win_matches_with_zero_opponent_points}
+          </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>
             Процент Двухсетовиков vs Трехсетовиков
           </span>
-          <span className={styles.value}>3</span>
+          <span className={styles.value}>
+            {statsData?.two_three_sets_matches_proportion}
+          </span>
         </div>
       </div>
     </div>
