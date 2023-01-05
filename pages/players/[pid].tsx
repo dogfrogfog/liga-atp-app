@@ -57,7 +57,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
     };
 
     fetchWrapper();
-  }, [player.id]);
+  }, [player.id, statsTabLvlDropdown]);
 
   const {
     id,

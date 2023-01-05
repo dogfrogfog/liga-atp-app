@@ -99,7 +99,7 @@ const StatsTab = ({
           </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>W/L в своем уровне</span>
+          <span className={styles.valueName}>W/L</span>
           <span className={styles.value}>
             {statsData?.win_lose_in_level_proportion}
           </span>
