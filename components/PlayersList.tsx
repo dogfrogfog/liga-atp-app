@@ -45,7 +45,7 @@ const PlayersList = ({
               )[0].toUpperCase()}. ${last_name}`}</span>
             </div>
             <div className={styles.levelColumn}>
-              {level ? LEVEL_NUMBER_VALUES[level] : ''}
+              {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
             </div>
             <div className={styles.rankColumn}>
               <span className={styles.rankValue}>1489</span>

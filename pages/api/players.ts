@@ -8,15 +8,21 @@ export default async (
   res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    const paginatedPlayers = await prisma.player.findMany({
-      take: parseInt(req.query.take as string),
-      skip: parseInt(req.query.skip as string),
-      orderBy: {
-        id: 'desc',
-      },
-    });
+    const isPaginated = !!(req.query.take && req.query.skip);
 
-    res.json(paginatedPlayers);
+    const playersList = await prisma.player.findMany(
+      isPaginated
+        ? {
+            take: parseInt(req.query.take as string),
+            skip: parseInt(req.query.skip as string),
+            orderBy: {
+              id: 'desc',
+            },
+          }
+        : undefined
+    );
+
+    res.json(playersList);
   }
 
   if (req.method === 'POST') {

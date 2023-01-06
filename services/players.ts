@@ -13,14 +13,16 @@ type IGetPlayersResponse = PlayersResponse<PlayerT[]>;
 type ICreatePlayerResponse = PlayersResponse<PlayerT>;
 type IDeletePlayerResponse = PlayersResponse<Prisma.BatchPayload>;
 type IUpdatePlayerResponse = PlayersResponse<PlayerT>;
-type IH2hPlayersResponse = PlayersResponse<PlayerT[]>;
+// type IH2hPlayersResponse = PlayersResponse<PlayerT[]>;
 
 export async function getPlayers(
-  pagination: PaginationProps
+  pagination?: PaginationProps
 ): Promise<IGetPlayersResponse> {
-  const url = `/api/players?take=${pagination.pageSize}&skip=${
-    pagination.pageIndex * pagination.pageSize
-  }`;
+  const url = pagination
+    ? `/api/players?take=${pagination.pageSize}&skip=${
+        pagination.pageIndex * pagination.pageSize
+      }`
+    : '/api/players';
   const response = await axios.get<PlayerT[]>(url);
 
   if (response.status === 200) {
