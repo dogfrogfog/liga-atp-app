@@ -36,6 +36,7 @@
   background-color: $custom-aqua;
   border-radius: 50%;
   color: $custom-black;
+  font-size: 10px;
 }
 
 .levelColumn,
@@ -45,6 +46,10 @@
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.rankColumn {
+  text-align: right;
 }
 
 .listItem {
