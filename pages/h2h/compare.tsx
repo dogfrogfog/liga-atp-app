@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
@@ -47,23 +48,28 @@ const CompareTwoPlayersPage: NextPage<{
       case STATS_TABS[2]: {
         return (
           <>
-            {matches.length > 0
-              ? matches.map((match, i) => (
-                  <MatchListElement
-                    key={i}
-                    tournamentName={match.tournament.name || ''}
-                    startDate={
-                      match?.start_date
-                        ? format(new Date(match.start_date), 'yyyy-MM-dd')
-                        : ''
-                    }
-                    score={match?.score || ''}
-                    p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
-                    p2Name={getOpponents(p1.id, match)}
-                    isMainPlayerWin={String(p1.id) === match?.winner_id}
-                  />
-                ))
-              : 'У игроков еще нет матчей против друг друга'}
+            {matches.length > 0 ? (
+              matches.map((match, i) => (
+                <MatchListElement
+                  key={i}
+                  tournamentName={match.tournament.name || ''}
+                  startDate={
+                    match?.start_date
+                      ? format(new Date(match.start_date), 'yyyy-MM-dd')
+                      : ''
+                  }
+                  score={match?.score || ''}
+                  p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
+                  p2Name={getOpponents(p1.id, match)}
+                  isMainPlayerWin={String(p1.id) === match?.winner_id}
+                />
+              ))
+            ) : (
+              <NotFoundMessage
+                className={styles.err}
+                message="У игроков еще нет совместных матчей"
+              />
+            )}
           </>
         );
       }

@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 
 import Tabs from 'ui-kit/Tabs';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import PageTitle from 'ui-kit/PageTitle';
 import PlayersList from 'components/PlayersList';
 import { getPlayers } from 'services/players';
 import styles from 'styles/Ranking.module.scss';
@@ -82,8 +82,8 @@ const RankingPage: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <p className={styles.pageTitle}>Рейтинг</p>
+    <div className={styles.pageContainer}>
+      <PageTitle>Рейтинг</PageTitle>
       <Tabs
         tabNames={RANKING_TABS}
         activeTab={activeTab}
