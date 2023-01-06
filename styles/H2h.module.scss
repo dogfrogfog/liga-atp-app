@@ -1,15 +1,8 @@
 @import './variables.scss';
 
-.container {
+.pageContainer {
+  margin-top: 80px;
   padding: 15px;
-}
-
-.pageTitle {
-  display: block;
-  padding: 0;
-  margin: 90px 0 40px;
-  font-size: 30px;
-  font-weight: 600;
 }
 
 .selection {

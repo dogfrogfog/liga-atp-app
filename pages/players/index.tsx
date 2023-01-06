@@ -7,6 +7,7 @@ import { prisma } from 'services/db';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SearchInput from 'components/SearchInput';
 import PlayersList from 'components/PlayersList';
+import PageTitle from 'ui-kit/PageTitle';
 import styles from 'styles/Players.module.scss';
 
 type PlayersIndexPageProps = {
@@ -30,28 +31,29 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
   };
 
   return (
-    <div className={styles.playersContainer}>
-      <div className={styles.header}></div>
+    <div className={styles.pageContainer}>
+      <div className={styles.searchInputContainer}>
+        <SearchInput
+          value={search}
+          handleChange={handleSearch}
+          submitSearch={submitSearch}
+        />
+      </div>
+      <PageTitle>Игроки</PageTitle>
       {data.length === 0 ? (
-        <NotFoundMessage message="Результаты по вашему запросу не найдены" />
+        <NotFoundMessage message="При загрузке игроков произошла ошибка. Попробуйте позже" />
       ) : (
         <>
-          <p className={styles.listTitle}>Игроки</p>
           <PlayersList players={data} />
         </>
       )}
-      <SearchInput
-        value={search}
-        handleChange={handleSearch}
-        submitSearch={submitSearch}
-      />
     </div>
   );
 };
 
 export const getServerSideProps = async () => {
   const players = await prisma.player.findMany({
-    take: 15,
+    take: 50,
     orderBy: {
       id: 'desc',
     },

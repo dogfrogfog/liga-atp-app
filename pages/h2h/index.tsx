@@ -5,6 +5,7 @@ import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
 
 import { prisma } from 'services/db';
+import PageTitle from 'ui-kit/PageTitle';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import styles from 'styles/H2h.module.scss';
 
@@ -20,8 +21,8 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <p className={styles.pageTitle}>Head To Head</p>
+    <div className={styles.pageContainer}>
+      <PageTitle>Head To Head</PageTitle>
       <div
         className={cl(
           styles.selection,

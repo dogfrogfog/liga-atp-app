@@ -11,6 +11,7 @@ import SearchInput from 'components/SearchInput';
 import TournamentListItem from 'components/TournamentListItem';
 import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
 import { getTournaments } from 'services/tournaments';
+import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
@@ -233,15 +234,15 @@ const TournamentsPage: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className={styles.pageContainer}>
+      <PageTitle>Турниры</PageTitle>
+      <div className={styles.searchInputContainer}>
         <SearchInput
           value={search}
           handleChange={handleSearch}
           submitSearch={submitSearch}
         />
       </div>
-      <p className={styles.listTitle}>Турниры </p>
       <Tabs
         activeTab={activeTab}
         tabNames={TOURNAMENT_TABS}
