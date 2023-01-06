@@ -1,10 +1,13 @@
+@import '../../styles/variables.scss';
+
 .notFoundMessage {
-  margin-top: 190px;
   text-align: center;
+  padding: 15px;
+  background-color: $custom-darkgray;
+  border-radius: 14px;
 
   p {
-    padding: 0 30px 0;
-    font-size: 14px;
-    line-height: 18px;
+    margin: 35px 0;
+    font-size: 16px;
   }
 }
