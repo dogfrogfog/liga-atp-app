@@ -2,6 +2,7 @@
 
 .container {
   margin-bottom: 20px;
+  position: relative;
 
   :global(.react-autosuggest__input) {
     outline: none;

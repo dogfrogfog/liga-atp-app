@@ -8,15 +8,17 @@ export default async (
   res: NextApiResponse<TournamentT[] | TournamentT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    const paginatedTournaments = await prisma.tournament.findMany({
+    const isPaginated = !!(req.query.take && req.query.skip);
+
+    const tournaments = await prisma.tournament.findMany(isPaginated ? {
       take: parseInt(req.query.take as string),
       skip: parseInt(req.query.skip as string),
       orderBy: {
         id: 'desc',
       },
-    });
+    } : undefined);
 
-    res.json(paginatedTournaments);
+    res.json(tournaments);
   }
 
   if (req.method === 'POST') {

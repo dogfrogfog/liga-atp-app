@@ -10,4 +10,8 @@
   width: calc(100% - 30px);
   position: absolute;
   top: -65px;
+
+  :global(.react-autosuggest__suggestions-container) {
+    width: 100%;
+  }
 }
