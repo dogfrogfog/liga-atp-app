@@ -1,12 +1,15 @@
 @import './variables.scss';
 
-.container {
+.pageContainer {
+  position: relative;
   padding: 15px;
+  margin-top: 140px;
 }
 
-.header {
-  margin-top: 60px;
-  margin-bottom: 40px;
+.searchInputContainer {
+  width: calc(100% - 30px);
+  position: absolute;
+  top: -65px;
 }
 
 .tournamentName {
@@ -17,14 +20,6 @@
   color: $custom-lightgray;
   font-weight: 200;
   font-size: 12px;
-}
-
-.listTitle {
-  display: block;
-  padding: 0;
-  margin: 0 0 20px;
-  font-size: 30px;
-  font-weight: 600;
 }
 
 .weekFiltersContainer {
