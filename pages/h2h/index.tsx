@@ -58,7 +58,7 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
               <span
                 className={cl(
                   styles.compare,
-                  !selectedPlayers[0]?.id && !selectedPlayers[1]?.id
+                  !selectedPlayers[0]?.id || !selectedPlayers[1]?.id
                     ? styles.disabled
                     : ''
                 )}

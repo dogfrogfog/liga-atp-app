@@ -11,13 +11,22 @@
     border: none;
     border-radius: 5px;
     font-size: 18px;
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px 15px;
   }
 
   :global(.react-autosuggest__input--open) {
     border-radius: 0;
     border-bottom: 2px solid $custom-lightgray;
+  }
+
+  :global(.react-autosuggest__suggestions-container) {
+    max-height: 400px;
+    overflow-y: scroll;
+    width: calc(100% - 60px);
+    z-index: 3;
+    position: absolute;
+    background-color: $custom-black;
   }
 
   :global(.react-autosuggest__container) {
