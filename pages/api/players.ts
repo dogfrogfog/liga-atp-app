@@ -10,19 +10,21 @@ export default async (
   if (req.method === 'GET') {
     const isPaginated = !!(req.query.take && req.query.skip);
 
-    const playersList = await prisma.player.findMany(
-      isPaginated
-        ? {
-            take: parseInt(req.query.take as string),
-            skip: parseInt(req.query.skip as string),
-            orderBy: {
-              id: 'desc',
-            },
-          }
-        : undefined
-    );
+    const paginationParams = isPaginated
+      ? ({
+          take: parseInt(req.query.take as string),
+          skip: parseInt(req.query.skip as string),
+        } as Prisma.playerFindManyArgs)
+      : {};
 
-    res.json(playersList);
+    const players = await prisma.player.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+      ...paginationParams,
+    });
+
+    res.json(players);
   }
 
   if (req.method === 'POST') {
