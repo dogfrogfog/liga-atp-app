@@ -4,39 +4,37 @@ import Autosuggest, {
   SuggestionsFetchRequestedParams,
 } from 'react-autosuggest';
 
-import type { player as PlayerT } from 'services/db';
+import type { player as PlayerT, tournament as TournamentT } from 'services/db';
 import styles from './styles.module.scss';
 
 type SuggestionsInputProps = {
   placeholder: string;
-  players: PlayerT[];
-  onSuggestionClick: (p: PlayerT) => void;
+  suggestions: PlayerT[] | TournamentT[];
+  filterFn: (inputV: string) => (v: any) => boolean;
+  onSuggestionClick: (v: any) => void;
 };
 
 const SuggestionsInput = ({
-  players,
+  suggestions,
   placeholder,
+  filterFn,
   onSuggestionClick,
 }: SuggestionsInputProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [inputSuggestions, setInputSuggestions] = useState<PlayerT[]>([]);
+  const [inputSuggestions, setInputSuggestions] = useState<
+    (PlayerT | TournamentT)[]
+  >([]);
 
   const getSuggestions = (value: string) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
-    return inputLength >= 3
-      ? players.filter(
-          (p) =>
-            (p?.first_name as string).toLowerCase().slice(0, inputLength) ===
-              inputValue ||
-            (p?.last_name as string).toLowerCase().slice(0, inputLength) ===
-              inputValue
-        )
-      : [];
+    // @ts-ignore
+    return inputLength >= 3 ? suggestions.filter(filterFn(inputValue)) : [];
   };
 
-  const getSuggestionValue = (s: any) => `${s.first_name[0]}. ${s.last_name}`;
+  const getSuggestionValue = (s: any) =>
+    s.first_name ? `${s.first_name[0]}. ${s.last_name}` : s.name;
 
   const onSuggestionsFetchRequested = ({
     value,
@@ -55,9 +53,14 @@ const SuggestionsInput = ({
     onSuggestionClick(v.suggestion);
   };
 
-  const renderSuggestion = (s: PlayerT) => (
+  const renderSuggestion = (s: PlayerT | TournamentT) => (
     <div>
-      {(s?.first_name as string)[0]}. {s?.last_name}
+      {/* @ts-ignore */}
+      {s?.first_name
+        ? // @ts-ignore
+          `${(s.first_name as string)[0]}. ${s.last_name}`
+        : // @ts-ignore
+          s?.name}
     </div>
   );
 

@@ -20,6 +20,12 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
     setPlayers([]);
   };
 
+  // same as /players page
+  const filterFn = (inputValue: string) => (p: PlayerT) =>
+    ((p?.first_name as string) + ' ' + p?.last_name)
+      .toLowerCase()
+      .includes(inputValue);
+
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Head To Head</PageTitle>
@@ -43,13 +49,16 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
         )}
         <div className={cl(selectedPlayers.length === 0 ? styles.initial : '')}>
           {selectedPlayers.length !== 2 && (
-            <SuggestionsInput
-              placeholder={`Введите имя ${
-                selectedPlayers.length === 1 ? '2-го' : '1-го'
-              } игрока`}
-              players={allPlayers}
-              onSuggestionClick={onSuggestionClick}
-            />
+            <div className={styles.searchInputContainer}>
+              <SuggestionsInput
+                placeholder={`Введите имя ${
+                  selectedPlayers.length === 1 ? '2-го' : '1-го'
+                } игрока`}
+                suggestions={allPlayers}
+                onSuggestionClick={onSuggestionClick}
+                filterFn={filterFn}
+              />
+            </div>
           )}
           <div className={styles.buttons}>
             <Link
@@ -58,7 +67,7 @@ const H2hPage: NextPage<{ allPlayers: PlayerT[] }> = ({ allPlayers }) => {
               <span
                 className={cl(
                   styles.compare,
-                  !selectedPlayers[0]?.id && !selectedPlayers[1]?.id
+                  !selectedPlayers[0]?.id || !selectedPlayers[1]?.id
                     ? styles.disabled
                     : ''
                 )}

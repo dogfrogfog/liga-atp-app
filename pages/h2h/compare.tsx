@@ -18,11 +18,22 @@ import styles from 'styles/Compare.module.scss';
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
 const CompareTwoPlayersPage: NextPage<{
-  p1: PlayerT;
-  p2: PlayerT;
+  p1?: PlayerT;
+  p2?: PlayerT;
   matches: MatchWithTournamentType[];
 }> = ({ p1, p2, matches }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
+
+  if (!p1 || !p2) {
+    return (
+      <div className={styles.errorContainer}>
+        <NotFoundMessage
+          className={styles.notFound}
+          message="Выбирите двух игроков"
+        />
+      </div>
+    );
+  }
 
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(STATS_TABS[value]);
@@ -134,34 +145,41 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   const p1IdInt = parseInt(p1Id as string, 10);
   const p2IdInt = parseInt(p2Id as string, 10);
 
-  const p1 = await prisma.player.findUnique({
-    where: {
-      id: p1IdInt,
-    },
-  });
+  const p1 = p1IdInt
+    ? ((await prisma.player.findUnique({
+        where: {
+          id: p1IdInt,
+        },
+      })) as PlayerT)
+    : undefined;
 
-  const p2 = await prisma.player.findUnique({
-    where: {
-      id: p2IdInt,
-    },
-  });
+  const p2 = p2IdInt
+    ? ((await prisma.player.findUnique({
+        where: {
+          id: p2IdInt,
+        },
+      })) as PlayerT)
+    : undefined;
 
   // matches of two selected players
-  const matches = await prisma.match.findMany({
-    where: {
-      OR: [
-        { player1_id: p1IdInt, player2_id: p2IdInt },
-        { player1_id: p2IdInt, player2_id: p1IdInt },
-      ],
-    },
-    include: {
-      tournament: true,
-      player_match_player1_idToplayer: true,
-      player_match_player2_idToplayer: true,
-      player_match_player3_idToplayer: true,
-      player_match_player4_idToplayer: true,
-    },
-  });
+  const matches =
+    p1IdInt && p2IdInt
+      ? await prisma.match.findMany({
+          where: {
+            OR: [
+              { player1_id: p1IdInt, player2_id: p2IdInt },
+              { player1_id: p2IdInt, player2_id: p1IdInt },
+            ],
+          },
+          include: {
+            tournament: true,
+            player_match_player1_idToplayer: true,
+            player_match_player2_idToplayer: true,
+            player_match_player3_idToplayer: true,
+            player_match_player4_idToplayer: true,
+          },
+        })
+      : [];
 
   return {
     props: {

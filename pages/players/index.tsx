@@ -1,11 +1,10 @@
-import { ChangeEvent, useState } from 'react';
 import type { NextPage } from 'next';
-import axios from 'axios';
 import { player as PlayerT } from '@prisma/client';
+import { useRouter } from 'next/router';
 
 import { prisma } from 'services/db';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
-import SearchInput from 'components/SearchInput';
+import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import PlayersList from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from 'styles/Players.module.scss';
@@ -15,37 +14,32 @@ type PlayersIndexPageProps = {
 };
 
 const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
-  const [search, setSearch] = useState('');
-  const [data, setData] = useState(players);
+  const router = useRouter();
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+  const onSuggestionClick = (p: PlayerT) => {
+    router.push(`/players/${p.id}`);
   };
 
-  const submitSearch = async () => {
-    const response = await axios.get(`/api/players/search?name=${search}`);
-
-    if (response.status === 200) {
-      setData(response.data);
-    }
-  };
+  const filterFn = (inputValue: string) => (p: PlayerT) =>
+    ((p?.first_name as string) + ' ' + p?.last_name)
+      .toLowerCase()
+      .includes(inputValue);
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.searchInputContainer}>
-        <SearchInput
-          value={search}
-          handleChange={handleSearch}
-          submitSearch={submitSearch}
+        <SuggestionsInput
+          suggestions={players}
+          filterFn={filterFn}
+          placeholder="Введите имя игрока"
+          onSuggestionClick={onSuggestionClick}
         />
       </div>
       <PageTitle>Игроки</PageTitle>
-      {data.length === 0 ? (
+      {players.length === 0 ? (
         <NotFoundMessage message="При загрузке игроков произошла ошибка. Попробуйте позже" />
       ) : (
-        <>
-          <PlayersList players={data} />
-        </>
+        <PlayersList players={players} />
       )}
     </div>
   );
@@ -53,7 +47,7 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
 
 export const getServerSideProps = async () => {
   const players = await prisma.player.findMany({
-    take: 50,
+    take: 150,
     orderBy: {
       id: 'desc',
     },
