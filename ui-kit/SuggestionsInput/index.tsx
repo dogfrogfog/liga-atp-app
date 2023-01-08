@@ -3,6 +3,7 @@ import Autosuggest, {
   ChangeEvent,
   SuggestionsFetchRequestedParams,
 } from 'react-autosuggest';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 import type { player as PlayerT, tournament as TournamentT } from 'services/db';
 import styles from './styles.module.scss';
@@ -76,6 +77,9 @@ const SuggestionsInput = ({
 
   return (
     <div className={styles.container}>
+      <div className={styles.icon}>
+        <AiOutlineSearch />
+      </div>
       <Autosuggest
         suggestions={inputSuggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
