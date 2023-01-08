@@ -20,11 +20,17 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
     router.push(`/players/${p.id}`);
   };
 
+  const filterFn = (inputValue: string) => (p: PlayerT) =>
+    ((p?.first_name as string) + ' ' + p?.last_name)
+      .toLowerCase()
+      .includes(inputValue);
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.searchInputContainer}>
         <SuggestionsInput
-          players={players}
+          suggestions={players}
+          filterFn={filterFn}
           placeholder="Введите имя игрока"
           onSuggestionClick={onSuggestionClick}
         />

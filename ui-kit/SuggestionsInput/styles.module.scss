@@ -18,7 +18,7 @@
 
   :global(.react-autosuggest__input--open) {
     border-radius: 0;
-    border-bottom: 2px solid $custom-lightgray;
+    border-bottom: 1px solid $custom-lightgray;
   }
 
   :global(.react-autosuggest__suggestions-container) {
@@ -28,6 +28,7 @@
     z-index: 3;
     position: absolute;
     background-color: $custom-black;
+    border: 1px solid $custom-lightgray;
   }
 
   :global(.react-autosuggest__container) {
