@@ -15,11 +15,13 @@ type IDeleteTournamentResponse = TournamentsResponse<Prisma.BatchPayload>;
 type IUpdateTournamentResponse = TournamentsResponse<TournamentT>;
 
 export async function getTournaments(
-  pagination: PaginationProps
+  pagination?: PaginationProps
 ): Promise<IGetTournamentsResponse> {
-  const url = `/api/tournaments?take=${pagination.pageSize}&skip=${
-    pagination.pageIndex * pagination.pageSize
-  }`;
+  const url = pagination
+    ? `/api/tournaments?take=${pagination.pageSize}&skip=${
+        pagination.pageIndex * pagination.pageSize
+      }`
+    : '/api/tournaments';
   const response = await axios.get<TournamentT[]>(url);
 
   if (response.status === 200) {

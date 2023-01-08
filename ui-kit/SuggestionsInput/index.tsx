@@ -9,7 +9,7 @@ import styles from './styles.module.scss';
 
 type SuggestionsInputProps = {
   placeholder: string;
-  suggestions: (PlayerT | TournamentT)[];
+  suggestions: PlayerT[] | TournamentT[];
   filterFn: (inputV: string) => (v: any) => boolean;
   onSuggestionClick: (v: any) => void;
 };
@@ -29,10 +29,12 @@ const SuggestionsInput = ({
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
+    // @ts-ignore
     return inputLength >= 3 ? suggestions.filter(filterFn(inputValue)) : [];
   };
 
-  const getSuggestionValue = (s: any) => `${s.first_name[0]}. ${s.last_name}`;
+  const getSuggestionValue = (s: any) =>
+    s.first_name ? `${s.first_name[0]}. ${s.last_name}` : s.name;
 
   const onSuggestionsFetchRequested = ({
     value,

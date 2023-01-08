@@ -10,13 +10,17 @@ export default async (
   if (req.method === 'GET') {
     const isPaginated = !!(req.query.take && req.query.skip);
 
-    const tournaments = await prisma.tournament.findMany(isPaginated ? {
-      take: parseInt(req.query.take as string),
-      skip: parseInt(req.query.skip as string),
-      orderBy: {
-        id: 'desc',
-      },
-    } : undefined);
+    const tournaments = await prisma.tournament.findMany(
+      isPaginated
+        ? {
+            take: parseInt(req.query.take as string),
+            skip: parseInt(req.query.skip as string),
+            orderBy: {
+              id: 'desc',
+            },
+          }
+        : undefined
+    );
 
     res.json(tournaments);
   }
