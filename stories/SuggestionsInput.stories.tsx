@@ -17,21 +17,22 @@ const Template: ComponentStory<typeof SuggestionsInput> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   placeholder: 'Placeholder',
-  players: [
-    // @ts-ignore
+  suggestions: [
     {
+      // @ts-ignore
       first_name: 'John',
       last_name: 'Lennon',
     },
-    // @ts-ignore
     {
+      // @ts-ignore
       first_name: 'Max',
       last_name: 'Lemon',
     },
-    // @ts-ignore
     {
+      // @ts-ignore
       first_name: 'John',
       last_name: 'Lenn22on',
     },
   ],
+  filterFn: (v: string) => (playerV: any) => playerV.first_name.includes(v),
 };
