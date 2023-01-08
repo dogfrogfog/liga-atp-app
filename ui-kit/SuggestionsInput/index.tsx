@@ -75,6 +75,8 @@ const SuggestionsInput = ({
     onChange,
   };
 
+  const noSuggestions = inputValue.length >= 3 && inputSuggestions.length === 0;
+
   return (
     <div className={styles.container}>
       <div className={styles.icon}>
@@ -89,6 +91,11 @@ const SuggestionsInput = ({
         inputProps={inputProps}
         onSuggestionSelected={onSuggestionSelected}
       />
+      {noSuggestions && (
+        <div className={styles.noSuggestions}>
+          По вашему запросу ничего не найдено
+        </div>
+      )}
     </div>
   );
 };

@@ -37,8 +37,6 @@
 
   :global(.react-autosuggest__container) {
     width: 100%;
-    background-color: $custom-black;
-    color: $custom-white;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 
@@ -68,4 +66,14 @@
     width: 24px;
     height: 24px;
   }
+}
+
+.noSuggestions {
+  color: $custom-white;
+  background-color: $custom-mediumdark;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
 }
