@@ -255,7 +255,7 @@ const TournamentsPage: NextPage = () => {
         <SuggestionsInput
           filterFn={filterFn}
           suggestions={inputSuggestions}
-          placeholder="Введите имя игрока"
+          placeholder="Введите название турнира"
           onSuggestionClick={onSuggestionClick}
         />
       </div>

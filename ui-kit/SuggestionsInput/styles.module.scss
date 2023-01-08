@@ -6,29 +6,33 @@
 
   :global(.react-autosuggest__input) {
     outline: none;
-    background-color: $custom-black;
+    background-color: $custom-mediumdark;
     color: $custom-white;
-    // height: 30px;
     border: none;
-    border-radius: 5px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 14px;
     font-size: 18px;
     width: 100%;
-    padding: 10px 15px;
+    padding: 15px 10px 15px 50px;
   }
 
   :global(.react-autosuggest__input--open) {
-    border-radius: 0;
-    border-bottom: 1px solid $custom-lightgray;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid $custom-lightlightgray;
   }
 
   :global(.react-autosuggest__suggestions-container) {
+    color: $custom-white;
+    background-color: $custom-mediumdark;
     max-height: 400px;
     overflow-y: scroll;
     width: calc(100% - 60px);
     z-index: 3;
     position: absolute;
-    background-color: $custom-black;
-    border: 1px solid $custom-lightgray;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
   }
 
   :global(.react-autosuggest__container) {
@@ -52,5 +56,16 @@
         }
       }
     }
+  }
+}
+
+.icon {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+
+  svg {
+    width: 24px;
+    height: 24px;
   }
 }
