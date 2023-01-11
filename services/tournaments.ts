@@ -9,27 +9,9 @@ interface TournamentsResponse<D = any> {
   errorMessage?: string;
 }
 
-type IGetTournamentsResponse = TournamentsResponse<TournamentT[]>;
 type ICreateTournamentResponse = TournamentsResponse<TournamentT>;
 type IDeleteTournamentResponse = TournamentsResponse<Prisma.BatchPayload>;
 type IUpdateTournamentResponse = TournamentsResponse<TournamentT>;
-
-export async function getTournaments(
-  pagination?: PaginationProps
-): Promise<IGetTournamentsResponse> {
-  const url = pagination
-    ? `/api/tournaments?take=${pagination.pageSize}&skip=${
-        pagination.pageIndex * pagination.pageSize
-      }`
-    : '/api/tournaments';
-  const response = await axios.get<TournamentT[]>(url);
-
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-}
 
 export async function createTournament(
   tournament: TournamentT

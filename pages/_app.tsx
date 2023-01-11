@@ -1,3 +1,4 @@
+import { SWRConfig } from 'swr';
 import type { AppProps } from 'next/app';
 import { withPasswordProtect } from 'next-password-protect';
 import '../styles/globals.css';
@@ -10,7 +11,6 @@ import PWALayout from '../layouts/PWALayout';
 import AdminLayout from '../layouts/AdminLayout';
 import MainAppLayout from '../layouts/MainAppLayout';
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
-import PreviewLayout from '../layouts/PreviewLayout';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
@@ -36,16 +36,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
-  // if (router.pathname === '/') {
-  //   return (
-  //     <PWALayout>
-  //       <PreviewLayout>
-  //         <Component {...pageProps} />
-  //       </PreviewLayout>
-  //     </PWALayout>
-  //   );
-  // }
-
   // with bottom menu
   return (
     <PWALayout>
@@ -56,10 +46,19 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 }
 
+// @ts-ignore
+export const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+const SWRMyApp = (props: AppProps) => (
+  <SWRConfig value={{ fetcher }}>
+    <MyApp {...props} />
+  </SWRConfig>
+);
+
 // todo: add only for /admin route
 // https://github.com/instantcommerce/next-password-protect
 // Step 3
-export default withPasswordProtect(MyApp, {
+export default withPasswordProtect(SWRMyApp, {
   bypassProtection: ({ route }) => {
     return !route.startsWith('/admin');
   },

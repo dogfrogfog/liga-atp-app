@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, useMemo } from 'react';
+import { useState, ChangeEvent, useMemo } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -6,15 +6,16 @@ import { tournament as TournamentT } from '@prisma/client';
 import { format, startOfISOWeek } from 'date-fns';
 import cl from 'classnames';
 
+import useTournaments from 'hooks/useTournaments';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import TournamentListItem from 'components/TournamentListItem';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
   TOURNAMENT_TYPE_NUMBER_VALUES,
 } from 'constants/values';
-import { getTournaments } from 'services/tournaments';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
 
@@ -23,7 +24,7 @@ const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
 const now = new Date();
 const TournamentsPage: NextPage = () => {
-  const [tournaments, setTournaments] = useState<TournamentT[]>([]);
+  const { tournaments, isLoading } = useTournaments();
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsFilters, setFinishedTournamentsFilters] = useState<{
@@ -35,18 +36,6 @@ const TournamentsPage: NextPage = () => {
   });
 
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      const res = await getTournaments();
-
-      if (res.isOk) {
-        setTournaments(res.data as TournamentT[]);
-      }
-    };
-
-    fetchWrapper();
-  }, []);
 
   const { active, recording, finished } = useMemo(
     () =>
@@ -328,7 +317,7 @@ const TournamentsPage: NextPage = () => {
         tabNames={TOURNAMENT_TABS}
         onChange={handleTabChange}
       />
-      {activeTabContent}
+      {isLoading ? <LoadingSpinner /> : activeTabContent}
     </div>
   );
 };
