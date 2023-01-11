@@ -10,11 +10,13 @@ import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import TournamentListItem from 'components/TournamentListItem';
-import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
+import {
+  TOURNAMENT_STATUS_NUMBER_VALUES,
+  TOURNAMENT_TYPE_NUMBER_VALUES,
+} from 'constants/values';
 import { getTournaments } from 'services/tournaments';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
-import Router from 'next/router';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
@@ -24,6 +26,13 @@ const TournamentsPage: NextPage = () => {
   const [tournaments, setTournaments] = useState<TournamentT[]>([]);
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
+  const [finishedTournamentsFilters, setFinishedTournamentsFilters] = useState<{
+    isDoubles: boolean;
+    tournamentType: number | undefined;
+  }>({
+    tournamentType: undefined,
+    isDoubles: false,
+  });
 
   const router = useRouter();
 
@@ -195,10 +204,57 @@ const TournamentsPage: NextPage = () => {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
+        // const toggleDoublesCheckbox = () => {
+        //   setFinishedTournamentsFilters((v) => ({
+        //     ...v,
+        //     isDoubles: !v.isDoubles,
+        //   }));
+        // };
+
+        const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
+          setFinishedTournamentsFilters((v) => ({
+            ...v,
+            tournamentType: parseInt(e.target.value, 10),
+          }));
+        };
+
+        const filteredFinishedTournaments = finished.filter((v) =>
+          finishedTournamentsFilters.tournamentType !== undefined
+            ? finishedTournamentsFilters.tournamentType === v.tournament_type
+            : true
+        );
+
         return (
           <>
-            <div>filters////</div>
-            {finished.map((v) => (
+            <div className={styles.finishedTournamentsFilters}>
+              <div className={styles.tournamentType}>
+                <span>Тип турнира</span>
+                <select
+                  onChange={handleLevelChange}
+                  value={finishedTournamentsFilters.tournamentType}
+                >
+                  <option value={undefined}>Все</option>
+                  {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
+                    ([key, name]) => {
+                      return (
+                        <option key={key} value={key}>
+                          {name as string}
+                        </option>
+                      );
+                    }
+                  )}
+                </select>
+              </div>
+              {/* <div className={styles.checkbox}>
+                <input
+                  type="checkbox"
+                  onChange={toggleDoublesCheckbox}
+                  checked={finishedTournamentsFilters.isDoubles}
+                />
+                <span>Даблс</span>
+              </div> */}
+            </div>
+            {filteredFinishedTournaments.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
                 <span>
                   <TournamentListItem

@@ -33,6 +33,10 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
   101: 'Парный ProAm',
 };
 
+export const DOUBLES_TOURNAMENT_TYPES_NUMBER = [
+  12, 13, 14, 15, 18, 20, 22, 101,
+];
+
 // previously used indexes: 22, 5, 7, 6, 8, 9
 export const TOURNAMENT_DRAW_TYPE_NUMBER_VALUES: NumberValuesT = {
   // olympic net
