@@ -14,7 +14,6 @@ import { TOURNAMENT_STATUS_NUMBER_VALUES } from 'constants/values';
 import { getTournaments } from 'services/tournaments';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
-import Router from 'next/router';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
@@ -197,8 +196,11 @@ const TournamentsPage: NextPage = () => {
 
         return (
           <>
-            <div>
-              filters////
+            <div className={styles.finishedTournamentsFilters}>
+              <div className={styles.checkbox}>
+                <input type="checkbox" />
+                <span>Даблс</span>
+              </div>
             </div>
             {finished.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
@@ -206,7 +208,9 @@ const TournamentsPage: NextPage = () => {
                   <TournamentListItem
                     name={v.name || 'tbd'}
                     status={
-                      v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'
+                      v.status
+                        ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
+                        : 'tbd'
                     }
                     startDate={
                       v.start_date

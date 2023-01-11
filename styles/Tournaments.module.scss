@@ -68,3 +68,40 @@
     background-color: $custom-aqua;
   }
 }
+
+.finishedTournamentsFilters {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+
+    input {
+      appearance: none;
+      border-radius: 5px;
+      border: 2px solid $custom-lightgray;
+      margin: 0;
+      margin-right: 10px;
+      width: 25px;
+      height: 25px;
+
+      &::before {
+        content: '';
+        width: 14px;
+        height: 14px;
+        margin: 3.5px;
+        transform: scale(0);
+        background-color: $custom-lightgray;
+        display: grid;
+        place-content: center;
+      }
+
+      &:checked::before {
+        transform: scale(1);
+      }
+    }
+  }
+}
