@@ -36,15 +36,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     );
   }
 
-  if (router.pathname === '/') {
-    return (
-      <PWALayout>
-        <PreviewLayout>
-          <Component {...pageProps} />
-        </PreviewLayout>
-      </PWALayout>
-    );
-  }
+  // if (router.pathname === '/') {
+  //   return (
+  //     <PWALayout>
+  //       <PreviewLayout>
+  //         <Component {...pageProps} />
+  //       </PreviewLayout>
+  //     </PWALayout>
+  //   );
+  // }
 
   // with bottom menu
   return (

@@ -204,12 +204,12 @@ const TournamentsPage: NextPage = () => {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
-        const toggleDoublesCheckbox = () => {
-          setFinishedTournamentsFilters((v) => ({
-            ...v,
-            isDoubles: !v.isDoubles,
-          }));
-        };
+        // const toggleDoublesCheckbox = () => {
+        //   setFinishedTournamentsFilters((v) => ({
+        //     ...v,
+        //     isDoubles: !v.isDoubles,
+        //   }));
+        // };
 
         const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
           setFinishedTournamentsFilters((v) => ({
