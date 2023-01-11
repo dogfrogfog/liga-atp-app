@@ -9,28 +9,10 @@ interface PlayersResponse<D> {
   errorMessage?: string;
 }
 
-type IGetPlayersResponse = PlayersResponse<PlayerT[]>;
 type ICreatePlayerResponse = PlayersResponse<PlayerT>;
 type IDeletePlayerResponse = PlayersResponse<Prisma.BatchPayload>;
 type IUpdatePlayerResponse = PlayersResponse<PlayerT>;
 // type IH2hPlayersResponse = PlayersResponse<PlayerT[]>;
-
-export async function getPlayers(
-  pagination?: PaginationProps
-): Promise<IGetPlayersResponse> {
-  const url = pagination
-    ? `/api/players?take=${pagination.pageSize}&skip=${
-        pagination.pageIndex * pagination.pageSize
-      }`
-    : '/api/players';
-  const response = await axios.get<PlayerT[]>(url);
-
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-}
 
 export async function createPlayer(
   player: PlayerT

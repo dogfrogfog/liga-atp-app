@@ -19,9 +19,9 @@ import PageTitle from 'ui-kit/PageTitle';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import InputWithError from 'ui-kit/InputWithError';
 import Modal from 'ui-kit/Modal';
+import useTournaments from 'hooks/useTournaments';
 
 import {
-  getTournaments,
   createTournament,
   updateTournament,
   deleteSelectedTournament,
@@ -31,30 +31,18 @@ import formStyles from '../Form.module.scss';
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
-  const [isLoading, setLoadingStatus] = useState(false);
-  const [data, setData] = useState<TournamentT[]>([]);
+
+  // should be paginated?
+  const { tournaments, isLoading, mutate } = useTournaments();
+
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingTournament, setEditingTournament] = useState<
     undefined | TournamentT
   >();
   const { pagination, setPagination, ...tableProps } = useTable(
-    data,
+    tournaments,
     TOURNAMENT_COLUMNS
   );
-
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      setLoadingStatus(true);
-      const res = await getTournaments(pagination);
-
-      if (res.isOk) {
-        setData(res.data as TournamentT[]);
-        setLoadingStatus(false);
-      }
-    };
-
-    fetchWrapper();
-  }, [pagination]);
 
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
@@ -67,21 +55,21 @@ const Tournaments: NextPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const updatingTournamentData = data[tableProps.selectedRow];
+    const updatingTournamentData = tournaments[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingTournament(updatingTournamentData);
   };
 
   const handleDeleteClick = async () => {
-    const { id } = data[tableProps.selectedRow];
+    const { id } = tournaments[tableProps.selectedRow];
 
     // todo: add delete operation
     // deleteSelectedPlayer(id);
   };
 
   const handlePickClick = () => {
-    const { id } = data[tableProps.selectedRow];
+    const { id } = tournaments[tableProps.selectedRow];
     const href = '/admin/tournaments/' + id;
     router.push(href);
   };
@@ -98,14 +86,14 @@ const Tournaments: NextPage = () => {
     };
 
     if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createTournament(
+      const { isOk, errorMessage } = await createTournament(
         normalizedNewTournament
       );
 
       if (isOk) {
         handleReset();
 
-        setData((prevV) => [data as TournamentT, ...prevV]);
+        mutate();
       } else {
         console.warn(errorMessage);
       }
@@ -118,7 +106,7 @@ const Tournaments: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
+        mutate();
       } else {
         console.warn(errorMessage);
       }
@@ -138,11 +126,7 @@ const Tournaments: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length === 0 || isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Table {...tableProps} />
-      )}
+      {isLoading ? <LoadingSpinner /> : <Table {...tableProps} />}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <Modal handleClose={handleReset} title="Редактировать турнир">
