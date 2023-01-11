@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       </PWALayout>
     );
   }
-  
+
   // if (router.pathname === '/') {
   //   return (
   //     <PWALayout>

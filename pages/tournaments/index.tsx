@@ -197,16 +197,16 @@ const TournamentsPage: NextPage = () => {
 
         return (
           <>
-            <div>
-              filters////
-            </div>
+            <div>filters////</div>
             {finished.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
                 <span>
                   <TournamentListItem
                     name={v.name || 'tbd'}
                     status={
-                      v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'
+                      v.status
+                        ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
+                        : 'tbd'
                     }
                     startDate={
                       v.start_date
