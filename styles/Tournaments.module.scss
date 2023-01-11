@@ -84,7 +84,7 @@
       border-radius: 5px;
       border: 2px solid $custom-lightgray;
       margin: 0;
-      margin-right: 10px;
+      margin-right: 5px;
       width: 25px;
       height: 25px;
 
@@ -102,6 +102,24 @@
       &:checked::before {
         transform: scale(1);
       }
+    }
+  }
+
+  .tournamentType {
+    span {
+      margin-right: 5px;
+    }
+
+    select {
+      font-weight: 400;
+      width: 150px;
+      outline: none;
+      font-size: 14px;
+      margin-right: 5px;
+      border-radius: 5px;
+      border: 2px solid $custom-lightgray;
+      color: $custom-lightgray;
+      background-color: $custom-black;
     }
   }
 }
