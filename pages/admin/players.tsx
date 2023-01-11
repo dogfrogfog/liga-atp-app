@@ -17,37 +17,22 @@ import {
   PLAYER_COLUMNS,
 } from 'constants/values';
 import {
-  getPlayers,
   createPlayer,
   updatePlayer,
   deleteSelectedPlayer,
 } from 'services/players';
 
 import formStyles from './Form.module.scss';
+import usePlayers from 'hooks/usePlayers';
 
 const Players: NextPage = () => {
-  const [isLoading, setLoadingStatus] = useState(false);
-  const [data, setData] = useState<PlayerT[]>([]);
+  const { players, isLoading, mutate } = usePlayers();
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
   const { pagination, setPagination, ...tableProps } = useTable(
-    data,
+    players,
     PLAYER_COLUMNS
   );
-
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      setLoadingStatus(true);
-      const res = await getPlayers(pagination);
-
-      if (res.isOk) {
-        setData(res.data as PlayerT[]);
-        setLoadingStatus(false);
-      }
-    };
-
-    fetchWrapper();
-  }, [pagination]);
 
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
@@ -60,26 +45,18 @@ const Players: NextPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const editingPlayerData = data[tableProps.selectedRow];
+    const editingPlayerData = players[tableProps.selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingPlayer(editingPlayerData);
   };
 
   const handleDeleteClick = async () => {
-    const { id } = data[tableProps.selectedRow];
+    const { id } = players[tableProps.selectedRow];
     const res = await deleteSelectedPlayer(id);
 
     if (res.isOk) {
-      setData((prevData) => {
-        return prevData.reduce((acc, p) => {
-          if (p.id !== id) {
-            acc.push(p);
-          }
-
-          return acc;
-        }, [] as PlayerT[]);
-      });
+      mutate();
       handleReset();
     }
   };
@@ -91,18 +68,19 @@ const Players: NextPage = () => {
       if (isOk) {
         handleReset();
 
-        setData((prevV) => [data as PlayerT, ...prevV]);
+        mutate();
       } else {
         console.warn(errorMessage);
       }
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updatePlayer(newPlayer);
+      // todo: swr
+      const { isOk, errorMessage } = await updatePlayer(newPlayer);
       if (isOk) {
         handleReset();
 
-        setData((prevV) => prevV.map((v) => (v.id === data?.id ? data : v)));
+        mutate();
       } else {
         console.warn(errorMessage);
       }
@@ -121,11 +99,7 @@ const Players: NextPage = () => {
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {data.length === 0 || isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Table {...tableProps} />
-      )}
+      {isLoading ? <LoadingSpinner /> : <Table {...tableProps} />}
       <Pagination pagination={pagination} setPagination={setPagination} />
       {modalStatus.isOpen ? (
         <Modal handleClose={handleReset} title="Редактировать игроока">
@@ -319,42 +293,42 @@ const PlayerForm = ({
           <br />
           Техника:
           <input
-            {...register('technique', { required: false, valueAsNumber: true })}
+            {...register('technique', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
           <br />
           Тактика:
           <input
-            {...register('tactics', { required: false, valueAsNumber: true })}
+            {...register('tactics', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.power?.message}>
           <br />
           Мощь:
           <input
-            {...register('power', { required: false, valueAsNumber: true })}
+            {...register('power', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.shakes?.message}>
           <br />
           Кач:
           <input
-            {...register('shakes', { required: false, valueAsNumber: true })}
+            {...register('shakes', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.serve?.message}>
           <br />
           Подача:
           <input
-            {...register('serve', { required: false, valueAsNumber: true })}
+            {...register('serve', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
           <br />
           Поведение:
           <input
-            {...register('behaviour', { required: false, valueAsNumber: true })}
+            {...register('behaviour', { required: true, valueAsNumber: true })}
           />
         </InputWithError>
         <div className={formStyles.formActions}>

@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 
 import Tabs from 'ui-kit/Tabs';
 import PageTitle from 'ui-kit/PageTitle';
 import PlayersList from 'components/PlayersList';
-import { getPlayers } from 'services/players';
+import usePlayers from 'hooks/usePlayers';
 import styles from 'styles/Ranking.module.scss';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
 const RANKING_TABS = [
   'Все',
@@ -22,50 +23,38 @@ const RANKING_TABS = [
 
 const RankingPage: NextPage = () => {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
-  const [data, setData] = useState<PlayerT[]>([]);
-
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      const res = await getPlayers();
-
-      if (res.isOk) {
-        setData(res.data as PlayerT[]);
-      }
-    };
-
-    fetchWrapper();
-  }, []);
+  const { players, isLoading } = usePlayers();
 
   const activeTabContent = (() => {
     let filteredPlayersList: PlayerT[];
 
     switch (activeTab) {
       case RANKING_TABS[0]: {
-        filteredPlayersList = data;
+        filteredPlayersList = players;
         break;
       }
       case RANKING_TABS[1]: {
-        filteredPlayersList = data.filter((p) => p.level === 3);
+        filteredPlayersList = players.filter((p) => p.level === 3);
         break;
       }
       case RANKING_TABS[2]: {
-        filteredPlayersList = data.filter((p) => p.level === 2);
+        filteredPlayersList = players.filter((p) => p.level === 2);
         break;
       }
       case RANKING_TABS[3]: {
-        filteredPlayersList = data.filter((p) => p.level === 4);
+        filteredPlayersList = players.filter((p) => p.level === 4);
         break;
       }
       case RANKING_TABS[4]: {
-        filteredPlayersList = data.filter((p) => p.level === 1);
+        filteredPlayersList = players.filter((p) => p.level === 1);
         break;
       }
       case RANKING_TABS[5]: {
-        filteredPlayersList = data.filter((p) => p.level === 0);
+        filteredPlayersList = players.filter((p) => p.level === 0);
         break;
       }
       case RANKING_TABS[6]: {
-        filteredPlayersList = data.filter((p) => p.level === -1);
+        filteredPlayersList = players.filter((p) => p.level === -1);
         break;
       }
       default: {
@@ -89,7 +78,7 @@ const RankingPage: NextPage = () => {
         activeTab={activeTab}
         onChange={handleTabChange}
       />
-      {activeTabContent}
+      {isLoading ? <LoadingSpinner /> : activeTabContent}
     </div>
   );
 };

@@ -47,7 +47,6 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
 
 export const getServerSideProps = async () => {
   const players = await prisma.player.findMany({
-    take: 150,
     orderBy: {
       id: 'desc',
     },
