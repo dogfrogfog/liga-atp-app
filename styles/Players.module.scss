@@ -3,13 +3,13 @@
 .pageContainer {
   position: relative;
   padding: 15px;
-  margin-top: 140px;
+  margin-top: 80px;
 }
 
 .searchInputContainer {
   width: calc(100% - 30px);
   position: absolute;
-  top: -65px;
+  top: -50px;
 
   :global(.react-autosuggest__suggestions-container) {
     width: 100%;
