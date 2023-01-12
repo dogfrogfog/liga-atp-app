@@ -2,19 +2,17 @@ import type { NextPage } from 'next';
 import { player as PlayerT } from '@prisma/client';
 import { useRouter } from 'next/router';
 
-import { prisma } from 'services/db';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import PlayersList from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
+import usePlayers from 'hooks/usePlayers';
 import styles from 'styles/Players.module.scss';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
-type PlayersIndexPageProps = {
-  players: PlayerT[];
-};
-
-const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
+const PlayersIndexPage: NextPage = () => {
   const router = useRouter();
+  const { players, isLoading, error } = usePlayers();
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -36,27 +34,12 @@ const PlayersIndexPage: NextPage<PlayersIndexPageProps> = ({ players }) => {
         />
       </div>
       <PageTitle>Игроки</PageTitle>
-      {players.length === 0 ? (
+      {error && (
         <NotFoundMessage message="При загрузке игроков произошла ошибка. Попробуйте позже" />
-      ) : (
-        <PlayersList players={players} />
       )}
+      {isLoading ? <LoadingSpinner /> : <PlayersList players={players} />}
     </div>
   );
-};
-
-export const getServerSideProps = async () => {
-  const players = await prisma.player.findMany({
-    orderBy: {
-      id: 'desc',
-    },
-  });
-
-  return {
-    props: {
-      players,
-    },
-  };
 };
 
 export default PlayersIndexPage;
