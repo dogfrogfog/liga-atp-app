@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import {
-  PrismaClient,
   tournament as TournamentT,
   match as MatchT,
   player as PlayerT,
@@ -28,7 +27,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 
-const TOURNAMENT_TABS = ['Расписание', 'Список игроков'];
+const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
 
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];
@@ -36,7 +35,9 @@ const TournamentPage: NextPage<{
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
-  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
+  const [activeTab, setActiveTab] = useState(
+    TOURNAMENT_TABS[tournament.status === 1 ? 1 : 0]
+  );
   const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
   const [isPlayerLoading, setPlayerLoadingStatus] = useState(false);
   const {
@@ -49,6 +50,11 @@ const TournamentPage: NextPage<{
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
+        // active recording
+        if (tournament.status === 1) {
+          return <NotFoundMessage message="Жеребьевка еще не прошла" />;
+        }
+
         return brackets ? (
           <Schedule
             hasGroups={
@@ -65,7 +71,11 @@ const TournamentPage: NextPage<{
           <NotFoundMessage message="Сетка не сформирована" />
         );
       case TOURNAMENT_TABS[1]:
-        return <PlayersList players={registeredPlayers} />;
+        return registeredPlayers.length > 0 ? (
+          <PlayersList players={registeredPlayers} />
+        ) : (
+          <NotFoundMessage message="Нет зарегестрированных игроков" />
+        );
       default:
         return null;
     }
@@ -74,8 +84,6 @@ const TournamentPage: NextPage<{
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(TOURNAMENT_TABS[value]);
   };
-
-  const isFinished = tournament.is_finished || tournament.status === 3;
 
   const handleDownloadClick = () => {};
   const toggleAddPlayerModal = () => {
@@ -118,6 +126,8 @@ const TournamentPage: NextPage<{
 
     setPlayerLoadingStatus(false);
   };
+
+  const isFinished = tournament.is_finished || tournament.status === 3;
 
   return (
     <div className={styles.сontainer}>

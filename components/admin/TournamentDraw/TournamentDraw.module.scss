@@ -85,11 +85,7 @@
   margin: 0;
 
   &.winner {
-    background-color: rgba($custom-green, 0.5);
-  }
-
-  &.loser {
-    background-color: rgba($custom-red, 0.5);
+    background-color: rgba($custom-green, 0.8);
   }
 }
 
