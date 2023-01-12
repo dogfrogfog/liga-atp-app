@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import {
-  PrismaClient,
   tournament as TournamentT,
   match as MatchT,
   player as PlayerT,
@@ -65,7 +64,9 @@ const TournamentPage: NextPage<{
           <NotFoundMessage message="Сетка не сформирована" />
         );
       case TOURNAMENT_TABS[1]:
-        return <PlayersList players={registeredPlayers} />;
+        return registeredPlayers.length > 0
+          ? <PlayersList players={registeredPlayers} />
+          : <NotFoundMessage message="Нет зарегестрированных игроков" />;
       default:
         return null;
     }
