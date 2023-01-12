@@ -27,7 +27,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 
-const TOURNAMENT_TABS = ['Расписание', 'Список игроков'];
+const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
 
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];

@@ -10,24 +10,30 @@ import styles from './Schedule.module.scss';
 
 type MatchProps = {
   tournamentName: string;
-  startDate: string;
+  startDate: Date | null;
   opponent: string;
 };
 
-const Match = ({ tournamentName, startDate, opponent }: MatchProps) => (
-  <div className={styles.match}>
-    <div className={styles.row}>
-      <span className={styles.tournamentName}>{tournamentName}</span>
-      <span className={styles.matchTime}>{startDate}</span>
+const Match = ({ tournamentName, startDate, opponent }: MatchProps) => {
+  const date = startDate && new Date(startDate);
+
+  return (
+    <div className={styles.match}>
+      <div className={styles.row}>
+        <span className={styles.tournamentName}>{tournamentName}</span>
+        <span className={styles.matchDate}>
+          {date && format(date, 'dd.MM')}
+        </span>
+      </div>
+      <div className={styles.row}>
+        <span className={styles.opponent}>vs {opponent}</span>
+        <span className={styles.matchDate}>
+          {date && format(date, 'hh:mm')}
+        </span>
+      </div>
     </div>
-    <div className={styles.row}>
-      <span className={styles.opponent}>vs {opponent}</span>
-      <span>
-        <i>{'<место>'}</i>
-      </span>
-    </div>
-  </div>
-);
+  );
+};
 
 const ScheduleTab = ({
   playerId,
@@ -43,9 +49,7 @@ const ScheduleTab = ({
           <Match
             key={v.id}
             tournamentName={v.tournament.name || ''}
-            startDate={
-              v.start_date ? format(new Date(v.start_date), 'dd.MM hh:mm') : ''
-            }
+            startDate={v.start_date}
             opponent={getOpponents(playerId, v)}
           />
         ))
