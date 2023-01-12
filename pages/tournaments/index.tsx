@@ -22,6 +22,9 @@ import styles from '../../styles/Tournaments.module.scss';
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
+const filterFn = (inputValue: string) => (t: TournamentT) =>
+  (t?.name as string).toLowerCase().includes(inputValue);
+
 const now = new Date();
 const TournamentsPage: NextPage = () => {
   const { tournaments, isLoading } = useTournaments();
@@ -193,13 +196,6 @@ const TournamentsPage: NextPage = () => {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
-        // const toggleDoublesCheckbox = () => {
-        //   setFinishedTournamentsFilters((v) => ({
-        //     ...v,
-        //     isDoubles: !v.isDoubles,
-        //   }));
-        // };
-
         const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
           setFinishedTournamentsFilters((v) => ({
             ...v,
@@ -276,27 +272,6 @@ const TournamentsPage: NextPage = () => {
     setActiveTab(TOURNAMENT_TABS[value]);
   };
 
-  const filterFn = (inputValue: string) => (t: TournamentT) =>
-    (t?.name as string).toLowerCase().includes(inputValue);
-
-  // фильтрация турниров в активном табе
-  const inputSuggestions = (() => {
-    switch (activeTab) {
-      case TOURNAMENT_TABS[0]: {
-        return active;
-      }
-      case TOURNAMENT_TABS[1]: {
-        return recording;
-      }
-      case TOURNAMENT_TABS[2]: {
-        return finished;
-      }
-      default: {
-        return [];
-      }
-    }
-  })();
-
   const onSuggestionClick = (t: TournamentT) => {
     router.push(`tournaments/${t.id}`);
   };
@@ -306,7 +281,7 @@ const TournamentsPage: NextPage = () => {
       <div className={styles.searchInputContainer}>
         <SuggestionsInput
           filterFn={filterFn}
-          suggestions={inputSuggestions}
+          suggestions={tournaments}
           placeholder="Введите название турнира"
           onSuggestionClick={onSuggestionClick}
         />
