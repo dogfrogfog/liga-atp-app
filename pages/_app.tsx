@@ -50,7 +50,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const SWRMyApp = (props: AppProps) => (
-  <SWRConfig value={{ fetcher }}>
+  <SWRConfig value={{
+    fetcher,
+    // to prevent same requests occur multiple times
+    revalidateIfStale: false,
+  }}>
     <MyApp {...props} />
   </SWRConfig>
 );
