@@ -44,13 +44,10 @@ const SuggestionsInput = ({
   };
 
   const onSuggestionsClearRequested = () => {
-    setInputSuggestions([]);
+    setInputValue('');
   };
 
   const onSuggestionSelected = (_: any, v: any) => {
-    setInputValue('');
-    setInputSuggestions([]);
-
     onSuggestionClick(v.suggestion);
   };
 
@@ -79,7 +76,7 @@ const SuggestionsInput = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.icon}>
+      <div className={styles.searchIcon}>
         <AiOutlineSearch />
       </div>
       <Autosuggest
@@ -90,6 +87,7 @@ const SuggestionsInput = ({
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         onSuggestionSelected={onSuggestionSelected}
+        focusInputOnSuggestionClick={false}
       />
       {noSuggestions && (
         <div className={styles.noSuggestions}>
