@@ -100,3 +100,12 @@ model tournament_players {
   @@index([tournament_id], map: "idx_16849_core_tournament_players_656a3fdb")
   @@index([player_id], map: "idx_16849_core_tournament_players_afe72417")
 }
+
+model digest {
+  id                    Int       @id @default(autoincrement())
+  date                  DateTime? @db.Date
+  image_link            String?
+  markdown              String?
+  title                 String?
+  mentioned_players_ids String?
+}
