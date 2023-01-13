@@ -34,6 +34,9 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
 };
 
 export const DOUBLES_TOURNAMENT_TYPES_NUMBER = [
+  // deprecated
+  16,
+
   12, 13, 14, 15, 18, 20, 22, 101,
 ];
 

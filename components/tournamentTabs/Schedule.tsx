@@ -27,7 +27,7 @@ const ScheculeTab = ({
   hasGroups,
 }: ScheculeTabProps) => {
   // because carousel doesn't allow us to get active thumb (to set active stage colors)
-  const [activeStage, setActiveStage] = useState('0');
+  // const [activeStage, setActiveStage] = useState('0');
   const stagesNumber = brackets.length;
   const stages = hasGroups
     ? [
@@ -68,12 +68,12 @@ const ScheculeTab = ({
       renderThumb: (
         <button
           onClick={() => {
-            setActiveStage(i + '');
+            // setActiveStage(i + '');
             slideToItem(i);
           }}
           className={cl(
-            styles.stageButton,
-            i + '' === activeStage ? styles.active : ''
+            styles.stageButton
+            // i + '' === activeStage ? styles.active : ''
           )}
         >
           {stages[i]}
