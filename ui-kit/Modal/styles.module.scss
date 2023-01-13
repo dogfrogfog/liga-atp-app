@@ -14,7 +14,7 @@
 
   .modalBlock {
     padding: $padding;
-    position: absolute;
+    position: fixed;
     z-index: 2;
     top: 200px;
     left: 0;

@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, isValidElement } from 'react';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
-import { GiTrophyCup } from 'react-icons/gi';
+import { GiConsoleController, GiTrophyCup } from 'react-icons/gi';
 
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import type { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { singleStagesNames, groupStagesNames } from 'constants/values';
 import styles from './Schedule.module.scss';
@@ -81,10 +82,6 @@ const ScheculeTab = ({
     })),
   });
 
-  {
-    console.log(getCurrentActiveItem());
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.bracketContainer}>
@@ -116,17 +113,20 @@ const Stage = ({
         return (
           <div key={mi} className={styles.groupWrapper}>
             <p className={styles.groupTitle}>Группа {mi + 1}</p>
-            {bracketUnit.length > 0
-              ? bracketUnit.map((v, gmi) => (
-                  <Match
-                    key={gmi}
-                    isFinal={isFinal}
-                    isDoubles={isDoubles}
-                    match={matchesMap.get(v.matchId)}
-                    playersMap={playersMap}
-                  />
-                ))
-              : 'В группе пока нет матчей'}
+            {bracketUnit.length > 0 ? (
+              bracketUnit.map((v, gmi) => (
+                <Match
+                  className={styles.groupMatch}
+                  key={gmi}
+                  isFinal={isFinal}
+                  isDoubles={isDoubles}
+                  match={matchesMap.get(v.matchId)}
+                  playersMap={playersMap}
+                />
+              ))
+            ) : (
+              <NotFoundMessage message="В группе пока нет матчей" />
+            )}
           </div>
         );
       }
@@ -155,11 +155,13 @@ const Match = ({
   match,
   playersMap,
   isFinal,
+  className,
 }: {
   isFinal: boolean;
   isDoubles: boolean;
   match?: MatchT;
   playersMap: Map<number, PlayerT>;
+  className?: string;
 }) => {
   const isPlayed = match?.winner_id && match.score;
   const p1 = match?.player1_id ? playersMap.get(match.player1_id) : undefined;
@@ -191,10 +193,11 @@ const Match = ({
   const matchDate = match?.start_date ? new Date(match.start_date) : null;
 
   return (
-    <div className={styles.match}>
+    <div className={cl(styles.match, className)}>
       <div className={styles.row}>
         <div className={styles.left}>
-          {!isDoubles && p1Name && (
+          {/* if no data - return question mark component */}
+          {!isDoubles && !isValidElement(p1Name) && (
             <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
           )}
           <span
@@ -221,7 +224,8 @@ const Match = ({
       </div>
       <div className={styles.row}>
         <div className={styles.left}>
-          {!isDoubles && p2Name && (
+          {/* if no data - return question mark component */}
+          {!isDoubles && !isValidElement(p2Name) && (
             <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
           )}
           <span
