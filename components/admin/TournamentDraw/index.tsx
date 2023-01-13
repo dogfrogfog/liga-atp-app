@@ -177,15 +177,19 @@ const Match = ({
     return null;
   }
 
-  const firstPairIsWinner =
-    matchRecord.player1_id === parseInt(matchRecord?.winner_id as any, 10);
+  const isPlayed = !!(matchRecord.score && matchRecord.winner_id);
 
   return (
     <div className={styles.match}>
       <p
-        className={cl(styles.players, {
-          [firstPairIsWinner ? styles.winner : styles.loser]: matchRecord.score,
-        })}
+        className={cl(
+          styles.players,
+          isPlayed &&
+            matchRecord.player1_id ===
+              parseInt(matchRecord.winner_id as string, 10)
+            ? styles.winner
+            : ''
+        )}
       >
         {playersNames.get(matchRecord.player1_id as number)}
         {isDoubles &&
@@ -193,10 +197,14 @@ const Match = ({
       </p>
       <p className={styles.vs}>VS</p>
       <p
-        className={cl(styles.players, {
-          [!firstPairIsWinner ? styles.winner : styles.loser]:
-            matchRecord.score,
-        })}
+        className={cl(
+          styles.players,
+          isPlayed &&
+            matchRecord.player2_id ===
+              parseInt(matchRecord.winner_id as string, 10)
+            ? styles.winner
+            : ''
+        )}
       >
         {playersNames.get(matchRecord.player2_id as number)}
         {isDoubles &&

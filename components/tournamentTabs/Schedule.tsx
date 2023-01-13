@@ -1,8 +1,12 @@
+import { useState, isValidElement } from 'react';
 import cl from 'classnames';
-import { match as MatchT, player as PlayerT } from '@prisma/client';
+import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
 import { useSpringCarousel } from 'react-spring-carousel';
+import { FaQuestion } from 'react-icons/fa';
+import { GiConsoleController, GiTrophyCup } from 'react-icons/gi';
 
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import type { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { singleStagesNames, groupStagesNames } from 'constants/values';
 import styles from './Schedule.module.scss';
@@ -22,6 +26,8 @@ const ScheculeTab = ({
   isDoubles,
   hasGroups,
 }: ScheculeTabProps) => {
+  // because carousel doesn't allow us to get active thumb (to set active stage colors)
+  // const [activeStage, setActiveStage] = useState('0');
   const stagesNumber = brackets.length;
   const stages = hasGroups
     ? [
@@ -40,27 +46,41 @@ const ScheculeTab = ({
     return acc;
   }, new Map<number, PlayerT>());
 
-  const { carouselFragment, thumbsFragment, slideToItem, getIsActiveItem } =
-    useSpringCarousel({
-      withThumbs: true,
-      items: brackets.map((stage, i, arr) => ({
-        id: i + '',
-        renderItem: (
-          <Stage
-            stage={stage}
-            isFinal={arr.length - 1 === i}
-            isDoubles={isDoubles}
-            matchesMap={matchesMap}
-            playersMap={playersMap}
-          />
-        ),
-        renderThumb: (
-          <button onClick={() => slideToItem(i)} className={styles.stageButton}>
-            {stages[i]}
-          </button>
-        ),
-      })),
-    });
+  const {
+    carouselFragment,
+    thumbsFragment,
+    slideToItem,
+    getCurrentActiveItem,
+  } = useSpringCarousel({
+    withThumbs: true,
+    touchAction: '',
+    items: brackets.map((stage, i, arr) => ({
+      id: i + '',
+      renderItem: (
+        <Stage
+          stage={stage}
+          isFinal={arr.length - 1 === i}
+          isDoubles={isDoubles}
+          matchesMap={matchesMap}
+          playersMap={playersMap}
+        />
+      ),
+      renderThumb: (
+        <button
+          onClick={() => {
+            // setActiveStage(i + '');
+            slideToItem(i);
+          }}
+          className={cl(
+            styles.stageButton
+            // i + '' === activeStage ? styles.active : ''
+          )}
+        >
+          {stages[i]}
+        </button>
+      ),
+    })),
+  });
 
   return (
     <div className={styles.container}>
@@ -93,17 +113,20 @@ const Stage = ({
         return (
           <div key={mi} className={styles.groupWrapper}>
             <p className={styles.groupTitle}>Группа {mi + 1}</p>
-            {bracketUnit.length > 0
-              ? bracketUnit.map((v, gmi) => (
-                  <Match
-                    key={gmi}
-                    isFinal={isFinal}
-                    isDoubles={isDoubles}
-                    match={matchesMap.get(v.matchId)}
-                    playersMap={playersMap}
-                  />
-                ))
-              : 'В группе пока нет матчей'}
+            {bracketUnit.length > 0 ? (
+              bracketUnit.map((v, gmi) => (
+                <Match
+                  className={styles.groupMatch}
+                  key={gmi}
+                  isFinal={isFinal}
+                  isDoubles={isDoubles}
+                  match={matchesMap.get(v.matchId)}
+                  playersMap={playersMap}
+                />
+              ))
+            ) : (
+              <NotFoundMessage message="В группе пока нет матчей" />
+            )}
           </div>
         );
       }
@@ -120,7 +143,7 @@ const Stage = ({
         />
       ) : (
         <div key={mi} className={styles.matchDoesntExists}>
-          tbd / tbd
+          <FaQuestion />
         </div>
       );
     })}
@@ -132,11 +155,13 @@ const Match = ({
   match,
   playersMap,
   isFinal,
+  className,
 }: {
   isFinal: boolean;
   isDoubles: boolean;
   match?: MatchT;
   playersMap: Map<number, PlayerT>;
+  className?: string;
 }) => {
   const isPlayed = match?.winner_id && match.score;
   const p1 = match?.player1_id ? playersMap.get(match.player1_id) : undefined;
@@ -144,23 +169,37 @@ const Match = ({
   const p3 = match?.player3_id ? playersMap.get(match.player3_id) : undefined;
   const p4 = match?.player4_id ? playersMap.get(match.player4_id) : undefined;
 
-  // @ts-ignore
-  const p1Name = p1 ? `${p1.first_name[0]}. ${p1.last_name}` : 'tbd1';
-  // @ts-ignore
-  const p2Name = p2 ? `${p2.first_name[0]}. ${p2.last_name}` : 'tbd';
-  // @ts-ignore
-  const p3Name = p3 ? `${p3.first_name[0]}. ${p3.last_name}` : 'tbd';
-  // @ts-ignore
-  const p4Name = p4 ? `${p4.first_name[0]}. ${p4.last_name}` : 'tbd';
+  const p1Name = p1 ? (
+    `${(p1.first_name as string)[0]}. ${p1.last_name}`
+  ) : (
+    <FaQuestion />
+  );
+  const p2Name = p2 ? (
+    `${(p2.first_name as string)[0]}. ${p2.last_name}`
+  ) : (
+    <FaQuestion />
+  );
+  const p3Name = p3 ? (
+    `${(p3.first_name as string)[0]}. ${p3.last_name}`
+  ) : (
+    <FaQuestion />
+  );
+  const p4Name = p4 ? (
+    `${(p4.first_name as string)[0]}. ${p4.last_name}`
+  ) : (
+    <FaQuestion />
+  );
 
-  const nameString1 = isDoubles ? `${p1Name} / ${p3Name}` : p1Name;
-  const nameString2 = isDoubles ? `${p2Name} / ${p4Name}` : p2Name;
+  const matchDate = match?.start_date ? new Date(match.start_date) : null;
 
   return (
-    <div className={styles.match}>
+    <div className={cl(styles.match, className)}>
       <div className={styles.row}>
         <div className={styles.left}>
-          <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+          {/* if no data - return question mark component */}
+          {!isDoubles && !isValidElement(p1Name) && (
+            <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+          )}
           <span
             className={cl(
               styles.name,
@@ -170,21 +209,25 @@ const Match = ({
                 : ''
             )}
           >
-            {nameString1 || 'tbd'}
+            {p1Name} {isDoubles && `/`} {isDoubles && p3Name}
           </span>
         </div>
         <div className={styles.right}>
-          <span className={styles.date}>
-            {isPlayed ? match.score : ''}
-            {!isPlayed && match?.start_date
-              ? format(new Date(match.start_date), 'dd.MM-HH:mm')
-              : ''}
-          </span>
+          {isPlayed ? (
+            <span className={styles.score}>{match.score}</span>
+          ) : (
+            <span className={styles.matchDate}>
+              {matchDate && format(matchDate, 'dd.MM')}
+            </span>
+          )}
         </div>
       </div>
       <div className={styles.row}>
         <div className={styles.left}>
-          <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+          {/* if no data - return question mark component */}
+          {!isDoubles && !isValidElement(p2Name) && (
+            <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+          )}
           <span
             className={cl(
               styles.name,
@@ -194,14 +237,20 @@ const Match = ({
                 : ''
             )}
           >
-            {nameString2 || 'tbd'}
+            {p2Name} {isDoubles && `/`} {isDoubles && p4Name}
           </span>
         </div>
         <div className={styles.right}>
-          <span className={styles.place}>{!isPlayed ? '<место>' : ''}</span>
+          <span className={styles.matchDate}>
+            {matchDate && format(matchDate, isPlayed ? 'dd.MM' : 'HH:mm')}
+          </span>
         </div>
       </div>
-      {isFinal ? 'isFinal' : ''}
+      {isFinal && (
+        <div className={styles.finalsTrophy}>
+          <GiTrophyCup />
+        </div>
+      )}
     </div>
   );
 };

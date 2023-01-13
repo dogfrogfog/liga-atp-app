@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import {
-  PrismaClient,
   tournament as TournamentT,
   match as MatchT,
   player as PlayerT,
@@ -23,12 +22,14 @@ import PlayersList from 'components/PlayersList';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
   GROUPS_DRAW_TYPES,
+  DOUBLES_TOURNAMENT_TYPES_NUMBER,
 } from 'constants/values';
 import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
+import usePlayers from 'hooks/usePlayers';
 
-const TOURNAMENT_TABS = ['Расписание', 'Список игроков'];
+const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
 
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];
@@ -36,7 +37,10 @@ const TournamentPage: NextPage<{
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
-  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
+  const { players: allPlayers } = usePlayers();
+  const [activeTab, setActiveTab] = useState(
+    TOURNAMENT_TABS[tournament.status === 1 ? 1 : 0]
+  );
   const [isAddPlayerModalOpen, setAddPlayerModalStatus] = useState(false);
   const [isPlayerLoading, setPlayerLoadingStatus] = useState(false);
   const {
@@ -49,6 +53,61 @@ const TournamentPage: NextPage<{
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
+        // for old tournaments with no brackets data or brackets data in old format
+        if (
+          (tournament.status === 3 || tournament.is_finished) &&
+          (!brackets || (brackets && !Array.isArray(brackets[0])))
+        ) {
+          const lastMatch = tournamentMatches[tournamentMatches.length - 1];
+          const isDoubles =
+            DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+              tournament.tournament_type as number
+            ) || tournament.is_doubles;
+
+          let winners = [] as PlayerT[];
+          if (isDoubles) {
+            const winnersIds = lastMatch.winner_id?.split('012340');
+
+            const playersWhoWin = allPlayers.reduce((acc, p) => {
+              const targetPlayer = winnersIds?.includes(p.id + '');
+
+              if (targetPlayer) {
+                acc.push(p);
+              }
+
+              return acc;
+            }, [] as PlayerT[]);
+
+            winners = playersWhoWin;
+          } else {
+            const targetPlayer = allPlayers.find(
+              (p) => lastMatch.winner_id === p.id + ''
+            ) as PlayerT;
+
+            winners = [targetPlayer];
+          }
+
+          return (
+            <>
+              <div className={styles.winner}>
+                <p className={styles.winnerTitle}>Победитель</p>
+                {winners.map((p) => (
+                  <span key={p.id} className={styles.winnerName}>
+                    {p?.first_name + ' ' + p?.last_name}
+                  </span>
+                ))}
+                <span className={styles.score}>{lastMatch.score}</span>
+              </div>
+              {/* <NotFoundMessage message="Сетка недоступна" /> */}
+            </>
+          );
+        }
+
+        // active recording
+        if (tournament.status === 1) {
+          return <NotFoundMessage message="Жеребьевка еще не прошла" />;
+        }
+
         return brackets ? (
           <Schedule
             hasGroups={
@@ -65,7 +124,21 @@ const TournamentPage: NextPage<{
           <NotFoundMessage message="Сетка не сформирована" />
         );
       case TOURNAMENT_TABS[1]:
-        return <PlayersList players={registeredPlayers} />;
+        // for old tournaments with no players data
+        if (
+          (tournament.status === 3 || tournament.is_finished) &&
+          !registeredPlayers
+        ) {
+          return (
+            <NotFoundMessage message="Зарегестрированные игроки недоступны" />
+          );
+        }
+
+        return registeredPlayers.length > 0 ? (
+          <PlayersList players={registeredPlayers} />
+        ) : (
+          <NotFoundMessage message="Нет зарегестрированных игроков" />
+        );
       default:
         return null;
     }
@@ -74,8 +147,6 @@ const TournamentPage: NextPage<{
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(TOURNAMENT_TABS[value]);
   };
-
-  const isFinished = tournament.is_finished || tournament.status === 3;
 
   const handleDownloadClick = () => {};
   const toggleAddPlayerModal = () => {
@@ -119,6 +190,8 @@ const TournamentPage: NextPage<{
     setPlayerLoadingStatus(false);
   };
 
+  const isFinished = tournament.is_finished || tournament.status === 3;
+
   return (
     <div className={styles.сontainer}>
       <div className={styles.header}>
@@ -138,33 +211,30 @@ const TournamentPage: NextPage<{
         />
       </div>
       <section className={styles.tabsContainer}>
-        {!isFinished ? (
-          <>
-            {tournament.status === 2 ? (
-              <button
-                onClick={handleDownloadClick}
-                className={styles.nearTabButton}
-              >
-                <AiOutlineDownload />
-              </button>
-            ) : (
-              <button
-                onClick={toggleAddPlayerModal}
-                className={styles.nearTabButton}
-              >
-                <AiOutlineUserAdd />
-              </button>
-            )}
-            <Tabs
-              tabNames={TOURNAMENT_TABS}
-              activeTab={activeTab}
-              onChange={handleTabChange}
-            />
-            {activeTabContent}
-          </>
-        ) : (
-          <div>Турнир прошел</div>
-        )}
+        <>
+          {tournament.status === 2 && (
+            <button
+              onClick={handleDownloadClick}
+              className={styles.nearTabButton}
+            >
+              <AiOutlineDownload />
+            </button>
+          )}
+          {tournament.status === 1 && (
+            <button
+              onClick={toggleAddPlayerModal}
+              className={styles.nearTabButton}
+            >
+              <AiOutlineUserAdd />
+            </button>
+          )}
+          <Tabs
+            tabNames={TOURNAMENT_TABS}
+            activeTab={activeTab}
+            onChange={handleTabChange}
+          />
+          {activeTabContent}
+        </>
         {isAddPlayerModalOpen && (
           <>
             <div className={styles.addPlayerForm}>
