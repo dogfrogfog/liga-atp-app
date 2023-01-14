@@ -42,7 +42,7 @@ const StatsTab = ({
     setSelectedLvl(parseInt(e.target.value, 10));
   };
 
-  console.log(selectedLvl, statsData);
+  // console.log(selectedLvl, statsData);
 
   return (
     <div className={styles.statsTabContainer}>

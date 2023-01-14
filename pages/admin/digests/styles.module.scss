@@ -1,0 +1,67 @@
+@import '../../../styles/variables.scss';
+
+.mainPageContainer {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.digestCard {
+  position: relative;
+  height: 350px;
+  width: 300px;
+  transition: 0.2 ease;
+  margin-bottom: 50px;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.005);
+    transition: 0.2 ease;
+  }
+}
+
+.digestCardHeader {
+  background-color: aquamarine;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  height: 150px;
+}
+
+.digestCardFooter {
+  position: relative;
+  height: 200px;
+  background-color: $custom-lightgray;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  padding: 15px;
+}
+
+.id {
+  color: $custom-black;
+  top: 10px;
+  left: 10px;
+  position: absolute;
+}
+
+.date {
+  position: absolute;
+  padding: 5px;
+  top: -26px;
+  right: 0;
+  border-top-left-radius: 14px;
+  background-color: $custom-black;
+  color: $custom-white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.title {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.desc {
+  display: block;
+  font-size: 16px;
+}

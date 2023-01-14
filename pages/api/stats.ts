@@ -12,7 +12,6 @@ const getWinLoseProportion = (playerId: number, matches: MatchT[]): string => {
   const { wins, losses } = matches.reduce(
     (acc, m) => {
       if (parseInt(m.winner_id as string, 10) === playerId) {
-        // console.log(m)
         acc.wins += 1;
       } else {
         acc.losses += 1;
@@ -23,7 +22,7 @@ const getWinLoseProportion = (playerId: number, matches: MatchT[]): string => {
     { wins: 0, losses: 0 }
   );
 
-  console.log(matches.length, 'wins: ' + wins + ' ///// losses: ' + losses);
+  // console.log(matches.length, 'wins: ' + wins + ' ///// losses: ' + losses);
 
   return `${wins}/${losses}`;
 };
@@ -89,7 +88,7 @@ export default async (
 
         // to filter doubles matches
         if (!acc.ids.includes(m.id)) {
-          console.log(tournamentsMap.get(m.tournament_id as number));
+          // console.log(tournamentsMap.get(m.tournament_id as number));
           // && !tournamentsMap.get(m.tournament_id as number)?.is_doubl÷÷es
           acc.ids.push(m.id);
           acc.uniqueSinglesMatches.push(m as MatchT);

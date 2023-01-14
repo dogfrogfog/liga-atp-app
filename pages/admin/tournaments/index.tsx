@@ -44,8 +44,6 @@ const Tournaments: NextPage = () => {
     TOURNAMENT_COLUMNS
   );
 
-  console.log(editingTournament);
-
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
     setEditingTournament(undefined);
