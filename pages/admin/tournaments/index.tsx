@@ -115,9 +115,7 @@ const Tournaments: NextPage = () => {
 
   return (
     <div>
-      <div>
-        <PageTitle>Управление турнирами</PageTitle>
-      </div>
+      <PageTitle>Управление турнирами</PageTitle>
       <TableControls
         selectedRow={tableProps.selectedRow}
         handlePickClick={handlePickClick}

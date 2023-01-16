@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { digest as DigestT } from '@prisma/client';
 import { format } from 'date-fns';
@@ -42,6 +43,11 @@ const DigestMainPage: NextPage = () => {
 
   return (
     <div className={styles.mainPageContainer}>
+      <div className={styles.createNewDigest}>
+        <Link href="/admin/digests/new">
+          <span className={styles.createLink}>Создать дайджест</span>
+        </Link>
+      </div>
       {[
         {
           id: 11,

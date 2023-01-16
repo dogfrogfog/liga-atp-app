@@ -19,7 +19,7 @@ const Sidebar = () => {
         </div>
         <div className={styles.menuItem}>
           <TbNews />
-          <Link href="/admin/digest">Дайджест</Link>
+          <Link href="/admin/digests">Дайджест</Link>
         </div>
       </div>
     </div>
