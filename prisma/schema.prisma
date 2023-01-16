@@ -107,5 +107,6 @@ model digest {
   image_link            String?
   markdown              String?
   title                 String?
-  mentioned_players_ids String?
+  desc                  String?
+  mentioned_players_ids Int[]
 }
