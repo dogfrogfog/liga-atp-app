@@ -5,14 +5,12 @@ import type { digest as DigestT } from '@prisma/client';
 import { format } from 'date-fns';
 
 import useDigests from 'hooks/useDigests';
-
 import styles from './styles.module.scss';
 
 const DigestCard = ({
   id,
   image_link,
   date,
-  // @ts-ignore
   desc,
   title,
   onClick,
@@ -48,16 +46,7 @@ const DigestMainPage: NextPage = () => {
           <span className={styles.createLink}>Создать дайджест</span>
         </Link>
       </div>
-      {[
-        {
-          id: 11,
-          image_link: '',
-          date: new Date(),
-          desc: 'Lorem  iprum lorem  iprum dolor lorem  iprum dolor lorem  iprum dolor lorem  iprum dolor, lorem  iprum dolor, lorem  iprum dolor',
-          title: 'Дайджест номер 23',
-        },
-      ].map((p) => (
-        // @ts-ignore
+      {digests.map((p) => (
         <DigestCard key={p.id} {...p} onClick={onCardClick} />
       ))}
     </div>
