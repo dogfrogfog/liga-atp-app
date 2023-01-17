@@ -23,7 +23,7 @@
   }
 
   .digestCard {
-    transition: 0.2 ease;
+    transition: 0.2s ease;
     margin-bottom: 50px;
     cursor: pointer;
     background-color: pink;
@@ -32,8 +32,8 @@
     font-weight: bold;
 
     &:hover {
-      transform: scale(1.005);
-      transition: 0.2 ease;
+      transform: scale(1.05);
+      transition: 0.2s ease;
     }
   }
 
@@ -115,6 +115,13 @@
   .digestDate {
     font-size: 20px;
     margin-bottom: 50px;
+  }
+
+  .mentionedPlayer {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid $custom-black;
+    border-radius: 5px;
   }
 }
 
