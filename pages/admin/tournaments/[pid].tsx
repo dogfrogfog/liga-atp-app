@@ -19,13 +19,14 @@ import {
   SURFACE_TYPE_NUMBER_VALUES,
   DEFAULT_MODAL,
 } from 'constants/values';
-import { DRAW_TYPE_NUMBER_VALUES } from 'constants/draw';
 import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
 import InputWithError from 'ui-kit/InputWithError';
 import { updateTournament } from 'services/tournaments';
 import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
+import { playersToMultiSelect, multiSelectToIds } from 'utils/multiselect';
+import { getInitialBrackets } from 'utils/bracket';
 import styles from './AdminSingleTournamentPape.module.scss';
 import formStyles from '../Form.module.scss';
 
@@ -41,44 +42,6 @@ interface IAdminSingleTournamentPapeProps {
   players: PlayerT[];
   matches: MatchT[];
 }
-
-const getInitialBrackets = (drawType: number) => {
-  const { totalStages, firstStageMatches, withQual, groups } =
-    DRAW_TYPE_NUMBER_VALUES[drawType];
-  let stageMatches = firstStageMatches;
-
-  let result: MatchT[][];
-
-  if (groups) {
-    // fill first round with groups
-    result = [new Array(groups).fill([])];
-
-    for (let i = 1; i < totalStages; i += 1) {
-      result.push(Array(stageMatches).fill({}));
-      stageMatches = stageMatches / 2;
-    }
-  } else {
-    result = withQual ? [Array(stageMatches).fill({})] : [];
-    for (let i = 0; i < totalStages; i += 1) {
-      result.push(Array(stageMatches).fill({}));
-      stageMatches = stageMatches / 2;
-    }
-  }
-
-  return result;
-};
-
-const playersToMultiSelectFormat = (players: PlayerT[]) =>
-  players.reduce((acc, v) => {
-    acc.push({ value: v.id, label: `${v.first_name} ${v.last_name}` });
-    return acc;
-  }, [] as Option[]);
-
-const multiSelectFormatToPlayersIds = (options: Option[]) =>
-  options.reduce((acc, { value }) => {
-    acc.push(value);
-    return acc;
-  }, [] as number[]);
 
 const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   tournament,
@@ -109,8 +72,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   const registeredPlayersIds = activeTournament.players_order
     ? JSON.parse(activeTournament?.players_order)?.players
     : [];
-  const newSelectedPlayersIds =
-    multiSelectFormatToPlayersIds(newSelectedPlayers);
+  const newSelectedPlayersIds = multiSelectToIds(newSelectedPlayers);
   const brackets =
     activeTournament.draw &&
     (JSON.parse(activeTournament?.draw)?.brackets as IBracketsUnit[][]);
@@ -513,7 +475,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
           <br />
           <MultiSelect
             disabled={isDisabled}
-            options={playersToMultiSelectFormat(players)}
+            options={playersToMultiSelect(players)}
             value={newSelectedPlayers}
             onChange={setNewSelectedPlayers}
             labelledBy="Выбирите игроков из списка"

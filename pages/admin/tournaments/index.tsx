@@ -44,8 +44,6 @@ const Tournaments: NextPage = () => {
     TOURNAMENT_COLUMNS
   );
 
-  console.log(editingTournament);
-
   const handleReset = () => {
     tableProps.setSelectedRow(-1);
     setEditingTournament(undefined);
@@ -117,9 +115,7 @@ const Tournaments: NextPage = () => {
 
   return (
     <div>
-      <div>
-        <PageTitle>Управление турнирами</PageTitle>
-      </div>
+      <PageTitle>Управление турнирами</PageTitle>
       <TableControls
         selectedRow={tableProps.selectedRow}
         handlePickClick={handlePickClick}

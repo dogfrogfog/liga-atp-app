@@ -89,9 +89,7 @@ const Players: NextPage = () => {
 
   return (
     <div>
-      <div>
-        <PageTitle>Управление игроками</PageTitle>
-      </div>
+      <PageTitle>Управление игроками</PageTitle>
       <TableControls
         selectedRow={tableProps.selectedRow}
         handleAddClick={handleAddClick}

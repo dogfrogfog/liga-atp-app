@@ -1,0 +1,140 @@
+@import '../../../styles/variables.scss';
+
+// MAIN PAGE START
+.mainPageContainer {
+  .createNewDigest {
+    margin-bottom: 15px;
+
+    .createLink {
+      cursor: pointer;
+      padding: 5px;
+      font-size: 18px;
+      background-color: $custom-green;
+      color: $custom-black;
+      border: 2px solid $custom-black;
+      display: inline-block;
+    }
+  }
+
+  .digestCardsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  .digestCard {
+    position: relative;
+    height: 350px;
+    width: 300px;
+    transition: 0.2 ease;
+    margin-bottom: 50px;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.005);
+      transition: 0.2 ease;
+    }
+  }
+
+  .digestCardHeader {
+    background-color: aquamarine;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    height: 150px;
+  }
+
+  .digestCardFooter {
+    position: relative;
+    height: 200px;
+    background-color: $custom-lightgray;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    padding: 15px;
+  }
+
+  .id {
+    color: $custom-black;
+    top: 10px;
+    left: 10px;
+    position: absolute;
+  }
+
+  .date {
+    position: absolute;
+    padding: 5px;
+    top: -26px;
+    right: 0;
+    border-top-left-radius: 14px;
+    background-color: $custom-black;
+    color: $custom-white;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .title {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+
+  .desc {
+    display: block;
+    font-size: 16px;
+  }
+}
+
+// MAIN PAGE END
+
+// CREATE PAGE START
+
+.createPageContainer {
+  .sidesContainer {
+    display: flex;
+  }
+
+  .side {
+    width: 50%;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+
+  .inputField {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    min-height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+
+  input,
+  textarea {
+    outline: none;
+  }
+
+  .markdownWrapper {
+    margin-bottom: 10px;
+  }
+
+  .submitButton {
+    background-color: $custom-green;
+    border: none;
+    color: $custom-black;
+    font-size: 20px;
+    padding: 5px;
+    width: 200px;
+    border: 2px solid $custom-green;
+
+    &:focus {
+      border-color: $custom-black;
+    }
+  }
+}
+
+// CREATE PAGE END
