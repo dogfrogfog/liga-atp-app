@@ -16,7 +16,7 @@ const DigestCard = ({
   onClick,
 }: DigestT & { onClick: (id: number) => void }) => (
   <div className={styles.digestCard} onClick={() => onClick(id)}>
-    <span className={styles.id}>id</span>
+    <span className={styles.id}>id: {id}</span>
     <div className={styles.digestCardHeader}>
       {/* todo: implement image */}
       {/* {image_link} */}
