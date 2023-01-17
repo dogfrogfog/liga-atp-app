@@ -3,6 +3,7 @@ type NumberValuesT = {
 };
 
 export const LEVEL_NUMBER_VALUES: NumberValuesT = {
+  5: 'СуперМастерс',
   4: 'Леджер',
   3: 'Про',
   2: 'Мастерс',

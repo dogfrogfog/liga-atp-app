@@ -18,10 +18,13 @@
 .nameColumn {
   width: 60%;
   display: flex;
+  align-items: center;
 }
+
 .titles .nameColumn {
   padding-left: 35px;
 }
+
 .withPlace .nameColumn {
   width: 50%;
 }
@@ -54,7 +57,14 @@
 
 .listItem {
   display: flex;
+  align-items: center;
   margin-bottom: 10px;
+
+  &:active,
+  &:focus {
+    background-color: $custom-aqua;
+    color: $custom-black;
+  }
 }
 
 .rankValue {
