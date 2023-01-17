@@ -90,17 +90,13 @@ const CreateDigestPage: NextPage = () => {
               placeholder="Описание"
               // todo: add this field to postgres
               // @ts-ignore
-              {...register('desc', {
-                required: true,
-              })}
+              {...register('desc')}
             />
             {/* todo: add regexp with next.config.js domain name */}
             <input
               className={styles.inputField}
               placeholder="Ссылка на картинку"
-              {...register('image_link', {
-                required: true,
-              })}
+              {...register('image_link')}
             />
           </div>
           <div className={styles.side}>

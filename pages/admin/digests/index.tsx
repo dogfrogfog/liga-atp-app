@@ -9,9 +9,9 @@ import styles from './styles.module.scss';
 
 const DigestCard = ({
   id,
-  image_link,
+  // image_link,
   date,
-  desc,
+  // desc,
   title,
   onClick,
 }: DigestT & { onClick: (id: number) => void }) => (
@@ -26,7 +26,7 @@ const DigestCard = ({
         {date && format(new Date(date), 'dd.MM.yyyy')}
       </div>
       <span className={styles.title}>{title}</span>
-      <span className={styles.desc}>{desc}</span>
+      {/* <span className={styles.desc}>{desc}</span> */}
     </div>
   </div>
 );
