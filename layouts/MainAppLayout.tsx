@@ -39,11 +39,11 @@ function MainAppLayout({ children }: { children: ReactNode }) {
             <Tournaments />
           </div>
         </Link>
-        <Link href="/digest">
+        <Link href="/digests">
           <div
             className={cl(
               styles.menuItem,
-              currentRoute === '/digest' ? styles.active : ''
+              currentRoute === '/digests' ? styles.active : ''
             )}
           >
             <Digest />

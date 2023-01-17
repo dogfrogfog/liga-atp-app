@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+.pageContainer {
+  position: relative;
+  padding: 120px 15px 15px;
+}
+
+.singleDigestDate {
+  position: absolute;
+  z-index: 3;
+  right: 30px;
+  top: 50px;
+  background-color: $custom-darkgray;
+  color: $custom-white;
+  border-radius: 14px;
+  padding: 8px 12px;
+}
