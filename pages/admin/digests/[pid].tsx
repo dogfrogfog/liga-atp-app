@@ -1,6 +1,6 @@
 import type { NextPage, NextPageContext } from 'next';
 import dynamic from 'next/dynamic';
-import type { digest as DigestT } from '@prisma/client';
+import type { digest as DigestT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
 
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
@@ -13,7 +13,7 @@ const MarkdownPreview = dynamic(
   { ssr: false, loading: () => <LoadingSpinner /> }
 );
 
-const SingleDigestPage: NextPage<{ digest: DigestT }> = ({ digest }) => {
+const SingleDigestPage: NextPage<{ digest: DigestT; players: PlayerT[] }> = ({ digest, players }) => {
   return (
     <div className={styles.singleDigestPage}>
       <PageTitle>{digest.title}</PageTitle>
@@ -21,6 +21,15 @@ const SingleDigestPage: NextPage<{ digest: DigestT }> = ({ digest }) => {
         {digest.date && format(digest.date, 'dd-MM-yyyy')}
       </p>
       <MarkdownPreview source={digest.markdown || ''} />
+      <br />
+      <p>Упомянутые игроки:</p>
+      <div>
+        {players.map((p) => (
+          <span className={styles.mentionedPlayer}>
+            {p.first_name} {p.last_name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };
@@ -32,9 +41,18 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     },
   });
 
+  const players = digest?.mentioned_players_ids ? await prisma.player.findMany({
+    where: {
+      id: {
+        in: digest?.mentioned_players_ids,
+      }
+    }
+  }) : [];
+
   return {
     props: {
       digest,
+      players,
     },
   };
 };
