@@ -13,7 +13,10 @@ const MarkdownPreview = dynamic(
   { ssr: false, loading: () => <LoadingSpinner /> }
 );
 
-const SingleDigestPage: NextPage<{ digest: DigestT; players: PlayerT[] }> = ({ digest, players }) => {
+const SingleDigestPage: NextPage<{ digest: DigestT; players: PlayerT[] }> = ({
+  digest,
+  players,
+}) => {
   return (
     <div className={styles.singleDigestPage}>
       <PageTitle>{digest.title}</PageTitle>
@@ -25,7 +28,7 @@ const SingleDigestPage: NextPage<{ digest: DigestT; players: PlayerT[] }> = ({ d
       <p>Упомянутые игроки:</p>
       <div>
         {players.map((p) => (
-          <span className={styles.mentionedPlayer}>
+          <span key={p.id} className={styles.mentionedPlayer}>
             {p.first_name} {p.last_name}
           </span>
         ))}
@@ -41,13 +44,15 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     },
   });
 
-  const players = digest?.mentioned_players_ids ? await prisma.player.findMany({
-    where: {
-      id: {
-        in: digest?.mentioned_players_ids,
-      }
-    }
-  }) : [];
+  const players = digest?.mentioned_players_ids
+    ? await prisma.player.findMany({
+        where: {
+          id: {
+            in: digest?.mentioned_players_ids,
+          },
+        },
+      })
+    : [];
 
   return {
     props: {
