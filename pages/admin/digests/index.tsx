@@ -9,25 +9,15 @@ import styles from './styles.module.scss';
 
 const DigestCard = ({
   id,
-  // image_link,
   date,
-  // desc,
   title,
   onClick,
 }: DigestT & { onClick: (id: number) => void }) => (
   <div className={styles.digestCard} onClick={() => onClick(id)}>
-    <span className={styles.id}>id: {id}</span>
-    <div className={styles.digestCardHeader}>
-      {/* todo: implement image */}
-      {/* {image_link} */}
-    </div>
-    <div className={styles.digestCardFooter}>
-      <div className={styles.date}>
-        {date && format(new Date(date), 'dd.MM.yyyy')}
-      </div>
-      <span className={styles.title}>{title}</span>
-      {/* <span className={styles.desc}>{desc}</span> */}
-    </div>
+    <span className={styles.title}>{title}</span>
+    <span className={styles.date}>
+      {date && format(new Date(date), 'dd.MM.yyyy')}
+    </span>
   </div>
 );
 
@@ -46,9 +36,11 @@ const DigestMainPage: NextPage = () => {
           <span className={styles.createLink}>Создать дайджест</span>
         </Link>
       </div>
-      {digests.map((p) => (
-        <DigestCard key={p.id} {...p} onClick={onCardClick} />
-      ))}
+      <div className={styles.digestCardsContainer}>
+        {digests.map((p) => (
+          <DigestCard key={p.id} {...p} onClick={onCardClick} />
+        ))}
+      </div>
     </div>
   );
 };
