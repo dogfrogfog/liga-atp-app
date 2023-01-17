@@ -21,7 +21,7 @@ const PROFILE_TABS = [
   'Расписание',
   'История матчей',
   'Статистика',
-  'Новости',
+  'Дайджесты',
 ];
 
 const calculateYearsFromDate = (date: Date) => {

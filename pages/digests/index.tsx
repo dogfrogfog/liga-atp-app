@@ -1,26 +1,11 @@
 import type { NextPage } from 'next';
-import type { digest as DigestT } from '@prisma/client';
-import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 
 import PageTitle from 'ui-kit/PageTitle';
+import DigestListEl from 'components/DigestListEl';
 import useDigests from 'hooks/useDigests';
 import styles from 'styles/Digests.module.scss';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
-
-const DigestListEl = ({
-  id,
-  title,
-  date,
-  onClick,
-}: DigestT & { onClick: (id: number) => void }) => (
-  <div onClick={() => onClick(id)} className={styles.digestListEl}>
-    <span className={styles.title}>{title}</span>
-    <span className={styles.date}>
-      {format(new Date(date as Date), 'dd.MM.yyyy')}
-    </span>
-  </div>
-);
 
 const DigestsPage: NextPage = () => {
   const { digests, isLoading } = useDigests();

@@ -1,0 +1,19 @@
+@import '../styles/variables.scss';
+
+.digestListEl {
+  background-color: $custom-darkgray;
+  border-radius: 14px;
+  padding: 15px;
+  margin-bottom: 15px;
+
+  .title {
+    margin-right: 20px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .date {
+    display: block;
+    font-size: 12px;
+  }
+}
