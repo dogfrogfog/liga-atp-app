@@ -53,6 +53,10 @@ const SWRMyApp = (props: AppProps) => (
   <SWRConfig
     value={{
       fetcher,
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        // Only retry up to 3 times.
+        if (retryCount >= 3) return;
+      },
       // to prevent same requests occur multiple times
       revalidateIfStale: false,
     }}
