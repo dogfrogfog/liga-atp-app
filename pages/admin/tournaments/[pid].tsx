@@ -27,6 +27,7 @@ import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { createMatch, updateMatch } from 'services/matches';
 import { playersToMultiSelect, multiSelectToIds } from 'utils/multiselect';
 import { getInitialBrackets } from 'utils/bracket';
+import usePlayers from 'hooks/usePlayers';
 import styles from './AdminSingleTournamentPape.module.scss';
 import formStyles from '../Form.module.scss';
 
@@ -39,13 +40,11 @@ const translation = {
 
 interface IAdminSingleTournamentPapeProps {
   tournament: TournamentT;
-  players: PlayerT[];
   matches: MatchT[];
 }
 
 const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   tournament,
-  players,
   matches: metchesOriginal,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +57,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     mi?: number;
     isGroupMatch?: boolean;
   }>();
-
+  const { players } = usePlayers();
   const [matches, setMatches] = useState(metchesOriginal);
   const [activeTournament, setActiveTournament] = useState(tournament);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
