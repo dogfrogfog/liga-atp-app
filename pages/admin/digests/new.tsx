@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import type { digest as DigestT, player as PlayerT } from '@prisma/client';
+import type { digest as DigestT } from '@prisma/client';
 import { MultiSelect, Option } from 'react-multi-select-component';
+import axios from 'axios';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 
@@ -16,6 +18,18 @@ const MDEditor = dynamic(
   { ssr: false, loading: () => <LoadingSpinner /> }
 );
 
+const createDigests = async (
+  data: Omit<DigestT, 'id'>
+): Promise<{ isOk: boolean; errorMessage?: string; data?: DigestT }> => {
+  const response = await axios.post<DigestT>('/api/digests/new', { data });
+
+  if (response.status === 200) {
+    return { isOk: true, data: response.data };
+  } else {
+    return { isOk: false, errorMessage: response.statusText };
+  }
+};
+
 import PageTitle from 'ui-kit/PageTitle';
 import styles from './styles.module.scss';
 
@@ -26,6 +40,7 @@ type NoCustomFieldsType = Omit<
 
 const CreateDigestPage: NextPage = () => {
   const { players } = usePlayers();
+  const router = useRouter();
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [markdown, setMarkdown] = useState<string | undefined>();
 
@@ -35,14 +50,18 @@ const CreateDigestPage: NextPage = () => {
     },
   });
 
-  const onSubmit = (formData: NoCustomFieldsType) => {
-    console.log({
+  const onSubmit = async (formData: NoCustomFieldsType) => {
+    const res = await createDigests({
       ...formData,
-      markdown,
-      mentioned_players_ids: JSON.stringify(
-        multiSelectToIds(newSelectedPlayers)
-      ),
+      markdown: markdown || null,
+      mentioned_players_ids: multiSelectToIds(newSelectedPlayers),
     });
+
+    if (res.isOk) {
+      router.push(`/admin/digests/${res.data?.id}`);
+    } else {
+      console.error(res.errorMessage);
+    }
   };
 
   return (
