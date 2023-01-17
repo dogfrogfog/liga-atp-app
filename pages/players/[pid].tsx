@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 import { FaMedal } from 'react-icons/fa';
-import { player as PlayerT } from '@prisma/client';
+import type { player as PlayerT, digest as DigestT } from '@prisma/client';
 import axios from 'axios';
 
 import type { StatsDataType } from 'pages/api/stats';
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
-import NewsList from 'components/NewsList';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import DigestListEl from 'components/DigestListEl';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
 import Tabs from 'ui-kit/Tabs';
 import styles from 'styles/Profile.module.scss';
@@ -31,13 +33,17 @@ const calculateYearsFromDate = (date: Date) => {
   return Math.abs(age_dt.getUTCFullYear() - 1970);
 };
 
-const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
+const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
+  player,
+  digests,
+}) => {
   const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsData, setStatsData] = useState<StatsDataType | undefined>();
   const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(
     player.level || undefined
   );
+  const router = useRouter();
 
   useEffect(() => {
     const fetchWrapper = async () => {
@@ -108,6 +114,10 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
     }
   );
 
+  const onDigestClick = (id: number) => {
+    router.push(`/digests/${id}`);
+  };
+
   const activeTabContent = (() => {
     switch (activeTab) {
       case PROFILE_TABS[0]:
@@ -154,15 +164,12 @@ const SingleProfilePage: NextPage<{ player: PlayerT }> = ({ player }) => {
           />
         );
       case PROFILE_TABS[4]:
-        return (
-          <NewsList
-            news={new Array(3).fill({
-              title: 'Вторая травма ахила за неделю',
-              date: '11.11.2022',
-              desc: 'Lorem ipsum dolor sit amet, con',
-              id: Math.round(Math.random() * 100),
-            })}
-          />
+        return digests.length > 0 ? (
+          digests.map((d) => (
+            <DigestListEl key={d.id} {...d} onClick={onDigestClick} />
+          ))
+        ) : (
+          <NotFoundMessage message="Нет упоминаний об игроке" />
         );
       default:
         return null;
@@ -239,9 +246,18 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     },
   });
 
+  const digests = await prisma.digest.findMany({
+    where: {
+      mentioned_players_ids: {
+        has: parseInt(ctx.query.pid as string, 10),
+      },
+    },
+  });
+
   return {
     props: {
       player,
+      digests: digests || [],
     },
   };
 };
