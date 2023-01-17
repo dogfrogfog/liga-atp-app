@@ -2,9 +2,14 @@ import type { NextPage } from 'next';
 
 import NewsList from 'components/NewsList';
 import PageTitle from 'ui-kit/PageTitle';
+import useDigests from 'hooks/useDigests';
 import styles from 'styles/Digest.module.scss';
 
 const DigestPage: NextPage = () => {
+  const { digests } = useDigests();
+
+  console.log(digests)
+
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Дайджест</PageTitle>
