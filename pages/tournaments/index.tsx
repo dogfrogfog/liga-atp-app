@@ -204,6 +204,13 @@ const TournamentsPage: NextPage = () => {
           }));
         };
 
+        const toggleDoublesCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+          setFinishedTournamentsFilters((v) => ({
+            ...v,
+            isDoubles: e.target.checked,
+          }));
+        };
+
         const filteredFinishedTournaments = finished.filter((v) =>
           finishedTournamentsFilters.tournamentType !== 999
             ? finishedTournamentsFilters.tournamentType === v.tournament_type
@@ -213,6 +220,14 @@ const TournamentsPage: NextPage = () => {
         return (
           <>
             <div className={styles.finishedTournamentsFilters}>
+              {/* <div className={styles.checkbox}>
+                <span>Даблс</span>
+                <input
+                  type="checkbox"
+                  onChange={toggleDoublesCheckbox}
+                  checked={finishedTournamentsFilters.isDoubles}
+                />
+              </div> */}
               <div className={styles.tournamentType}>
                 <span>Тип турнира</span>
                 <select
@@ -231,14 +246,6 @@ const TournamentsPage: NextPage = () => {
                   )}
                 </select>
               </div>
-              {/* <div className={styles.checkbox}>
-                <input
-                  type="checkbox"
-                  onChange={toggleDoublesCheckbox}
-                  checked={finishedTournamentsFilters.isDoubles}
-                />
-                <span>Даблс</span>
-              </div> */}
             </div>
             {filteredFinishedTournaments.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
