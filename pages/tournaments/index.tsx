@@ -34,7 +34,8 @@ const TournamentsPage: NextPage = () => {
     isDoubles: boolean;
     tournamentType: number | undefined;
   }>({
-    tournamentType: undefined,
+    /// 999 is "all" option. just for fun
+    tournamentType: 999,
     isDoubles: false,
   });
 
@@ -204,7 +205,7 @@ const TournamentsPage: NextPage = () => {
         };
 
         const filteredFinishedTournaments = finished.filter((v) =>
-          finishedTournamentsFilters.tournamentType !== undefined
+          finishedTournamentsFilters.tournamentType !== 999
             ? finishedTournamentsFilters.tournamentType === v.tournament_type
             : true
         );
@@ -218,7 +219,7 @@ const TournamentsPage: NextPage = () => {
                   onChange={handleLevelChange}
                   value={finishedTournamentsFilters.tournamentType}
                 >
-                  <option value={undefined}>Все</option>
+                  <option value={999}>Все</option>
                   {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
                     ([key, name]) => {
                       return (
