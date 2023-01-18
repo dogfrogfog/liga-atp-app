@@ -42,8 +42,6 @@ const StatsTab = ({
     setSelectedLvl(parseInt(e.target.value, 10));
   };
 
-  // console.log(selectedLvl, statsData);
-
   return (
     <div className={styles.statsTabContainer}>
       <div className={styles.specs}>
@@ -69,6 +67,10 @@ const StatsTab = ({
       </div>
       <div className={styles.levelContainer}>
         <select value={selectedLvl} onChange={handleLevelChange} name="level">
+          {/* todo: add filters */}
+          <option key="*" value="*">
+            Все
+          </option>
           {Object.entries(LEVEL_NUMBER_VALUES).map(([k, v]) => (
             <option key={k} value={k}>
               {v}

@@ -13,12 +13,13 @@ const RANKING_TABS = [
   'Все',
 
   // ...Object.values(LEVEL_NUMBER_VALUES),
-  'Про',
-  'Мастерс',
-  'Леджер',
-  'Челленджер',
-  'Фьючерс',
-  'Сателлит',
+  'Про', // 3
+  'S-Мастерс', // 5
+  'Мастерс', // 2
+  'Челленджер', // 1
+  'Леджер', // 4
+  'Фьючерс', // 0
+  'Сателлит', // -1
 ];
 
 const RankingPage: NextPage = () => {
@@ -38,11 +39,11 @@ const RankingPage: NextPage = () => {
         break;
       }
       case RANKING_TABS[2]: {
-        filteredPlayersList = players.filter((p) => p.level === 2);
+        filteredPlayersList = players.filter((p) => p.level === 5);
         break;
       }
       case RANKING_TABS[3]: {
-        filteredPlayersList = players.filter((p) => p.level === 4);
+        filteredPlayersList = players.filter((p) => p.level === 2);
         break;
       }
       case RANKING_TABS[4]: {
@@ -50,10 +51,14 @@ const RankingPage: NextPage = () => {
         break;
       }
       case RANKING_TABS[5]: {
-        filteredPlayersList = players.filter((p) => p.level === 0);
+        filteredPlayersList = players.filter((p) => p.level === 4);
         break;
       }
       case RANKING_TABS[6]: {
+        filteredPlayersList = players.filter((p) => p.level === 0);
+        break;
+      }
+      case RANKING_TABS[7]: {
         filteredPlayersList = players.filter((p) => p.level === -1);
         break;
       }
