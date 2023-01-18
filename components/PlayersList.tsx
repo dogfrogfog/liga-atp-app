@@ -20,7 +20,7 @@ const PlayersList = ({
       {shouldShowPlace && <span className={styles.placeColumn}>Топ</span>}
       <span className={styles.nameColumn}>Имя</span>
       <span className={styles.levelColumn}>Уровень</span>
-      <span className={styles.rankColumn}>Рейтинг</span>
+      <span className={styles.rankColumn}>Эло</span>
     </div>
     <div className={styles.list}>
       {players.map(({ id, first_name, last_name, level, avatar }, i) => (
