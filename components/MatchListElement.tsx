@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { AiOutlineYoutube } from 'react-icons/ai';
 import { GiTabletopPlayers } from 'react-icons/gi';
 import { format } from 'date-fns';
+import cl from 'classnames';
 
 import styles from './MatchListElement.module.scss';
 
@@ -26,11 +27,15 @@ const Match = ({
 }: MatchProps) => (
   // need to have all players' id here to set id to query params of link
   <div className={styles.match}>
-    <span className={styles.time}>
-      {format(new Date(startDate), 'dd.MM.yyyy')}
-    </span>
     <div className={styles.row}>
-      <span className={styles.tournamentName}>{tournamentName}</span>
+      <span className={styles.tournamentName}>
+        {tournamentName}
+        <span className={styles.time}>
+          {' ('}
+          {format(new Date(startDate), 'dd.MM.yyyy')}
+          {')'}
+        </span>
+      </span>
       <div className={styles.buttons}>
         <Link href="/">
           <AiOutlineYoutube />
@@ -44,18 +49,23 @@ const Match = ({
     </div>
     <div className={styles.row}>
       <span className={styles.players}>
-        <span className={isMainPlayerWin ? styles.win : styles.lose}>
-          {p1Name}
-        </span>
+        <span>{p1Name}</span>
         <i> vs. </i>
-        <span className={!isMainPlayerWin ? styles.win : styles.lose}>
-          {p2Name}
-        </span>
+        <span>{p2Name}</span>
       </span>
       <span
-        className={!p1Name ? (isMainPlayerWin ? styles.win : styles.lose) : ''}
+        className={cl(
+          styles.score,
+          !p1Name ? (isMainPlayerWin ? styles.win : styles.lose) : ''
+        )}
       >
-        {score}
+        {score.split(' ').length > 0
+          ? score.split(' ').map((setScore, i) => (
+              <span key={setScore + i} className={styles.setScoreCol}>
+                {setScore.replace('-', ' ')}
+              </span>
+            ))
+          : score}
       </span>
     </div>
   </div>
