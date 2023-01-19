@@ -40,7 +40,12 @@ const PlayersList = ({
             <div className={styles.nameColumn}>
               <div className={styles.image}>
                 {avatar?.includes('.userapi.com') ? (
-                  <Image alt='player-image' src={avatar} height={25} width={25} />
+                  <Image
+                    alt="player-image"
+                    src={avatar}
+                    height={25}
+                    width={25}
+                  />
                 ) : (
                   <BsFillPersonFill />
                 )}

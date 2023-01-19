@@ -201,7 +201,12 @@ const Match = ({
           {!isDoubles && !isValidElement(p1Name) && (
             <span className={styles.img}>
               {p1?.avatar?.includes('userapi.com') ? (
-                <Image alt='player-image' src={p1?.avatar || ''} height={20} width={20} />
+                <Image
+                  alt="player-image"
+                  src={p1?.avatar || ''}
+                  height={20}
+                  width={20}
+                />
               ) : (
                 <BsFillPersonFill />
               )}
@@ -234,7 +239,12 @@ const Match = ({
           {!isDoubles && !isValidElement(p2Name) && (
             <span className={styles.img}>
               {p2?.avatar?.includes('userapi.com') ? (
-                <Image alt='player-image' src={p2?.avatar || ''} height={20} width={20} />
+                <Image
+                  alt="player-image"
+                  src={p2?.avatar || ''}
+                  height={20}
+                  width={20}
+                />
               ) : (
                 <BsFillPersonFill />
               )}
