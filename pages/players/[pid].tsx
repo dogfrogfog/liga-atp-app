@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { FaMedal } from 'react-icons/fa';
+import { FaUserAlt } from 'react-icons/fa';
 import type { player as PlayerT, digest as DigestT } from '@prisma/client';
 import axios from 'axios';
 
@@ -73,12 +74,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     first_name,
     last_name,
     country,
-    // email,
-    // phone,
-
-    // todo: work on avatar
-    // avatar,
-
+    avatar,
     level,
     gameplay_style,
     forehand,
@@ -184,7 +180,8 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
-        is_coach={is_coach as boolean}
+        avavarUrl={avatar || ''}
+        isCoach={!!is_coach}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
@@ -203,21 +200,31 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
 };
 
 interface IProfileHeaderProps {
+  avavarUrl: string;
   name: string;
   level: string;
   points: string;
-  is_coach: boolean;
+  isCoach: boolean;
 }
 
 const ProfileHeader = ({
+  avavarUrl,
   name,
   level,
   points,
-  is_coach,
+  isCoach,
 }: IProfileHeaderProps) => {
   return (
-    <div className={styles.profileHeader}>
-      <span className={styles.status}>{is_coach ? 'Тренер' : 'Игрок'}</span>
+    <div
+      className={styles.profileHeader}
+      style={{ background: `url(${avavarUrl})`, backgroundSize: 'cover' }}
+    >
+      {!avavarUrl && (
+        <div className={styles.noAvatarBlock}>
+          <FaUserAlt />
+        </div>
+      )}
+      <span className={styles.status}>{isCoach ? 'Тренер' : 'Игрок'}</span>
       <div className={styles.info}>
         <p className={styles.name}>{name}</p>
         <div className={styles.infoContainer}>

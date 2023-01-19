@@ -18,10 +18,6 @@
   width: 100%;
 }
 
-.images {
-  margin-bottom: 20px;
-}
-
 .img {
   height: 350px;
   background-color: $custom-lightgray;
@@ -42,13 +38,13 @@
 
 .playerInfo {
   padding: 10px;
+  margin-bottom: -15px;
 }
 
-.name {
+.side .name {
   text-align: center;
-  margin: 0 0 10px;
-  font-weight: 500;
-  font-size: 18px;
+  margin: 0 0 15px;
+  font-size: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -67,6 +63,7 @@
 
 .lvl {
   text-transform: uppercase;
+  font-size: 12px;
   margin: 0 10px;
 }
 
@@ -86,7 +83,8 @@
 .rank {
   margin: 0 10px;
   color: $custom-aqua;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .tabsContainer {

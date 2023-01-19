@@ -92,10 +92,14 @@ const CompareTwoPlayersPage: NextPage<{
   return (
     <div className={styles.container}>
       <div className={styles.images}>
-        {/* add styles for actual image */}
-        <div className={cl(styles.img, styles.side)}></div>
-        {/* add styles for actual image */}
-        <div className={cl(styles.img, styles.side)}></div>
+        <div
+          className={cl(styles.img, styles.side)}
+          style={{ background: `url(${p1.avatar})`, backgroundSize: 'cover' }}
+        ></div>
+        <div
+          className={cl(styles.img, styles.side)}
+          style={{ background: `url(${p2.avatar})`, backgroundSize: 'cover' }}
+        ></div>
       </div>
       {matches.length > 0 && (
         <div className={styles.score}>
@@ -105,7 +109,9 @@ const CompareTwoPlayersPage: NextPage<{
       <div className={styles.mainInfo}>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>
-            {p1.first_name} {p1.last_name}
+            {p1.first_name}
+            <br />
+            {p1.last_name}
           </p>
           <div className={styles.info}>
             <span className={styles.lvl}>
@@ -117,7 +123,9 @@ const CompareTwoPlayersPage: NextPage<{
         </div>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>
-            {p2.first_name} {p2.last_name}
+            {p2.first_name}
+            <br />
+            {p2.last_name}
           </p>
           <div className={styles.info}>
             <span className={styles.lvl}>
