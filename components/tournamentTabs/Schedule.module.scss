@@ -76,7 +76,6 @@
 
   &.groupMatch {
     width: 100%;
-    // background-color: $custom-mediumdarkgray;
   }
 }
 
@@ -137,6 +136,7 @@
   border-radius: 50%;
   border: 1px solid $custom-white;
   margin-right: 10px;
+  overflow: hidden;
 }
 
 .finalsTrophy {

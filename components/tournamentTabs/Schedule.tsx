@@ -1,10 +1,12 @@
-import { useState, isValidElement } from 'react';
+import { isValidElement } from 'react';
+import Image from 'next/image';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
-import { GiConsoleController, GiTrophyCup } from 'react-icons/gi';
+import { GiTrophyCup } from 'react-icons/gi';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import type { IBracketsUnit } from 'components/admin/TournamentDraw';
@@ -196,9 +198,14 @@ const Match = ({
     <div className={cl(styles.match, className)}>
       <div className={styles.row}>
         <div className={styles.left}>
-          {/* if no data - return question mark component */}
           {!isDoubles && !isValidElement(p1Name) && (
-            <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+            <span className={styles.img}>
+              {p1?.avatar?.includes('userapi.com') ? (
+                <Image alt='player-image' src={p1?.avatar || ''} height={20} width={20} />
+              ) : (
+                <BsFillPersonFill />
+              )}
+            </span>
           )}
           <span
             className={cl(
@@ -224,9 +231,14 @@ const Match = ({
       </div>
       <div className={styles.row}>
         <div className={styles.left}>
-          {/* if no data - return question mark component */}
           {!isDoubles && !isValidElement(p2Name) && (
-            <span className={styles.img}>{/* <Image src={iconSrc} /> */}</span>
+            <span className={styles.img}>
+              {p2?.avatar?.includes('userapi.com') ? (
+                <Image alt='player-image' src={p2?.avatar || ''} height={20} width={20} />
+              ) : (
+                <BsFillPersonFill />
+              )}
+            </span>
           )}
           <span
             className={cl(

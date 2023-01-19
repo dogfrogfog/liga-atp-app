@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { player as PlayerT } from '@prisma/client';
 import { BsFillPersonFill } from 'react-icons/bs';
 import cl from 'classnames';
@@ -38,7 +39,11 @@ const PlayersList = ({
             )}
             <div className={styles.nameColumn}>
               <div className={styles.image}>
-                {avatar ? null : <BsFillPersonFill />}
+                {avatar?.includes('.userapi.com') ? (
+                  <Image alt='player-image' src={avatar} height={25} width={25} />
+                ) : (
+                  <BsFillPersonFill />
+                )}
               </div>
               <span className={styles.name}>{`${(
                 first_name as string
