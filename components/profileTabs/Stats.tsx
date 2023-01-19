@@ -17,8 +17,8 @@ const trans: { [k: string]: string } = {
 
 type StatsTabProps = {
   playerId: number;
-  selectedLvl: number | undefined;
-  setSelectedLvl: Dispatch<SetStateAction<number | undefined>>;
+  selectedLvl: number;
+  setSelectedLvl: Dispatch<SetStateAction<number>>;
 
   statsData?: StatsDataType;
 
@@ -67,8 +67,7 @@ const StatsTab = ({
       </div>
       <div className={styles.levelContainer}>
         <select value={selectedLvl} onChange={handleLevelChange} name="level">
-          {/* todo: add filters */}
-          <option key="*" value="*">
+          <option key={999} value={999}>
             Все
           </option>
           {Object.entries(LEVEL_NUMBER_VALUES).map(([k, v]) => (

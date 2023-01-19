@@ -40,9 +40,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsData, setStatsData] = useState<StatsDataType | undefined>();
-  const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(
-    player.level || undefined
-  );
+  const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(999);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,9 +51,12 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         setMatches(response.data);
       }
 
-      const statsResp = await axios.get(
-        `/api/stats?playerId=${player.id}&level=${statsTabLvlDropdown}`
-      );
+      const url =
+        statsTabLvlDropdown === 999
+          ? `/api/stats?playerId=${player.id}`
+          : `/api/stats?playerId=${player.id}&level=${statsTabLvlDropdown}`;
+
+      const statsResp = await axios.get(url);
 
       if (statsResp.status === 200) {
         setStatsData(statsResp.data);

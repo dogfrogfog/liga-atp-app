@@ -370,7 +370,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                     key={key}
                     className={cl(styles.field, styles.inputField)}
                   >
-                    <span>Дата начала-использовать пикер</span>
+                    <span>Дата начала</span>
                     <input
                       value={
                         activeTournament?.start_date

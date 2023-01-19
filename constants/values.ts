@@ -76,14 +76,13 @@ export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
   3: 'Завершен',
 };
 
-export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
 export const PLAYER_COLUMNS = [
-  'level',
   'first_name',
   'last_name',
   'date_of_birth',
+  'level',
   'height',
   'city',
   'country',
@@ -106,15 +105,13 @@ export const PLAYER_COLUMNS = [
 ];
 
 export const TOURNAMENT_COLUMNS = [
+  'id',
   'name',
+  'city',
   'address',
-  'tournament_type',
-  'draw',
   'start_date',
+  'tournament_type',
+  'draw_type',
   'surface',
   'status',
-  'city',
-  'is_doubles',
-  'draw_type',
-  'players_order',
 ];

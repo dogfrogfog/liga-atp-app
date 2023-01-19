@@ -34,7 +34,7 @@ const TournamentsPage: NextPage = () => {
     isDoubles: boolean;
     tournamentType: number | undefined;
   }>({
-    /// 999 is "all" option. just for fun
+    /// 999 is "all" option
     tournamentType: 999,
     isDoubles: false,
   });

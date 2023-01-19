@@ -1,8 +1,6 @@
 import axios from 'axios';
 import type { tournament as TournamentT, Prisma } from '@prisma/client';
 
-import type { PaginationProps } from '../components/admin/Pagination';
-
 interface TournamentsResponse<D = any> {
   data?: D;
   isOk: boolean;
