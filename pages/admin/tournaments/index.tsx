@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
@@ -6,12 +6,11 @@ import { useForm, Controller } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
-import Table, { useTable } from 'components/admin/Table';
-import Pagination from 'components/admin/Pagination';
 import {
   DEFAULT_MODAL,
   TOURNAMENT_TYPE_NUMBER_VALUES,
   SURFACE_TYPE_NUMBER_VALUES,
+  TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
   TOURNAMENT_COLUMNS,
 } from 'constants/values';
@@ -27,25 +26,21 @@ import {
   deleteSelectedTournament,
 } from 'services/tournaments';
 
+import tableStyles from '../Table.module.scss';
 import formStyles from '../Form.module.scss';
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
-
-  // should be paginated?
   const { tournaments, isLoading, mutate } = useTournaments();
 
+  const [selectedRow, setSelectedRow] = useState(-1);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingTournament, setEditingTournament] = useState<
     undefined | TournamentT
   >();
-  const { pagination, setPagination, ...tableProps } = useTable(
-    tournaments,
-    TOURNAMENT_COLUMNS
-  );
 
   const handleReset = () => {
-    tableProps.setSelectedRow(-1);
+    setSelectedRow(-1);
     setEditingTournament(undefined);
     setModalStatus(DEFAULT_MODAL);
   };
@@ -55,21 +50,21 @@ const Tournaments: NextPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const updatingTournamentData = tournaments[tableProps.selectedRow];
+    const updatingTournamentData = tournaments[selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingTournament(updatingTournamentData);
   };
 
   const handleDeleteClick = async () => {
-    const { id } = tournaments[tableProps.selectedRow];
+    const { id } = tournaments[selectedRow];
 
     // todo: add delete operation
     // deleteSelectedPlayer(id);
   };
 
   const handlePickClick = () => {
-    const { id } = tournaments[tableProps.selectedRow];
+    const { id } = tournaments[selectedRow];
     const href = '/admin/tournaments/' + id;
     router.push(href);
   };
@@ -117,15 +112,22 @@ const Tournaments: NextPage = () => {
     <div>
       <PageTitle>Управление турнирами</PageTitle>
       <TableControls
-        selectedRow={tableProps.selectedRow}
+        selectedRow={selectedRow}
         handlePickClick={handlePickClick}
         handleAddClick={handleAddClick}
         handleUpdateClick={handleUpdateClick}
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {isLoading ? <LoadingSpinner /> : <Table {...tableProps} />}
-      <Pagination pagination={pagination} setPagination={setPagination} />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <TournamentsTable
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+          tournaments={tournaments}
+        />
+      )}
       {modalStatus.isOpen ? (
         <Modal handleClose={handleReset} title="Редактировать турнир">
           <TournamentForm tournament={editingTournament} onSubmit={onSubmit} />
@@ -250,6 +252,80 @@ const TournamentForm = ({
           <input className={formStyles.submitButton} type="submit" />
         </div>
       </form>
+    </div>
+  );
+};
+
+const getTableValue = (t: TournamentT, k: string) => {
+  if (k === 'draw_type' && t.draw_type) {
+    return TOURNAMENT_DRAW_TYPE_NUMBER_VALUES[t.draw_type];
+  }
+
+  if (k === 'surface' && t.surface) {
+    return SURFACE_TYPE_NUMBER_VALUES[t.surface];
+  }
+
+  if (k === 'status' && t.status) {
+    return TOURNAMENT_STATUS_NUMBER_VALUES[t.status];
+  }
+
+  if (k === 'start_date' && t.start_date) {
+    return format(new Date(t.start_date), 'dd.MM.yyyy');
+  }
+
+  if (k === 'tournament_type' && t.tournament_type) {
+    return TOURNAMENT_TYPE_NUMBER_VALUES[t.tournament_type];
+  }
+
+  // @ts-ignore
+  return t[k];
+};
+
+const TournamentsTable = ({
+  tournaments,
+  selectedRow,
+  setSelectedRow,
+}: {
+  tournaments: TournamentT[];
+  selectedRow: number;
+  setSelectedRow: Dispatch<SetStateAction<number>>;
+}) => {
+  const handleCheckboxClick = (i: number) => {
+    setSelectedRow((v) => (v === i ? -1 : i));
+  };
+
+  return (
+    <div className={tableStyles.tableWrapper}>
+      <table className={tableStyles.table}>
+        <thead>
+          <tr>
+            <td />
+            {TOURNAMENT_COLUMNS.map((field) => (
+              // todo: add i18
+              <th key={field}>{field}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tournaments.map((t, i) => (
+            <tr
+              key={t.id}
+              className={selectedRow === i ? tableStyles.selectedRow : ''}
+            >
+              <td key="checkbox">
+                <input
+                  checked={selectedRow === i}
+                  onChange={() => handleCheckboxClick(i)}
+                  type="checkbox"
+                />
+              </td>
+              {TOURNAMENT_COLUMNS.map((cellKey) => (
+                <td key={cellKey}>{getTableValue(t, cellKey)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import { useForm, Controller } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
-import Table, { useTable } from 'components/admin/Table';
-import Pagination from 'components/admin/Pagination';
 import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
 import InputWithError from 'ui-kit/InputWithError';
@@ -21,21 +19,19 @@ import {
   updatePlayer,
   deleteSelectedPlayer,
 } from 'services/players';
-
-import formStyles from './Form.module.scss';
 import usePlayers from 'hooks/usePlayers';
+
+import tableStyles from './Table.module.scss';
+import formStyles from './Form.module.scss';
 
 const Players: NextPage = () => {
   const { players, isLoading, mutate } = usePlayers();
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
-  const { pagination, setPagination, ...tableProps } = useTable(
-    players,
-    PLAYER_COLUMNS
-  );
+  const [selectedRow, setSelectedRow] = useState(-1);
 
   const handleReset = () => {
-    tableProps.setSelectedRow(-1);
+    setSelectedRow(-1);
     setEditingPlayer(undefined);
     setModalStatus(DEFAULT_MODAL);
   };
@@ -45,14 +41,14 @@ const Players: NextPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const editingPlayerData = players[tableProps.selectedRow];
+    const editingPlayerData = players[selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingPlayer(editingPlayerData);
   };
 
   const handleDeleteClick = async () => {
-    const { id } = players[tableProps.selectedRow];
+    const { id } = players[selectedRow];
     const res = await deleteSelectedPlayer(id);
 
     if (res.isOk) {
@@ -91,14 +87,21 @@ const Players: NextPage = () => {
     <div>
       <PageTitle>Управление игроками</PageTitle>
       <TableControls
-        selectedRow={tableProps.selectedRow}
+        selectedRow={selectedRow}
         handleAddClick={handleAddClick}
         handleUpdateClick={handleUpdateClick}
         handleDeleteClick={handleDeleteClick}
         handleResetClick={handleReset}
       />
-      {isLoading ? <LoadingSpinner /> : <Table {...tableProps} />}
-      <Pagination pagination={pagination} setPagination={setPagination} />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <PlayersTable
+          players={players}
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+        />
+      )}
       {modalStatus.isOpen ? (
         <Modal handleClose={handleReset} title="Редактировать игроока">
           <PlayerForm player={editingPlayer} onSubmit={onSubmit} />
@@ -333,6 +336,72 @@ const PlayerForm = ({
           <input className={formStyles.submitButton} type="submit" />
         </div>
       </form>
+    </div>
+  );
+};
+
+const getTableValue = (p: PlayerT, k: string) => {
+  if (k === 'date_of_birth' && p.date_of_birth) {
+    return format(new Date(p.date_of_birth), 'dd.MM.yyyy');
+  }
+
+  if (k === 'in_tennis_from' && p.in_tennis_from) {
+    return format(new Date(p.in_tennis_from), 'dd.MM.yyyy');
+  }
+
+  if (k === 'level' && p.level) {
+    return LEVEL_NUMBER_VALUES[p.level];
+  }
+
+  // @ts-ignore
+  return p[k];
+};
+
+const PlayersTable = ({
+  players,
+  selectedRow,
+  setSelectedRow,
+}: {
+  players: PlayerT[];
+  selectedRow: number;
+  setSelectedRow: Dispatch<SetStateAction<number>>;
+}) => {
+  const handleCheckboxClick = (i: number) => {
+    setSelectedRow((v) => (v === i ? -1 : i));
+  };
+
+  return (
+    <div className={tableStyles.tableWrapper}>
+      <table className={tableStyles.table}>
+        <thead>
+          <tr>
+            <td />
+            {PLAYER_COLUMNS.map((field) => (
+              // todo: add i18
+              <th key={field}>{field}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((p, i) => (
+            <tr
+              key={p.id}
+              className={selectedRow === i ? tableStyles.selectedRow : ''}
+            >
+              <td key="checkbox">
+                <input
+                  checked={selectedRow === i}
+                  onChange={() => handleCheckboxClick(i)}
+                  type="checkbox"
+                />
+              </td>
+              {PLAYER_COLUMNS.map((cellKey) => (
+                <td key={cellKey}>{getTableValue(p, cellKey)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
