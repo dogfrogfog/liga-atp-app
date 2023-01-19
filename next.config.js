@@ -12,7 +12,12 @@ module.exports = removeImports(
     reactStrictMode: true,
     swcMinify: true,
     images: {
-      domains: ['upload.wikimedia.org'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '**.userapi.com',
+        },
+      ],
     },
   })
 );
