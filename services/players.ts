@@ -1,8 +1,6 @@
 import axios from 'axios';
 import type { player as PlayerT, Prisma } from '@prisma/client';
 
-import type { PaginationProps } from '../components/admin/Pagination';
-
 interface PlayersResponse<D> {
   data?: D;
   isOk: boolean;

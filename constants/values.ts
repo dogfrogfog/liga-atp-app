@@ -76,7 +76,6 @@ export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
   3: 'Завершен',
 };
 
-export const DEFAULT_PAGINATION = { pageIndex: 0, pageSize: 25 };
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
 export const PLAYER_COLUMNS = [
