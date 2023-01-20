@@ -50,19 +50,23 @@ const TournamentPage: NextPage<{
     reset,
   } = useForm();
 
+  const isFinished = tournament.is_finished || tournament.status === 3;
+
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
         // for old tournaments with no brackets data or brackets data in old format
         if (
-          (tournament.status === 3 || tournament.is_finished) &&
+          isFinished &&
           (!brackets || (brackets && !Array.isArray(brackets[0])))
         ) {
           const lastMatch = tournamentMatches[tournamentMatches.length - 1];
           const isDoubles =
+            tournament.is_doubles ||
             DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
               tournament.tournament_type as number
-            ) || tournament.is_doubles;
+            ) ||
+            tournament.is_doubles;
 
           let winners = [] as PlayerT[];
           if (isDoubles) {
@@ -189,8 +193,6 @@ const TournamentPage: NextPage<{
 
     setPlayerLoadingStatus(false);
   };
-
-  const isFinished = tournament.is_finished || tournament.status === 3;
 
   return (
     <div className={styles.сontainer}>
