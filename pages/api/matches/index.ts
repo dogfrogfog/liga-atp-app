@@ -44,6 +44,9 @@ export default async (
         player_match_player4_idToplayer: true,
         tournament: true,
       },
+      orderBy: {
+        id: 'desc',
+      },
     });
 
     res.json(matches);

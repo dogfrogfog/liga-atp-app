@@ -42,18 +42,24 @@ const CompareTwoPlayersPage: NextPage<{
   const activeTabContent = (() => {
     switch (activeTab) {
       case STATS_TABS[0]: {
-        return <StatsTab />;
+        return (
+          <div className={styles.tabContentWrapper}>
+            <StatsTab />
+          </div>
+        );
       }
       case STATS_TABS[1]: {
         return (
-          <SpecsTab
-            technique={[p1.technique, p2.technique]}
-            tactics={[p1.tactics, p2.tactics]}
-            power={[p1.power as number, p2.power as number]}
-            shakes={[p1.shakes, p2.shakes]}
-            serve={[p1.serve, p2.serve]}
-            behaviour={[p1.behaviour, p2.behaviour]}
-          />
+          <div className={styles.tabContentWrapper}>
+            <SpecsTab
+              technique={[p1.technique, p2.technique]}
+              tactics={[p1.tactics, p2.tactics]}
+              power={[p1.power as number, p2.power as number]}
+              shakes={[p1.shakes, p2.shakes]}
+              serve={[p1.serve, p2.serve]}
+              behaviour={[p1.behaviour, p2.behaviour]}
+            />
+          </div>
         );
       }
       case STATS_TABS[2]: {
@@ -142,7 +148,7 @@ const CompareTwoPlayersPage: NextPage<{
           onChange={handleTabChange}
           tabNames={STATS_TABS}
         />
-        <div className={styles.tabContentWrapper}>{activeTabContent}</div>
+        {activeTabContent}
       </div>
     </div>
   );
@@ -158,6 +164,12 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
         where: {
           id: p1IdInt,
         },
+        include: {
+          match_match_player1_idToplayer: true,
+          match_match_player2_idToplayer: true,
+          match_match_player3_idToplayer: true,
+          match_match_player4_idToplayer: true,
+        },
       })) as PlayerT)
     : undefined;
 
@@ -166,34 +178,44 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
         where: {
           id: p2IdInt,
         },
+        include: {
+          match_match_player1_idToplayer: true,
+          match_match_player2_idToplayer: true,
+          match_match_player3_idToplayer: true,
+          match_match_player4_idToplayer: true,
+        },
       })) as PlayerT)
     : undefined;
 
   // matches of two selected players
-  const matches =
-    p1IdInt && p2IdInt
-      ? await prisma.match.findMany({
-          where: {
-            OR: [
-              { player1_id: p1IdInt, player2_id: p2IdInt },
-              { player1_id: p2IdInt, player2_id: p1IdInt },
-            ],
-          },
-          include: {
-            tournament: true,
-            player_match_player1_idToplayer: true,
-            player_match_player2_idToplayer: true,
-            player_match_player3_idToplayer: true,
-            player_match_player4_idToplayer: true,
-          },
-        })
-      : [];
+  // const matches = p1IdInt
+  //     ? await prisma.match.findMany({
+  //         where: {
+  //           OR: [
+  //             { player1_id: p1IdInt, player2_id: p2IdInt },
+  //             { player2_id: p2IdInt, player2_id: p1IdInt },
+  //             { player3_id: p2IdInt, player2_id: p1IdInt },
+  //             { player4_id: p2IdInt, player2_id: p1IdInt },
+  //             // { player1_id: p2IdInt, player2_id: p1IdInt },
+  //             // { player1_id: p2IdInt, player2_id: p1IdInt },
+  //           ],
+  //         },
+  //         include: {
+  //           tournament: true,
+  //           player_match_player1_idToplayer: true,
+  //           player_match_player2_idToplayer: true,
+  //           player_match_player3_idToplayer: true,
+  //           player_match_player4_idToplayer: true,
+  //         },
+  //       })
+  //     : [];
 
   return {
     props: {
       p1,
       p2,
-      matches,
+      // todo: find way to find matches against each other
+      matches: [],
     },
   };
 };

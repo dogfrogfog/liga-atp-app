@@ -4,6 +4,8 @@ import type {
   player as PlayerT,
 } from '@prisma/client';
 
+import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
+
 export type MatchWithTournamentType = MatchT & {
   tournament: TournamentT;
   player_match_player1_idToplayer: PlayerT;
@@ -22,33 +24,41 @@ export const getOpponents = (
     player_match_player3_idToplayer: p3,
     player_match_player4_idToplayer: p4,
   } = match;
-  const isDoubles = match.tournament.is_doubles;
-  const isFirstPlayer = playerId === p1.id;
+  const isDoubles =
+    DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+      match.tournament.tournament_type as number
+    ) || match.tournament.is_doubles;
+
+  // get opponent id in singles match
+  if (!isDoubles) {
+    if (playerId === p1.id) {
+      return p2 ? `${(p2.first_name as string)[0]}. ${p2.last_name}` : 'tbd';
+    }
+
+    if (playerId === p2.id) {
+      return p1 ? `${(p1.first_name as string)[0]}. ${p1.last_name}` : 'tbd';
+    }
+  }
 
   // we have cases where 'is_doubles' is null but it's still a double tournament (has player3 and player4)
-  const hasBothTherdAndFourthPlayers = p4 && p4;
-
-  if (isDoubles || hasBothTherdAndFourthPlayers) {
-    if (isFirstPlayer) {
+  const hasMoreThenTwoPlayers = p3 || p4;
+  if (isDoubles || hasMoreThenTwoPlayers) {
+    if (playerId === p1.id || playerId === p3.id) {
       // @ts-ignore
       return `${p2 ? `${p2.first_name[0]}. ${p2.last_name}` : 'tbd'} / ${
         // @ts-ignore
         p4 ? `${p4.first_name[0]}. ${p4.last_name}` : 'tbd'
       }`;
-    } else {
+    }
+
+    if (playerId === p2.id || playerId === p4.id) {
       // @ts-ignore
-      return `${p1 ? `${p1.first_name[0]}. ${p1.last_name}` : 'tbd'} / ${
+      return `${p1 ? `${p2.first_name[0]}. ${p1.last_name}` : 'tbd'} / ${
         // @ts-ignore
-        p1 ? `${p3.first_name[0]}. ${p3.last_name}` : 'tbd'
+        p4 ? `${p3.first_name[0]}. ${p3.last_name}` : 'tbd'
       }`;
     }
-  } else {
-    if (isFirstPlayer) {
-      // @ts-ignore
-      return p2 ? `${(p2?.first_name)[0]}. ${p2.last_name}` : 'tbd';
-    } else {
-      // @ts-ignore
-      return p1 ? `${p1.first_name[0]}. ${p1.last_name}` : 'tbd';
-    }
   }
+
+  return '';
 };

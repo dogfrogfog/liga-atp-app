@@ -13,6 +13,7 @@ import ScheduleTab from 'components/profileTabs/Schedule';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
+import useMatches from 'hooks/useMatches';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import DigestListEl from 'components/DigestListEl';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
@@ -38,20 +39,19 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   player,
   digests,
 }) => {
-  const [matches, setMatches] = useState<MatchWithTournamentType[]>([]);
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsData, setStatsData] = useState<StatsDataType | undefined>();
   const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(999);
   const router = useRouter();
 
+  // todo: add hook for stats
+  const { matches } = useMatches(
+    player.id,
+    statsTabLvlDropdown === 999 ? undefined : statsTabLvlDropdown
+  );
+
   useEffect(() => {
     const fetchWrapper = async () => {
-      const response = await axios.get(`/api/matches?id=${player.id}`);
-
-      if (response.status === 200) {
-        setMatches(response.data);
-      }
-
       const url =
         statsTabLvlDropdown === 999
           ? `/api/stats?playerId=${player.id}`
@@ -84,7 +84,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     in_tennis_from,
     job_description,
     height,
-
     technique,
     tactics,
     power,

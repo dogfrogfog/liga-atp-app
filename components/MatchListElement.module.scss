@@ -16,16 +16,11 @@
   }
 
   .time {
-    position: absolute;
-    font-weight: 600;
-    display: inline-block;
-    font-size: 10px;
-    top: -4px;
-    left: 0;
+    font-size: 12px;
   }
 
   .win {
-    color: $custom-aqua;
+    color: $custom-green;
   }
 
   .lose {
@@ -52,5 +47,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+}
+
+.score {
+  font-weight: bold;
+}
+
+.setScoreCol {
+  font-size: 14px;
+  padding: 0 8px;
+  width: 10px;
+  display: inline-block;
+  margin-right: 5px;
+
+  &:last-child {
+    margin-right: 0;
   }
 }

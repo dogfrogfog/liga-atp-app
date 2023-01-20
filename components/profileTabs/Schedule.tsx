@@ -1,8 +1,3 @@
-import type {
-  match as MatchT,
-  player as PlayerT,
-  tournament as TournamentT,
-} from '@prisma/client';
 import { format } from 'date-fns';
 
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
