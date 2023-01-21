@@ -2,9 +2,11 @@ import useSWR from 'swr';
 
 import type { StatsDataType } from 'pages/api/stats';
 
-const usePlayers = (id: number, level?: number) => {
+const useStats = (id: number, tournament_type?: number) => {
   const { data, isLoading, error } = useSWR<StatsDataType>(
-    `/api/stats?id=${id}${level ? `&level=${level}` : ''}`
+    `/api/stats?id=${id}${
+      tournament_type ? `&tournament_type=${tournament_type}` : ''
+    }`
   );
 
   return {
@@ -14,4 +16,4 @@ const usePlayers = (id: number, level?: number) => {
   };
 };
 
-export default usePlayers;
+export default useStats;

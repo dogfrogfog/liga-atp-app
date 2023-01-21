@@ -39,13 +39,14 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   digests,
 }) => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
-  const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(999);
+  const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
+    useState(999);
   const router = useRouter();
 
   const { matches } = useMatches(player.id);
   const { statsData } = useStats(
     player.id,
-    statsTabLvlDropdown === 999 ? undefined : statsTabLvlDropdown
+    statsTabTournamentType === 999 ? undefined : statsTabTournamentType
   );
 
   const {
@@ -129,8 +130,8 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         return (
           <StatsTab
             playerId={id}
-            selectedLvl={statsTabLvlDropdown}
-            setSelectedLvl={setStatsTabLvlDropdown}
+            selectedLvl={statsTabTournamentType}
+            setSelectedLvl={setStatsTabTournamentTypeDropdown}
             technique={technique}
             tactics={tactics}
             power={power as number}

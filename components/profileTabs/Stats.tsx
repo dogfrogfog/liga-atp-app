@@ -1,7 +1,7 @@
 import { Dispatch, ChangeEvent, SetStateAction } from 'react';
 
 import type { StatsDataType } from 'pages/api/stats';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import { TOURNAMENT_TYPE_NUMBER_VALUES } from 'constants/values';
 import styles from './Stats.module.scss';
 
 const trans: { [k: string]: string } = {
@@ -60,15 +60,12 @@ const StatsTab = ({
           </div>
         ))}
       </div>
-      {/* <div className={styles.eloChart}>
-        <i>{'<График изменение рейтинга Эло>'}</i>
-      </div> */}
       <div className={styles.levelContainer}>
         <select value={selectedLvl} onChange={handleLevelChange} name="level">
           <option key={999} value={999}>
             Все
           </option>
-          {Object.entries(LEVEL_NUMBER_VALUES).map(([k, v]) => (
+          {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
             </option>
