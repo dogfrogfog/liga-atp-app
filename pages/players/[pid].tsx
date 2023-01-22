@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
 import type { player as PlayerT, digest as DigestT } from '@prisma/client';
-import axios from 'axios';
 
-import type { StatsDataType } from 'pages/api/stats';
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
-import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
-import useMatches from 'hooks/useMatches';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import DigestListEl from 'components/DigestListEl';
-import type { MatchWithTournamentType } from 'utils/getOpponents';
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
+import useMatches from 'hooks/useMatches';
+import useStats from 'hooks/useStats';
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import type { MatchWithTournamentType } from 'utils/getOpponents';
+import { isMatchPlayed } from 'utils/isMatchPlayed';
 import styles from 'styles/Profile.module.scss';
 
 const PROFILE_TABS = [
@@ -40,32 +40,15 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   digests,
 }) => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
-  const [statsData, setStatsData] = useState<StatsDataType | undefined>();
-  const [statsTabLvlDropdown, setStatsTabLvlDropdown] = useState(999);
+  const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
+    useState(999);
   const router = useRouter();
 
-  // todo: add hook for stats
-  const { matches } = useMatches(
+  const { matches } = useMatches(player.id);
+  const { statsData } = useStats(
     player.id,
-    statsTabLvlDropdown === 999 ? undefined : statsTabLvlDropdown
+    statsTabTournamentType === 999 ? undefined : statsTabTournamentType
   );
-
-  useEffect(() => {
-    const fetchWrapper = async () => {
-      const url =
-        statsTabLvlDropdown === 999
-          ? `/api/stats?playerId=${player.id}`
-          : `/api/stats?playerId=${player.id}&level=${statsTabLvlDropdown}`;
-
-      const statsResp = await axios.get(url);
-
-      if (statsResp.status === 200) {
-        setStatsData(statsResp.data);
-      }
-    };
-
-    fetchWrapper();
-  }, [player.id, statsTabLvlDropdown]);
 
   const {
     id,
@@ -94,10 +77,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
 
   const { upcomingMatches, playedMatches } = matches.reduce(
     (acc, match) => {
-      const isMatchPlayed =
-        !!(match.winner_id && match.score) || match.is_completed === true;
-
-      if (isMatchPlayed) {
+      if (isMatchPlayed(match)) {
         acc.playedMatches.push(match);
       } else {
         acc.upcomingMatches.push(match);
@@ -148,15 +128,15 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         return (
           <StatsTab
             playerId={id}
-            selectedLvl={statsTabLvlDropdown}
-            setSelectedLvl={setStatsTabLvlDropdown}
+            selectedLvl={statsTabTournamentType}
+            setSelectedLvl={setStatsTabTournamentTypeDropdown}
             technique={technique}
             tactics={tactics}
             power={power as number}
             shakes={shakes}
             serve={serve}
             behaviour={behaviour}
-            statsData={statsData}
+            statsData={statsData as any}
           />
         );
       case PROFILE_TABS[4]:
@@ -185,6 +165,8 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
         points={'1490'}
+        tournamentsWins={(statsData as any)?.tournaments_wins}
+        tournamentsFinals={(statsData as any)?.tournaments_finals}
       />
       <section>
         <Tabs
@@ -204,6 +186,8 @@ interface IProfileHeaderProps {
   level: string;
   points: string;
   isCoach: boolean;
+  tournamentsWins?: number;
+  tournamentsFinals?: number;
 }
 
 const ProfileHeader = ({
@@ -212,6 +196,8 @@ const ProfileHeader = ({
   level,
   points,
   isCoach,
+  tournamentsWins,
+  tournamentsFinals,
 }: IProfileHeaderProps) => {
   return (
     <div
@@ -229,14 +215,15 @@ const ProfileHeader = ({
         <div className={styles.infoContainer}>
           <div className={styles.achievements}>
             <div className={styles.rank}>
-              {/* <span className={styles.position}>10</span> */}
               <span className={styles.positionName}>{level}</span>
             </div>
             <div className={styles.medal}>
-              <FaMedal color="yellow" />3
+              <FaMedal color="yellow" />
+              {` ${tournamentsWins}`}
             </div>
             <div className={styles.medal}>
-              <FaMedal color="lightgrey" />6
+              <FaMedal color="lightgrey" />
+              {` ${tournamentsFinals}`}
             </div>
           </div>
           <span className={styles.elo}>{points}</span>

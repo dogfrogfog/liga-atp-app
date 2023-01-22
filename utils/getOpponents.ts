@@ -29,7 +29,7 @@ export const getOpponents = (
       match.tournament.tournament_type as number
     ) || match.tournament.is_doubles;
 
-  // get opponent id in singles match
+  // get opponent name in singles match
   if (!isDoubles) {
     if (playerId === p1.id) {
       return p2 ? `${(p2.first_name as string)[0]}. ${p2.last_name}` : 'tbd';

@@ -1,5 +1,6 @@
 import styles from './Stats.module.scss';
 
+// for now used only in  /compare page
 const Stats = () => {
   return (
     <>

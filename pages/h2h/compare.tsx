@@ -11,6 +11,7 @@ import StatsTab from 'components/statsTabs/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
+import { isPlayerWon } from 'utils/isPlayerWon';
 import { calculateMatchesForP1Score } from 'utils/calculateMatchesScore';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from 'styles/Compare.module.scss';
@@ -78,7 +79,7 @@ const CompareTwoPlayersPage: NextPage<{
                   score={match?.score || ''}
                   p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
                   p2Name={getOpponents(p1.id, match)}
-                  isMainPlayerWin={String(p1.id) === match?.winner_id}
+                  isMainPlayerWin={isPlayerWon(p1.id, match)}
                 />
               ))
             ) : (

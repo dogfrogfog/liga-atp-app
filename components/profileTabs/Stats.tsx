@@ -1,10 +1,8 @@
-import { Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
-import axios from 'axios';
+import { Dispatch, ChangeEvent, SetStateAction } from 'react';
 
 import type { StatsDataType } from 'pages/api/stats';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import { TOURNAMENT_TYPE_NUMBER_VALUES } from 'constants/values';
 import styles from './Stats.module.scss';
-import { GiConsoleController } from 'react-icons/gi';
 
 const trans: { [k: string]: string } = {
   technique: 'Техника',
@@ -62,15 +60,12 @@ const StatsTab = ({
           </div>
         ))}
       </div>
-      <div className={styles.eloChart}>
-        <i>{'<График изменение рейтинга Эло>'}</i>
-      </div>
       <div className={styles.levelContainer}>
         <select value={selectedLvl} onChange={handleLevelChange} name="level">
           <option key={999} value={999}>
             Все
           </option>
-          {Object.entries(LEVEL_NUMBER_VALUES).map(([k, v]) => (
+          {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
             </option>
@@ -81,28 +76,32 @@ const StatsTab = ({
       <div>
         <div className={styles.row}>
           <span className={styles.valueName}>Сыгранных турниров</span>
-          <span className={styles.value}>{statsData?.tournaments_played}</span>
+          <span className={styles.value}>
+            {statsData?.tournaments_played || '0'}
+          </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество титулов</span>
-          <span className={styles.value}>{statsData?.tournaments_wins}</span>
+          <span className={styles.value}>
+            {statsData?.tournaments_wins || '0'}
+          </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество финалов</span>
-          <span className={styles.value}>{statsData?.finals_number}</span>
+          <span className={styles.value}>
+            {statsData?.tournaments_finals || '0'}
+          </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>
-            Количество сыгранных матчей в уровне
-          </span>
+          <span className={styles.valueName}>Количество сыгранных матчей</span>
           <span className={styles.value}>
-            {statsData?.matches_played_in_level}
+            {statsData?.matches_played || '0'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>W/L</span>
           <span className={styles.value}>
-            {statsData?.win_lose_in_level_proportion}
+            {statsData?.win_lose_in_level_proportion || '-'}
           </span>
         </div>
         {/* <div className={styles.row}>
@@ -122,27 +121,25 @@ const StatsTab = ({
             Процент побед после поражения в первом сете
           </span>
           <span className={styles.value}>
-            {statsData?.win_lose_with_first_set_lose_proportion}
+            {statsData?.win_lose_with_first_set_lose_proportion || '-'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 0-6 0-6</span>
           <span className={styles.value}>
-            {statsData?.lose_matches_with_zero_points}
+            {statsData?.lose_matches_with_zero_points || '-'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 6-0 6-0</span>
           <span className={styles.value}>
-            {statsData?.win_matches_with_zero_opponent_points}
+            {statsData?.win_matches_with_zero_opponent_points || '-'}
           </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>
-            Процент Двухсетовиков vs Трехсетовиков
-          </span>
+          <span className={styles.valueName}>2-сетовики vs 3-сетовики</span>
           <span className={styles.value}>
-            {statsData?.two_three_sets_matches_proportion}
+            {statsData?.two_three_sets_matches_proportion || '-'}
           </span>
         </div>
       </div>

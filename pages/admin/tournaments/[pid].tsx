@@ -15,9 +15,9 @@ import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
   TOURNAMENT_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
-  // DOUBLES_TOURNAMENT_DRAW,
   SURFACE_TYPE_NUMBER_VALUES,
   DEFAULT_MODAL,
+  DOUBLES_TOURNAMENT_TYPES_NUMBER,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
@@ -395,29 +395,30 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               case 'players_order':
               case 'unregistered_players':
               case 'draw':
+              case 'is_doubles':
               case 'is_finished': {
                 return null;
               }
-              case 'is_doubles': {
-                return (
-                  <div
-                    key={key}
-                    className={cl(styles.field, styles.is_doubles)}
-                  >
-                    <span>Парный турнир</span>
-                    <input
-                      checked={!!activeTournament.is_doubles}
-                      type="checkbox"
-                      onChange={(e) => {
-                        setActiveTournament((v) => ({
-                          ...v,
-                          [key]: e.target.checked,
-                        }));
-                      }}
-                    />
-                  </div>
-                );
-              }
+              // case 'is_doubles': {
+              //   return (
+              //     <div
+              //       key={key}
+              //       className={cl(styles.field, styles.is_doubles)}
+              //     >
+              //       <span>Парный турнир</span>
+              //       <input
+              //         checked={!!activeTournament.is_doubles}
+              //         type="checkbox"
+              //         onChange={(e) => {
+              //           setActiveTournament((v) => ({
+              //             ...v,
+              //             [key]: e.target.checked,
+              //           }));
+              //         }}
+              //       />
+              //     </div>
+              //   );
+              // }
               case 'surface': {
                 return (
                   <div key={key} className={cl(styles.field, styles.surface)}>
@@ -524,7 +525,11 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       </div>
       {activeTournament.draw_type ? (
         <TournamentDraw
-          isDoubles={!!activeTournament.is_doubles}
+          isDoubles={
+            !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+              activeTournament.tournament_type as number
+            )
+          }
           isDisabled={isDisabled}
           matches={matches}
           brackets={brackets || [[]]}
@@ -538,7 +543,11 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
       {modalStatus.isOpen && (
         <Modal title="Редактировать матч" handleClose={handleReset}>
           <MatchForm
-            isDoubles={!!activeTournament.is_doubles}
+            isDoubles={
+              !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+                activeTournament.tournament_type as number
+              )
+            }
             match={editingMatchData?.newMatch as MatchT}
             onSubmit={onSubmit}
             registeredPlayers={registeredPlayers}

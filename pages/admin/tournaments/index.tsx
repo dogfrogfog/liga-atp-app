@@ -73,7 +73,7 @@ const Tournaments: NextPage = () => {
   const onSubmit = async (newTournament: TournamentT) => {
     const normalizedNewTournament = {
       ...newTournament,
-      is_doubles: newTournament.is_doubles || false,
+      // is_doubles: newTournament.is_doubles || false,
       tournament_type: parseInt(newTournament.tournament_type as any as string),
       surface: parseInt(newTournament.surface as any as string),
       status: parseInt(newTournament.status as any as string),
@@ -154,7 +154,7 @@ const TournamentForm = ({
       tournament_type: null,
       surface: null,
       status: 1,
-      is_doubles: false,
+      // is_doubles: false,
       ...tournament,
       start_date: tournament?.start_date
         ? format(new Date(tournament?.start_date), 'yyyy-MM-dd')
@@ -236,7 +236,7 @@ const TournamentForm = ({
             {...register('start_date', { required: false, valueAsDate: true })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.is_doubles?.message}>
+        {/* <InputWithError errorMessage={errors.is_doubles?.message}>
           <br />
           Парный разряд:
           <Controller
@@ -247,7 +247,7 @@ const TournamentForm = ({
               <input type="checkbox" {...field} checked={field.value} />
             )}
           />
-        </InputWithError>
+        </InputWithError> */}
         <div className={formStyles.formActions}>
           <input className={formStyles.submitButton} type="submit" />
         </div>
