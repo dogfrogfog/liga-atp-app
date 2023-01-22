@@ -59,7 +59,7 @@ const Match = ({
           !p1Name ? (isMainPlayerWin ? styles.win : styles.lose) : ''
         )}
       >
-        {score.split(' ').length > 0
+        {score.split(' ').length > 0 && score !== 'w/o'
           ? score.split(' ').map((setScore, i) => (
               <span key={setScore + i} className={styles.setScoreCol}>
                 {setScore.replace('-', ' ')}

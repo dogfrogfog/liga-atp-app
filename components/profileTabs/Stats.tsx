@@ -93,9 +93,7 @@ const StatsTab = ({
           </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>
-            Количество сыгранных матчей в уровне
-          </span>
+          <span className={styles.valueName}>Количество сыгранных матчей</span>
           <span className={styles.value}>
             {statsData?.matches_played_in_level || '-'}
           </span>

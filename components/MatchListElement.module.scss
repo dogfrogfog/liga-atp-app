@@ -56,7 +56,7 @@
 
 .setScoreCol {
   font-size: 14px;
-  padding: 0 8px;
+  padding-right: 12px;
   width: 10px;
   display: inline-block;
   margin-right: 5px;
@@ -64,4 +64,8 @@
   &:last-child {
     margin-right: 0;
   }
+}
+
+.textScore {
+  margin-right: 18px;
 }
