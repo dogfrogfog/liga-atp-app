@@ -5,7 +5,7 @@ import type { StatsDataType } from 'pages/api/stats';
 const useStats = (id: number, tournament_type?: number) => {
   const { data, isLoading, error } = useSWR<StatsDataType>(
     `/api/stats?id=${id}${
-      tournament_type ? `&tournament_type=${tournament_type}` : ''
+      tournament_type !== undefined ? `&tournament_type=${tournament_type}` : ''
     }`
   );
 
