@@ -34,7 +34,7 @@ export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
   101: 'Парный ProAm',
 };
 
-export const DOUBLES_TOURNAMENT_TYPES_NUMBER = [
+export const DOUBLES_TOURNAMENT_TYPES_NUMBER: number[] = [
   // deprecated
   16,
 
