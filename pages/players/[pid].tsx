@@ -8,16 +8,16 @@ import type { player as PlayerT, digest as DigestT } from '@prisma/client';
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
-import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
 import StatsTab from 'components/profileTabs/Stats';
+import DigestListEl from 'components/DigestListEl';
+import NotFoundMessage from 'ui-kit/NotFoundMessage';
+import Tabs from 'ui-kit/Tabs';
 import useMatches from 'hooks/useMatches';
 import useStats from 'hooks/useStats';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
-import DigestListEl from 'components/DigestListEl';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
-import Tabs from 'ui-kit/Tabs';
 import styles from 'styles/Profile.module.scss';
 
 const PROFILE_TABS = [
@@ -165,6 +165,8 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
         points={'1490'}
+        tournamentsWins={(statsData as any)?.tournaments_wins}
+        tournamentsFinals={(statsData as any)?.tournaments_finals}
       />
       <section>
         <Tabs
@@ -184,6 +186,8 @@ interface IProfileHeaderProps {
   level: string;
   points: string;
   isCoach: boolean;
+  tournamentsWins?: number;
+  tournamentsFinals?: number;
 }
 
 const ProfileHeader = ({
@@ -192,6 +196,8 @@ const ProfileHeader = ({
   level,
   points,
   isCoach,
+  tournamentsWins,
+  tournamentsFinals,
 }: IProfileHeaderProps) => {
   return (
     <div
@@ -209,14 +215,15 @@ const ProfileHeader = ({
         <div className={styles.infoContainer}>
           <div className={styles.achievements}>
             <div className={styles.rank}>
-              {/* <span className={styles.position}>10</span> */}
               <span className={styles.positionName}>{level}</span>
             </div>
             <div className={styles.medal}>
-              <FaMedal color="yellow" />3
+              <FaMedal color="yellow" />
+              {` ${tournamentsWins}`}
             </div>
             <div className={styles.medal}>
-              <FaMedal color="lightgrey" />6
+              <FaMedal color="lightgrey" />
+              {` ${tournamentsFinals}`}
             </div>
           </div>
           <span className={styles.elo}>{points}</span>
