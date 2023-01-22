@@ -77,25 +77,25 @@ const StatsTab = ({
         <div className={styles.row}>
           <span className={styles.valueName}>Сыгранных турниров</span>
           <span className={styles.value}>
-            {statsData?.tournaments_played || '-'}
+            {statsData?.tournaments_played || '0'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество титулов</span>
           <span className={styles.value}>
-            {statsData?.tournaments_wins || '-'}
+            {statsData?.tournaments_wins || '0'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество финалов</span>
           <span className={styles.value}>
-            {statsData?.finals_number || '-'}
+            {statsData?.tournaments_finals || '0'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество сыгранных матчей</span>
           <span className={styles.value}>
-            {statsData?.matches_played_in_level || '-'}
+            {statsData?.matches_played || '0'}
           </span>
         </div>
         <div className={styles.row}>
@@ -137,9 +137,7 @@ const StatsTab = ({
           </span>
         </div>
         <div className={styles.row}>
-          <span className={styles.valueName}>
-            Процент Двухсетовиков vs Трехсетовиков
-          </span>
+          <span className={styles.valueName}>2-сетовики vs 3-сетовики</span>
           <span className={styles.value}>
             {statsData?.two_three_sets_matches_proportion || '-'}
           </span>

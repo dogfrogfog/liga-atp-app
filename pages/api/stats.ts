@@ -5,14 +5,14 @@ import type {
 } from '@prisma/client';
 
 import { prisma } from 'services/db';
-import { getWinLoseNumbers } from 'utils/getWinLoseNumbers';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
+import { isPlayerWon } from 'utils/isPlayerWon';
 
 export type StatsDataType = {
   tournaments_played: number;
   tournaments_wins: number;
-  matches_played_in_level: number;
-  finals_number: number;
+  matches_played: number;
+  tournaments_finals: number;
   win_lose_in_level_proportion: string;
   // Процент побед/поражений побед после поражения в первом сете
   win_lose_with_first_set_lose_proportion: string;
@@ -56,8 +56,27 @@ export default async (
       isMatchPlayed(m as any)
     ) as (MatchT & { tournament: TournamentT })[];
 
+    const matchesMap = playedMatches.reduce(
+      (acc, m) => acc.set(m.id, m),
+      new Map<number, MatchT>()
+    );
+    const filteredPlayedMatches = tournament_type
+      ? playedMatches.filter(
+          (m) =>
+            m.tournament.tournament_type ===
+            parseInt(tournament_type as string, 10)
+        )
+      : playedMatches;
+
+    // just to remove same tournaments
     const uniqueTournamentsIds = [] as number[];
-    const { tournamentsPlayed } = playedMatches.reduce(
+    const {
+      tournamentsPlayed,
+      twoSetsMatchesNumber,
+      threeSetsMatchesNumber,
+      wins,
+      losses,
+    } = filteredPlayedMatches.reduce(
       (acc, m) => {
         if (!uniqueTournamentsIds.includes(m.tournament_id as number)) {
           uniqueTournamentsIds.push(m.tournament_id as number);
@@ -67,39 +86,38 @@ export default async (
           // todo: count finals
         }
 
+        const numberOfSets = (m.score?.match(/-/g) || []).length;
+        if (numberOfSets === 2) {
+          acc.twoSetsMatchesNumber += 1;
+        }
+
+        if (numberOfSets === 3) {
+          acc.threeSetsMatchesNumber += 1;
+        }
+
+        if (isPlayerWon(playerIdInt, m)) {
+          acc.wins += 1;
+        } else {
+          acc.losses += 1;
+        }
+
+        // todo
+        // if(m.winner_id !== '' || m.winner_id !== playerId) {
+
+        // }
+
         return acc;
       },
-      { tournamentsPlayed: [] as TournamentT[] }
+      {
+        tournamentsPlayed: [] as TournamentT[],
+        twoSetsMatchesNumber: 0,
+        threeSetsMatchesNumber: 0,
+        wins: 0,
+        losses: 0,
+      }
     );
 
-    // @ts-ignore playedMatches doesn't need to include players data here
-    const { wins, losses } = getWinLoseNumbers(playerIdInt, playedMatches);
-
-    console.log({ wins, losses });
-
-    const statsData = {
-      tournaments_played: tournamentsPlayed.length,
-      tournaments_wins: 'tournamentWins',
-      matches_played_in_level: playedMatches.length,
-      finals_number: 'finals',
-      win_lose_in_level_proportion: `${wins}/${losses}`,
-      win_lose_with_first_set_lose_proportion: 'tbd',
-      two_three_sets_matches_proportion: 'tbd',
-      lose_matches_with_zero_points: 'tbd',
-      win_matches_with_zero_opponent_points: 'tbd',
-    };
-
-    // tournaments_played: tournamentsNumber,
-    // tournaments_wins: tournamentWins,
-    // matches_played_in_level: playedMatches.length,
-    // finals_number: finals,
-    // win_lose_in_level_proportion: winLoseProportion,
-
-    // const tournaments = await prisma.tournament.findMany();
-    // const tournamentsMap = tournaments.reduce((map, t) => {
-    //   map.set(t.id, t);
-    //   return map;
-    // }, new Map<number, TournamentT>());
+ 
 
     // const { finals, tournamentWins } = Array(tournamentsMap.keys()).reduce(
     //   (acc, tId) => {
@@ -108,14 +126,6 @@ export default async (
     //     const brackets = tournament?.draw
     //       ? JSON.parse(tournament.draw).brackets
     //       : null;
-
-    //     let lastMatch: undefined | MatchT;
-
-    //     // new brackets format
-    //     if (brackets && Array.isArray(brackets[0])) {
-    //       const lastMatchId = brackets[brackets.length - 1][0]?.matchId;
-    //       lastMatch = lastMatchId ? matchesMap.get(lastMatchId) : undefined;
-    //     }
 
     //     // old brackets format
     //     // to support legacy data in db
@@ -148,6 +158,18 @@ export default async (
     //     tournamentWins: 0,
     //   }
     // );
+    // @ts-ignore filteredPlayedMatches doesn't need to include players data here
+    const statsData = {
+      tournaments_played: tournamentsPlayed.length,
+      matches_played: filteredPlayedMatches.length,
+      tournaments_wins: 'tournamentWins',
+      tournaments_finals: 'finals',
+      win_lose_in_level_proportion: `${wins}/${losses}`,
+      win_lose_with_first_set_lose_proportion: 'tbd',
+      two_three_sets_matches_proportion: `${twoSetsMatchesNumber}/${threeSetsMatchesNumber}`,
+      lose_matches_with_zero_points: 'tbd',
+      win_matches_with_zero_opponent_points: 'tbd',
+    };
 
     res.json(statsData);
   }

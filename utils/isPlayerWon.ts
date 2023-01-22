@@ -1,9 +1,15 @@
-import type {} from '@prisma/client';
+import type {
+  match as MatchT,
+  tournament as TournamentT,
+} from '@prisma/client';
 
 import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
-import type { MatchWithTournamentType } from 'utils/getOpponents';
+// import type { MatchWithTournamentType } from 'utils/getOpponents';
 
-export const isPlayerWon = (playerId: number, m: MatchWithTournamentType) => {
+export const isPlayerWon = (
+  playerId: number,
+  m: MatchT & { tournament: TournamentT }
+) => {
   const isDoubles = !!(
     (m.player3_id && m.player4_id) ||
     DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
