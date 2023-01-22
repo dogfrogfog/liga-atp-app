@@ -16,6 +16,7 @@ import useStats from 'hooks/useStats';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import DigestListEl from 'components/DigestListEl';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
+import { isMatchPlayed } from 'utils/isMatchPlayed';
 import Tabs from 'ui-kit/Tabs';
 import styles from 'styles/Profile.module.scss';
 
@@ -76,10 +77,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
 
   const { upcomingMatches, playedMatches } = matches.reduce(
     (acc, match) => {
-      const isMatchPlayed =
-        !!(match.winner_id && match.score) || match.is_completed === true;
-
-      if (isMatchPlayed) {
+      if (isMatchPlayed(match)) {
         acc.playedMatches.push(match);
       } else {
         acc.upcomingMatches.push(match);
