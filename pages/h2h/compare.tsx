@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
@@ -12,23 +12,74 @@ import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
 import { isPlayerWon } from 'utils/isPlayerWon';
-import { calculateMatchesForP1Score } from 'utils/calculateMatchesScore';
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import {
+  LEVEL_NUMBER_VALUES,
+  DOUBLES_TOURNAMENT_TYPES_NUMBER,
+} from 'constants/values';
 import useStats from 'hooks/useStats';
+import useMatches from 'hooks/useMatches';
 import styles from 'styles/Compare.module.scss';
-import axios from 'axios';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
 const CompareTwoPlayersPage: NextPage<{
   p1?: PlayerT;
   p2?: PlayerT;
-  matches: MatchWithTournamentType[];
-}> = ({ p1, p2, matches }) => {
+}> = ({ p1, p2 }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
 
   const { statsData: p1StatsData } = useStats(p1?.id);
   const { statsData: p2StatsData } = useStats(p2?.id);
+  const { matches } = useMatches();
+
+  // @ts-ignore
+  const { playersMatches, p1Wins, p2Wins } = useMemo(
+    () =>
+      p1 && p2
+        ? matches.reduce(
+            (acc, m) => {
+              // count only singles
+              const isDoubles =
+                !!(
+                  (m.player3_id && m.player4_id) ||
+                  DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+                    m.tournament.tournament_type as number
+                  )
+                ) ||
+                (m.tournament.status === null &&
+                  (m.winner_id as string)?.length > 4);
+
+              const isBothPlayersInMatch =
+                (m.player1_id === p1.id && m.player2_id === p2.id) ||
+                (m.player1_id === p2.id && m.player2_id === p1.id);
+
+              if (!isDoubles && isBothPlayersInMatch) {
+                acc.playersMatches.push(m);
+
+                if (m.winner_id === p1.id + '') {
+                  acc.p1Wins += 1;
+                }
+
+                if (m.winner_id === p2.id + '') {
+                  acc.p2Wins += 1;
+                }
+              }
+
+              return acc;
+            },
+            {
+              playersMatches: [] as MatchWithTournamentType[],
+              p1Wins: 0,
+              p2Wins: 0,
+            }
+          )
+        : {
+            playersMatches: [] as MatchWithTournamentType[],
+            p1Wins: 0,
+            p2Wins: 0,
+          },
+    [matches, p1, p2]
+  );
 
   if (!p1 || !p2) {
     return (
@@ -74,8 +125,8 @@ const CompareTwoPlayersPage: NextPage<{
       case STATS_TABS[2]: {
         return (
           <>
-            {matches.length > 0 ? (
-              matches.map((match, i) => (
+            {playersMatches && playersMatches.length > 0 ? (
+              playersMatches.map((match, i) => (
                 <MatchListElement
                   key={i}
                   tournamentName={match.tournament.name || ''}
@@ -116,11 +167,9 @@ const CompareTwoPlayersPage: NextPage<{
           style={{ background: `url(${p2.avatar})`, backgroundSize: 'cover' }}
         ></div>
       </div>
-      {matches.length > 0 && (
-        <div className={styles.score}>
-          {calculateMatchesForP1Score(matches)}
-        </div>
-      )}
+      <div className={styles.score}>
+        {p1Wins} vs {p2Wins}
+      </div>
       <div className={styles.mainInfo}>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>
@@ -165,11 +214,11 @@ const CompareTwoPlayersPage: NextPage<{
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const { p1Id, p2Id } = ctx.query;
+  const p1IdInt = parseInt(p1Id as string, 10);
+  const p2IdInt = parseInt(p2Id as string, 10);
 
   let p1;
-  if (p1Id) {
-    const p1IdInt = parseInt(p1Id as string, 10);
-
+  if (p1IdInt) {
     const p1Data = await prisma.player.findUnique({
       where: {
         id: p1IdInt,
@@ -180,9 +229,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   let p2;
-  if (p2Id) {
-    const p2IdInt = parseInt(p2Id as string, 10);
-
+  if (p2IdInt) {
     const p2Data = await prisma.player.findUnique({
       where: {
         id: p2IdInt,
@@ -192,35 +239,10 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     p2 = p2Data;
   }
 
-  // matches of two selected players
-  // const matches = p1IdInt
-  //     ? await prisma.match.findMany({
-  //         where: {
-  //           OR: [
-  //             { player1_id: p1IdInt, player2_id: p2IdInt },
-  //             { player2_id: p2IdInt, player2_id: p1IdInt },
-  //             { player3_id: p2IdInt, player2_id: p1IdInt },
-  //             { player4_id: p2IdInt, player2_id: p1IdInt },
-  //             // { player1_id: p2IdInt, player2_id: p1IdInt },
-  //             // { player1_id: p2IdInt, player2_id: p1IdInt },
-  //           ],
-  //         },
-  //         include: {
-  //           tournament: true,
-  //           player_match_player1_idToplayer: true,
-  //           player_match_player2_idToplayer: true,
-  //           player_match_player3_idToplayer: true,
-  //           player_match_player4_idToplayer: true,
-  //         },
-  //       })
-  //     : [];
-
   return {
     props: {
       p1,
       p2,
-      // todo: find way to find matches against each other
-      matches: [],
     },
   };
 };
