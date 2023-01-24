@@ -7,14 +7,16 @@ import { format } from 'date-fns';
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
-import StatsTab from 'components/statsTabs/Stats';
+import StatsTab from 'components/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
 import { isPlayerWon } from 'utils/isPlayerWon';
 import { calculateMatchesForP1Score } from 'utils/calculateMatchesScore';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import useStats from 'hooks/useStats';
 import styles from 'styles/Compare.module.scss';
+import axios from 'axios';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
@@ -24,6 +26,9 @@ const CompareTwoPlayersPage: NextPage<{
   matches: MatchWithTournamentType[];
 }> = ({ p1, p2, matches }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
+
+  const { statsData: p1StatsData } = useStats(p1?.id);
+  const { statsData: p2StatsData } = useStats(p2?.id);
 
   if (!p1 || !p2) {
     return (
@@ -45,7 +50,10 @@ const CompareTwoPlayersPage: NextPage<{
       case STATS_TABS[0]: {
         return (
           <div className={styles.tabContentWrapper}>
-            <StatsTab />
+            <StatsTab
+              p1Stats={p1StatsData as any}
+              p2Stats={p2StatsData as any}
+            />
           </div>
         );
       }
@@ -157,36 +165,32 @@ const CompareTwoPlayersPage: NextPage<{
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const { p1Id, p2Id } = ctx.query;
-  const p1IdInt = parseInt(p1Id as string, 10);
-  const p2IdInt = parseInt(p2Id as string, 10);
 
-  const p1 = p1IdInt
-    ? ((await prisma.player.findUnique({
-        where: {
-          id: p1IdInt,
-        },
-        include: {
-          match_match_player1_idToplayer: true,
-          match_match_player2_idToplayer: true,
-          match_match_player3_idToplayer: true,
-          match_match_player4_idToplayer: true,
-        },
-      })) as PlayerT)
-    : undefined;
+  let p1;
+  if (p1Id) {
+    const p1IdInt = parseInt(p1Id as string, 10);
 
-  const p2 = p2IdInt
-    ? ((await prisma.player.findUnique({
-        where: {
-          id: p2IdInt,
-        },
-        include: {
-          match_match_player1_idToplayer: true,
-          match_match_player2_idToplayer: true,
-          match_match_player3_idToplayer: true,
-          match_match_player4_idToplayer: true,
-        },
-      })) as PlayerT)
-    : undefined;
+    const p1Data = await prisma.player.findUnique({
+      where: {
+        id: p1IdInt,
+      },
+    });
+
+    p1 = p1Data;
+  }
+
+  let p2;
+  if (p2Id) {
+    const p2IdInt = parseInt(p2Id as string, 10);
+
+    const p2Data = await prisma.player.findUnique({
+      where: {
+        id: p2IdInt,
+      },
+    });
+
+    p2 = p2Data;
+  }
 
   // matches of two selected players
   // const matches = p1IdInt

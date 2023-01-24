@@ -1,0 +1,77 @@
+@import '../styles/variables.scss';
+
+// .row {
+//   display: flex;
+//   justify-content: space-between;
+//   border-bottom: 1px solid $custom-black;
+//   margin-bottom: 10px;
+//   padding-bottom: 10px;
+//   color: $custom-lightgray;
+//   font-weight: 600;
+//   font-size: 16px;
+
+//   &:last-child {
+//     border: none;
+//     margin: 0;
+//     padding: 0;
+//   }
+// }
+
+// .value {
+//   width: 20%;
+//   text-align: left;
+
+//   &:last-child {
+//     text-align: right;
+//   }
+// }
+
+// .centerName {
+//   width: 50%;
+//   text-align: center;
+// }
+
+.row {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #1b2223;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+    border: none;
+  }
+
+  span:last-child {
+    display: inline-block;
+    min-width: 70px;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: right;
+  }
+}
+
+.compare .row {
+  flex-direction: row-reverse;
+  border-color: $custom-black;
+
+  span:first-child,
+  span:last-child {
+    font-weight: bold;
+    display: inline-block;
+    width: 20%;
+  }
+
+  span:first-child {
+    text-align: right;
+  }
+
+  span:last-child {
+    text-align: left;
+  }
+}

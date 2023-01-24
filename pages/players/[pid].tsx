@@ -223,7 +223,7 @@ const ProfileHeader = ({
             </div>
             <div className={styles.medal}>
               <FaMedal color="lightgrey" />
-              {` ${tournamentsFinals}`}
+              {` ${(tournamentsFinals || 0) - (tournamentsWins || 0)}`}
             </div>
           </div>
           <span className={styles.elo}>{points}</span>
