@@ -116,24 +116,24 @@ const StatsTab = ({
           </span>
           <span className={styles.value}>3</span>
         </div> */}
-        <div className={styles.row}>
+        {/* <div className={styles.row}>
           <span className={styles.valueName}>
             Процент побед после поражения в первом сете
           </span>
           <span className={styles.value}>
             {statsData?.win_lose_with_first_set_lose_proportion || '-'}
           </span>
-        </div>
+        </div> */}
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 0-6 0-6</span>
           <span className={styles.value}>
-            {statsData?.lose_matches_with_zero_points || '-'}
+            {statsData?.lose_with_zero_points || '0'}
           </span>
         </div>
         <div className={styles.row}>
           <span className={styles.valueName}>Количество матчей 6-0 6-0</span>
           <span className={styles.value}>
-            {statsData?.win_matches_with_zero_opponent_points || '-'}
+            {statsData?.win_with_zero_points || '0'}
           </span>
         </div>
         <div className={styles.row}>
