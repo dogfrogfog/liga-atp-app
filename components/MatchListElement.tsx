@@ -49,9 +49,21 @@ const Match = ({
     </div>
     <div className={styles.row}>
       <span className={styles.players}>
-        <span>{p1Name}</span>
+        <span
+          className={
+            !withCompareLink && isMainPlayerWin ? styles.win : styles.lose
+          }
+        >
+          {p1Name}
+        </span>
         <i> vs. </i>
-        <span>{p2Name}</span>
+        <span
+          className={
+            !withCompareLink && !isMainPlayerWin ? styles.win : styles.lose
+          }
+        >
+          {p2Name}
+        </span>
       </span>
       <span
         className={cl(
