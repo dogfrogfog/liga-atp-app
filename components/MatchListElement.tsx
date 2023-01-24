@@ -50,16 +50,26 @@ const Match = ({
     <div className={styles.row}>
       <span className={styles.players}>
         <span
+          // to highlight winner in /compare page
           className={
-            !withCompareLink && isMainPlayerWin ? styles.win : styles.lose
+            p1Name && !withCompareLink
+              ? isMainPlayerWin
+                ? styles.win
+                : styles.lose
+              : ''
           }
         >
           {p1Name}
         </span>
         <i> vs. </i>
         <span
+          // to highlight winner in /compare page
           className={
-            !withCompareLink && !isMainPlayerWin ? styles.win : styles.lose
+            p1Name && !withCompareLink
+              ? !isMainPlayerWin
+                ? styles.win
+                : styles.lose
+              : ''
           }
         >
           {p2Name}
