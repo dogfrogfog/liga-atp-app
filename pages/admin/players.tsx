@@ -294,42 +294,72 @@ const PlayerForm = ({
           <br />
           Техника:
           <input
-            {...register('technique', { required: true, valueAsNumber: true })}
+            {...register('technique', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.tactics?.message}>
           <br />
           Тактика:
           <input
-            {...register('tactics', { required: true, valueAsNumber: true })}
+            {...register('tactics', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.power?.message}>
           <br />
           Мощь:
           <input
-            {...register('power', { required: true, valueAsNumber: true })}
+            {...register('power', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.shakes?.message}>
           <br />
           Кач:
           <input
-            {...register('shakes', { required: true, valueAsNumber: true })}
+            {...register('shakes', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.serve?.message}>
           <br />
           Подача:
           <input
-            {...register('serve', { required: true, valueAsNumber: true })}
+            {...register('serve', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <InputWithError errorMessage={errors.behaviour?.message}>
           <br />
           Поведение:
           <input
-            {...register('behaviour', { required: true, valueAsNumber: true })}
+            {...register('behaviour', {
+              required: true,
+              valueAsNumber: true,
+              max: 100,
+              min: 0,
+            })}
           />
         </InputWithError>
         <div className={formStyles.formActions}>

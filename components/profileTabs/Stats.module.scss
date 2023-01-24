@@ -72,23 +72,3 @@
     padding: 5px;
   }
 }
-
-.row {
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 0.5px solid #1b2223;
-
-  &:last-child {
-    border: none;
-  }
-
-  span:last-child {
-    display: inline-block;
-    min-width: 70px;
-    font-weight: bold;
-    line-height: 24px;
-    text-align: right;
-  }
-}
