@@ -237,59 +237,59 @@ const TournamentPage: NextPage<{
           />
           {activeTabContent}
         </>
-        {isAddPlayerModalOpen && (
-          <>
-            <div className={styles.addPlayerForm}>
-              <p className={styles.formTitle}>Форма регистрации игрока</p>
-              {!isPlayerLoading ? (
-                <form onSubmit={handleSubmit(submitPlayerRegistration)}>
-                  <InputWithError errorMessage={errors.first_name?.message}>
-                    <input
-                      className={styles.input}
-                      placeholder="Имя"
-                      {...register('first_name', { required: true })}
-                    />
-                  </InputWithError>
-                  <InputWithError errorMessage={errors.last_name?.message}>
-                    <input
-                      className={styles.input}
-                      placeholder="Фамилия"
-                      {...register('last_name', { required: true })}
-                    />
-                  </InputWithError>
-                  <InputWithError errorMessage={errors.phone?.message}>
-                    <input
-                      className={cl(styles.input, styles.phone)}
-                      placeholder="Номер телефона"
-                      {...register('phone', {
-                        pattern: {
-                          value: /^375\d{9}$/,
-                          message: 'Некорректный формат (прим. 375291234567)',
-                        },
-                      })}
-                    />
-                  </InputWithError>
-                  <span className={styles.phoneNote}>
-                    если вы впервые учавствуете в турнире - заполните поле{' '}
-                    <b>номер телефона</b>
-                  </span>
-                  <input
-                    className={cl(styles.input, styles.submit)}
-                    type="submit"
-                    value="Записаться"
-                  />
-                </form>
-              ) : (
-                <LoadingSpinner />
-              )}
-            </div>
-            <div
-              onClick={toggleAddPlayerModal}
-              className={styles.addPlayerFormOverlay}
-            ></div>
-          </>
-        )}
       </section>
+      {isAddPlayerModalOpen && (
+        <>
+          <div className={styles.addPlayerForm}>
+            <p className={styles.formTitle}>Форма регистрации игрока</p>
+            {!isPlayerLoading ? (
+              <form onSubmit={handleSubmit(submitPlayerRegistration)}>
+                <InputWithError errorMessage={errors.first_name?.message}>
+                  <input
+                    className={styles.input}
+                    placeholder="Имя"
+                    {...register('first_name', { required: true })}
+                  />
+                </InputWithError>
+                <InputWithError errorMessage={errors.last_name?.message}>
+                  <input
+                    className={styles.input}
+                    placeholder="Фамилия"
+                    {...register('last_name', { required: true })}
+                  />
+                </InputWithError>
+                <InputWithError errorMessage={errors.phone?.message}>
+                  <input
+                    className={cl(styles.input, styles.phone)}
+                    placeholder="Номер телефона"
+                    {...register('phone', {
+                      pattern: {
+                        value: /^375\d{9}$/,
+                        message: 'Некорректный формат (прим. 375291234567)',
+                      },
+                    })}
+                  />
+                </InputWithError>
+                <span className={styles.phoneNote}>
+                  если вы впервые учавствуете в турнире - заполните поле{' '}
+                  <b>номер телефона</b>
+                </span>
+                <input
+                  className={cl(styles.input, styles.submit)}
+                  type="submit"
+                  value="Записаться"
+                />
+              </form>
+            ) : (
+              <LoadingSpinner />
+            )}
+          </div>
+          <div
+            onClick={toggleAddPlayerModal}
+            className={styles.addPlayerFormOverlay}
+          ></div>
+        </>
+      )}
     </div>
   );
 };
