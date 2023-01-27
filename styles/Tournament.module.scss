@@ -5,6 +5,7 @@
   position: relative;
   overflow-y: scroll;
   overflow-x: hidden;
+  min-height: 500px;
 }
 
 .header {
@@ -43,10 +44,10 @@
   z-index: 5;
   position: absolute;
   top: 50px;
-  width: 100%;
+  width: calc(100% - 30px);
   background-color: $custom-darkgray;
   border-radius: 14px;
-  padding: 15px;
+  padding: 15px 20px;
 
   .input {
     outline: none;

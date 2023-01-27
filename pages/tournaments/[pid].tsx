@@ -237,7 +237,8 @@ const TournamentPage: NextPage<{
           />
           {activeTabContent}
         </>
-        {isAddPlayerModalOpen && (
+      </section>
+      {isAddPlayerModalOpen && (
           <>
             <div className={styles.addPlayerForm}>
               <p className={styles.formTitle}>Форма регистрации игрока</p>
@@ -288,8 +289,7 @@ const TournamentPage: NextPage<{
               className={styles.addPlayerFormOverlay}
             ></div>
           </>
-        )}
-      </section>
+      )}
     </div>
   );
 };
