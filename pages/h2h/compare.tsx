@@ -30,13 +30,14 @@ const CompareTwoPlayersPage: NextPage<{
 
   const { statsData: p1StatsData } = useStats(p1?.id);
   const { statsData: p2StatsData } = useStats(p2?.id);
-  const { matches } = useMatches();
+  const { matches: matchesOfP1 } = useMatches(p1?.id as number);
+  const { matches: matchesOfP2 } = useMatches(p2?.id as number);
 
   // @ts-ignore
   const { playersMatches, p1Wins, p2Wins } = useMemo(
     () =>
       p1 && p2
-        ? matches.reduce(
+        ? [...matchesOfP1, ...matchesOfP2].reduce(
             (acc, m) => {
               // count only singles
               const isDoubles =
@@ -78,7 +79,7 @@ const CompareTwoPlayersPage: NextPage<{
             p1Wins: 0,
             p2Wins: 0,
           },
-    [matches, p1, p2]
+    [matchesOfP1, matchesOfP2, p1, p2]
   );
 
   if (!p1 || !p2) {
