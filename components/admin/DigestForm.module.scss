@@ -1,0 +1,50 @@
+@import '../../styles/variables.scss';
+
+.digestForm {
+  .sidesContainer {
+    display: flex;
+  }
+
+  .side {
+    width: 50%;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+
+  .inputField {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    min-height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+
+  input {
+    outline: none;
+  }
+
+  .markdownWrapper {
+    margin-bottom: 10px;
+  }
+
+  .submitButton {
+    background-color: $custom-green;
+    border: none;
+    color: $custom-black;
+    font-size: 20px;
+    padding: 5px;
+    width: 200px;
+    border: 2px solid $custom-green;
+
+    &:focus {
+      border-color: $custom-black;
+    }
+  }
+}

@@ -58,55 +58,6 @@
 
 // CREATE PAGE START
 
-.createPageContainer {
-  .sidesContainer {
-    display: flex;
-  }
-
-  .side {
-    width: 50%;
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
-    &:last-child {
-      margin-left: 10px;
-    }
-  }
-
-  .inputField {
-    display: block;
-    margin-bottom: 10px;
-    width: 100%;
-    min-height: 30px;
-    padding: 5px 10px;
-    font-size: 16px;
-  }
-
-  input {
-    outline: none;
-  }
-
-  .markdownWrapper {
-    margin-bottom: 10px;
-  }
-
-  .submitButton {
-    background-color: $custom-green;
-    border: none;
-    color: $custom-black;
-    font-size: 20px;
-    padding: 5px;
-    width: 200px;
-    border: 2px solid $custom-green;
-
-    &:focus {
-      border-color: $custom-black;
-    }
-  }
-}
-
 // CREATE PAGE END
 
 // SINGLE PAGE START
@@ -118,10 +69,37 @@
   }
 
   .mentionedPlayer {
+    background-color: darkmagenta;
+    color: $custom-white;
+    font-weight: 500;
+    display: inline-block;
+    margin: 0 15px 15px 0;
     font-size: 16px;
     padding: 10px;
-    border: 1px solid $custom-black;
     border-radius: 5px;
+  }
+
+  .buttons {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      font-size: 18px;
+      margin-left: 10px;
+      padding: 5px 15px;
+      border: none;
+    }
+  }
+
+  .reset {
+    background-color: $custom-lightgray;
+  }
+
+  .action {
+    background-color: orange;
+    color: white;
+    font-weight: 500;
   }
 }
 
