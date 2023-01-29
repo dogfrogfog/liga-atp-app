@@ -52,14 +52,14 @@ const SuggestionsInput = ({
   };
 
   const renderSuggestion = (s: PlayerT | TournamentT) => (
-    <div>
+    <button>
       {/* @ts-ignore */}
       {s?.first_name
         ? // @ts-ignore
           `${(s.first_name as string)[0]}. ${s.last_name}`
         : // @ts-ignore
           s?.name}
-    </div>
+    </button>
   );
 
   const onChange = (_: FormEvent<HTMLElement>, { newValue }: ChangeEvent) => {
