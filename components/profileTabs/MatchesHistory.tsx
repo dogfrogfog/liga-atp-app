@@ -26,6 +26,7 @@ const MatchesHistoryTab = ({
         score={match?.score || 'w/o'}
         p2Name={getOpponents(playerId, match)}
         isMainPlayerWin={isPlayerWon(playerId, match)}
+        youtubeLink={match?.youtube_link || ''}
       />
     ))}
   </>
