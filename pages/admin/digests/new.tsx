@@ -1,22 +1,15 @@
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 import type { digest as DigestT } from '@prisma/client';
-import { MultiSelect, Option } from 'react-multi-select-component';
+import type { Option } from 'react-multi-select-component';
 import axios from 'axios';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 
-import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import DigestForm from 'components/admin/DigestForm';
 import usePlayers from 'hooks/usePlayers';
-import { playersToMultiSelect, multiSelectToIds } from 'utils/multiselect';
-
-const MDEditor = dynamic(
-  () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false, loading: () => <LoadingSpinner /> }
-);
+import { multiSelectToIds } from 'utils/multiselect';
 
 const createDigests = async (
   data: Omit<DigestT, 'id'>
@@ -33,7 +26,7 @@ const createDigests = async (
 import PageTitle from 'ui-kit/PageTitle';
 import styles from './styles.module.scss';
 
-type NoCustomFieldsType = Omit<
+export type NoCustomFieldsType = Omit<
   DigestT,
   'id' | 'makrdown' | 'mentioned_players_ids'
 >;
@@ -41,14 +34,9 @@ type NoCustomFieldsType = Omit<
 const CreateDigestPage: NextPage = () => {
   const { players } = usePlayers();
   const router = useRouter();
+
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [markdown, setMarkdown] = useState<string | undefined>();
-
-  const { register, handleSubmit } = useForm<NoCustomFieldsType>({
-    defaultValues: {
-      date: null,
-    },
-  });
 
   const onSubmit = async (formData: NoCustomFieldsType) => {
     const res = await createDigests({
@@ -67,42 +55,14 @@ const CreateDigestPage: NextPage = () => {
   return (
     <div className={styles.createPageContainer}>
       <PageTitle>Новый дайджест</PageTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.sidesContainer}>
-          <div className={styles.side}>
-            <input
-              className={styles.inputField}
-              type="date"
-              {...register('date', {
-                required: true,
-                valueAsDate: true,
-              })}
-            />
-            <input
-              className={styles.inputField}
-              placeholder="Заголовок"
-              {...register('title', {
-                required: true,
-              })}
-            />
-          </div>
-          <div className={styles.side}>
-            <MultiSelect
-              disabled={false}
-              options={playersToMultiSelect(players)}
-              value={newSelectedPlayers}
-              onChange={setNewSelectedPlayers}
-              labelledBy="Выбирите игроков из списка"
-            />
-          </div>
-        </div>
-        <div data-color-mode="light" className={styles.markdownWrapper}>
-          <MDEditor value={markdown} onChange={setMarkdown} />
-        </div>
-        <button className={styles.submitButton} type="submit">
-          Сохранить
-        </button>
-      </form>
+      <DigestForm
+        players={players}
+        onSubmit={onSubmit}
+        markdown={markdown}
+        setMarkdown={setMarkdown}
+        newSelectedPlayers={newSelectedPlayers}
+        setNewSelectedPlayers={setNewSelectedPlayers}
+      />
     </div>
   );
 };

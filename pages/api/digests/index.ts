@@ -12,4 +12,15 @@ export default async (
 
     res.json(digests);
   }
+
+  if (req.method === 'PUT') {
+    const updatedDigest = await prisma.digest.update({
+      where: {
+        id: req.body.data.id,
+      },
+      data: req.body.data,
+    });
+
+    res.json(updatedDigest);
+  }
 };
