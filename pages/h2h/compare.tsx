@@ -142,6 +142,7 @@ const CompareTwoPlayersPage: NextPage<{
                     p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
                     p2Name={getOpponents(p1.id, match)}
                     isMainPlayerWin={isPlayerWon(p1.id, match)}
+                    youtubeLink={match?.youtube_link || ''}
                   />
                 </>
               ))
