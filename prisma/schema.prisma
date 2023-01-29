@@ -21,6 +21,7 @@ model match {
   score                           String?
   player3_id                      Int?
   player4_id                      Int?
+  youtube_link                    String?
   player_match_player1_idToplayer player?     @relation("match_player1_idToplayer", fields: [player1_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_match_player1_id_fkey")
   player_match_player2_idToplayer player?     @relation("match_player2_idToplayer", fields: [player2_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_match_player2_id_fkey")
   player_match_player3_idToplayer player?     @relation("match_player3_idToplayer", fields: [player3_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_match_player3_id_fkey")

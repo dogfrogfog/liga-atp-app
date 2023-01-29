@@ -45,7 +45,7 @@ interface IAdminSingleTournamentPapeProps {
 
 const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   tournament,
-  matches: metchesOriginal,
+  matches: matchesOriginal,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   // when match already exists we save passed match to have default values to form
@@ -58,7 +58,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     isGroupMatch?: boolean;
   }>();
   const { players } = usePlayers();
-  const [matches, setMatches] = useState(metchesOriginal);
+  const [matches, setMatches] = useState(matchesOriginal);
   const [activeTournament, setActiveTournament] = useState(tournament);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
@@ -399,26 +399,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
               case 'is_finished': {
                 return null;
               }
-              // case 'is_doubles': {
-              //   return (
-              //     <div
-              //       key={key}
-              //       className={cl(styles.field, styles.is_doubles)}
-              //     >
-              //       <span>Парный турнир</span>
-              //       <input
-              //         checked={!!activeTournament.is_doubles}
-              //         type="checkbox"
-              //         onChange={(e) => {
-              //           setActiveTournament((v) => ({
-              //             ...v,
-              //             [key]: e.target.checked,
-              //           }));
-              //         }}
-              //       />
-              //     </div>
-              //   );
-              // }
               case 'surface': {
                 return (
                   <div key={key} className={cl(styles.field, styles.surface)}>
@@ -676,6 +656,18 @@ const MatchForm = ({
               pattern: {
                 value: /^(\d{1,2}-\d{1,2} ){1,5}/,
                 message: 'correct format: 6-2 2-6 10-2',
+              },
+            })}
+          />
+        </InputWithError>
+        <InputWithError errorMessage={errors.youtube_link?.message}>
+          <input
+            className={formStyles.youtubeLink}
+            placeholder="Ссылка на ютюб"
+            {...register('youtube_link', {
+              pattern: {
+                value: /^(https:\/\/)/,
+                message: 'should starts with https://',
               },
             })}
           />

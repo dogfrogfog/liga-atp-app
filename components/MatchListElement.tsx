@@ -14,6 +14,7 @@ type MatchProps = {
   isMainPlayerWin: boolean;
   withCompareLink?: boolean;
   p1Name?: string;
+  youtubeLink: string;
 };
 
 const Match = ({
@@ -24,6 +25,7 @@ const Match = ({
   isMainPlayerWin,
   withCompareLink = false,
   p1Name = '',
+  youtubeLink = '',
 }: MatchProps) => (
   // need to have all players' id here to set id to query params of link
   <div className={styles.match}>
@@ -37,9 +39,11 @@ const Match = ({
         </span>
       </span>
       <div className={styles.buttons}>
-        <Link href="/">
-          <AiOutlineYoutube />
-        </Link>
+        {youtubeLink && (
+          <Link href={youtubeLink}>
+            <AiOutlineYoutube />
+          </Link>
+        )}
         {withCompareLink && (
           <Link href={`/h2h/compare?p1Id=${1883}&p2Id=${1881}`}>
             <GiTabletopPlayers />
