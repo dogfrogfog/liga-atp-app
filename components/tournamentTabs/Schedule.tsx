@@ -197,75 +197,87 @@ const Match = ({
   return (
     <div className={cl(styles.match, className)}>
       <div className={styles.row}>
-        <div className={styles.left}>
-          {!isDoubles && !isValidElement(p1Name) && (
-            <span className={styles.img}>
-              {p1?.avatar?.includes('userapi.com') ? (
-                <Image
-                  alt="player-image"
-                  src={p1?.avatar || ''}
-                  height={20}
-                  width={20}
-                />
-              ) : (
-                <BsFillPersonFill />
-              )}
-            </span>
-          )}
-          <span
-            className={cl(
-              styles.name,
-              isPlayed &&
-                parseInt(match?.winner_id as string, 10) === match?.player1_id
-                ? styles.winner
-                : ''
+        <div className={styles.col}>
+          <div className={styles.singleNameWrapper}>
+            {!isDoubles && !isValidElement(p1Name) && (
+              <span className={styles.img}>
+                {p1?.avatar?.includes('userapi.com') ? (
+                  <Image
+                    alt="player-image"
+                    src={p1?.avatar || ''}
+                    height={20}
+                    width={20}
+                  />
+                ) : (
+                  <BsFillPersonFill />
+                )}
+              </span>
             )}
-          >
-            {p1Name} {isDoubles && `/`} {isDoubles && p3Name}
-          </span>
+            <span
+              className={cl(
+                styles.name,
+                isPlayed &&
+                  parseInt(match?.winner_id as string, 10) === match?.player1_id
+                  ? styles.winner
+                  : ''
+              )}
+            >
+              {p1Name} {isDoubles && `/`} {isDoubles && p3Name}
+            </span>
+          </div>
+          <div className={styles.singleNameWrapper}>
+            {!isDoubles && !isValidElement(p2Name) && (
+              <span className={styles.img}>
+                {p2?.avatar?.includes('userapi.com') ? (
+                  <Image
+                    alt="player-image"
+                    src={p2?.avatar || ''}
+                    height={20}
+                    width={20}
+                  />
+                ) : (
+                  <BsFillPersonFill />
+                )}
+              </span>
+            )}
+            <span
+              className={cl(
+                styles.name,
+                isPlayed &&
+                  parseInt(match?.winner_id as string, 10) === match?.player2_id
+                  ? styles.winner
+                  : ''
+              )}
+            >
+              {p2Name} {isDoubles && `/`} {isDoubles && p4Name}
+            </span>
+          </div>
         </div>
-        <div className={styles.right}>
+        <div className={styles.col}>
           {isPlayed ? (
-            <span className={styles.score}>{match.score}</span>
+            <span className={styles.score}>
+              {match.score?.split(' ').map((set, i) => (
+                <span key={i} className={styles.setCol}>
+                  {(set.split('-') as [string, string]).map((v) => (
+                    <span key={v} className={styles.game}>
+                      {v}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </span>
           ) : (
-            <span className={styles.matchDate}>
-              {matchDate && format(matchDate, 'dd.MM')}
-            </span>
+            matchDate && (
+              <span className={styles.matchDate}>
+                <span className={styles.timeUnit}>
+                  {format(matchDate, 'EEEEEE HH:mm')}
+                </span>
+                <span className={styles.timeUnit}>
+                  {format(matchDate, 'dd.MM')}
+                </span>
+              </span>
+            )
           )}
-        </div>
-      </div>
-      <div className={styles.row}>
-        <div className={styles.left}>
-          {!isDoubles && !isValidElement(p2Name) && (
-            <span className={styles.img}>
-              {p2?.avatar?.includes('userapi.com') ? (
-                <Image
-                  alt="player-image"
-                  src={p2?.avatar || ''}
-                  height={20}
-                  width={20}
-                />
-              ) : (
-                <BsFillPersonFill />
-              )}
-            </span>
-          )}
-          <span
-            className={cl(
-              styles.name,
-              isPlayed &&
-                parseInt(match?.winner_id as string, 10) === match?.player2_id
-                ? styles.winner
-                : ''
-            )}
-          >
-            {p2Name} {isDoubles && `/`} {isDoubles && p4Name}
-          </span>
-        </div>
-        <div className={styles.right}>
-          <span className={styles.matchDate}>
-            {matchDate && format(matchDate, isPlayed ? 'dd.MM' : 'HH:mm')}
-          </span>
         </div>
       </div>
       {isFinal && (

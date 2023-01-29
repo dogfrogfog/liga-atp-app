@@ -51,6 +51,11 @@ const TournamentPage: NextPage<{
   } = useForm();
 
   const isFinished = tournament.is_finished || tournament.status === 3;
+  const isDoubles =
+    tournament.is_doubles ||
+    DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+      tournament.tournament_type as number
+    );
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -61,12 +66,6 @@ const TournamentPage: NextPage<{
           (!brackets || (brackets && !Array.isArray(brackets[0])))
         ) {
           const lastMatch = tournamentMatches[tournamentMatches.length - 1];
-          const isDoubles =
-            tournament.is_doubles ||
-            DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
-              tournament.tournament_type as number
-            ) ||
-            tournament.is_doubles;
 
           let winners = [] as PlayerT[];
           if (isDoubles) {
@@ -119,7 +118,7 @@ const TournamentPage: NextPage<{
                 ? GROUPS_DRAW_TYPES.includes(tournament.draw_type)
                 : false
             }
-            isDoubles={!!tournament.is_doubles}
+            isDoubles={isDoubles}
             brackets={brackets}
             tournamentMatches={tournamentMatches}
             registeredPlayers={registeredPlayers}
