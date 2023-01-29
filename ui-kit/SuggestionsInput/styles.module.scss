@@ -4,6 +4,20 @@
   margin-bottom: 20px;
   position: relative;
 
+  button {
+    font-size: 16px;
+    border: none;
+    width: 100%;
+    color: $custom-white;
+    text-align: left;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: $custom-aqua;
+      color: $custom-black;
+    }
+  }
   :global(.react-autosuggest__input) {
     outline: none;
     background-color: $custom-mediumdarkgray;
@@ -43,7 +57,6 @@
     ul {
       list-style-type: none;
       padding: 10px;
-      font-size: 16px;
       margin: 0;
 
       li {
