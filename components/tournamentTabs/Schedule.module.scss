@@ -30,9 +30,17 @@
   }
 }
 
-.left {
-  width: 70%;
-  display: flex;
+.name {
+  display: block;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &.winner {
+    color: $custom-aqua;
+  }
 }
 
 .right {
@@ -63,10 +71,10 @@
 .match {
   position: relative;
   text-align: center;
-  padding: 15px;
-  border: 1px solid $custom-mediumdarkgray;
-  background-color: $custom-darkgray;
-  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid $custom-white;
+  background-color: black;
+  border-radius: 4px;
   width: 85%;
   margin-bottom: 20px;
 
@@ -91,10 +99,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  &:first-child {
-    margin-bottom: 15px;
-  }
 }
 
 .nameContainer {
@@ -109,23 +113,40 @@
   overflow: hidden;
 }
 
-.matchDate {
-  font-weight: bold;
-  font-style: italic;
+.singleNameWrapper:first-child,
+.game:first-child,
+.timeUnit:first-child {
+  margin-bottom: 10px;
+}
+
+.singleNameWrapper {
+  display: flex;
+  width: 100%;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  max-width: 65%;
 }
 
 .score {
-  font-weight: bold;
+  display: flex;
+  font-size: 16px;
 }
 
-.name {
-  svg {
-    width: 12px;
-    height: 12px;
-  }
+.matchDate {
+  text-align: right;
+}
 
-  &.winner {
-    color: $custom-aqua;
+.setCol,
+.matchDate {
+  display: flex;
+  margin-right: 10px;
+  flex-direction: column;
+
+  &:last-child {
+    margin: 0;
   }
 }
 
