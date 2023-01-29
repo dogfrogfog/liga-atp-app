@@ -20,6 +20,15 @@
     color: $custom-gray;
   }
 
+  button {
+    &:focus,
+    &:active {
+      svg {
+        color: $custom-aqua;
+      }
+    }
+  }
+
   .active {
     svg {
       color: $custom-aqua;
@@ -34,9 +43,6 @@
     align-items: center;
     font-size: 14px;
     font-weight: 200;
-
-    &:last-child {
-      border: 0;
-    }
+    border: 0;
   }
 }
