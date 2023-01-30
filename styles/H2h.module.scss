@@ -56,6 +56,11 @@
     font-size: 20px;
     padding: 10px 15px;
     margin: 0 10px;
+
+    &:focus,
+    &:active {
+      opacity: 0.8;
+    }
   }
 
   .compare {
