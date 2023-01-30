@@ -1,5 +1,6 @@
 import { useState, Fragment } from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
@@ -11,6 +12,7 @@ import styles from 'styles/H2h.module.scss';
 
 const H2hPage: NextPage = () => {
   const { players } = usePlayers();
+  const router = useRouter();
   const [selectedPlayers, setPlayers] = useState<PlayerT[]>([]);
 
   const onSuggestionClick = (p: PlayerT) => {
@@ -62,20 +64,21 @@ const H2hPage: NextPage = () => {
             </div>
           )}
           <div className={styles.buttons}>
-            <Link
-              href={`/h2h/compare?p1Id=${selectedPlayers[0]?.id}&p2Id=${selectedPlayers[1]?.id}`}
+            <button
+              onClick={() =>
+                router.push(
+                  `/h2h/compare?p1Id=${selectedPlayers[0]?.id}&p2Id=${selectedPlayers[1]?.id}`
+                )
+              }
+              className={cl(
+                styles.compare,
+                !selectedPlayers[0]?.id || !selectedPlayers[1]?.id
+                  ? styles.disabled
+                  : ''
+              )}
             >
-              <span
-                className={cl(
-                  styles.compare,
-                  !selectedPlayers[0]?.id || !selectedPlayers[1]?.id
-                    ? styles.disabled
-                    : ''
-                )}
-              >
-                Сравнить
-              </span>
-            </Link>
+              Сравнить
+            </button>
             <button onClick={reset} className={styles.reset}>
               Сбросить
             </button>
