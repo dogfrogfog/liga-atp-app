@@ -129,21 +129,7 @@ const CompareTwoPlayersPage: NextPage<{
             {playersMatches && playersMatches.length > 0 ? (
               playersMatches.map((match, i) => (
                 <>
-                  {console.log(isPlayerWon(p1.id, match))}
-                  <MatchListElement
-                    key={i}
-                    tournamentName={match.tournament.name || ''}
-                    startDate={
-                      match?.start_date
-                        ? format(new Date(match.start_date), 'yyyy-MM-dd')
-                        : ''
-                    }
-                    score={match?.score || ''}
-                    p1Name={(p1.first_name as string)[0] + '. ' + p1.last_name}
-                    p2Name={getOpponents(p1.id, match)}
-                    isMainPlayerWin={isPlayerWon(p1.id, match)}
-                    youtubeLink={match?.youtube_link || ''}
-                  />
+                  <MatchListElement key={i} match={match} />
                 </>
               ))
             ) : (

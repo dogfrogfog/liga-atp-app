@@ -4,97 +4,126 @@ import { GiTabletopPlayers } from 'react-icons/gi';
 import { format } from 'date-fns';
 import cl from 'classnames';
 
+import { MatchWithTournamentType, getOpponents } from 'utils/getOpponents';
+import { isPlayerWon } from 'utils/isPlayerWon';
+import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
 import styles from './MatchListElement.module.scss';
 
 type MatchProps = {
-  tournamentName: string;
-  startDate: string;
-  p2Name: string;
-  score: string;
-  isMainPlayerWin: boolean;
-  withCompareLink?: boolean;
-  p1Name?: string;
-  youtubeLink: string;
+  match: MatchWithTournamentType;
+  playerId?: number;
 };
 
-const Match = ({
-  tournamentName,
-  startDate,
-  p2Name,
-  score,
-  isMainPlayerWin,
-  withCompareLink = false,
-  p1Name = '',
-  youtubeLink = '',
-}: MatchProps) => (
-  // need to have all players' id here to set id to query params of link
-  <div className={styles.match}>
-    <div className={styles.row}>
-      <span className={styles.tournamentName}>
-        {tournamentName}
-        <span className={styles.time}>
-          {' ('}
-          {format(new Date(startDate), 'dd.MM.yyyy')}
-          {')'}
+const Match = ({ match, playerId }: MatchProps) => {
+  const {
+    tournament,
+    start_date,
+    youtube_link,
+    score,
+    winner_id,
+    player1_id,
+    player2_id,
+  } = match;
+
+  return (
+    <div className={styles.match}>
+      <div className={styles.row}>
+        <span className={styles.tournamentName}>
+          {tournament.name}
+          <span className={styles.time}>
+            {' ('}
+            {start_date && format(new Date(start_date), 'dd.MM.yyyy')}
+            {')'}
+          </span>
         </span>
-      </span>
-      <div className={styles.buttons}>
-        {youtubeLink && (
-          <Link href={youtubeLink}>
-            <AiOutlineYoutube />
-          </Link>
-        )}
-        {withCompareLink && (
-          <Link href={`/h2h/compare?p1Id=${1883}&p2Id=${1881}`}>
-            <GiTabletopPlayers />
-          </Link>
-        )}
+        <div className={styles.buttons}>
+          {youtube_link && (
+            <Link href={youtube_link}>
+              <AiOutlineYoutube />
+            </Link>
+          )}
+          {!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+            tournament.tournament_type as number
+          ) && (
+            <Link
+              href={`/h2h/compare?p1Id=${match.player1_id}&p2Id=${match.player2_id}`}
+            >
+              <GiTabletopPlayers />
+            </Link>
+          )}
+        </div>
+      </div>
+      <div className={styles.row}>
+        <span className={styles.players}>
+          {playerId ? (
+            <>
+              <i> vs. </i>
+              {getOpponents(playerId, match)}
+            </>
+          ) : (
+            <>
+              <span
+                className={
+                  !playerId
+                    ? isPlayerWon(player1_id as number, match)
+                      ? styles.win
+                      : ''
+                    : undefined
+                }
+              >
+                {!playerId && getOpponents(player2_id as number, match)}
+              </span>
+              <i> vs. </i>
+              <span
+                className={
+                  !playerId
+                    ? isPlayerWon(player2_id as number, match)
+                      ? styles.win
+                      : ''
+                    : undefined
+                }
+              >
+                {!playerId && getOpponents(player1_id as number, match)}
+              </span>
+            </>
+          )}
+        </span>
+        <span
+          className={cl(
+            styles.score,
+            playerId
+              ? isPlayerWon(playerId, match)
+                ? styles.win
+                : styles.lose
+              : ''
+          )}
+        >
+          <Score score={score || ''} />
+        </span>
       </div>
     </div>
-    <div className={styles.row}>
-      <span className={styles.players}>
-        <span
-          // to highlight winner in /compare page
-          className={
-            p1Name && !withCompareLink
-              ? isMainPlayerWin
-                ? styles.win
-                : styles.lose
-              : ''
-          }
-        >
-          {p1Name}
-        </span>
-        <i> vs. </i>
-        <span
-          // to highlight winner in /compare page
-          className={
-            p1Name && !withCompareLink
-              ? !isMainPlayerWin
-                ? styles.win
-                : styles.lose
-              : ''
-          }
-        >
-          {p2Name}
-        </span>
-      </span>
-      <span
-        className={cl(
-          styles.score,
-          !p1Name ? (isMainPlayerWin ? styles.win : styles.lose) : ''
-        )}
-      >
-        {score.split(' ').length > 0 && score !== 'w/o'
-          ? score.split(' ').map((setScore, i) => (
-              <span key={setScore + i} className={styles.setScoreCol}>
-                {setScore.replace('-', ' ')}
-              </span>
-            ))
-          : score}
-      </span>
-    </div>
-  </div>
-);
+  );
+};
+
+const Score = ({ score }: { score: string }) => {
+  if (score.includes('w/o')) {
+    return <span>{score}</span>;
+  }
+
+  const setStrings = score.split(' ');
+  if (setStrings.length > 0) {
+    return (
+      <>
+        {score.split(' ').map((setScore, i) => (
+          <span key={setScore + i} className={styles.setScoreCol}>
+            {setScore.replace('-', ' ')}
+          </span>
+        ))}
+      </>
+    );
+  }
+
+  return null;
+};
 
 export default Match;

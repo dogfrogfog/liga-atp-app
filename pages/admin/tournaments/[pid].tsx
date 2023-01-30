@@ -649,17 +649,20 @@ const MatchForm = ({
             {...register('start_date', { required: false, valueAsDate: true })}
           />
         </InputWithError>
+        <br />
+        <p>если матч завершился без счета - указывать {'"w/o"'}</p>
         <InputWithError errorMessage={errors.score?.message}>
           <input
             placeholder="Счет"
             {...register('score', {
               pattern: {
-                value: /^(\d{1,2}-\d{1,2} ){1,5}/,
+                value: /^((\d{1,2}-\d{1,2} )|w\/o){1,5}/,
                 message: 'correct format: 6-2 2-6 10-2',
               },
             })}
           />
         </InputWithError>
+        <br />
         <InputWithError errorMessage={errors.youtube_link?.message}>
           <input
             className={formStyles.youtubeLink}

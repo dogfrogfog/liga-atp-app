@@ -39,7 +39,7 @@ export const DOUBLES_TOURNAMENT_TYPES_NUMBER: number[] = [
   // deprecated
   16,
 
-  12, 13, 14, 15, 18, 20, 22, 101,
+  12, 13, 14, 15, 18, 20, 22, 23, 101,
 ];
 
 // previously used indexes: 22, 5, 7, 6, 8, 9
