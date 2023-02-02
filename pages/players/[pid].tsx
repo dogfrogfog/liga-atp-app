@@ -125,16 +125,9 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
             yearsInTennis={
               in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
             }
-            playerId={id}
             gameplayStyle={gameplay_style || ''}
             selectedLvl={statsTabTournamentType}
             setSelectedLvl={setStatsTabTournamentTypeDropdown}
-            technique={technique}
-            tactics={tactics}
-            power={power as number}
-            shakes={shakes}
-            serve={serve}
-            behaviour={behaviour}
             statsData={statsData as any}
           />
         );
