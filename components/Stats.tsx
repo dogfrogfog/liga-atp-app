@@ -6,10 +6,19 @@ import styles from './Stats.module.scss';
 const Stats = ({
   p1Stats,
   p2Stats,
+  p1Years,
+  p2Years,
+  p1Style,
+  p2Style,
 }: {
   p1Stats: StatsDataType;
   p2Stats?: StatsDataType;
+  p1Years: string;
+  p2Years?: string;
+  p1Style: string;
+  p2Style?: string;
 }) => {
+  console.log(p1Years, p2Years, p1Style, p2Style);
   return (
     <div className={cl(styles.statsContainer, p2Stats ? styles.compare : '')}>
       <div className={styles.row}>
@@ -19,7 +28,6 @@ const Stats = ({
       </div>
       <div className={styles.row}>
         {p2Stats && <span>{p2Stats?.tournaments_wins || '0'}</span>}
-
         <span className={styles.valueName}>Титулы</span>
         <span>{p1Stats?.tournaments_wins || '0'}</span>
       </div>
@@ -42,24 +50,14 @@ const Stats = ({
         <span>{p1Stats?.win_lose_in_level_proportion || '-'}</span>
       </div>
       <div className={styles.row}>
-        {p2Stats && <span>{p2Stats?.lose_with_zero_points || '0'}</span>}
-
-        <span className={styles.valueName}>Матчи 0-6 0-6</span>
-        <span>{p1Stats?.lose_with_zero_points || '0'}</span>
+        {p2Years !== undefined && <span>{p2Years}</span>}
+        <span>Лет в теннисе</span>
+        <span>{p1Years || '0'}</span>
       </div>
       <div className={styles.row}>
-        {p2Stats && <span>{p2Stats?.win_with_zero_points || '0'}</span>}
-
-        <span className={styles.valueName}>Матчи 6-0 6-0</span>
-        <span>{p1Stats?.win_with_zero_points || '0'}</span>
-      </div>
-      <div className={styles.row}>
-        {p2Stats && (
-          <span>{p2Stats?.two_three_sets_matches_proportion || '0/0'}</span>
-        )}
-
-        <span className={styles.valueName}>2-сетовики / 3-сетовики</span>
-        <span>{p1Stats?.two_three_sets_matches_proportion || '0/0'}</span>
+        {p2Style !== undefined && <span>{p2Style}</span>}
+        <span>Стиль игры</span>
+        <span>{p1Style || ''}</span>
       </div>
     </div>
   );
