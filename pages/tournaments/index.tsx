@@ -74,7 +74,7 @@ const TournamentsPage: NextPage = () => {
 
         return active.map((v) => (
           <Link key={v.id} href={'/tournaments/' + v.id}>
-            <span>
+            <a className={styles.link}>
               <TournamentListItem
                 name={v.name || 'tbd'}
                 status={
@@ -89,7 +89,7 @@ const TournamentsPage: NextPage = () => {
                   v.status === 3 || v.is_finished ? '<имя победителя>' : ''
                 }
               />
-            </span>
+            </a>
           </Link>
         ));
       case TOURNAMENT_TABS[1]:
@@ -165,7 +165,7 @@ const TournamentsPage: NextPage = () => {
             {filteredTournaments.length > 0 ? (
               filteredTournaments.map((v) => (
                 <Link key={v.id} href={'/tournaments/' + v.id}>
-                  <span>
+                  <a className={styles.link}>
                     <TournamentListItem
                       name={v.name || 'tbd'}
                       status={
@@ -184,7 +184,7 @@ const TournamentsPage: NextPage = () => {
                           : ''
                       }
                     />
-                  </span>
+                  </a>
                 </Link>
               ))
             ) : (
@@ -231,18 +231,10 @@ const TournamentsPage: NextPage = () => {
                   )}
                 </select>
               </div>
-              {/* <div className={styles.checkbox}>
-                <input
-                  type="checkbox"
-                  onChange={toggleDoublesCheckbox}
-                  checked={finishedTournamentsFilters.isDoubles}
-                />
-                <span>Даблс</span>
-              </div> */}
             </div>
             {filteredFinishedTournaments.map((v) => (
               <Link key={v.id} href={'/tournaments/' + v.id}>
-                <span>
+                <a className={styles.link}>
                   <TournamentListItem
                     name={v.name || 'tbd'}
                     status={
@@ -259,7 +251,7 @@ const TournamentsPage: NextPage = () => {
                       v.status === 3 || v.is_finished ? '<имя победителя>' : ''
                     }
                   />
-                </span>
+                </a>
               </Link>
             ))}
           </>

@@ -4,6 +4,19 @@
   position: relative;
   padding: 15px;
   margin-top: 80px;
+
+  .link {
+    margin-bottom: 8px;
+    display: block;
+
+    &:active,
+    &:focus {
+      border-radius: 14px;
+      border: 1px solid $custom-aqua;
+      margin: -1px;
+      margin-bottom: 7px;
+    }
+  }
 }
 
 .searchInputContainer {
