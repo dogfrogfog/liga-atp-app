@@ -14,17 +14,7 @@ export type StatsDataType = {
   tournaments_finals: number;
   matches_played: number;
   win_lose_in_level_proportion: string;
-  // Процент двухсетовики/трехсетовиков
-  two_three_sets_matches_proportion: string;
-  // Процент побед/поражений побед после поражения в первом сете
-  // win_lose_with_first_set_lose_proportion: string;
-  // проигрыш в ноль
-  lose_with_zero_points: number;
-  // выигрыш в ноль
-  win_with_zero_points: number;
 };
-
-const zeroScoreTemplates = ['6-0 6-0', '0-6 0-6'];
 
 export default async (
   req: NextApiRequest,
@@ -73,15 +63,7 @@ export default async (
 
     // just to remove same tournaments
     const uniqueTournamentsIds = [] as number[];
-    const {
-      tournamentsPlayed,
-      twoSetsMatchesNumber,
-      threeSetsMatchesNumber,
-      wins,
-      losses,
-      lossesWithZeroPoints,
-      winsWithZeroPoints,
-    } = filteredPlayedMatches.reduce(
+    const { tournamentsPlayed, wins, losses } = filteredPlayedMatches.reduce(
       (acc, m) => {
         if (!uniqueTournamentsIds.includes(m.tournament_id as number)) {
           uniqueTournamentsIds.push(m.tournament_id as number);
@@ -90,48 +72,22 @@ export default async (
 
         const isPlayerWonTheMatch = isPlayerWon(playerIdInt, m);
 
-        const numberOfSets = (m.score?.match(/-/g) || []).length;
-        if (numberOfSets === 2) {
-          acc.twoSetsMatchesNumber += 1;
-        }
-
-        if (numberOfSets === 3) {
-          acc.threeSetsMatchesNumber += 1;
-        }
-
         if (isPlayerWonTheMatch) {
           acc.wins += 1;
         } else {
           acc.losses += 1;
         }
 
-        if (
-          !isPlayerWonTheMatch &&
-          zeroScoreTemplates.includes(m.score as string)
-        ) {
-          acc.lossesWithZeroPoints += 1;
-        }
-
-        if (
-          isPlayerWonTheMatch &&
-          zeroScoreTemplates.includes(m.score as string)
-        ) {
-          acc.winsWithZeroPoints += 1;
-        }
-
-        if (isPlayerWonTheMatch) {
-        }
-
         return acc;
       },
       {
         tournamentsPlayed: [] as TournamentT[],
-        twoSetsMatchesNumber: 0,
-        threeSetsMatchesNumber: 0,
+        // twoSetsMatchesNumber: 0,
+        // threeSetsMatchesNumber: 0,
         wins: 0,
         losses: 0,
-        lossesWithZeroPoints: 0,
-        winsWithZeroPoints: 0,
+        // lossesWithZeroPoints: 0,
+        // winsWithZeroPoints: 0,
       }
     );
 
@@ -210,17 +166,12 @@ export default async (
       { tournamentFinals: 0, tournamentWins: 0 }
     );
 
-    // @ts-ignore filteredPlayedMatches doesn't need to include players data here
     const statsData = {
       tournaments_played: tournamentsPlayed.length,
       matches_played: filteredPlayedMatches.length,
       tournaments_wins: tournamentWins,
       tournaments_finals: tournamentFinals,
       win_lose_in_level_proportion: `${wins}/${losses}`,
-      // win_lose_with_first_set_lose_proportion: 'tbd',
-      two_three_sets_matches_proportion: `${twoSetsMatchesNumber}/${threeSetsMatchesNumber}`,
-      lose_with_zero_points: lossesWithZeroPoints,
-      win_with_zero_points: winsWithZeroPoints,
     };
 
     res.json(statsData);

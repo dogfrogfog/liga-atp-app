@@ -41,26 +41,6 @@ const Stats = ({
         <span className={styles.valueName}>W / L</span>
         <span>{p1Stats?.win_lose_in_level_proportion || '-'}</span>
       </div>
-      <div className={styles.row}>
-        {p2Stats && <span>{p2Stats?.lose_with_zero_points || '0'}</span>}
-
-        <span className={styles.valueName}>Матчи 0-6 0-6</span>
-        <span>{p1Stats?.lose_with_zero_points || '0'}</span>
-      </div>
-      <div className={styles.row}>
-        {p2Stats && <span>{p2Stats?.win_with_zero_points || '0'}</span>}
-
-        <span className={styles.valueName}>Матчи 6-0 6-0</span>
-        <span>{p1Stats?.win_with_zero_points || '0'}</span>
-      </div>
-      <div className={styles.row}>
-        {p2Stats && (
-          <span>{p2Stats?.two_three_sets_matches_proportion || '0/0'}</span>
-        )}
-
-        <span className={styles.valueName}>2-сетовики / 3-сетовики</span>
-        <span>{p1Stats?.two_three_sets_matches_proportion || '0/0'}</span>
-      </div>
     </div>
   );
 };
