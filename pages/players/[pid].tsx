@@ -26,6 +26,7 @@ const PROFILE_TABS = [
   'Расписание',
   'История матчей',
   'Статистика',
+  'Характеристика',
   'Дайджесты',
 ];
 
@@ -138,6 +139,33 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
           />
         );
       case PROFILE_TABS[4]:
+        return (
+          <div className={styles.specs}>
+            {[
+              ['Техника', technique],
+              ['Тактика', tactics],
+              ['Мощь', power],
+              ['Кач', shakes],
+              ['Подача', serve],
+              ['Поведение', behaviour],
+            ].map(([k, v]) => (
+              <div key={k} className={styles.inputRow}>
+                <p className={styles.inputValue}>
+                  {k} <span className={styles.percent}>{v}%</span>
+                </p>
+                <input
+                  disabled
+                  className={styles.percentInput}
+                  type="range"
+                  max={100}
+                  min={0}
+                  defaultValue={v as any}
+                />
+              </div>
+            ))}
+          </div>
+        );
+      case PROFILE_TABS[5]:
         return digests.length > 0 ? (
           digests.map((d) => (
             <DigestListEl key={d.id} {...d} onClick={onDigestClick} />

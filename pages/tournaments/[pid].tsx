@@ -172,11 +172,8 @@ const TournamentPage: NextPage<{
         tournament.unregistered_players
       );
 
-      console.log('concat');
-
       newUnregisteredPlayers = prevUnregisteredPlayers.concat([cleanData]);
     } else {
-      console.log('new');
       newUnregisteredPlayers = [cleanData];
     }
 
