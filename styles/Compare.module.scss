@@ -48,6 +48,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  a:focus,
+  a:active {
+    color: $custom-aqua;
+  }
 }
 
 .info {

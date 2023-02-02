@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import type { player as PlayerT } from '@prisma/client';
 import cl from 'classnames';
-import { format } from 'date-fns';
+import Link from 'next/link';
 
 import { prisma } from 'services/db';
 import Tabs from 'ui-kit/Tabs';
@@ -176,9 +176,13 @@ const CompareTwoPlayersPage: NextPage<{
       <div className={styles.mainInfo}>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>
-            {p1.first_name}
-            <br />
-            {p1.last_name}
+            <Link href={`/players/${p1.id}`}>
+              <a>
+                {p1.first_name}
+                <br />
+                {p1.last_name}
+              </a>
+            </Link>
           </p>
           <div className={styles.info}>
             <span className={styles.lvl}>
@@ -190,9 +194,13 @@ const CompareTwoPlayersPage: NextPage<{
         </div>
         <div className={cl(styles.playerInfo, styles.side)}>
           <p className={styles.name}>
-            {p2.first_name}
-            <br />
-            {p2.last_name}
+            <Link href={`/players/${p2.id}`}>
+              <a>
+                {p2.first_name}
+                <br />
+                {p2.last_name}
+              </a>
+            </Link>
           </p>
           <div className={styles.info}>
             <span className={styles.lvl}>
