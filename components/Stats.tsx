@@ -8,16 +8,17 @@ const Stats = ({
   p2Stats,
   p1Years,
   p2Years,
-  p1Stype,
-  p2Stype,
+  p1Style,
+  p2Style,
 }: {
   p1Stats: StatsDataType;
   p2Stats?: StatsDataType;
   p1Years: string;
   p2Years?: string;
-  p1Stype: string;
-  p2Stype?: string;
+  p1Style: string;
+  p2Style?: string;
 }) => {
+  console.log(p1Years, p2Years, p1Style, p2Style);
   return (
     <div className={cl(styles.statsContainer, p2Stats ? styles.compare : '')}>
       <div className={styles.row}>
@@ -49,14 +50,14 @@ const Stats = ({
         <span>{p1Stats?.win_lose_in_level_proportion || '-'}</span>
       </div>
       <div className={styles.row}>
-        {p2Years && <span>{p2Years || '0'}</span>}
+        {p2Years !== undefined && <span>{p2Years}</span>}
         <span>Лет в теннисе</span>
-        {<span>{p1Years || '0'}</span>}
+        <span>{p1Years || '0'}</span>
       </div>
       <div className={styles.row}>
-        {p2Stype && <span>{p2Stype || ''}</span>}
+        {p2Style !== undefined && <span>{p2Style}</span>}
         <span>Стиль игры</span>
-        <span>{p1Stype || ''}</span>
+        <span>{p1Style || ''}</span>
       </div>
     </div>
   );

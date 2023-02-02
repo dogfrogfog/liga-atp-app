@@ -10,14 +10,14 @@ import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import StatsTab from 'components/Stats';
 import SpecsTab from 'components/statsTabs/Specs';
 import MatchListElement from 'components/MatchListElement';
-import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
-import { isPlayerWon } from 'utils/isPlayerWon';
+import { MatchWithTournamentType } from 'utils/getOpponents';
 import {
   LEVEL_NUMBER_VALUES,
   DOUBLES_TOURNAMENT_TYPES_NUMBER,
 } from 'constants/values';
 import useStats from 'hooks/useStats';
 import useMatches from 'hooks/useMatches';
+import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
@@ -105,6 +105,18 @@ const CompareTwoPlayersPage: NextPage<{
             <StatsTab
               p1Stats={p1StatsData as any}
               p2Stats={p2StatsData as any}
+              p1Style={p1.gameplay_style || ''}
+              p2Style={p2.gameplay_style || ''}
+              p1Years={
+                p1.in_tennis_from
+                  ? calculateYearsFromDate(p1.in_tennis_from) + ''
+                  : ''
+              }
+              p2Years={
+                p2.in_tennis_from
+                  ? calculateYearsFromDate(p2.in_tennis_from) + ''
+                  : ''
+              }
             />
           </div>
         );

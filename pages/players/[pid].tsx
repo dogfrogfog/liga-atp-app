@@ -18,6 +18,7 @@ import useStats from 'hooks/useStats';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
+import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import styles from 'styles/Profile.module.scss';
 
 const PROFILE_TABS = [
@@ -27,13 +28,6 @@ const PROFILE_TABS = [
   'Статистика',
   'Дайджесты',
 ];
-
-export const calculateYearsFromDate = (date: Date) => {
-  var diff_ms = Date.now() - date.getTime();
-  var age_dt = new Date(diff_ms);
-
-  return Math.abs(age_dt.getUTCFullYear() - 1970);
-};
 
 const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   player,

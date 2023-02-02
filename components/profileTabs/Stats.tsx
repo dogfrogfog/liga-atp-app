@@ -83,7 +83,7 @@ const StatsTab = ({
         <StatsData
           p1Stats={statsData}
           p1Years={yearsInTennis}
-          p1Stype={gameplayStyle}
+          p1Style={gameplayStyle}
         />
       )}
     </div>
