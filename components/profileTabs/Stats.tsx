@@ -28,6 +28,9 @@ type StatsTabProps = {
   shakes: number;
   serve: number;
   behaviour: number;
+
+  yearsInTennis: string;
+  gameplayStyle: string;
 };
 
 const StatsTab = ({
@@ -35,6 +38,8 @@ const StatsTab = ({
   selectedLvl,
   setSelectedLvl,
   statsData,
+  yearsInTennis,
+  gameplayStyle,
   ...rest
 }: StatsTabProps) => {
   const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -74,7 +79,13 @@ const StatsTab = ({
         </select>
       </div>
       <div className={styles.lvlSelectContainer}></div>
-      {statsData && <StatsData p1Stats={statsData} />}
+      {statsData && (
+        <StatsData
+          p1Stats={statsData}
+          p1Years={yearsInTennis}
+          p1Stype={gameplayStyle}
+        />
+      )}
     </div>
   );
 };

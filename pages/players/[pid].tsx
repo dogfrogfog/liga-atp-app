@@ -28,7 +28,7 @@ const PROFILE_TABS = [
   'Дайджесты',
 ];
 
-const calculateYearsFromDate = (date: Date) => {
+export const calculateYearsFromDate = (date: Date) => {
   var diff_ms = Date.now() - date.getTime();
   var age_dt = new Date(diff_ms);
 
@@ -127,7 +127,11 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       case PROFILE_TABS[3]:
         return (
           <StatsTab
+            yearsInTennis={
+              in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
+            }
             playerId={id}
+            gameplayStyle={gameplay_style || ''}
             selectedLvl={statsTabTournamentType}
             setSelectedLvl={setStatsTabTournamentTypeDropdown}
             technique={technique}
