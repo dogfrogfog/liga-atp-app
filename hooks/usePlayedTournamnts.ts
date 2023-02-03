@@ -1,17 +1,17 @@
 import useSWR from 'swr';
 import type { tournament as TournamentT } from '@prisma/client';
 
-const useTournaments = (withPlayed = true) => {
+const usePlayedTournamnts = () => {
   const { data, isLoading, error, mutate } = useSWR<TournamentT[]>(
-    `/api/tournaments${withPlayed ? '?withPlayed=true' : ''}`
+    '/api/tournaments/playedTournaments'
   );
 
   return {
-    tournaments: data || [],
+    playedTournaments: data || [],
     isLoading,
     error,
     mutate,
   };
 };
 
-export default useTournaments;
+export default usePlayedTournamnts;

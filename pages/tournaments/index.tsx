@@ -2,17 +2,13 @@ import { useState, ChangeEvent, useMemo } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {
-  tournament as TournamentT,
-  player as PlayerT,
-  match as MatchT,
-} from '@prisma/client';
+import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import { format, startOfISOWeek } from 'date-fns';
 import cl from 'classnames';
 
 import useTournaments from 'hooks/useTournaments';
+import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
 import usePlayers from 'hooks/usePlayers';
-import useCleanMatches from 'hooks/useCleanMatches';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
@@ -23,7 +19,6 @@ import {
   TOURNAMENT_TYPE_NUMBER_VALUES,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
-import getTournamentWinnerString from 'utils/getTournamentWinnerString';
 import styles from '../../styles/Tournaments.module.scss';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
@@ -34,9 +29,10 @@ const filterFn = (inputValue: string) => (t: TournamentT) =>
 
 const now = new Date();
 const TournamentsPage: NextPage = () => {
-  const { tournaments, isLoading } = useTournaments();
+  const { tournaments, isLoading } = useTournaments(false);
+  const { playedTournaments, isLoading: isPlayedTournamentsLoading } =
+    usePlayedTournamnts();
   const { players } = usePlayers();
-  const { matches } = useCleanMatches();
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsFilters, setFinishedTournamentsFilters] = useState<{
@@ -59,17 +55,8 @@ const TournamentsPage: NextPage = () => {
       }, new Map<number, PlayerT>()),
     [players]
   );
-  const matchesMap = useMemo(
-    () =>
-      matches.reduce((acc, p) => {
-        acc.set(p.id, p);
 
-        return acc;
-      }, new Map<number, MatchT>()),
-    [matches]
-  );
-
-  const { active, recording, finished } = useMemo(
+  const { active, recording } = useMemo(
     () =>
       tournaments.reduce(
         (acc, v) => {
@@ -79,15 +66,11 @@ const TournamentsPage: NextPage = () => {
           if (v.status === 2) {
             acc.active.push(v);
           }
-          if (v.status === 3 || v.is_finished) {
-            acc.finished.push(v);
-          }
           return acc;
         },
         {
           active: [] as TournamentT[],
           recording: [] as TournamentT[],
-          finished: [] as TournamentT[],
         }
       ),
     [tournaments]
@@ -221,7 +204,7 @@ const TournamentsPage: NextPage = () => {
           </div>
         );
       case TOURNAMENT_TABS[2]:
-        if (finished.length === 0) {
+        if (playedTournaments.length === 0) {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
@@ -232,7 +215,7 @@ const TournamentsPage: NextPage = () => {
           }));
         };
 
-        const filteredFinishedTournaments = finished.filter((v) =>
+        const filteredFinishedTournaments = playedTournaments.filter((v) =>
           finishedTournamentsFilters.tournamentType !== 999
             ? finishedTournamentsFilters.tournamentType === v.tournament_type
             : true
@@ -277,7 +260,7 @@ const TournamentsPage: NextPage = () => {
                     }
                     winnerName={
                       v.status === 3 || v.is_finished
-                        ? getTournamentWinnerString(v, playersMap, matchesMap)
+                        ? 'getTournamentWinnerString(v, playersMap)'
                         : ''
                     }
                   />
@@ -315,7 +298,11 @@ const TournamentsPage: NextPage = () => {
         tabNames={TOURNAMENT_TABS}
         onChange={handleTabChange}
       />
-      {isLoading ? <LoadingSpinner /> : activeTabContent}
+      {isLoading || isPlayedTournamentsLoading ? (
+        <LoadingSpinner />
+      ) : (
+        activeTabContent
+      )}
     </div>
   );
 };

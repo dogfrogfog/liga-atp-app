@@ -8,10 +8,23 @@ export default async (
   res: NextApiResponse<TournamentT[] | TournamentT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
+    const shouldIncludePlayedTournaments = !!req.query.withPlayed;
+
+    const additionalParams = !shouldIncludePlayedTournaments
+      ? {
+          where: {
+            status: {
+              in: [1, 2],
+            },
+          },
+        }
+      : null;
+
     const tournaments = await prisma.tournament.findMany({
       orderBy: {
         id: 'desc',
       },
+      ...additionalParams,
     });
 
     res.json(tournaments);
