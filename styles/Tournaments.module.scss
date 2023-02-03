@@ -151,4 +151,11 @@
   &:active {
     border-color: $custom-aqua;
   }
+
+  &:disabled {
+    opacity: 0.7;
+    color: $custom-lightgray;
+    border-color: $custom-lightgray;
+    background-color: $custom-mediumdarkgray;
+  }
 }
