@@ -60,8 +60,7 @@ const getTournamentWinners = (
   if (winners.length > 0) {
     return winners.reduce(
       (acc, w, i) =>
-        (acc +=
-          (i === 1 ? ' / ' : '')) +
+        (acc += i === 1 ? ' / ' : '') +
         `${(w.first_name as string)[0]}. ${w.last_name}`,
       ''
     );
