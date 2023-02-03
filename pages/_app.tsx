@@ -59,6 +59,7 @@ const SWRMyApp = (props: AppProps) => (
       },
       // to prevent same requests occur multiple times
       revalidateIfStale: false,
+      revalidateOnFocus: false,
     }}
   >
     <MyApp {...props} />
