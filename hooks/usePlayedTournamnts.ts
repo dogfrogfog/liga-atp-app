@@ -1,10 +1,13 @@
 import useSWR from 'swr';
-import type { tournament as TournamentT } from '@prisma/client';
+import type {
+  tournament as TournamentT,
+  match as MatchT,
+} from '@prisma/client';
 
 const usePlayedTournamnts = (page: number) => {
-  const { data, isLoading, error, mutate } = useSWR<TournamentT[]>(
-    `/api/tournaments/playedTournaments?page=${page}`
-  );
+  const { data, isLoading, error, mutate } = useSWR<
+    (TournamentT & { match: MatchT[] })[]
+  >(`/api/tournaments/playedTournaments?page=${page}`);
 
   return {
     playedTournaments: data || [],

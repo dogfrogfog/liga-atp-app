@@ -19,6 +19,8 @@ import {
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
+import usePlayers from 'hooks/usePlayers';
+import getTournamentWinners from 'utils/getTournamentWinners';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
@@ -34,7 +36,17 @@ const TournamentsPage: NextPage = () => {
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
 
   const { tournaments, isLoading } = useTournaments(false);
+  const { players } = usePlayers();
   const router = useRouter();
+
+  const playersMap = useMemo(
+    () =>
+      players.reduce((acc, p) => {
+        acc.set(p.id, p);
+        return acc;
+      }, new Map<number, PlayerT>()),
+    [players]
+  );
 
   const { active, recording } = useMemo(
     () =>
@@ -193,6 +205,7 @@ const TournamentsPage: NextPage = () => {
           pages.push(
             <FinishedTournamentsList
               key={i}
+              playersMap={playersMap}
               playedTournamentsPage={i + 1}
               finishedTournamentsType={finishedTournamentsType}
               isLastPage={i + 1 === playedTournamentsPage}
@@ -268,16 +281,20 @@ const TournamentsPage: NextPage = () => {
   );
 };
 
+type FinishedTournamentsListProps = {
+  playedTournamentsPage: number;
+  finishedTournamentsType: number;
+  isLastPage: boolean;
+  playersMap: Map<number, PlayerT>;
+};
+
 const FinishedTournamentsList = memo(
   ({
     playedTournamentsPage,
     finishedTournamentsType,
     isLastPage,
-  }: {
-    playedTournamentsPage: number;
-    finishedTournamentsType: number;
-    isLastPage: boolean;
-  }) => {
+    playersMap,
+  }: FinishedTournamentsListProps) => {
     const { playedTournaments, isLoading } = usePlayedTournamnts(
       playedTournamentsPage
     );
@@ -302,18 +319,20 @@ const FinishedTournamentsList = memo(
           <Link key={v.id} href={'/tournaments/' + v.id}>
             <a className={styles.link}>
               <TournamentListItem
-                name={v.name || 'tbd'}
+                name={v.name || 'название не определено'}
                 status={
-                  v.status ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status] : 'tbd'
+                  v.status
+                    ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
+                    : TOURNAMENT_STATUS_NUMBER_VALUES[3]
                 }
                 startDate={
                   v.start_date
                     ? format(new Date(v.start_date), 'dd.MM.yyyy')
-                    : 'tbd'
+                    : 'дата не определена'
                 }
                 winnerName={
                   v.status === 3 || v.is_finished
-                    ? 'getTournamentWinnerString(v, playersMap)'
+                    ? getTournamentWinners(v, playersMap)
                     : ''
                 }
               />

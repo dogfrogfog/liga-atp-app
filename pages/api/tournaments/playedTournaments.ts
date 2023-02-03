@@ -34,6 +34,9 @@ export default async (
           },
         ],
       },
+      include: {
+        match: true,
+      },
     });
 
     res.json(playedTournaments);
