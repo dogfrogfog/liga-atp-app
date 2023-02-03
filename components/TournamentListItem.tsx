@@ -2,7 +2,7 @@ import cl from 'classnames';
 
 import styles from './TournamentListItem.module.scss';
 
-type TournamentListItemsProps = {
+type TournamentListItemProps = {
   name: string;
   status: string;
   startDate: string;
@@ -10,13 +10,13 @@ type TournamentListItemsProps = {
   className?: string;
 };
 
-const TournamentListItems = ({
+const TournamentListItem = ({
   name,
   status,
   startDate,
   winnerName,
   className,
-}: TournamentListItemsProps) => (
+}: TournamentListItemProps) => (
   <div className={cl(styles.container, className)}>
     <div className={styles.row}>
       <span className={styles.name}>{name}</span>
@@ -29,4 +29,4 @@ const TournamentListItems = ({
   </div>
 );
 
-export default TournamentListItems;
+export default TournamentListItem;

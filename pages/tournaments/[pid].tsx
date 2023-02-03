@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import {
   tournament as TournamentT,
@@ -91,18 +91,19 @@ const TournamentPage: NextPage<{
           }
 
           return (
-            <>
-              <div className={styles.winner}>
-                <p className={styles.winnerTitle}>Победитель</p>
-                {winners.map((p) => (
-                  <span key={p.id} className={styles.winnerName}>
-                    {p?.first_name + ' ' + p?.last_name}
-                  </span>
-                ))}
-                <span className={styles.score}>{lastMatch.score}</span>
-              </div>
-              {/* <NotFoundMessage message="Сетка недоступна" /> */}
-            </>
+            <p className={styles.newDrawWinner}>
+              Победитель турнира:
+              <br />
+              <br />
+              {winners.map((p, i) => (
+                <Fragment key={p.id}>
+                  {p?.first_name +
+                    ' ' +
+                    p?.last_name +
+                    `${i + 1 != winners.length ? ' / ' : ''}`}
+                </Fragment>
+              ))}
+            </p>
           );
         }
 
@@ -111,18 +112,74 @@ const TournamentPage: NextPage<{
           return <NotFoundMessage message="Жеребьевка еще не прошла" />;
         }
 
+        // new brackets.draw format
+        const lastMatch = isFinished
+          ? tournamentMatches.find(
+              (v) => v.id === brackets[brackets.length - 1][0].matchId
+            )
+          : null;
+        let winnerName;
+        if (!isDoubles) {
+          const winner = allPlayers.find(
+            (v) => v.id + '' === lastMatch?.winner_id
+          );
+
+          winnerName = winner
+            ? `${(winner.first_name as string)[0]}. ${winner.last_name}`
+            : '';
+        } else {
+          const team1 = [lastMatch?.player1_id, lastMatch?.player3_id];
+          const team2 = [lastMatch?.player2_id, lastMatch?.player4_id];
+
+          if (team1.includes(parseInt(lastMatch?.winner_id as string, 10))) {
+            winnerName = allPlayers.reduce((acc, p) => {
+              if (team1.includes(p.id)) {
+                if (acc) {
+                  acc += ` / ${(p.first_name as string)[0]}. ${p.last_name}`;
+                } else {
+                  acc = `${(p.first_name as string)[0]}. ${p.last_name}`;
+                }
+              }
+              return acc;
+            }, '');
+          }
+
+          if (team2.includes(parseInt(lastMatch?.winner_id as string, 10))) {
+            winnerName = allPlayers.reduce((acc, p) => {
+              if (team2.includes(p.id)) {
+                if (acc) {
+                  acc += ` / ${(p.first_name as string)[0]}. ${p.last_name}`;
+                } else {
+                  acc = `${(p.first_name as string)[0]}. ${p.last_name}`;
+                }
+              }
+              return acc;
+            }, '');
+          }
+        }
+
         return brackets ? (
-          <Schedule
-            hasGroups={
-              tournament.draw_type
-                ? GROUPS_DRAW_TYPES.includes(tournament.draw_type)
-                : false
-            }
-            isDoubles={isDoubles}
-            brackets={brackets}
-            tournamentMatches={tournamentMatches}
-            registeredPlayers={registeredPlayers}
-          />
+          <>
+            {isFinished && (
+              <p className={styles.newDrawWinner}>
+                Победитель:
+                <br />
+                <br />
+                {winnerName}
+              </p>
+            )}
+            <Schedule
+              hasGroups={
+                tournament.draw_type
+                  ? GROUPS_DRAW_TYPES.includes(tournament.draw_type)
+                  : false
+              }
+              isDoubles={isDoubles}
+              brackets={brackets}
+              tournamentMatches={tournamentMatches}
+              registeredPlayers={registeredPlayers}
+            />
+          </>
         ) : (
           <NotFoundMessage message="Сетка не сформирована" />
         );

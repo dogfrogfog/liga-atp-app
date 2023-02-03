@@ -11,9 +11,7 @@
     color: $custom-white;
     text-align: left;
 
-    &:active,
-    &:focus,
-    &:hover {
+    &:active {
       background-color: $custom-aqua;
       color: $custom-black;
     }

@@ -69,8 +69,7 @@
   align-items: center;
   margin-bottom: 10px;
 
-  &:active,
-  &:focus {
+  &:active {
     background-color: $custom-aqua;
     color: $custom-black;
   }

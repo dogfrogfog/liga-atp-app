@@ -1,12 +1,13 @@
-import { useState, ChangeEvent, useMemo } from 'react';
+import { useState, ChangeEvent, useMemo, memo } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { tournament as TournamentT } from '@prisma/client';
+import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import { format, startOfISOWeek } from 'date-fns';
 import cl from 'classnames';
 
 import useTournaments from 'hooks/useTournaments';
+import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
@@ -18,6 +19,8 @@ import {
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
+import usePlayers from 'hooks/usePlayers';
+import getTournamentWinners from 'utils/getTournamentWinners';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
@@ -27,21 +30,25 @@ const filterFn = (inputValue: string) => (t: TournamentT) =>
 
 const now = new Date();
 const TournamentsPage: NextPage = () => {
-  const { tournaments, isLoading } = useTournaments();
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
-  const [finishedTournamentsFilters, setFinishedTournamentsFilters] = useState<{
-    isDoubles: boolean;
-    tournamentType: number | undefined;
-  }>({
-    /// 999 is "all" option
-    tournamentType: 999,
-    isDoubles: false,
-  });
+  const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
+  const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
 
+  const { tournaments, isLoading } = useTournaments(false);
+  const { players } = usePlayers();
   const router = useRouter();
 
-  const { active, recording, finished } = useMemo(
+  const playersMap = useMemo(
+    () =>
+      players.reduce((acc, p) => {
+        acc.set(p.id, p);
+        return acc;
+      }, new Map<number, PlayerT>()),
+    [players]
+  );
+
+  const { active, recording } = useMemo(
     () =>
       tournaments.reduce(
         (acc, v) => {
@@ -51,15 +58,11 @@ const TournamentsPage: NextPage = () => {
           if (v.status === 2) {
             acc.active.push(v);
           }
-          if (v.status === 3 || v.is_finished) {
-            acc.finished.push(v);
-          }
           return acc;
         },
         {
           active: [] as TournamentT[],
           recording: [] as TournamentT[],
-          finished: [] as TournamentT[],
         }
       ),
     [tournaments]
@@ -74,7 +77,7 @@ const TournamentsPage: NextPage = () => {
 
         return active.map((v) => (
           <Link key={v.id} href={'/tournaments/' + v.id}>
-            <span>
+            <a className={styles.link}>
               <TournamentListItem
                 name={v.name || 'tbd'}
                 status={
@@ -89,7 +92,7 @@ const TournamentsPage: NextPage = () => {
                   v.status === 3 || v.is_finished ? '<имя победителя>' : ''
                 }
               />
-            </span>
+            </a>
           </Link>
         ));
       case TOURNAMENT_TABS[1]:
@@ -165,7 +168,7 @@ const TournamentsPage: NextPage = () => {
             {filteredTournaments.length > 0 ? (
               filteredTournaments.map((v) => (
                 <Link key={v.id} href={'/tournaments/' + v.id}>
-                  <span>
+                  <a className={styles.link}>
                     <TournamentListItem
                       name={v.name || 'tbd'}
                       status={
@@ -184,7 +187,7 @@ const TournamentsPage: NextPage = () => {
                           : ''
                       }
                     />
-                  </span>
+                  </a>
                 </Link>
               ))
             ) : (
@@ -193,22 +196,22 @@ const TournamentsPage: NextPage = () => {
           </div>
         );
       case TOURNAMENT_TABS[2]:
-        if (finished.length === 0) {
-          return <NotFoundMessage message="Нет доступных турниров" />;
-        }
-
         const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
-          setFinishedTournamentsFilters((v) => ({
-            ...v,
-            tournamentType: parseInt(e.target.value, 10),
-          }));
+          setFinishedTournamentsType(parseInt(e.target.value, 10));
         };
 
-        const filteredFinishedTournaments = finished.filter((v) =>
-          finishedTournamentsFilters.tournamentType !== 999
-            ? finishedTournamentsFilters.tournamentType === v.tournament_type
-            : true
-        );
+        const pages = [];
+        for (let i = 0; i < playedTournamentsPage; i += 1) {
+          pages.push(
+            <FinishedTournamentsList
+              key={i}
+              playersMap={playersMap}
+              playedTournamentsPage={i + 1}
+              finishedTournamentsType={finishedTournamentsType}
+              isLastPage={i + 1 === playedTournamentsPage}
+            />
+          );
+        }
 
         return (
           <>
@@ -217,7 +220,7 @@ const TournamentsPage: NextPage = () => {
                 <span>Тип турнира</span>
                 <select
                   onChange={handleLevelChange}
-                  value={finishedTournamentsFilters.tournamentType}
+                  value={finishedTournamentsType}
                 >
                   <option value={999}>Все</option>
                   {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
@@ -231,37 +234,17 @@ const TournamentsPage: NextPage = () => {
                   )}
                 </select>
               </div>
-              {/* <div className={styles.checkbox}>
-                <input
-                  type="checkbox"
-                  onChange={toggleDoublesCheckbox}
-                  checked={finishedTournamentsFilters.isDoubles}
-                />
-                <span>Даблс</span>
-              </div> */}
             </div>
-            {filteredFinishedTournaments.map((v) => (
-              <Link key={v.id} href={'/tournaments/' + v.id}>
-                <span>
-                  <TournamentListItem
-                    name={v.name || 'tbd'}
-                    status={
-                      v.status
-                        ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
-                        : 'tbd'
-                    }
-                    startDate={
-                      v.start_date
-                        ? format(new Date(v.start_date), 'dd.MM.yyyy')
-                        : 'tbd'
-                    }
-                    winnerName={
-                      v.status === 3 || v.is_finished ? '<имя победителя>' : ''
-                    }
-                  />
-                </span>
-              </Link>
-            ))}
+            {pages}
+            <div className={styles.loadMoreContainer}>
+              <button
+                // disabled={true}
+                onClick={() => setPlayedTournamentsPage((v) => v + 1)}
+                className={styles.loadMore}
+              >
+                Загрузить еще
+              </button>
+            </div>
           </>
         );
     }
@@ -297,5 +280,71 @@ const TournamentsPage: NextPage = () => {
     </div>
   );
 };
+
+type FinishedTournamentsListProps = {
+  playedTournamentsPage: number;
+  finishedTournamentsType: number;
+  isLastPage: boolean;
+  playersMap: Map<number, PlayerT>;
+};
+
+const FinishedTournamentsList = memo(
+  ({
+    playedTournamentsPage,
+    finishedTournamentsType,
+    isLastPage,
+    playersMap,
+  }: FinishedTournamentsListProps) => {
+    const { playedTournaments, isLoading } = usePlayedTournamnts(
+      playedTournamentsPage
+    );
+
+    const filteredFinishedTournaments = playedTournaments.filter((v) =>
+      finishedTournamentsType !== 999
+        ? finishedTournamentsType === v.tournament_type
+        : true
+    );
+
+    if (isLastPage && isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    if (isLastPage && filteredFinishedTournaments.length === 0) {
+      return <NotFoundMessage message="Нет доступных турниров" />;
+    }
+
+    return (
+      <>
+        {filteredFinishedTournaments.map((v) => (
+          <Link key={v.id} href={'/tournaments/' + v.id}>
+            <a className={styles.link}>
+              <TournamentListItem
+                name={v.name || 'название не определено'}
+                status={
+                  v.status
+                    ? TOURNAMENT_STATUS_NUMBER_VALUES[v.status]
+                    : TOURNAMENT_STATUS_NUMBER_VALUES[3]
+                }
+                startDate={
+                  v.start_date
+                    ? format(new Date(v.start_date), 'dd.MM.yyyy')
+                    : 'дата не определена'
+                }
+                winnerName={
+                  v.status === 3 || v.is_finished
+                    ? getTournamentWinners(v, playersMap)
+                    : ''
+                }
+              />
+            </a>
+          </Link>
+        ))}
+      </>
+    );
+  },
+  (prevP, nextP) => {
+    return prevP.playedTournamentsPage === nextP.playedTournamentsPage;
+  }
+);
 
 export default TournamentsPage;
