@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import cl from 'classnames';
 import {
@@ -125,8 +125,18 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
     setIsLoading(false);
   };
 
-  const handleTournamentFieldChange = (key: string, value: any) => {
+  const handleTournamentFieldChange = (key: string, value: string | number) => {
     setActiveTournament((v) => ({ ...v, [key]: value }));
+  };
+
+  const handleTournamentStartDateChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const newDate = e.target.value ? new Date(e.target.value) : null;
+
+    if (newDate && newDate?.getFullYear() < 3000) {
+      setActiveTournament((v) => ({ ...v, start_date: new Date(newDate) }));
+    }
   };
 
   const onSubmit = async (match: MatchT) => {
@@ -381,12 +391,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
                           : ''
                       }
                       type="date"
-                      onChange={(e) =>
-                        handleTournamentFieldChange(
-                          'start_date',
-                          new Date(e.target.value)
-                        )
-                      }
+                      onChange={handleTournamentStartDateChange}
                     />
                   </div>
                 );
