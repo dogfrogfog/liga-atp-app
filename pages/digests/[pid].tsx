@@ -21,7 +21,9 @@ const DigestPage: NextPage<{ digest: DigestT }> = ({ digest }) => {
       </span>
       <PageTitle>{digest.title}</PageTitle>
       <br />
-      <MarkdownPreview source={digest.markdown || ''} />
+      <div className={styles.markdownContainer}>
+        <MarkdownPreview source={digest.markdown || ''} />
+      </div>
     </div>
   );
 };

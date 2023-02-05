@@ -25,6 +25,7 @@ const createDigests = async (
 
 import PageTitle from 'ui-kit/PageTitle';
 import styles from './styles.module.scss';
+import useDigests from 'hooks/useDigests';
 
 export type NoCustomFieldsType = Omit<
   DigestT,
@@ -34,6 +35,7 @@ export type NoCustomFieldsType = Omit<
 const CreateDigestPage: NextPage = () => {
   const { players } = usePlayers();
   const router = useRouter();
+  const { mutate } = useDigests();
 
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [markdown, setMarkdown] = useState<string | undefined>();
@@ -47,6 +49,7 @@ const CreateDigestPage: NextPage = () => {
 
     if (res.isOk) {
       router.push(`/admin/digests/${res.data?.id}`);
+      mutate();
     } else {
       console.error(res.errorMessage);
     }

@@ -14,6 +14,7 @@ import type { NoCustomFieldsType } from 'pages/admin/digests/new';
 import { multiSelectToIds, playersToMultiSelect } from 'utils/multiselect';
 import styles from './styles.module.scss';
 import usePlayers from 'hooks/usePlayers';
+import useDigests from 'hooks/useDigests';
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
@@ -37,6 +38,7 @@ const SingleDigestPage: NextPage<{
   mentionedPlayers: PlayerT[];
 }> = ({ digest, mentionedPlayers }) => {
   const { players } = usePlayers();
+  const { mutate } = useDigests();
   const [activeDigest, setActiveDigest] = useState(digest);
   const [isEditing, setEditingStatus] = useState(false);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>(
@@ -61,6 +63,7 @@ const SingleDigestPage: NextPage<{
 
     if (res.isOk) {
       setActiveDigest(res.data as DigestT);
+      mutate();
     } else {
       console.error(res.errorMessage);
     }
