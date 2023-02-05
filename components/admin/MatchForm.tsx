@@ -1,9 +1,13 @@
+import { useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { player as PlayerT, match as MatchT } from '@prisma/client';
 import { format } from 'date-fns';
 
 import InputWithError from 'ui-kit/InputWithError';
 import formStyles from '../../styles/Form.module.scss';
+
+export const getInputDateTimeFormatFromDate = (date: Date) =>
+  format(date, 'yyyy-MM-dd') + 'T' + format(date, 'H:mm');
 
 const MatchForm = ({
   isDoubles,
@@ -16,22 +20,30 @@ const MatchForm = ({
   onSubmit: (v: MatchT) => Promise<void>;
   isDoubles: boolean;
 }) => {
+  const [dateTimeLocal, setDateTimeLocal] = useState<string | null>(
+    match?.time ? getInputDateTimeFormatFromDate(new Date(match.time)) : null
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<any>({
+    setValue,
+  } = useForm<MatchT>({
     defaultValues: {
       player1_id: null,
       player2_id: null,
       player3_id: null,
       player4_id: null,
       ...match,
-      start_date: match?.start_date
-        ? format(new Date(match?.start_date), 'yyyy-MM-dd')
-        : null,
+      time: match?.time || null,
     },
   });
+
+  const handleMatchDateTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDateTimeLocal(e.target.value);
+    setValue('time', new Date(e.target.value));
+  };
 
   return (
     <div className={formStyles.formContainer}>
@@ -109,11 +121,14 @@ const MatchForm = ({
             ))}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.start_date?.message}>
+        <InputWithError errorMessage={errors.time?.message}>
+          <br />
+          Дата и время матча:
           <input
+            value={dateTimeLocal || undefined}
             placeholder="Начало матча"
-            type="date"
-            {...register('start_date', { required: false, valueAsDate: true })}
+            type="datetime-local"
+            onChange={handleMatchDateTimeChange}
           />
         </InputWithError>
         <br />

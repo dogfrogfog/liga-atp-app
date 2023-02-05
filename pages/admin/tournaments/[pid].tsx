@@ -146,7 +146,9 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         player4_id,
         winner_id,
         score,
+        time,
       } = match;
+
       const createdMatch = await createMatch({
         tournament_id: activeTournament.id,
         player1_id,
@@ -155,7 +157,7 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
         player4_id,
         winner_id,
         is_completed: false,
-        start_date: new Date(),
+        time,
         score,
       } as MatchT);
 
