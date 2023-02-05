@@ -22,7 +22,7 @@ import {
 import usePlayers from 'hooks/usePlayers';
 
 import tableStyles from './Table.module.scss';
-import formStyles from './Form.module.scss';
+import formStyles from '../../styles/Form.module.scss';
 
 const Players: NextPage = () => {
   const { players, isLoading, mutate } = usePlayers();

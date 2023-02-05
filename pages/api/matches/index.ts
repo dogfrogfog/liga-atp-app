@@ -62,7 +62,12 @@ export default async (
 
   if (req.method === 'POST') {
     const createdMatch = await prisma.match.create({
-      data: req.body.data,
+      data: {
+        ...req.body.data,
+        time: req.body.data?.time
+          ? new Date(req.body.data?.time).toISOString()
+          : null,
+      },
     });
 
     res.json(createdMatch);
@@ -73,7 +78,12 @@ export default async (
       where: {
         id: req.body.data.id,
       },
-      data: req.body.data,
+      data: {
+        ...req.body.data,
+        time: req.body.data?.time
+          ? new Date(req.body.data?.time).toISOString()
+          : null,
+      },
     });
 
     res.json(updatedMatch);

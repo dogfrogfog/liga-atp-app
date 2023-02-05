@@ -5,12 +5,12 @@ import styles from './Schedule.module.scss';
 
 type MatchProps = {
   tournamentName: string;
-  startDate: Date | null;
+  time: Date | null;
   opponent: string;
 };
 
-const Match = ({ tournamentName, startDate, opponent }: MatchProps) => {
-  const date = startDate && new Date(startDate);
+const Match = ({ tournamentName, time, opponent }: MatchProps) => {
+  const date = time && new Date(time);
 
   return (
     <div className={styles.match}>
@@ -22,9 +22,7 @@ const Match = ({ tournamentName, startDate, opponent }: MatchProps) => {
       </div>
       <div className={styles.row}>
         <span className={styles.opponent}>vs {opponent}</span>
-        <span className={styles.matchDate}>
-          {date && format(date, 'hh:mm')}
-        </span>
+        <span className={styles.matchDate}>{date && format(date, 'H:mm')}</span>
       </div>
     </div>
   );
@@ -44,7 +42,7 @@ const ScheduleTab = ({
           <Match
             key={v.id}
             tournamentName={v.tournament.name || ''}
-            startDate={v.start_date}
+            time={v.time}
             opponent={getOpponents(playerId, v)}
           />
         ))
