@@ -9,9 +9,9 @@ function SecondaryLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className={styles.pageContainer}>
-      <a className={styles.back} onClick={() => router.back()}>
+      <button className={styles.back} onClick={() => router.back()}>
         <BiArrowBack size="xl" />
-      </a>
+      </button>
       {children}
     </div>
   );

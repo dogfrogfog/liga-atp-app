@@ -238,7 +238,7 @@ const ProfileHeader = ({
             </div>
             <div className={styles.medal}>
               <FaMedal color="yellow" />
-              {` ${tournamentsWins}`}
+              {` ${tournamentsWins || 0}`}
             </div>
             <div className={styles.medal}>
               <FaMedal color="lightgrey" />
