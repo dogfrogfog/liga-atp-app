@@ -192,7 +192,7 @@ const Match = ({
     <FaQuestion />
   );
 
-  const matchDate = match?.start_date ? new Date(match.start_date) : null;
+  const matchDateTime = match?.time ? new Date(match.time) : null;
 
   return (
     <div className={cl(styles.match, className)}>
@@ -267,13 +267,13 @@ const Match = ({
               ))}
             </span>
           ) : (
-            matchDate && (
+            matchDateTime && (
               <span className={styles.matchDate}>
                 <span className={styles.timeUnit}>
-                  {format(matchDate, 'EEEEEE HH:mm')}
+                  {format(matchDateTime, 'EEEEEE H:mm')}
                 </span>
                 <span className={styles.timeUnit}>
-                  {format(matchDate, 'dd.MM')}
+                  {format(matchDateTime, 'dd.MM')}
                 </span>
               </span>
             )
