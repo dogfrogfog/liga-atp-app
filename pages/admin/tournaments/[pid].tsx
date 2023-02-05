@@ -1,15 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import cl from 'classnames';
-import {
-  tournament as TournamentT,
-  player as PlayerT,
-  match as MatchT,
-} from '@prisma/client';
+import { tournament as TournamentT, match as MatchT } from '@prisma/client';
 import { prisma } from 'services/db';
 import { MultiSelect, Option } from 'react-multi-select-component';
 import { format } from 'date-fns';
-import { useForm } from 'react-hook-form';
 
 import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
@@ -21,15 +16,14 @@ import {
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
-import InputWithError from 'ui-kit/InputWithError';
 import { updateTournament } from 'services/tournaments';
 import TournamentDraw, { IBracketsUnit } from 'components/admin/TournamentDraw';
+import MatchForm from 'components/admin/MatchForm';
 import { createMatch, updateMatch } from 'services/matches';
 import { playersToMultiSelect, multiSelectToIds } from 'utils/multiselect';
 import { getInitialBrackets } from 'utils/bracket';
 import usePlayers from 'hooks/usePlayers';
 import styles from './AdminSingleTournamentPape.module.scss';
-import formStyles from '../Form.module.scss';
 
 // todo: https://github.com/dogfrogfog/liga-atp-app/issues/49
 const translation = {
@@ -543,151 +537,6 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   );
 };
 
-const MatchForm = ({
-  isDoubles,
-  match,
-  onSubmit,
-  registeredPlayers,
-}: {
-  registeredPlayers: PlayerT[];
-  match?: MatchT;
-  onSubmit: (v: MatchT) => Promise<void>;
-  isDoubles: boolean;
-}) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<any>({
-    defaultValues: {
-      player1_id: null,
-      player2_id: null,
-      player3_id: null,
-      player4_id: null,
-      ...match,
-      start_date: match?.start_date
-        ? format(new Date(match?.start_date), 'yyyy-MM-dd')
-        : null,
-    },
-  });
-
-  return (
-    <div className={formStyles.formContainer}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWithError errorMessage={errors.player1_id?.message}>
-          <br />
-          Игрок 1:
-          <select
-            {...register('player1_id', {
-              required: true,
-              valueAsNumber: true,
-            })}
-          >
-            <option>не выбран</option>
-            {registeredPlayers.map((p) => (
-              <option key={p.id} value={p.id}>
-                {`${p.last_name} ${(p.first_name as string)[0]}`}
-              </option>
-            ))}
-          </select>
-        </InputWithError>
-        <InputWithError errorMessage={errors.player2_id?.message}>
-          <br />
-          Игрок 2:
-          <select
-            {...register('player2_id', {
-              valueAsNumber: true,
-            })}
-          >
-            <option>не выбран</option>
-            {registeredPlayers.map((p) => (
-              <option key={p.id} value={p.id}>
-                {`${p.last_name} ${(p.first_name as string)[0]}`}
-              </option>
-            ))}
-          </select>
-        </InputWithError>
-        {isDoubles && (
-          <>
-            <InputWithError errorMessage={errors.player3_id?.message}>
-              <br />
-              Пара игрока 1 - игрок 3:
-              <select {...register('player3_id', { valueAsNumber: true })}>
-                <option>не выбран</option>
-                {registeredPlayers.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {`${p.last_name} ${(p.first_name as string)[0]}`}
-                  </option>
-                ))}
-              </select>
-            </InputWithError>
-            <InputWithError errorMessage={errors.player4_id?.message}>
-              <br />
-              Пара игрока 2 - игрок 4:
-              <select {...register('player4_id', { valueAsNumber: true })}>
-                <option>не выбран</option>
-                {registeredPlayers.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {`${p.last_name} ${(p.first_name as string)[0]}`}
-                  </option>
-                ))}
-              </select>
-            </InputWithError>
-          </>
-        )}
-        <InputWithError errorMessage={errors.winner_id?.message}>
-          <br />
-          Победитель - игрок 1 или игрок 2:
-          <select {...register('winner_id')}>
-            <option value="">не выбран</option>
-            {registeredPlayers.map((p) => (
-              <option key={p.id} value={p.id}>
-                {`${p.last_name} ${(p.first_name as string)[0]}`}
-              </option>
-            ))}
-          </select>
-        </InputWithError>
-        <InputWithError errorMessage={errors.start_date?.message}>
-          <input
-            placeholder="Начало матча"
-            type="date"
-            {...register('start_date', { required: false, valueAsDate: true })}
-          />
-        </InputWithError>
-        <br />
-        <p>если матч завершился без счета - указывать {'"w/o"'}</p>
-        <InputWithError errorMessage={errors.score?.message}>
-          <input
-            placeholder="Счет"
-            {...register('score', {
-              pattern: {
-                value: /^((\d{1,2}-\d{1,2} )|w\/o){1,5}/,
-                message: 'correct format: 6-2 2-6 10-2',
-              },
-            })}
-          />
-        </InputWithError>
-        <br />
-        <InputWithError errorMessage={errors.youtube_link?.message}>
-          <input
-            className={formStyles.youtubeLink}
-            placeholder="Ссылка на ютюб"
-            {...register('youtube_link', {
-              pattern: {
-                value: /^(https:\/\/)/,
-                message: 'should starts with https://',
-              },
-            })}
-          />
-        </InputWithError>
-        <div className={formStyles.formActions}>
-          <input className={formStyles.submitButton} type="submit" />
-        </div>
-      </form>
-    </div>
-  );
-};
-
 export default AdminSingleTournamentPape;
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
@@ -701,12 +550,10 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   });
 
   const { match, ...tournamentProps } = tournament as any;
-  const players = await prisma.player.findMany();
 
   return {
     props: {
       tournament: tournamentProps,
-      players,
       matches: match,
     },
   };

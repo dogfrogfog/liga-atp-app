@@ -27,7 +27,7 @@ import {
 } from 'services/tournaments';
 
 import tableStyles from '../Table.module.scss';
-import formStyles from '../Form.module.scss';
+import formStyles from '../../../styles/Form.module.scss';
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
