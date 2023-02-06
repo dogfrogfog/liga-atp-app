@@ -179,7 +179,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
-        avavarUrl={''}
+        avavarUrl={avatar || ''}
         isCoach={!!is_coach}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
