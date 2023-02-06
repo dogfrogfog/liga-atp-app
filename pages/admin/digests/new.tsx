@@ -56,7 +56,7 @@ const CreateDigestPage: NextPage = () => {
   };
 
   return (
-    <div className={styles.createPageContainer}>
+    <>
       <PageTitle>Новый дайджест</PageTitle>
       <DigestForm
         players={players}
@@ -66,7 +66,7 @@ const CreateDigestPage: NextPage = () => {
         newSelectedPlayers={newSelectedPlayers}
         setNewSelectedPlayers={setNewSelectedPlayers}
       />
-    </div>
+    </>
   );
 };
 
