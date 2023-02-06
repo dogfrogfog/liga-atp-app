@@ -156,9 +156,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         );
       case PROFILE_TABS[5]:
         return digests.length > 0 ? (
-          digests.map((d) => (
-            <DigestListEl key={d.id} {...d} />
-          ))
+          digests.map((d) => <DigestListEl key={d.id} {...d} />)
         ) : (
           <NotFoundMessage message="Нет упоминаний об игроке" />
         );
