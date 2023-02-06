@@ -85,10 +85,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     }
   );
 
-  const onDigestClick = (id: number) => {
-    router.push(`/digests/${id}`);
-  };
-
   const activeTabContent = (() => {
     switch (activeTab) {
       case PROFILE_TABS[0]:
@@ -161,7 +157,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       case PROFILE_TABS[5]:
         return digests.length > 0 ? (
           digests.map((d) => (
-            <DigestListEl key={d.id} {...d} onClick={onDigestClick} />
+            <DigestListEl key={d.id} {...d} />
           ))
         ) : (
           <NotFoundMessage message="Нет упоминаний об игроке" />
