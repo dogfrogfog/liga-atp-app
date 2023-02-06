@@ -24,7 +24,6 @@ const createDigests = async (
 };
 
 import PageTitle from 'ui-kit/PageTitle';
-import styles from './styles.module.scss';
 import useDigests from 'hooks/useDigests';
 
 export type NoCustomFieldsType = Omit<

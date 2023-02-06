@@ -20,7 +20,7 @@
     color: $custom-gray;
   }
 
-  button {
+  a {
     &:active {
       svg {
         color: $custom-aqua;
@@ -35,7 +35,7 @@
   }
 
   .menuItem {
-    width: calc(100% / 5);
+    width: calc(100% / 6);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -43,5 +43,20 @@
     font-size: 14px;
     font-weight: 200;
     border: 0;
+  }
+}
+
+.otherLinkItem {
+  svg {
+    position: relative;
+    top: -3px;
+    width: 40px;
+    height: 30px;
+    color: $custom-gray;
+  }
+
+  span {
+    font-size: 9px;
+    font-weight: 400;
   }
 }

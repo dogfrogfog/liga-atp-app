@@ -1,0 +1,36 @@
+@import './variables.scss';
+
+.pageContainer {
+  padding: 15px;
+  padding-top: 130px;
+}
+
+.markdownContainer {
+  overflow: hidden;
+
+  img {
+    width: 100%;
+  }
+}
+
+.linksList {
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+}
+
+.pageLink {
+  color: $custom-lightgray;
+  text-decoration: underline;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+
+  &:active {
+    color: $custom-aqua;
+  }
+}

@@ -115,3 +115,9 @@ export const TOURNAMENT_COLUMNS = [
   'surface',
   'status',
 ];
+
+export const OTHER_PAGES_KEYS = {
+  fame: 'fame',
+  events: 'events',
+  schedule: 'schedule',
+};

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { AiOutlineTrophy } from 'react-icons/ai';
 import { TbNews } from 'react-icons/tb';
 import { GiBabyfootPlayers } from 'react-icons/gi';
+import { FiMoreHorizontal } from 'react-icons/fi';
 
 import styles from '../../styles/Sidebar.module.scss';
 
@@ -20,6 +21,10 @@ const Sidebar = () => {
         <div className={styles.menuItem}>
           <TbNews />
           <Link href="/admin/digests">Дайджест</Link>
+        </div>
+        <div className={styles.menuItem}>
+          <FiMoreHorizontal />
+          <Link href="/admin/other">Прочее</Link>
         </div>
       </div>
     </div>

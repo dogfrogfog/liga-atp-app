@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
-import cl from 'classnames';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import cl from 'classnames';
+import { FiMoreHorizontal } from 'react-icons/fi';
 
 import styles from './MainAppLayout.module.scss';
 import {
@@ -15,59 +17,72 @@ function MainAppLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const currentRoute = router.pathname;
 
-  const onLinkClick = (url: string) => {
-    router.push(url);
-  };
-
   return (
     <>
       <div className={styles.pageContainer}>{children}</div>
       <div className={styles.bottomMenu}>
-        <button
-          onClick={() => onLinkClick('/players')}
-          className={cl(
-            styles.menuItem,
-            currentRoute === '/players' ? styles.active : styles.passive
-          )}
-        >
-          <Players />
-        </button>
-        <button
-          onClick={() => onLinkClick('/tournaments')}
-          className={cl(
-            styles.menuItem,
-            currentRoute === '/tournaments' ? styles.active : styles.passive
-          )}
-        >
-          <Tournaments />
-        </button>
-        <button
-          onClick={() => onLinkClick('/digests')}
-          className={cl(
-            styles.menuItem,
-            currentRoute === '/digests' ? styles.active : ''
-          )}
-        >
-          <Digest />
-        </button>
-        <button
-          onClick={() => onLinkClick('/ranking')}
-          className={cl(
-            styles.menuItem,
-            currentRoute === '/ranking' ? styles.active : ''
-          )}
-        >
-          <Rating />
-        </button>
-        <button
-          onClick={() => onLinkClick('/h2h')}
-          className={cl(
-            styles.menuItem,
-            currentRoute === '/h2h' ? styles.active : ''
-          )}
-        >
-          <HeadToHead />
-        </button>
+        <Link href="/players">
+          <a
+            className={cl(
+              styles.menuItem,
+              currentRoute === '/players' ? styles.active : styles.passive
+            )}
+          >
+            <Players />
+          </a>
+        </Link>
+        <Link href="/tournaments">
+          <a
+            className={cl(
+              styles.menuItem,
+              currentRoute === '/tournaments' ? styles.active : styles.passive
+            )}
+          >
+            <Tournaments />
+          </a>
+        </Link>
+        <Link href="/digests">
+          <a
+            className={cl(
+              styles.menuItem,
+              currentRoute === '/digests' ? styles.active : styles.passive
+            )}
+          >
+            <Digest />
+          </a>
+        </Link>
+        <Link href="/ranking">
+          <a
+            className={cl(
+              styles.menuItem,
+              currentRoute === '/ranking' ? styles.active : styles.passive
+            )}
+          >
+            <Rating />
+          </a>
+        </Link>
+        <Link href="/h2h">
+          <a
+            className={cl(
+              styles.menuItem,
+              currentRoute === '/h2h' ? styles.active : styles.passive
+            )}
+          >
+            <HeadToHead />
+          </a>
+        </Link>
+        <Link href="/other">
+          <a
+            className={cl(
+              styles.menuItem,
+              styles.otherLinkItem,
+              currentRoute === '/other' ? styles.active : styles.passive
+            )}
+          >
+            <FiMoreHorizontal />
+            <span>Прочее</span>
+          </a>
+        </Link>
       </div>
     </>
   );
