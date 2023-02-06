@@ -5,6 +5,14 @@
   padding-top: 130px;
 }
 
+.markdownContainer {
+  overflow: hidden;
+
+  img {
+    width: 100%;
+  }
+}
+
 .linksList {
   margin: 0;
   padding: 0;

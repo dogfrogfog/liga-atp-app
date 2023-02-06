@@ -13,7 +13,7 @@ const FamePage: NextPage<FamePageProps> = ({ content }) => {
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Аллея славы</PageTitle>
-      {content}
+      <div className={styles.markdownContainer}>{content}</div>
     </div>
   );
 };

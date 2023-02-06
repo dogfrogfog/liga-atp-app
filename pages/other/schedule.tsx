@@ -13,7 +13,7 @@ const SchedulePage: NextPage<SchedulePageProps> = ({ content }) => {
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Расписание</PageTitle>
-      {content}
+      <div className={styles.markdownContainer}>{content}</div>
     </div>
   );
 };
