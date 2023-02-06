@@ -173,3 +173,15 @@
     }
   }
 }
+
+.digestLinkEl {
+  display: block;
+  margin-bottom: 15px;
+
+  &:active {
+    border-radius: 14px;
+    border: 1px solid $custom-aqua;
+    margin: -1px;
+    margin-bottom: 14px;
+  }
+}

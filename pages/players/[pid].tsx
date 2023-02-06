@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
 import type { player as PlayerT, digest as DigestT } from '@prisma/client';
@@ -154,8 +154,16 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         );
       case PROFILE_TABS[5]:
         return digests.length > 0 ? (
-          // @ts-ignore
-          digests.map((d) => <DigestListEl key={d.id} {...d} />)
+          digests.map((d) => (
+            <Link key={d.id} href={`/digests/${d.id}`}>
+              <a className={styles.digestLinkEl}>
+                <DigestListEl
+                  title={d.title || ''}
+                  date={d.date || undefined}
+                />
+              </a>
+            </Link>
+          ))
         ) : (
           <NotFoundMessage message="Нет упоминаний об игроке" />
         );
