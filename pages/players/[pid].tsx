@@ -34,10 +34,16 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   player,
   digests,
 }) => {
+
+  return (
+    <>
+      {'SingleProfilePage'}
+    </>
+  );
+
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
-  const router = useRouter();
 
   const { matches } = useMatches(player.id);
   const { statsData } = useStats(
@@ -265,7 +271,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   return {
     props: {
       player,
-      digests: digests || [],
+      digests,
     },
   };
 };
