@@ -35,17 +35,6 @@
   padding: 15px;
   position: relative;
 
-  .status {
-    position: absolute;
-    z-index: 3;
-    right: 30px;
-    top: 50px;
-    background-color: rgba(30, 30, 30, 0.6);
-    color: $custom-white;
-    border-radius: 14px;
-    padding: 8px 12px;
-  }
-
   .info {
     position: absolute;
     bottom: 20px;

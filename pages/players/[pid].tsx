@@ -56,7 +56,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     forehand,
     beckhand,
     insta_link,
-    is_coach,
     in_tennis_from,
     job_description,
     height,
@@ -180,7 +179,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     <div className={styles.profileContainer}>
       <ProfileHeader
         avavarUrl={avatar || ''}
-        isCoach={!!is_coach}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
@@ -205,7 +203,6 @@ interface IProfileHeaderProps {
   name: string;
   level: string;
   points: string;
-  isCoach: boolean;
   tournamentsWins?: number;
   tournamentsFinals?: number;
 }
@@ -215,7 +212,6 @@ const ProfileHeader = ({
   name,
   level,
   points,
-  isCoach,
   tournamentsWins,
   tournamentsFinals,
 }: IProfileHeaderProps) => {
@@ -229,7 +225,6 @@ const ProfileHeader = ({
           <FaUserAlt />
         </div>
       )}
-      <span className={styles.status}>{isCoach ? 'Тренер' : 'Игрок'}</span>
       <div className={styles.info}>
         <p className={styles.name}>{name}</p>
         <div className={styles.infoContainer}>

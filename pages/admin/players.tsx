@@ -127,7 +127,6 @@ const PlayerForm = ({
     defaultValues: {
       level: null,
       age: null,
-      is_coach: false,
       technique: null,
       tactics: null,
       power: null,
@@ -274,18 +273,6 @@ const PlayerForm = ({
                   'correct format: https://www.instagram.com/it.familyy/',
               },
             })}
-          />
-        </InputWithError>
-        <InputWithError errorMessage={errors.is_coach?.message}>
-          <br />
-          Является тренером:
-          <Controller
-            name="is_coach"
-            control={control}
-            rules={{ required: false }}
-            render={({ field }) => (
-              <input type="checkbox" {...field} checked={field.value} />
-            )}
           />
         </InputWithError>
         {/* need to add columns to the db */}
