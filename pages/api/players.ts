@@ -14,9 +14,9 @@ export default async (
     const page = parseInt(req.query.page as string, 10);
     const paginationParams = page
       ? {
-        skip: page > 1 ? page * PAGE_SIZE : 0,
-        take: PAGE_SIZE,
-      }
+          skip: page > 1 ? page * PAGE_SIZE : 0,
+          take: PAGE_SIZE,
+        }
       : undefined;
 
     const players = await prisma.player.findMany({
