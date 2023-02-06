@@ -34,8 +34,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   player,
   digests,
 }) => {
-  return <>{'SingleProfilePage'}</>;
-
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
@@ -47,7 +45,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   );
 
   const {
-    id,
     date_of_birth,
     city,
     first_name,
@@ -91,14 +88,12 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       case PROFILE_TABS[0]:
         return (
           <InfoTab
-            // @ts-ignore
             age={date_of_birth && calculateYearsFromDate(date_of_birth)}
             country={country || ''}
             city={city || ''}
             height={height || ''}
             jobDescription={job_description || ''}
             yearsInTennis={
-              // @ts-ignore
               in_tennis_from && calculateYearsFromDate(in_tennis_from)
             }
             gameplayStyle={gameplay_style || ''}
@@ -122,7 +117,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         return (
           <StatsTab
             yearsInTennis={
-              // @ts-ignore
               in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
             }
             gameplayStyle={gameplay_style || ''}
