@@ -110,3 +110,9 @@ model digest {
   title                 String?
   mentioned_players_ids Int[]
 }
+
+model other_pages {
+  id        Int     @id(map: "otherpages_pkey") @default(autoincrement())
+  page_name String? @unique(map: "otherpages_page_name_key")
+  content   String?
+}
