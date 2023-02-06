@@ -29,6 +29,7 @@ const filterFn = (inputValue: string) => (t: TournamentT) =>
   (t?.name as string).toLowerCase().includes(inputValue);
 
 const now = new Date();
+
 const TournamentsPage: NextPage = () => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);

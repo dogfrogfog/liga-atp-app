@@ -10,7 +10,7 @@ import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 
 const DigestsPage: NextPage = () => {
-  const [digestPageNumber, setGigestPageNumber] = useState(1);
+  const [digestPageNumber, setDigestPageNumber] = useState(1);
 
   const pages = (() => {
     const result = [];
@@ -34,7 +34,7 @@ const DigestsPage: NextPage = () => {
         {pages}
         <div className={styles.loadMoreContainer}>
           <button
-            onClick={() => setGigestPageNumber((v) => v + 1)}
+            onClick={() => setDigestPageNumber((v) => v + 1)}
             className={styles.loadMore}
           >
             Загрузить еще
@@ -59,7 +59,7 @@ const DigestsList = ({
   }
 
   if (pageNumber === 1 && isLastPage && digests.length === 0) {
-    return <NotFoundMessage message="Нет доступных турниров" />;
+    return <NotFoundMessage message="Дайджесты отсутствуют" />;
   }
 
   return (
