@@ -12,12 +12,6 @@ import AdminLayout from '../layouts/AdminLayout';
 import MainAppLayout from '../layouts/MainAppLayout';
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
 
-export function reportWebVitals(metric: any) {
-  // if (metric.label === 'custom') {
-  console.log(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
-  // }
-}
-
 function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
     return (
