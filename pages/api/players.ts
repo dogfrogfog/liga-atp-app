@@ -3,15 +3,27 @@ import { Prisma, player as PlayerT } from '@prisma/client';
 
 import { prisma } from 'services/db';
 
+const PAGE_SIZE = 100;
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
+    // not used
+    const page = parseInt(req.query.page as string, 10);
+    const paginationParams = page
+      ? {
+          skip: page > 1 ? page * PAGE_SIZE : 0,
+          take: PAGE_SIZE,
+        }
+      : undefined;
+
     const players = await prisma.player.findMany({
       orderBy: {
         id: 'desc',
       },
+      ...paginationParams,
     });
 
     res.json(players);

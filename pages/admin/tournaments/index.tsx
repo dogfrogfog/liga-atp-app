@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
@@ -236,18 +236,6 @@ const TournamentForm = ({
             {...register('start_date', { required: false, valueAsDate: true })}
           />
         </InputWithError>
-        {/* <InputWithError errorMessage={errors.is_doubles?.message}>
-          <br />
-          Парный разряд:
-          <Controller
-            name="is_doubles"
-            control={control}
-            rules={{ required: false }}
-            render={({ field }) => (
-              <input type="checkbox" {...field} checked={field.value} />
-            )}
-          />
-        </InputWithError> */}
         <div className={formStyles.formActions}>
           <input className={formStyles.submitButton} type="submit" />
         </div>

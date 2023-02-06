@@ -16,15 +16,13 @@
     }
   }
 
-  .digestCardsContainer {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-  }
-
   .digestCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     transition: 0.2s ease;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     cursor: pointer;
     background-color: pink;
     border-radius: 14px;
@@ -32,7 +30,7 @@
     font-weight: bold;
 
     &:hover {
-      transform: scale(1.05);
+      box-shadow: 0 0 10px $custom-black;
       transition: 0.2s ease;
     }
   }
@@ -43,29 +41,18 @@
   }
 
   .title {
-    display: block;
-    margin-bottom: 20px;
     font-size: 20px;
-  }
-
-  .desc {
-    display: block;
-    font-size: 16px;
   }
 }
 
 // MAIN PAGE END
-
-// CREATE PAGE START
-
-// CREATE PAGE END
 
 // SINGLE PAGE START
 
 .singleDigestPage {
   .digestDate {
     font-size: 20px;
-    margin-bottom: 50px;
+    // margin-bottom: 50px;
   }
 
   .mentionedPlayer {

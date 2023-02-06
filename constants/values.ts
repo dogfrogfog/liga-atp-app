@@ -96,7 +96,6 @@ export const PLAYER_COLUMNS = [
   'insta_link',
   'job_description',
   'in_tennis_from',
-  'is_coach',
   'technique',
   'tactics',
   'power',

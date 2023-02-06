@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { NextPage, NextPageContext } from 'next';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
 import type { player as PlayerT, digest as DigestT } from '@prisma/client';
@@ -37,7 +37,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
-  const router = useRouter();
 
   const { matches } = useMatches(player.id);
   const { statsData } = useStats(
@@ -46,7 +45,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   );
 
   const {
-    id,
     date_of_birth,
     city,
     first_name,
@@ -58,7 +56,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     forehand,
     beckhand,
     insta_link,
-    is_coach,
     in_tennis_from,
     job_description,
     height,
@@ -84,10 +81,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       playedMatches: [] as MatchWithTournamentType[],
     }
   );
-
-  const onDigestClick = (id: number) => {
-    router.push(`/digests/${id}`);
-  };
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -161,7 +154,14 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       case PROFILE_TABS[5]:
         return digests.length > 0 ? (
           digests.map((d) => (
-            <DigestListEl key={d.id} {...d} onClick={onDigestClick} />
+            <Link key={d.id} href={`/digests/${d.id}`}>
+              <a className={styles.digestLinkEl}>
+                <DigestListEl
+                  title={d.title || ''}
+                  date={d.date || undefined}
+                />
+              </a>
+            </Link>
           ))
         ) : (
           <NotFoundMessage message="Нет упоминаний об игроке" />
@@ -179,7 +179,6 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
     <div className={styles.profileContainer}>
       <ProfileHeader
         avavarUrl={avatar || ''}
-        isCoach={!!is_coach}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         // todo: add real elo rank
@@ -204,7 +203,6 @@ interface IProfileHeaderProps {
   name: string;
   level: string;
   points: string;
-  isCoach: boolean;
   tournamentsWins?: number;
   tournamentsFinals?: number;
 }
@@ -214,7 +212,6 @@ const ProfileHeader = ({
   name,
   level,
   points,
-  isCoach,
   tournamentsWins,
   tournamentsFinals,
 }: IProfileHeaderProps) => {
@@ -228,7 +225,6 @@ const ProfileHeader = ({
           <FaUserAlt />
         </div>
       )}
-      <span className={styles.status}>{isCoach ? 'Тренер' : 'Игрок'}</span>
       <div className={styles.info}>
         <p className={styles.name}>{name}</p>
         <div className={styles.infoContainer}>
@@ -270,7 +266,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   return {
     props: {
       player,
-      digests: digests || [],
+      digests,
     },
   };
 };
