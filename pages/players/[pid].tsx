@@ -34,12 +34,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
   player,
   digests,
 }) => {
-
-  return (
-    <>
-      {'SingleProfilePage'}
-    </>
-  );
+  return <>{'SingleProfilePage'}</>;
 
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =

@@ -14,7 +14,7 @@ import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
 
 export function reportWebVitals(metric: any) {
   // if (metric.label === 'custom') {
-    console.log(metric) // The metric object ({ id, name, startTime, value, label }) is logged to the console
+  console.log(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
   // }
 }
 
