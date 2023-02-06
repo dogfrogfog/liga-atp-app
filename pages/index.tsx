@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
-import Link from 'next/link';
 
-import styles from './Home.module.scss';
+import styles from 'styles/Home.module.scss';
 
 const HomePage: NextPage = () => {
   return (
