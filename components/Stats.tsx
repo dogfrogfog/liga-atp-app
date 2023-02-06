@@ -45,7 +45,7 @@ const Stats = ({
       {p2Stats && <span>{p2Stats?.win_lose_in_level_proportion || '0'}</span>}
 
       <span className={styles.valueName}>W / L</span>
-      <span>{p1Stats?.win_lose_in_level_proportion || '-'}</span>
+      <span>{p1Stats?.win_lose_in_level_proportion || '0/0'}</span>
     </div>
     <div className={styles.row}>
       {p2Years !== undefined && <span>{p2Years}</span>}
