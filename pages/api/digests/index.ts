@@ -3,12 +3,27 @@ import { digest as DigestT } from '@prisma/client';
 
 import { prisma } from 'services/db';
 
+const PAGE_SIZE = 20;
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<DigestT[] | DigestT>
 ) => {
   if (req.method === 'GET') {
-    const digests = await prisma.digest.findMany();
+    const page = parseInt(req.query.page as string, 10);
+    const paginationParams = page
+      ? {
+          skip: page > 1 ? page * PAGE_SIZE : 0,
+          take: PAGE_SIZE,
+        }
+      : undefined;
+
+    const digests = await prisma.digest.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+      ...paginationParams,
+    });
 
     res.json(digests);
   }
