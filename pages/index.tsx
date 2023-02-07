@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { prisma } from 'services/db';
 import styles from 'styles/Home.module.scss';
 
+// @ts-ignore
 const HomePage: NextPage = ({ player, digests }) => {
   console.log(player, digests);
   return (
