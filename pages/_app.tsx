@@ -1,5 +1,8 @@
 import { SWRConfig } from 'swr';
+import { useState } from 'react';
 import type { AppProps } from 'next/app';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { withPasswordProtect } from 'next-password-protect';
 import '../styles/globals.css';
 import '@fontsource/roboto/300.css';
@@ -13,6 +16,23 @@ import MainAppLayout from '../layouts/MainAppLayout';
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  const { events } = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setLoading((v) => !v);
+    };
+
+    events.on('routeChangeStart', handleRouteChange);
+    events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      events.off('routeChangeStart', handleRouteChange);
+      events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [events]);
+
   if (router.pathname.startsWith('/admin')) {
     return (
       <AdminLayout>
@@ -30,7 +50,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   ) {
     return (
       <PWALayout>
-        <SecondaryPageLayout>
+        <SecondaryPageLayout loading={loading}>
           <Component {...pageProps} />
         </SecondaryPageLayout>
       </PWALayout>
@@ -40,7 +60,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   // with bottom menu
   return (
     <PWALayout>
-      <MainAppLayout>
+      <MainAppLayout loading={loading}>
         <Component {...pageProps} />
       </MainAppLayout>
     </PWALayout>

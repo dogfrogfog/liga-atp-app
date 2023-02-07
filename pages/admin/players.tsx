@@ -366,7 +366,7 @@ const getTableValue = (p: PlayerT, k: string) => {
     return format(new Date(p.in_tennis_from), 'dd.MM.yyyy');
   }
 
-  if (k === 'level' && p.level) {
+  if (k === 'level' && p.level !== null) {
     return LEVEL_NUMBER_VALUES[p.level];
   }
 

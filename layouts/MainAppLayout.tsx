@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import cl from 'classnames';
 import { FiMoreHorizontal } from 'react-icons/fi';
 
+import LoadingShadow from 'components/LoadingShadow';
 import styles from './MainAppLayout.module.scss';
 import {
   Digest,
@@ -13,13 +14,22 @@ import {
   Tournaments,
 } from './MainAppLayoutIcons';
 
-function MainAppLayout({ children }: { children: ReactNode }) {
+function MainAppLayout({
+  children,
+  loading,
+}: {
+  children: ReactNode;
+  loading: boolean;
+}) {
   const router = useRouter();
   const currentRoute = router.pathname;
 
   return (
     <>
-      <div className={styles.pageContainer}>{children}</div>
+      <div className={styles.pageContainer}>
+        {loading && <LoadingShadow />}
+        {children}
+      </div>
       <div className={styles.bottomMenu}>
         <Link href="/players">
           <a
