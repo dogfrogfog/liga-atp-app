@@ -1,8 +1,10 @@
 import { NextPage } from 'next';
 
+import { prisma } from 'services/db';
 import styles from 'styles/Home.module.scss';
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage = ({ player, digests }) => {
+  console.log(player, digests);
   return (
     <div className={styles.description}>
       <h3 className={styles.previeTitle}>Лига тенниса</h3>
@@ -12,6 +14,30 @@ const HomePage: NextPage = () => {
       </p>
     </div>
   );
+};
+
+export const getServerSideProps = async () => {
+  const [player, digests] = await prisma.$transaction([
+    prisma.player.findUnique({
+      where: {
+        id: 1886,
+      },
+    }),
+    prisma.digest.findMany({
+      where: {
+        mentioned_players_ids: {
+          has: 1886,
+        },
+      },
+    }),
+  ]);
+
+  return {
+    props: {
+      player,
+      digests,
+    },
+  };
 };
 
 export default HomePage;
