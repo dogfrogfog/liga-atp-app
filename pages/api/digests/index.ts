@@ -2,8 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { digest as DigestT } from '@prisma/client';
 
 import { prisma } from 'services/db';
-
-const PAGE_SIZE = 20;
+import { DIGEST_PAGE_SIZE } from 'constants/values';
 
 export default async (
   req: NextApiRequest,
@@ -13,8 +12,8 @@ export default async (
     const page = parseInt(req.query.page as string, 10);
     const paginationParams = page
       ? {
-          skip: page > 1 ? page * PAGE_SIZE : 0,
-          take: PAGE_SIZE,
+          skip: page > 1 ? page * DIGEST_PAGE_SIZE : 0,
+          take: DIGEST_PAGE_SIZE,
         }
       : undefined;
 

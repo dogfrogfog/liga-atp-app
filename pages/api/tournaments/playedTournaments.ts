@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import type { tournament as TournamentT } from '@prisma/client';
 
 import { prisma } from 'services/db';
+import { PLAYED_TOURNAMENT_PAGE_SIZE } from 'constants/values';
 
 // this api used only for /pages/tournaments/index to include linked data to the tournament
 // and make paginated queries
 
-const PAGE_SIZE = 30;
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<TournamentT[]>
@@ -18,8 +18,8 @@ export default async (
       orderBy: {
         id: 'desc',
       },
-      skip: page > 1 ? page * PAGE_SIZE : 0,
-      take: PAGE_SIZE,
+      skip: page > 1 ? page * PLAYED_TOURNAMENT_PAGE_SIZE : 0,
+      take: PLAYED_TOURNAMENT_PAGE_SIZE,
       where: {
         OR: [
           {

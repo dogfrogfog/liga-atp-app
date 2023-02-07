@@ -1,13 +1,14 @@
-import { useState, memo } from 'react';
+import { useState, memo, Dispatch, SetStateAction } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
 import PageTitle from 'ui-kit/PageTitle';
 import DigestListEl from 'components/DigestListEl';
 import useDigests from 'hooks/useDigests';
+
+import { DIGEST_PAGE_SIZE } from 'constants/values';
 import styles from 'styles/Digests.module.scss';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
-import NotFoundMessage from 'ui-kit/NotFoundMessage';
 
 const DigestsPage: NextPage = () => {
   const [digestPageNumber, setDigestPageNumber] = useState(1);
@@ -20,6 +21,7 @@ const DigestsPage: NextPage = () => {
           key={i}
           pageNumber={i + 1}
           isLastPage={i + 1 === digestPageNumber}
+          setDigestPageNumber={setDigestPageNumber}
         />
       );
     }
@@ -29,54 +31,54 @@ const DigestsPage: NextPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <>
-        <PageTitle>Дайджесты</PageTitle>
-        {pages}
-        <div className={styles.loadMoreContainer}>
-          <button
-            onClick={() => setDigestPageNumber((v) => v + 1)}
-            className={styles.loadMore}
-          >
-            Загрузить еще
-          </button>
-        </div>
-      </>
+      <PageTitle>Дайджесты</PageTitle>
+      {pages}
     </div>
   );
 };
 
-const DigestsList = ({
-  pageNumber,
-  isLastPage,
-}: {
-  pageNumber: number;
-  isLastPage: boolean;
-}) => {
-  const { digests, isLoading } = useDigests(pageNumber);
+const DigestsList = memo(
+  ({
+    pageNumber,
+    isLastPage,
+    setDigestPageNumber,
+  }: {
+    pageNumber: number;
+    isLastPage: boolean;
+    setDigestPageNumber: Dispatch<SetStateAction<number>>;
+  }) => {
+    const { digests, isLoading } = useDigests(pageNumber);
 
-  if (isLastPage && isLoading) {
-    return <LoadingSpinner />;
+    if (isLastPage && isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    return (
+      <div>
+        {digests.map((d) => (
+          <Link href={`/digests/${d.id}`} key={d.id}>
+            <a className={styles.listEl}>
+              <DigestListEl
+                key={d.id}
+                title={d.title || ''}
+                date={d.date || undefined}
+              />
+            </a>
+          </Link>
+        ))}
+        {isLastPage && digests.length === DIGEST_PAGE_SIZE && (
+          <div className={styles.loadMoreContainer}>
+            <button
+              onClick={() => setDigestPageNumber((v) => v + 1)}
+              className={styles.loadMore}
+            >
+              Загрузить еще
+            </button>
+          </div>
+        )}
+      </div>
+    );
   }
-
-  if (pageNumber === 1 && isLastPage && digests.length === 0) {
-    return <NotFoundMessage message="Дайджесты отсутствуют" />;
-  }
-
-  return (
-    <>
-      {digests.map((d) => (
-        <Link href={`/digests/${d.id}`} key={d.id}>
-          <a className={styles.listEl}>
-            <DigestListEl
-              key={d.id}
-              title={d.title || ''}
-              date={d.date || undefined}
-            />
-          </a>
-        </Link>
-      ))}
-    </>
-  );
-};
+);
 
 export default DigestsPage;
