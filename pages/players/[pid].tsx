@@ -248,24 +248,21 @@ const ProfileHeader = ({
   );
 };
 
-export const config = {
-  runtime: 'experimental-edge',
-};
-
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const player = await prisma.player.findUnique({
-    where: {
-      id: parseInt(ctx.query.pid as string),
-    },
-  });
-
-  const digests = await prisma.digest.findMany({
-    where: {
-      mentioned_players_ids: {
-        has: parseInt(ctx.query.pid as string, 10),
+  const [player, digests] = await prisma.$transaction([
+    prisma.player.findUnique({
+      where: {
+        id: parseInt(ctx.query.pid as string),
       },
-    },
-  });
+    }),
+    prisma.digest.findMany({
+      where: {
+        mentioned_players_ids: {
+          has: parseInt(ctx.query.pid as string, 10),
+        },
+      },
+    }),
+  ]);
 
   return {
     props: {

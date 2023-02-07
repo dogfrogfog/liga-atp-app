@@ -5,10 +5,6 @@ import { prisma } from 'services/db';
 
 const PAGE_SIZE = 100;
 
-export const config = {
-  runtime: 'experimental-edge',
-}
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
