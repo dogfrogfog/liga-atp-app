@@ -33,7 +33,7 @@ export const getServerSideProps = async () => {
     }),
   ]);
 
-  console.log(player,digests)
+  console.log(player, digests);
 
   return {
     props: {

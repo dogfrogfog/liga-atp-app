@@ -3,9 +3,9 @@ import type { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
-import type { player as PlayerT, digest as DigestT } from '@prisma/client';
+// import type { player as PlayerT, digest as DigestT } from '@prisma/client';
 
-import { prisma } from 'services/db';
+// import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
@@ -15,11 +15,13 @@ import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
 import useMatches from 'hooks/useMatches';
 import useStats from 'hooks/useStats';
+import useSinglePlayer from 'hooks/useSinglePlayer';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
 import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import styles from 'styles/Profile.module.scss';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
 const PROFILE_TABS = [
   'Информация',
@@ -30,19 +32,33 @@ const PROFILE_TABS = [
   'Дайджесты',
 ];
 
-const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
-  player,
-  digests,
-}) => {
+const SingleProfilePage: NextPage<{ id: number }> = ({ id }) => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
 
-  const { matches } = useMatches(player.id);
+  const { player, digests } = useSinglePlayer(id);
+  const { matches } = useMatches(id);
   const { statsData } = useStats(
-    player.id,
+    id,
     statsTabTournamentType === 999 ? undefined : statsTabTournamentType
   );
+
+  if (!player) {
+    return (
+      <>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <LoadingSpinner />
+      </>
+    );
+  }
 
   const {
     date_of_birth,
@@ -87,13 +103,13 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
       case PROFILE_TABS[0]:
         return (
           <InfoTab
-            age={date_of_birth && calculateYearsFromDate(date_of_birth)}
+            age={date_of_birth && calculateYearsFromDate(new Date(date_of_birth))}
             country={country || ''}
             city={city || ''}
             height={height || ''}
             jobDescription={job_description || ''}
             yearsInTennis={
-              in_tennis_from && calculateYearsFromDate(in_tennis_from)
+              in_tennis_from && calculateYearsFromDate(new Date(in_tennis_from))
             }
             gameplayStyle={gameplay_style || ''}
             forehand={forehand || ''}
@@ -249,25 +265,24 @@ const ProfileHeader = ({
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const [player, digests] = await prisma.$transaction([
-    prisma.player.findUnique({
-      where: {
-        id: parseInt(ctx.query.pid as string),
-      },
-    }),
-    prisma.digest.findMany({
-      where: {
-        mentioned_players_ids: {
-          has: parseInt(ctx.query.pid as string, 10),
-        },
-      },
-    }),
-  ]);
+  // const [player, digests] = await prisma.$transaction([
+  //   prisma.player.findUnique({
+  //     where: {
+  //       id: parseInt(ctx.query.pid as string),
+  //     },
+  //   }),
+  //   prisma.digest.findMany({
+  //     where: {
+  //       mentioned_players_ids: {
+  //         has: parseInt(ctx.query.pid as string, 10),
+  //       },
+  //     },
+  //   }),
+  // ]);
 
   return {
     props: {
-      player,
-      digests,
+      id: parseInt(ctx.query.pid as string, 10),
     },
   };
 };
