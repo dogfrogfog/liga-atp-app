@@ -13,13 +13,14 @@ export default async (
 ) => {
   if (req.method === 'GET') {
     const page = parseInt(req.query.page as string, 10);
+    const paginationParams = page
+      ? {
+          skip: (page - 1) * PLAYED_TOURNAMENT_PAGE_SIZE,
+          take: PLAYED_TOURNAMENT_PAGE_SIZE,
+        }
+      : undefined;
 
     const playedTournaments = await prisma.tournament.findMany({
-      orderBy: {
-        id: 'desc',
-      },
-      skip: page > 1 ? page * PLAYED_TOURNAMENT_PAGE_SIZE : 0,
-      take: PLAYED_TOURNAMENT_PAGE_SIZE,
       where: {
         OR: [
           {
@@ -37,6 +38,10 @@ export default async (
       include: {
         match: true,
       },
+      orderBy: {
+        id: 'desc',
+      },
+      ...paginationParams,
     });
 
     res.json(playedTournaments);

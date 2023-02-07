@@ -10,12 +10,10 @@ export default async (
 ) => {
   if (req.method === 'GET') {
     const page = parseInt(req.query.page as string, 10);
-    const paginationParams = page
-      ? {
-          skip: page > 1 ? page * DIGEST_PAGE_SIZE : 0,
-          take: DIGEST_PAGE_SIZE,
-        }
-      : undefined;
+    const paginationParams = {
+      skip: (page - 1) * DIGEST_PAGE_SIZE,
+      take: DIGEST_PAGE_SIZE,
+    };
 
     const digests = await prisma.digest.findMany({
       orderBy: {
