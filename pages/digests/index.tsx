@@ -54,7 +54,7 @@ const DigestsList = memo(
     }
 
     return (
-      <div>
+      <>
         {digests.map((d) => (
           <Link href={`/digests/${d.id}`} key={d.id}>
             <a className={styles.listEl}>
@@ -76,7 +76,7 @@ const DigestsList = memo(
             </button>
           </div>
         )}
-      </div>
+      </>
     );
   }
 );
