@@ -21,17 +21,19 @@ export const getServerSideProps = async () => {
   const [player, digests] = await prisma.$transaction([
     prisma.player.findUnique({
       where: {
-        id: 1886,
+        id: 1,
       },
     }),
     prisma.digest.findMany({
       where: {
         mentioned_players_ids: {
-          has: 1886,
+          has: 1,
         },
       },
     }),
   ]);
+
+  console.log(player,digests)
 
   return {
     props: {
