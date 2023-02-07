@@ -248,6 +248,10 @@ const ProfileHeader = ({
   );
 };
 
+export const config = {
+  runtime: 'experimental-edge',
+};
+
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const player = await prisma.player.findUnique({
     where: {
