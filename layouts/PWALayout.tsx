@@ -5,9 +5,9 @@ function PWALayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Head>
-        <title>Liga Tennisa | Liga</title>
-        <meta name="description" content="Liga Tennisa | Liga" />
-        <meta name="application-name" content="Liga Tennisa | Liga" />
+        <title>Liga Tennisa</title>
+        <meta name="description" content="Liga Tennisa" />
+        <meta name="application-name" content="Liga Tennisa" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Liga" />

@@ -1,4 +1,11 @@
-import { useState, ChangeEvent, useMemo, memo } from 'react';
+import {
+  useState,
+  ChangeEvent,
+  useMemo,
+  memo,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -16,6 +23,7 @@ import TournamentListItem from 'components/TournamentListItem';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
   TOURNAMENT_TYPE_NUMBER_VALUES,
+  PLAYED_TOURNAMENT_PAGE_SIZE,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
@@ -210,6 +218,7 @@ const TournamentsPage: NextPage = () => {
               playedTournamentsPage={i + 1}
               finishedTournamentsType={finishedTournamentsType}
               isLastPage={i + 1 === playedTournamentsPage}
+              setPlayedTournamentsPage={setPlayedTournamentsPage}
             />
           );
         }
@@ -237,15 +246,6 @@ const TournamentsPage: NextPage = () => {
               </div>
             </div>
             {pages}
-            <div className={styles.loadMoreContainer}>
-              <button
-                // disabled={true}
-                onClick={() => setPlayedTournamentsPage((v) => v + 1)}
-                className={styles.loadMore}
-              >
-                Загрузить еще
-              </button>
-            </div>
           </>
         );
     }
@@ -287,6 +287,7 @@ type FinishedTournamentsListProps = {
   finishedTournamentsType: number;
   isLastPage: boolean;
   playersMap: Map<number, PlayerT>;
+  setPlayedTournamentsPage: Dispatch<SetStateAction<number>>;
 };
 
 const FinishedTournamentsList = memo(
@@ -295,6 +296,7 @@ const FinishedTournamentsList = memo(
     finishedTournamentsType,
     isLastPage,
     playersMap,
+    setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
     const { playedTournaments, isLoading } = usePlayedTournamnts(
       playedTournamentsPage
@@ -308,10 +310,6 @@ const FinishedTournamentsList = memo(
 
     if (isLastPage && isLoading) {
       return <LoadingSpinner />;
-    }
-
-    if (isLastPage && filteredFinishedTournaments.length === 0) {
-      return <NotFoundMessage message="Нет доступных турниров" />;
     }
 
     return (
@@ -340,11 +338,19 @@ const FinishedTournamentsList = memo(
             </a>
           </Link>
         ))}
+        {isLastPage &&
+          playedTournaments.length === PLAYED_TOURNAMENT_PAGE_SIZE && (
+            <div className={styles.loadMoreContainer}>
+              <button
+                onClick={() => setPlayedTournamentsPage((v) => v + 1)}
+                className={styles.loadMore}
+              >
+                Загрузить еще
+              </button>
+            </div>
+          )}
       </>
     );
-  },
-  (prevP, nextP) => {
-    return prevP.playedTournamentsPage === nextP.playedTournamentsPage;
   }
 );
 
