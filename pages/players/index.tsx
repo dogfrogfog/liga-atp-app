@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
-import PlayersList from 'components/PlayersList';
+import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
 import usePlayers from 'hooks/usePlayers';
 import styles from 'styles/Players.module.scss';
@@ -37,7 +37,15 @@ const PlayersIndexPage: NextPage = () => {
       {error && (
         <NotFoundMessage message="При загрузке игроков произошла ошибка. Попробуйте позже" />
       )}
-      {isLoading ? <LoadingSpinner /> : <PlayersList players={players} />}
+
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <PlayersListHeader />
+          <PlayersList players={players} />
+        </>
+      )}
     </div>
   );
 };
