@@ -1,8 +1,10 @@
 import type { NextPage } from 'next';
+import { useState, memo, Dispatch, SetStateAction } from 'react';
 import { player as PlayerT } from '@prisma/client';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import NotFoundMessage from 'ui-kit/NotFoundMessage';
+import { PLAYERS_PAGE_SIZE } from 'constants/values';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
@@ -12,7 +14,8 @@ import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
 const PlayersIndexPage: NextPage = () => {
   const router = useRouter();
-  const { players, isLoading, error } = usePlayers();
+  const { players } = usePlayers();
+  const [playersPageNumber, setPlayersPageNumber] = useState(1);
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -22,6 +25,22 @@ const PlayersIndexPage: NextPage = () => {
     ((p?.first_name as string) + ' ' + p?.last_name)
       .toLowerCase()
       .includes(inputValue);
+
+  const pages = (() => {
+    const result = [];
+    for (let i = 0; i < playersPageNumber; i += 1) {
+      result.push(
+        <PaginatedPlayersList
+          key={i}
+          pageNumber={i + 1}
+          isLastPage={i + 1 === playersPageNumber}
+          setPlayersPageNumber={setPlayersPageNumber}
+        />
+      );
+    }
+
+    return result;
+  })();
 
   return (
     <div className={styles.pageContainer}>
@@ -34,20 +53,44 @@ const PlayersIndexPage: NextPage = () => {
         />
       </div>
       <PageTitle>Игроки</PageTitle>
-      {error && (
-        <NotFoundMessage message="При загрузке игроков произошла ошибка. Попробуйте позже" />
-      )}
-
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <PlayersListHeader />
-          <PlayersList players={players} />
-        </>
-      )}
+      <PlayersListHeader />
+      {pages}
     </div>
   );
 };
+
+const PaginatedPlayersList = memo(
+  ({
+    pageNumber,
+    isLastPage,
+    setPlayersPageNumber,
+  }: {
+    pageNumber: number;
+    isLastPage: boolean;
+    setPlayersPageNumber: Dispatch<SetStateAction<number>>;
+  }) => {
+    const { players, isLoading } = usePlayers(pageNumber);
+
+    if (isLastPage && isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    return (
+      <>
+        <PlayersList players={players} />
+        {isLastPage && players.length === PLAYERS_PAGE_SIZE && (
+          <div className={styles.loadMoreContainer}>
+            <button
+              onClick={() => setPlayersPageNumber((v) => v + 1)}
+              className={styles.loadMore}
+            >
+              Загрузить еще
+            </button>
+          </div>
+        )}
+      </>
+    );
+  }
+);
 
 export default PlayersIndexPage;

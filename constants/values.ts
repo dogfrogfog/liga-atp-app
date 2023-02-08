@@ -124,3 +124,4 @@ export const OTHER_PAGES_KEYS = {
 
 export const DIGEST_PAGE_SIZE = 30;
 export const PLAYED_TOURNAMENT_PAGE_SIZE = 50;
+export const PLAYERS_PAGE_SIZE = 70;

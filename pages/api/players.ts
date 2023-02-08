@@ -1,21 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, player as PlayerT } from '@prisma/client';
 
+import { PLAYERS_PAGE_SIZE } from 'constants/values';
 import { prisma } from 'services/db';
-
-const PAGE_SIZE = 100;
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    // not used
     const page = parseInt(req.query.page as string, 10);
     const paginationParams = page
       ? {
-          skip: page > 1 ? page * PAGE_SIZE : 0,
-          take: PAGE_SIZE,
+          skip: (page - 1) * PLAYERS_PAGE_SIZE,
+          take: PLAYERS_PAGE_SIZE,
         }
       : undefined;
 

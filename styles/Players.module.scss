@@ -15,3 +15,27 @@
     width: 100%;
   }
 }
+
+.loadMoreContainer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.loadMore {
+  border: 1px solid $custom-white;
+  color: $custom-white;
+  border-radius: 4px;
+  padding: 5px;
+  font-size: 16px;
+
+  &:active {
+    border-color: $custom-aqua;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    color: $custom-lightgray;
+    border-color: $custom-lightgray;
+    background-color: $custom-mediumdarkgray;
+  }
+}
