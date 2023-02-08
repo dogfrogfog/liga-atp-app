@@ -12,59 +12,57 @@ type PlayersListProps = {
   shouldShowPlace?: boolean;
 };
 
-const PlayersList = ({
+export const PlayersList = ({
   players,
   shouldShowPlace = false,
 }: PlayersListProps) => (
-  <div className={styles.playersTable}>
-    <div className={styles.titles}>
-      {shouldShowPlace && <span className={styles.placeColumn}>Топ</span>}
-      <span className={styles.nameColumn}>Имя</span>
-      <span className={styles.levelColumn}>Уровень</span>
-      <span className={styles.rankColumn}>Рейт</span>
-    </div>
-    <div className={styles.list}>
-      {players.map(({ id, first_name, last_name, level, avatar }, i) => (
-        <Link key={id} href={'/players/' + id}>
-          <div
-            className={cl(
-              styles.listItem,
-              shouldShowPlace ? styles.withPlace : ''
-            )}
-          >
-            {shouldShowPlace && (
-              <div className={styles.placeColumn}>
-                <span className={styles.place}>{i + 1}</span>
-              </div>
-            )}
-            <div className={styles.nameColumn}>
-              <div className={styles.image}>
-                {avatar?.includes('.userapi.com') ? (
-                  <Image
-                    alt="player-image"
-                    src={avatar}
-                    height={25}
-                    width={25}
-                  />
-                ) : (
-                  <BsFillPersonFill />
-                )}
-              </div>
-              <span className={styles.name}>{`${(
-                first_name as string
-              )[0].toUpperCase()}. ${last_name}`}</span>
+  <div className={styles.list}>
+    {players.map(({ id, first_name, last_name, level, avatar }, i) => (
+      <Link key={id} href={'/players/' + id}>
+        <div
+          className={cl(
+            styles.listItem,
+            shouldShowPlace ? styles.withPlace : ''
+          )}
+        >
+          {shouldShowPlace && (
+            <div className={styles.placeColumn}>
+              <span className={styles.place}>{i + 1}</span>
             </div>
-            <div className={styles.levelColumn}>
-              {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
+          )}
+          <div className={styles.nameColumn}>
+            <div className={styles.image}>
+              {avatar?.includes('.userapi.com') ? (
+                <Image alt="player-image" src={avatar} height={25} width={25} />
+              ) : (
+                <BsFillPersonFill />
+              )}
             </div>
-            <div className={styles.rankColumn}>
-              <span className={styles.rankValue}>1489</span>
-            </div>
+            <span className={styles.name}>{`${(
+              first_name as string
+            )[0].toUpperCase()}. ${last_name}`}</span>
           </div>
-        </Link>
-      ))}
-    </div>
+          <div className={styles.levelColumn}>
+            {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
+          </div>
+          <div className={styles.rankColumn}>
+            <span className={styles.rankValue}>1489</span>
+          </div>
+        </div>
+      </Link>
+    ))}
   </div>
 );
 
-export default PlayersList;
+export const PlayersListHeader = ({
+  shouldShowPlace = false,
+}: {
+  shouldShowPlace?: boolean;
+}) => (
+  <div className={styles.titles}>
+    {shouldShowPlace && <span className={styles.placeColumn}>Топ</span>}
+    <span className={styles.nameColumn}>Имя</span>
+    <span className={styles.levelColumn}>Уровень</span>
+    <span className={styles.rankColumn}>Рейт</span>
+  </div>
+);

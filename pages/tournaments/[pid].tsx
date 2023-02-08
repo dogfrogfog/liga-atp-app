@@ -18,7 +18,7 @@ import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
 import TournamentListItem from 'components/TournamentListItem';
 import Schedule from 'components/tournamentTabs/Schedule';
-import PlayersList from 'components/PlayersList';
+import { PlayersList, PlayersListHeader } from 'components/PlayersList';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
   GROUPS_DRAW_TYPES,
@@ -195,7 +195,10 @@ const TournamentPage: NextPage<{
         }
 
         return registeredPlayers.length > 0 ? (
-          <PlayersList players={registeredPlayers} />
+          <>
+            <PlayersListHeader />
+            <PlayersList players={registeredPlayers} />
+          </>
         ) : (
           <NotFoundMessage message="Нет зарегестрированных игроков" />
         );
