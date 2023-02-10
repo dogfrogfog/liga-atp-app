@@ -1,4 +1,5 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import type { NextPage, NextPageContext } from 'next';
 import {
   tournament as TournamentT,
@@ -37,6 +38,8 @@ const TournamentPage: NextPage<{
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
 }> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
+  const downloadImageRef = useRef();
+
   const { players: allPlayers } = usePlayers();
   const [activeTab, setActiveTab] = useState(
     TOURNAMENT_TABS[tournament.status === 1 ? 1 : 0]
@@ -169,6 +172,7 @@ const TournamentPage: NextPage<{
               </p>
             )}
             <Schedule
+              ref={downloadImageRef}
               hasGroups={
                 tournament.draw_type
                   ? GROUPS_DRAW_TYPES.includes(tournament.draw_type)
@@ -211,7 +215,27 @@ const TournamentPage: NextPage<{
     setActiveTab(TOURNAMENT_TABS[value]);
   };
 
-  const handleDownloadClick = () => {};
+  const handleDownloadClick = async () => {
+    console.log(downloadImageRef.current);
+    if (downloadImageRef.current) {
+      const canvas = await html2canvas(downloadImageRef.current);
+
+      const data = canvas.toDataURL('image/jpg');
+      const link = document.createElement('a');
+
+      if (typeof link.download === 'string') {
+        link.href = data;
+        link.download = 'image.jpg';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        window.open(data);
+      }
+    }
+  };
+
   const toggleAddPlayerModal = () => {
     setAddPlayerModalStatus((v) => !v);
   };
