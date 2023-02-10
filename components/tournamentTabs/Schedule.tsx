@@ -1,4 +1,4 @@
-import { isValidElement } from 'react';
+import { isValidElement, forwardRef } from 'react';
 import Image from 'next/image';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
@@ -21,78 +21,82 @@ type ScheculeTabProps = {
   hasGroups: boolean;
 };
 
-const ScheculeTab = ({
-  brackets,
-  tournamentMatches,
-  registeredPlayers,
-  isDoubles,
-  hasGroups,
-}: ScheculeTabProps) => {
-  // because carousel doesn't allow us to get active thumb (to set active stage colors)
-  // const [activeStage, setActiveStage] = useState('0');
-  const stagesNumber = brackets.length;
-  const stages = hasGroups
-    ? [
-        'G',
-        ...groupStagesNames.slice(groupStagesNames.length - stagesNumber + 1),
-      ]
-    : singleStagesNames.slice(singleStagesNames.length - stagesNumber);
+const ScheculeTab = forwardRef<any, ScheculeTabProps>(
+  (
+    { brackets, tournamentMatches, registeredPlayers, isDoubles, hasGroups },
+    downloadImageRef
+  ) => {
+    const stagesNumber = brackets.length;
+    const stages = hasGroups
+      ? [
+          'G',
+          ...groupStagesNames.slice(groupStagesNames.length - stagesNumber + 1),
+        ]
+      : singleStagesNames.slice(singleStagesNames.length - stagesNumber);
 
-  const matchesMap = tournamentMatches.reduce((acc, match) => {
-    acc.set(match.id, match);
-    return acc;
-  }, new Map<number, MatchT>());
+    const matchesMap = tournamentMatches.reduce((acc, match) => {
+      acc.set(match.id, match);
+      return acc;
+    }, new Map<number, MatchT>());
 
-  const playersMap = registeredPlayers.reduce((acc, player) => {
-    acc.set(player.id, player);
-    return acc;
-  }, new Map<number, PlayerT>());
+    const playersMap = registeredPlayers.reduce((acc, player) => {
+      acc.set(player.id, player);
+      return acc;
+    }, new Map<number, PlayerT>());
 
-  const {
-    carouselFragment,
-    thumbsFragment,
-    slideToItem,
-    getCurrentActiveItem,
-  } = useSpringCarousel({
-    withThumbs: true,
-    touchAction: '',
-    items: brackets.map((stage, i, arr) => ({
-      id: i + '',
-      renderItem: (
-        <Stage
-          stage={stage}
-          isFinal={arr.length - 1 === i}
-          isDoubles={isDoubles}
-          matchesMap={matchesMap}
-          playersMap={playersMap}
-        />
-      ),
-      renderThumb: (
-        <button
-          onClick={() => {
-            // setActiveStage(i + '');
-            slideToItem(i);
-          }}
-          className={cl(
-            styles.stageButton
-            // i + '' === activeStage ? styles.active : ''
-          )}
-        >
-          {stages[i]}
-        </button>
-      ),
-    })),
-  });
+    const { carouselFragment, thumbsFragment, slideToItem } = useSpringCarousel(
+      {
+        withThumbs: true,
+        touchAction: '',
+        items: brackets.map((stage, i, arr) => ({
+          id: i + '',
+          renderItem: (
+            <Stage
+              stage={stage}
+              isFinal={arr.length - 1 === i}
+              isDoubles={isDoubles}
+              matchesMap={matchesMap}
+              playersMap={playersMap}
+            />
+          ),
+          renderThumb: (
+            <button
+              onClick={() => {
+                // setActiveStage(i + '');
+                slideToItem(i);
+              }}
+              className={cl(
+                styles.stageButton
+                // i + '' === activeStage ? styles.active : ''
+              )}
+            >
+              {stages[i]}
+            </button>
+          ),
+        })),
+      }
+    );
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.bracketContainer}>
+    return (
+      <div className={styles.container}>
+        <div ref={downloadImageRef} className={styles.fakeBracket}>
+          {brackets.map((stage, i) => (
+            <Stage
+              key={i}
+              stage={stage}
+              isFinal={stage.length - 1 === i}
+              isDoubles={isDoubles}
+              matchesMap={matchesMap}
+              playersMap={playersMap}
+            />
+          ))}
+        </div>
         <div className={styles.stageButtons}>{thumbsFragment}</div>
-        <div className={styles.bracket}>{carouselFragment}</div>
+        {carouselFragment}
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 type StageProps = {
   stage: IBracketsUnit[];

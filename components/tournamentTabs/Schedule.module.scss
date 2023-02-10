@@ -170,3 +170,15 @@
     height: 35px;
   }
 }
+
+.fakeBracket {
+  padding: 50px;
+  background-color: white;
+  position: absolute;
+  display: flex;
+  z-index: -1000;
+
+  .stage {
+    width: 500px;
+  }
+}
