@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
@@ -45,66 +45,53 @@ const Tournaments: NextPage = () => {
     setModalStatus(DEFAULT_MODAL);
   };
 
-  const handleAddClick = () => {
+  const handleAddClick = useCallback(() => {
     setModalStatus({ isOpen: true, type: 'add' });
-  };
+  }, []);
 
-  const handleUpdateClick = () => {
+  const handleUpdateClick = useCallback(() => {
     const updatingTournamentData = tournaments[selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingTournament(updatingTournamentData);
-  };
+  }, [tournaments, selectedRow]);
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = useCallback(async () => {
     const { id } = tournaments[selectedRow];
 
-    // todo: add delete operation
     // deleteSelectedPlayer(id);
-  };
+  }, [tournaments, selectedRow]);
 
-  const handlePickClick = () => {
+  const handlePickClick = useCallback(() => {
     const { id } = tournaments[selectedRow];
     const href = '/admin/tournaments/' + id;
     router.push(href);
-  };
+  }, [selectedRow, tournaments, router]);
 
-  // todo: add notifications
   const onSubmit = async (newTournament: TournamentT) => {
     const normalizedNewTournament = {
       ...newTournament,
-      // is_doubles: newTournament.is_doubles || false,
       tournament_type: parseInt(newTournament.tournament_type as any as string),
       surface: parseInt(newTournament.surface as any as string),
       status: parseInt(newTournament.status as any as string),
       start_date: new Date(newTournament.start_date as any),
     };
 
+    let res;
     if (modalStatus.type === 'add') {
-      const { isOk, errorMessage } = await createTournament(
-        normalizedNewTournament
-      );
-
-      if (isOk) {
-        handleReset();
-
-        mutate();
-      } else {
-        console.warn(errorMessage);
-      }
+      res = await createTournament(normalizedNewTournament);
     }
 
     if (modalStatus.type === 'update') {
-      const { isOk, data, errorMessage } = await updateTournament(
-        newTournament
-      );
-      if (isOk) {
-        handleReset();
+      res = await updateTournament(newTournament);
+    }
 
-        mutate();
-      } else {
-        console.warn(errorMessage);
-      }
+    if (res?.isOk) {
+      handleReset();
+
+      mutate();
+    } else {
+      console.error(res?.errorMessage);
     }
   };
 
@@ -112,6 +99,7 @@ const Tournaments: NextPage = () => {
     <div>
       <PageTitle>Управление турнирами</PageTitle>
       <TableControls
+        isLoading={isLoading}
         selectedRow={selectedRow}
         handlePickClick={handlePickClick}
         handleAddClick={handleAddClick}
@@ -149,15 +137,14 @@ const TournamentForm = ({
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<any>({
+  } = useForm<TournamentT>({
     defaultValues: {
       tournament_type: null,
       surface: null,
       status: 1,
-      // is_doubles: false,
       ...tournament,
       start_date: tournament?.start_date
-        ? format(new Date(tournament?.start_date), 'yyyy-MM-dd')
+        ? (format(new Date(tournament?.start_date), 'yyyy-MM-dd') as any)
         : null,
     },
   });
@@ -244,7 +231,7 @@ const TournamentForm = ({
   );
 };
 
-const getTableValue = (t: TournamentT, k: string) => {
+const getTableValue = (t: TournamentT, k: keyof TournamentT) => {
   if (k === 'draw_type' && t.draw_type) {
     return TOURNAMENT_DRAW_TYPE_NUMBER_VALUES[t.draw_type];
   }
@@ -265,7 +252,6 @@ const getTableValue = (t: TournamentT, k: string) => {
     return TOURNAMENT_TYPE_NUMBER_VALUES[t.tournament_type];
   }
 
-  // @ts-ignore
   return t[k];
 };
 
@@ -308,7 +294,7 @@ const TournamentsTable = ({
                 />
               </td>
               {TOURNAMENT_COLUMNS.map((cellKey) => (
-                <td key={cellKey}>{getTableValue(t, cellKey)}</td>
+                <td key={cellKey}>{getTableValue(t, cellKey) as any}</td>
               ))}
             </tr>
           ))}

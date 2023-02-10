@@ -102,7 +102,7 @@ export const PLAYER_COLUMNS = [
   'shakes',
   'serve',
   'behaviour',
-];
+] as const;
 
 export const TOURNAMENT_COLUMNS = [
   'id',
@@ -114,13 +114,13 @@ export const TOURNAMENT_COLUMNS = [
   'draw_type',
   'surface',
   'status',
-];
+] as const;
 
 export const OTHER_PAGES_KEYS = {
   fame: 'fame',
   events: 'events',
   schedule: 'schedule',
-};
+} as const;
 
 export const DIGEST_PAGE_SIZE = 30;
 export const PLAYED_TOURNAMENT_PAGE_SIZE = 50;
