@@ -1,18 +1,7 @@
 import axios from 'axios';
 import type { match as MatchT } from '@prisma/client';
 
-interface MatchesResponse<D> {
-  data?: D;
-  isOk: boolean;
-  errorMessage?: string;
-}
-
-type ICreateMatchResponse = MatchesResponse<MatchT>;
-type IUpdateMatchResponse = MatchesResponse<MatchT>;
-
-export async function createMatch(
-  tournament: MatchT
-): Promise<ICreateMatchResponse> {
+export const createMatch = async (tournament: MatchT) => {
   const response = await axios.post<MatchT>('/api/matches', {
     data: tournament,
   });
@@ -22,11 +11,9 @@ export async function createMatch(
   } else {
     return { isOk: false, errorMessage: response.statusText };
   }
-}
+};
 
-export async function updateMatch(
-  match: MatchT
-): Promise<IUpdateMatchResponse> {
+export const updateMatch = async (match: MatchT) => {
   const response = await axios.put<MatchT>('/api/matches', { data: match });
 
   if (response.status === 200) {
@@ -34,4 +21,4 @@ export async function updateMatch(
   } else {
     return { isOk: false, errorMessage: response.statusText };
   }
-}
+};

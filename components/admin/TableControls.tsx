@@ -1,30 +1,30 @@
-import type { FC } from 'react';
-
 import styles from './TableControls.module.scss';
 
-interface ITableControlsProps {
+type TableControlsProps = {
+  isLoading: boolean;
   selectedRow: number;
-  handlePickClick?: any;
-  handleAddClick: any;
-  handleUpdateClick: any;
-  handleResetClick: any;
-  handleDeleteClick: any;
-}
+  handlePickClick?: () => void;
+  handleAddClick: () => void;
+  handleUpdateClick: () => void;
+  handleResetClick: () => void;
+  handleDeleteClick: () => void;
+};
 
-// todo: add disabled state (when editting or loading)
-const TableControls: FC<ITableControlsProps> = ({
+const TableControls = ({
+  isLoading,
   selectedRow,
   handlePickClick,
   handleAddClick,
   handleUpdateClick,
   handleDeleteClick,
   handleResetClick,
-}) => {
+}: TableControlsProps) => {
+  const isDisabled = selectedRow === -1 || isLoading;
   return (
     <div className={styles.tableControls}>
       {handlePickClick ? (
         <button
-          disabled={selectedRow === -1}
+          disabled={isDisabled}
           className={styles.pick}
           onClick={handlePickClick}
         >
@@ -35,21 +35,21 @@ const TableControls: FC<ITableControlsProps> = ({
         Добавить
       </button>
       <button
-        disabled={selectedRow === -1}
+        disabled={isDisabled}
         className={styles.update}
         onClick={handleUpdateClick}
       >
         Обновить
       </button>
       <button
-        disabled={true}
+        disabled={isDisabled}
         className={styles.delete}
         onClick={handleDeleteClick}
       >
         Удалить
       </button>
       <button
-        disabled={selectedRow === -1}
+        disabled={isDisabled}
         className={styles.reset}
         onClick={handleResetClick}
       >

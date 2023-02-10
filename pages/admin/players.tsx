@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import TableControls from 'components/admin/TableControls';
@@ -36,18 +36,18 @@ const Players: NextPage = () => {
     setModalStatus(DEFAULT_MODAL);
   };
 
-  const handleAddClick = () => {
+  const handleAddClick = useCallback(() => {
     setModalStatus({ isOpen: true, type: 'add' });
-  };
+  }, []);
 
-  const handleUpdateClick = () => {
+  const handleUpdateClick = useCallback(() => {
     const editingPlayerData = players[selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingPlayer(editingPlayerData);
-  };
+  }, [players, selectedRow]);
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = useCallback(async () => {
     const { id } = players[selectedRow];
     const res = await deleteSelectedPlayer(id);
 
@@ -55,38 +55,35 @@ const Players: NextPage = () => {
       mutate();
       handleReset();
     }
-  };
+  }, [players, selectedRow, mutate]);
 
-  const onSubmit = async (newPlayer: PlayerT) => {
-    if (modalStatus.type === 'add') {
-      const { isOk, data, errorMessage } = await createPlayer(newPlayer);
+  const onSubmit = useCallback(
+    async (newPlayer: PlayerT) => {
+      let res;
+      if (modalStatus.type === 'add') {
+        res = await createPlayer(newPlayer);
+      }
 
-      if (isOk) {
+      if (modalStatus.type === 'update') {
+        res = await updatePlayer(newPlayer);
+      }
+
+      if (res?.isOk) {
         handleReset();
 
         mutate();
       } else {
-        console.warn(errorMessage);
+        console.error(res?.errorMessage);
       }
-    }
-
-    if (modalStatus.type === 'update') {
-      // todo: swr
-      const { isOk, errorMessage } = await updatePlayer(newPlayer);
-      if (isOk) {
-        handleReset();
-
-        mutate();
-      } else {
-        console.warn(errorMessage);
-      }
-    }
-  };
+    },
+    [modalStatus, mutate]
+  );
 
   return (
     <div>
       <PageTitle>Управление игроками</PageTitle>
       <TableControls
+        isLoading={isLoading}
         selectedRow={selectedRow}
         handleAddClick={handleAddClick}
         handleUpdateClick={handleUpdateClick}
@@ -122,24 +119,23 @@ const PlayerForm = ({
     register,
     handleSubmit,
     formState: { errors },
-    control,
-  } = useForm<any>({
+  } = useForm<PlayerT>({
     defaultValues: {
       level: null,
       age: null,
-      technique: null,
-      tactics: null,
+      technique: 0,
+      tactics: 0,
       power: null,
-      shakes: null,
-      serve: null,
-      behaviour: null,
+      shakes: 0,
+      serve: 0,
+      behaviour: 0,
       height: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
-        ? format(new Date(player?.in_tennis_from), 'yyyy-MM-dd')
+        ? (format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') as any)
         : null,
       date_of_birth: player?.date_of_birth
-        ? format(new Date(player?.date_of_birth), 'yyyy-MM-dd')
+        ? (format(new Date(player?.date_of_birth), 'yyyy-MM-dd') as any)
         : null,
     },
   });
@@ -275,7 +271,6 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        {/* need to add columns to the db */}
         <h3>Характеристики</h3>
         <InputWithError errorMessage={errors.technique?.message}>
           <br />
@@ -357,7 +352,7 @@ const PlayerForm = ({
   );
 };
 
-const getTableValue = (p: PlayerT, k: string) => {
+const getTableValue = (p: PlayerT, k: keyof PlayerT) => {
   if (k === 'date_of_birth' && p.date_of_birth) {
     return format(new Date(p.date_of_birth), 'dd.MM.yyyy');
   }
@@ -370,7 +365,6 @@ const getTableValue = (p: PlayerT, k: string) => {
     return LEVEL_NUMBER_VALUES[p.level];
   }
 
-  // @ts-ignore
   return p[k];
 };
 
@@ -394,7 +388,6 @@ const PlayersTable = ({
           <tr>
             <td />
             {PLAYER_COLUMNS.map((field) => (
-              // todo: add i18
               <th key={field}>{field}</th>
             ))}
           </tr>
@@ -413,7 +406,7 @@ const PlayersTable = ({
                 />
               </td>
               {PLAYER_COLUMNS.map((cellKey) => (
-                <td key={cellKey}>{getTableValue(p, cellKey)}</td>
+                <td key={cellKey}>{getTableValue(p, cellKey) as any}</td>
               ))}
             </tr>
           ))}

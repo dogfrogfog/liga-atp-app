@@ -41,11 +41,11 @@ export default async (
   if (req.method === 'DELETE') {
     const deletedTournaments = await prisma.tournament.delete({
       where: {
-        id: req.body.data,
+        id: parseInt(req.body, 10),
       },
     });
 
-    res.json(deletedTournaments);
+    res.end();
   }
 
   if (req.method === 'PUT') {
