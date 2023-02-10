@@ -110,9 +110,9 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
 
     if (newTournament.isOk) {
       // @ts-ignore
-      const { match, ...v } = newTournament.data;
+      const { match, ...rest } = newTournament.data;
 
-      setActiveTournament(v);
+      setActiveTournament(rest);
       setNewSelectedPlayers([]);
     }
 
@@ -550,6 +550,8 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       match: true,
     },
   });
+
+  console.log(tournament);
 
   const { match, ...tournamentProps } = tournament as any;
 

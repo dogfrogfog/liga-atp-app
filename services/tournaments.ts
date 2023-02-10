@@ -19,15 +19,14 @@ export const updateTournament = async (tournament: TournamentT) => {
   });
 
   if (response.status === 200) {
-    return { isOk: true };
+    return { isOk: true, data: response.data };
   } else {
     return { isOk: false, errorMessage: response.statusText };
   }
 };
 
-export const deleteSelectedTournament = async (ids: number[]) => {
-  // todo: match { data } with beckend
-  const response = await axios.delete('/api/tournaments', { data: ids });
+export const deleteSelectedTournament = async (id: number) => {
+  const response = await axios.delete('/api/tournaments', { data: id });
 
   if (response.status === 200) {
     return { isOk: true };

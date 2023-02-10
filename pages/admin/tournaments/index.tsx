@@ -59,8 +59,14 @@ const Tournaments: NextPage = () => {
   const handleDeleteClick = useCallback(async () => {
     const { id } = tournaments[selectedRow];
 
-    // deleteSelectedPlayer(id);
-  }, [tournaments, selectedRow]);
+    const { isOk } = await deleteSelectedTournament(id);
+
+    if (isOk) {
+      handleReset();
+
+      mutate();
+    }
+  }, [tournaments, selectedRow, mutate]);
 
   const handlePickClick = useCallback(() => {
     const { id } = tournaments[selectedRow];
