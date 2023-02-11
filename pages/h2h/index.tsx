@@ -1,9 +1,7 @@
 import { useState, Fragment } from 'react';
-import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
-import cl from 'classnames';
 
 import usePlayers from 'hooks/usePlayers';
 import PageTitle from 'ui-kit/PageTitle';
@@ -23,7 +21,6 @@ const H2hPage: NextPage = () => {
     setPlayers([]);
   };
 
-  // same as /players page
   const filterFn = (inputValue: string) => (p: PlayerT) =>
     ((p?.first_name as string) + ' ' + p?.last_name)
       .toLowerCase()
@@ -32,57 +29,47 @@ const H2hPage: NextPage = () => {
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Head To Head</PageTitle>
-      <div
-        className={cl(
-          styles.selection,
-          selectedPlayers.length === 0 ? styles.initialSelection : ''
-        )}
-      >
-        {selectedPlayers.length > 0 && (
-          <div>
-            {selectedPlayers.map((p, i) => (
-              <Fragment key={p.id}>
-                <div className={styles.selectedPlayer}>
-                  {(p.first_name as string)[0]}. {p.last_name}
-                </div>
-                {i === 0 && <span className={styles.vs}>vs.</span>}
-              </Fragment>
-            ))}
+      <div className={styles.selection}>
+        {selectedPlayers.length > 0 &&
+          selectedPlayers.map((p, i) => (
+            <Fragment key={p.id}>
+              <div className={styles.selectedPlayer}>
+                {(p.first_name as string)[0]}. {p.last_name}
+              </div>
+              {i === 0 && <span className={styles.vs}>vs.</span>}
+            </Fragment>
+          ))}
+        {selectedPlayers.length !== 2 && (
+          <div className={styles.searchInputContainer}>
+            <SuggestionsInput
+              placeholder={`Введите имя ${
+                selectedPlayers.length === 1 ? '2-го' : '1-го'
+              } игрока`}
+              suggestions={players}
+              onSuggestionClick={onSuggestionClick}
+              filterFn={filterFn}
+            />
           </div>
         )}
-        <div className={cl(selectedPlayers.length === 0 ? styles.initial : '')}>
-          {selectedPlayers.length !== 2 && (
-            <div className={styles.searchInputContainer}>
-              <SuggestionsInput
-                placeholder={`Введите имя ${
-                  selectedPlayers.length === 1 ? '2-го' : '1-го'
-                } игрока`}
-                suggestions={players}
-                onSuggestionClick={onSuggestionClick}
-                filterFn={filterFn}
-              />
-            </div>
-          )}
-          <div className={styles.buttons}>
-            <button
-              onClick={() =>
-                router.push(
-                  `/h2h/compare?p1Id=${selectedPlayers[0]?.id}&p2Id=${selectedPlayers[1]?.id}`
-                )
-              }
-              className={cl(
-                styles.compare,
-                !selectedPlayers[0]?.id || !selectedPlayers[1]?.id
-                  ? styles.disabled
-                  : ''
-              )}
-            >
-              Сравнить
-            </button>
-            <button onClick={reset} className={styles.reset}>
-              Сбросить
-            </button>
-          </div>
+        <div className={styles.buttons}>
+          <button
+            onClick={() =>
+              router.push(
+                `/h2h/compare?p1Id=${selectedPlayers[0]?.id}&p2Id=${selectedPlayers[1]?.id}`
+              )
+            }
+            disabled={selectedPlayers.length !== 2}
+            className={styles.compare}
+          >
+            Сравнить
+          </button>
+          <button
+            onClick={reset}
+            className={styles.reset}
+            disabled={selectedPlayers.length === 0}
+          >
+            Сбросить
+          </button>
         </div>
       </div>
     </div>

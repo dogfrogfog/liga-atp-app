@@ -6,11 +6,11 @@
 }
 
 .bottomMenu {
-  background-color: black;
+  background-color: $custom-black;
   border-top: 1.5px solid $custom-white;
   padding-top: 10px;
-  height: 50px;
-  margin-bottom: 34px;
+  height: 84px;
+  padding-bottom: 34px;
   width: 100%;
   position: fixed;
   bottom: 0;
