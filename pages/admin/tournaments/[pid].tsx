@@ -58,7 +58,13 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     { ...initialTournamentValues, match: initialMatches }
   );
 
-  const { register, handleSubmit, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { isDirty },
+  } = useForm({
     defaultValues: {
       name: tournament?.name,
       address: tournament?.address,
@@ -205,6 +211,11 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     }
   };
 
+  const handleResetClick = () => {
+    reset();
+    setNewSelectedPlayers([]);
+  };
+
   const openModalForNewMatch = useCallback(
     (si: number, mi: number, isGroupMatch?: boolean) => {
       setModalStatus({ isOpen: true, type: 'create' });
@@ -242,11 +253,18 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       <div className={styles.buttons}>
         <button
           className={styles.save}
+          disabled={!isDirty && newSelectedPlayers.length === 0}
           onClick={handleSubmit(submitTournaments)}
         >
           Сохранить
         </button>
-        <button className={styles.reset}>Отменить</button>
+        <button
+          className={styles.reset}
+          onClick={handleResetClick}
+          disabled={!isDirty && newSelectedPlayers.length === 0}
+        >
+          Отменить
+        </button>
         <button className={styles.delete} onClick={handleDeleteClick}>
           Удалить
         </button>
