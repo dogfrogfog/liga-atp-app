@@ -11,6 +11,9 @@ const Sidebar = () => {
     <div className={styles.sidebarContainer}>
       <div className={styles.sidebarTop}>
         <div className={styles.menuItem}>
+          <Link href="/admin">Главная</Link>
+        </div>
+        <div className={styles.menuItem}>
           <GiBabyfootPlayers />
           <Link href="/admin/players">Игроки</Link>
         </div>

@@ -10,10 +10,12 @@ export default async (
 ) => {
   if (req.method === 'GET') {
     const page = parseInt(req.query.page as string, 10);
-    const paginationParams = {
-      skip: (page - 1) * DIGEST_PAGE_SIZE,
-      take: DIGEST_PAGE_SIZE,
-    };
+    const paginationParams = page
+      ? {
+          skip: (page - 1) * DIGEST_PAGE_SIZE,
+          take: DIGEST_PAGE_SIZE,
+        }
+      : undefined;
 
     const digests = await prisma.digest.findMany({
       orderBy: {
@@ -34,5 +36,15 @@ export default async (
     });
 
     res.json(updatedDigest);
+  }
+
+  if (req.method === 'DELETE') {
+    await prisma.digest.delete({
+      where: {
+        id: parseInt(req.body, 10),
+      },
+    });
+
+    res.end();
   }
 };

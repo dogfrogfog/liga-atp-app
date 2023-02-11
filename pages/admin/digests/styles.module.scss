@@ -81,10 +81,16 @@
 
   .reset {
     background-color: $custom-lightgray;
+    font-weight: 500;
   }
 
   .action {
     background-color: orange;
+    color: white;
+    font-weight: 500;
+  }
+  .delete {
+    background-color: rgb(255, 0, 102);
     color: white;
     font-weight: 500;
   }

@@ -1,10 +1,10 @@
-import type { NextPage, NextPageContext } from 'next';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import type { digest as DigestT, player as PlayerT } from '@prisma/client';
+import { useRouter } from 'next/router';
 import { format } from 'date-fns';
+import type { digest as DigestT, player as PlayerT } from '@prisma/client';
+import type { NextPage, NextPageContext } from 'next';
 import type { Option } from 'react-multi-select-component';
-import axios from 'axios';
 
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import { prisma } from 'services/db';
@@ -13,6 +13,7 @@ import DigestForm from 'components/admin/DigestForm';
 import type { NoCustomFieldsType } from 'pages/admin/digests/new';
 import { multiSelectToIds, playersToMultiSelect } from 'utils/multiselect';
 import styles from './styles.module.scss';
+import { updateDigest, deleteDigest } from 'services/digests';
 import usePlayers from 'hooks/usePlayers';
 import useDigests from 'hooks/useDigests';
 
@@ -21,22 +22,11 @@ const MarkdownPreview = dynamic(
   { ssr: false, loading: () => <LoadingSpinner /> }
 );
 
-const updateDigests = async (
-  data: DigestT
-): Promise<{ isOk: boolean; errorMessage?: string; data?: DigestT }> => {
-  const response = await axios.put<DigestT>('/api/digests', { data });
-
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-};
-
 const SingleDigestPage: NextPage<{
   digest: DigestT;
   mentionedPlayers: PlayerT[];
 }> = ({ digest, mentionedPlayers }) => {
+  const router = useRouter();
   const { players } = usePlayers();
   const { mutate } = useDigests();
   const [activeDigest, setActiveDigest] = useState(digest);
@@ -54,7 +44,7 @@ const SingleDigestPage: NextPage<{
   };
 
   const onSubmit = async (formData: NoCustomFieldsType) => {
-    const res = await updateDigests({
+    const res = await updateDigest({
       id: digest.id,
       ...formData,
       markdown: markdown || null,
@@ -75,9 +65,22 @@ const SingleDigestPage: NextPage<{
     setEditingStatus(true);
   };
 
+  const handleDeleteClick = async () => {
+    const { isOk } = await deleteDigest(activeDigest.id);
+
+    if (isOk) {
+      mutate();
+
+      router.push('/admin/digests');
+    }
+  };
+
   return (
     <div className={styles.singleDigestPage}>
       <div className={styles.buttons}>
+        <button className={styles.delete} onClick={handleDeleteClick}>
+          Удалить
+        </button>
         {!isEditing && (
           <button className={styles.action} onClick={edit}>
             Изменить
