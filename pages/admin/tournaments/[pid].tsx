@@ -48,9 +48,6 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     mi?: number;
     isGroupMatch?: boolean;
   }>();
-  const [editingTournament, setEditingTournament] = useState<
-    TournamentT | undefined
-  >();
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
 
@@ -124,6 +121,8 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
   // submit match changes
   const submitMatch = async (match: MatchT) => {
     setIsLoading(true);
+    // if there is no si and mi indexes then we should create a new match
+    // otherwise we should update existing match
     if (
       editingMatchData?.si !== undefined &&
       editingMatchData?.mi !== undefined

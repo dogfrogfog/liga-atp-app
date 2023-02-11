@@ -59,8 +59,6 @@ const TournamentDraw = ({
           <div>
             {Array.isArray(stage) &&
               stage.map((bracketUnit, mi) => {
-                // todo: implement
-                // old format
                 if (bracketUnit?.team1Id) {
                   return (
                     <div key={si + mi} className={styles.matchContainer}>
@@ -70,10 +68,10 @@ const TournamentDraw = ({
                 }
 
                 // for groups format (bracketUnit is array)
+                // each element of bracketUnit array should be a match
+                // the idea is to loop over bracketUnit, which is array and show every match played
+                // with ability to watch and edit match so as it was regular match
                 if (Array.isArray(bracketUnit)) {
-                  // each element of bracketUnit array should be a match
-                  // the idea is to loop over bracketUnit, which is array and show every match played
-                  // with ability to watch and edit match so as it was regular match
                   return (
                     <div
                       className={cl(styles.matchContainer, styles.singleGroup)}
@@ -81,7 +79,6 @@ const TournamentDraw = ({
                     >
                       <p className={styles.groupTitle}>Группа {mi + 1}</p>
                       <div className={styles.groupMatches}>
-                        {/* @ts-ignore */}
                         {bracketUnit.map((v) => {
                           const matchRecord = findMatchRecordById(
                             matches,
@@ -116,7 +113,7 @@ const TournamentDraw = ({
                   );
                 }
 
-                // for common format (bracketUnit is a match)
+                // for common format without groups (bracketUnit is a match)
                 const matchRecord = bracketUnit?.matchId
                   ? (findMatchRecordById(
                       matches,
