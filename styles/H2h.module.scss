@@ -3,20 +3,20 @@
 .pageContainer {
   margin-top: 80px;
   padding: 15px;
+
+  button[disabled] {
+    pointer-events: none;
+    touch-action: none;
+    opacity: 0.5;
+  }
 }
 
 .selection {
-  background-color: $custom-darkgray;
   border-radius: 14px;
   padding: 15px;
-  height: 225px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  &.initialSelection {
-    justify-content: flex-end;
-  }
 }
 
 .input {
@@ -77,20 +77,6 @@
   font-weight: 600;
   text-align: center;
   margin-bottom: 20px;
-}
-
-.disabled {
-  pointer-events: none;
-  touch-action: none;
-  opacity: 0.2;
-}
-
-.initial {
-  width: 100%;
-  display: flex;
-  height: 225px;
-  justify-content: space-between;
-  flex-direction: column;
 }
 
 .searchInputContainer {
