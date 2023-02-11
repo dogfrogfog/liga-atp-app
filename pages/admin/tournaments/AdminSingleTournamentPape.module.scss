@@ -4,12 +4,6 @@
   position: relative;
 }
 
-.isLoading {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
 .twoSides {
   display: flex;
   flex: 1;
@@ -18,40 +12,39 @@
     width: 50%;
     margin: 20px;
   }
+  .sideTitle {
+    margin: 0 0 10px;
+    font-size: 20px;
+    text-decoration: underline;
+  }
 }
 
-.playersListContainer {
-  .playersListTitle {
-    margin: 20px 0;
-    margin-top: 10px;
-    font-size: 18px;
-    background-color: $custom-scarlet;
-    padding: 10px;
-    text-align: center;
-    color: $custom-white;
-  }
+.playersListTitle {
+  margin: 20px 0;
+  margin-top: 10px;
+  font-size: 18px;
+  background-color: $custom-scarlet;
+  padding: 10px;
+  text-align: center;
+  color: $custom-white;
+}
 
-  .playersList {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.playersList {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-    &.new .player span {
-      background-color: $custom-olive;
-    }
+  .player {
+    display: block;
+    width: 50%;
+    padding: 5px;
+    margin-bottom: 10px;
 
-    .player {
-      display: block;
-      width: 50%;
+    span {
+      font-style: italic;
       padding: 5px;
-      margin-bottom: 10px;
-
-      span {
-        font-style: italic;
-        padding: 5px;
-        background-color: $custom-lightgray;
-      }
+      background-color: $custom-lightgray;
     }
   }
 }
@@ -59,92 +52,6 @@
 .addPlayersContainer {
   max-width: 50%;
   overflow: hidden;
-}
-
-.fieldsContainer {
-  .field {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    background-color: $custom-lightgray;
-    margin-bottom: 10px;
-    align-items: center;
-
-    span {
-      width: 50%;
-      height: 20px;
-
-      &:first-child {
-        text-align: left;
-        font-weight: 400;
-      }
-
-      &:last-child {
-        text-align: right;
-        cursor: pointer;
-        overflow: hidden;
-        border-bottom: $custom-green;
-      }
-    }
-
-    &.drawType,
-    &.type {
-      select {
-        width: 50%;
-        height: 30px;
-        font-size: 16px;
-        border: none;
-        background-color: $custom-olive;
-        cursor: pointer;
-        outline: none;
-        padding: 0 5px;
-
-        &[disabled] {
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    &.status {
-      select {
-        width: 50%;
-        height: 30px;
-        line-height: 30px;
-        padding: 0 10px;
-        background-color: $custom-yellow;
-        text-align: center;
-        outline: none;
-        font-size: 20px;
-      }
-    }
-
-    &.inputField input {
-      width: 50%;
-      outline: none;
-      background-color: $custom-olive;
-      height: 30px;
-      font-size: 16px;
-      border: none;
-      padding: 0 5px;
-    }
-
-    &.surface select {
-      width: 50%;
-      height: 30px;
-      line-height: 30px;
-      padding: 0 10px;
-      background-color: $custom-olive;
-      text-align: center;
-      outline: none;
-      font-size: 20px;
-    }
-
-    &[disabled] {
-      background-color: $custom-lightlightgray;
-      cursor: not-allowed;
-      border: 1px solid $custom-darkgray;
-    }
-  }
 }
 
 .buttons {
@@ -160,6 +67,11 @@
     margin-left: 10px;
     padding: 5px 15px;
     border: none;
+
+    &:active {
+      border: 2px solid;
+      margin: -2px -2px -2px 8px;
+    }
   }
 
   .reset {
@@ -178,28 +90,7 @@
     padding: 0;
   }
 }
-.controlButtons {
-  display: flex;
-  flex: 1;
 
-  button {
-    width: 50%;
-    margin: 5px;
-    cursor: pointer;
-
-    &:first-child {
-      background-color: $custom-green;
-      font-size: 18px;
-
-      &:disabled {
-        cursor: not-allowed;
-        opacity: 0.8;
-      }
-    }
-
-    &:last-child {
-      background-color: $custom-lightlightgray;
-      font-size: 18px;
-    }
-  }
+.tournamentPlayersMultiselect {
+  margin-bottom: 10px;
 }

@@ -29,6 +29,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 import usePlayers from 'hooks/usePlayers';
+import LoadingShadow from 'components/LoadingShadow';
 
 const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
 
@@ -361,7 +362,10 @@ const TournamentPage: NextPage<{
                 />
               </form>
             ) : (
-              <LoadingSpinner />
+              <>
+                <LoadingShadow />
+                <LoadingSpinner />
+              </>
             )}
           </div>
           <div

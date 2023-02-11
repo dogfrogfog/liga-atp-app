@@ -57,7 +57,7 @@ const TournamentDraw = ({
         <div key={si} className={styles.stage}>
           <p className={styles.stageTitle}>Стадия {si + 1}</p>
           <div>
-            {stage &&
+            {Array.isArray(stage) &&
               stage.map((bracketUnit, mi) => {
                 // todo: implement
                 // old format

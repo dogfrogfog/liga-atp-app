@@ -19,7 +19,7 @@ export const updateTournament = async (tournament: TournamentT) => {
   });
 
   if (response.status === 200) {
-    return { isOk: true, data: response.data };
+    return { isOk: true };
   } else {
     return { isOk: false, errorMessage: response.statusText };
   }

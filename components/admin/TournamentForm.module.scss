@@ -1,0 +1,85 @@
+@import '../../styles/variables.scss';
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  background-color: $custom-lightgray;
+  margin-bottom: 10px;
+  align-items: center;
+
+  span {
+    width: 50%;
+    height: 20px;
+
+    &:first-child {
+      text-align: left;
+      font-weight: 400;
+    }
+
+    &:last-child {
+      text-align: right;
+      cursor: pointer;
+      overflow: hidden;
+      border-bottom: $custom-green;
+    }
+  }
+
+  &.drawType,
+  &.type {
+    select {
+      width: 50%;
+      height: 30px;
+      font-size: 16px;
+      border: none;
+      background-color: $custom-olive;
+      cursor: pointer;
+      outline: none;
+      padding: 0 5px;
+
+      &[disabled] {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &.status {
+    select {
+      width: 50%;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      background-color: $custom-yellow;
+      text-align: center;
+      outline: none;
+      font-size: 20px;
+    }
+  }
+
+  &.inputField input {
+    width: 50%;
+    outline: none;
+    background-color: $custom-olive;
+    height: 30px;
+    font-size: 16px;
+    border: none;
+    padding: 0 5px;
+  }
+
+  &.surface select {
+    width: 50%;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    background-color: $custom-olive;
+    text-align: center;
+    outline: none;
+    font-size: 20px;
+  }
+
+  &[disabled] {
+    background-color: $custom-lightlightgray;
+    cursor: not-allowed;
+    border: 1px solid $custom-darkgray;
+  }
+}
