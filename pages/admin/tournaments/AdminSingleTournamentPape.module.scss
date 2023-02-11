@@ -147,6 +147,37 @@
   }
 }
 
+.buttons {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  top: 0;
+  right: 0;
+  margin-bottom: 20px;
+
+  button {
+    font-size: 18px;
+    margin-left: 10px;
+    padding: 5px 15px;
+    border: none;
+  }
+
+  .reset {
+    background-color: $custom-lightgray;
+  }
+
+  .save {
+    background-color: $custom-green;
+  }
+
+  .delete {
+    background-color: $custom-red;
+    font-size: 10px;
+    width: 50px;
+    height: 20px;
+    padding: 0;
+  }
+}
 .controlButtons {
   display: flex;
   flex: 1;

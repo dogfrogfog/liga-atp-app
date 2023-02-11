@@ -249,6 +249,11 @@ const AdminSingleTournamentPape: NextPage<IAdminSingleTournamentPapeProps> = ({
   return (
     <div className={styles.container}>
       <PageTitle>Управление турниром</PageTitle>
+      <div className={styles.buttons}>
+        <button className={styles.save}>Сохранить</button>
+        <button className={styles.reset}>Отменить</button>
+        <button className={cl(styles.delete)}>Удалить</button>
+      </div>
       {isLoading && <div className={styles.isLoading}>идет сохранение ...</div>}
       <div className={styles.twoSides}>
         <div className={cl(styles.side, styles.fieldsContainer)}>
