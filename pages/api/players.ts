@@ -28,6 +28,10 @@ export default async (
   }
 
   if (req.method === 'POST') {
+    if (!req.body.data) {
+      res.status(404);
+    }
+
     const createdPlayer = await prisma.player.create({
       data: req.body.data,
     });
@@ -36,6 +40,10 @@ export default async (
   }
 
   if (req.method === 'DELETE') {
+    if (!req.body) {
+      res.status(404);
+    }
+
     const deletedPlayer = await prisma.player.delete({
       where: {
         id: parseInt(req.body, 10),
@@ -46,6 +54,10 @@ export default async (
   }
 
   if (req.method === 'PUT') {
+    if (!req.body.data.id) {
+      res.status(404);
+    }
+
     const updatedPlayer = await prisma.player.update({
       where: {
         id: req.body.data.id,

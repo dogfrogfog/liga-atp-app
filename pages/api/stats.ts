@@ -22,13 +22,12 @@ export default async (
 ) => {
   if (req.method === 'GET') {
     const { id, tournament_type } = req.query;
-    const playerIdInt = parseInt(id as string, 10);
 
-    const p = await prisma.player.findUnique({
-      where: {
-        id: playerIdInt,
-      },
-    });
+    if (!id) {
+      res.status(404);
+    }
+
+    const playerIdInt = parseInt(id as string, 10);
 
     const matches = await prisma.match.findMany({
       where: {
@@ -82,12 +81,8 @@ export default async (
       },
       {
         tournamentsPlayed: [] as TournamentT[],
-        // twoSetsMatchesNumber: 0,
-        // threeSetsMatchesNumber: 0,
         wins: 0,
         losses: 0,
-        // lossesWithZeroPoints: 0,
-        // winsWithZeroPoints: 0,
       }
     );
 
