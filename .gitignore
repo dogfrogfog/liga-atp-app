@@ -36,6 +36,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# turborepo
+.turbo
+
 liga-new-db.sqlite3
 public/sw.js
 public/workbox-*.js
