@@ -21,7 +21,7 @@ InitialPoints = 1100
 LevelPointsDifference = 200
 DefaultKFactor = 32
 NoPointsDifference = 50
-PointsForMatchPlayed = 0
+PointsForMatchPlayed = 1
 TwoSetsMatchScoreLength = 7
 KfactorDynamic = False
 CoefStraightSets = 1.0
@@ -51,11 +51,14 @@ def setInitialPointsByLevel():
         pointsForLevel += LevelPointsDifference
 
 
+// функция для расчета вероятности игроков
+// на основе их текущих рейтингов 
 def getProbability(ranking_player, ranking_opponent):
-    probability = float(1)/(1+10**(float(ranking_opponent - ranking_player)/400))
+    probability = float(1)/(1+10**(float(ranking_opponent - ranking_player)/250))
     return probability
 
-
+// функция для расчета КОЭФИЦЕНТА, основанного на количестве сыгранных матчей
+// на основе их текущих рейтингов 
 def getPlayerKfactors(player1Id, player2Id):
     kFactorP1 = kFactorP2 = DefaultKFactor
 
@@ -160,10 +163,17 @@ def actionMatches(row):
     pointsDiff = abs(pointsSinglesDict[player1Id] - pointsSinglesDict[player2Id])
 
     inStraightSets = len(score) == TwoSetsMatchScoreLength
+    // КОЭФИЦЕНТ
+    // если игрок выиграл не проиграв не одного сета
+    // он получает коэфицент, увеличивающий количество выигранных очков ЭЛО
     coefMatchResult = CoefStraightSets if inStraightSets else 1
 
+    // КОЭФИЦЕНТЫ
+    // у каждого игрока будет коэфицент за количество сыгранных матчей
     kFactorsTuple = getPlayerKfactors(player1Id, player2Id)
 
+    // функция для расчета вероятности игроков
+    // на основе их текущих рейтингов 
     probabilityP1Wins = getProbability(pointsSinglesDict[player1Id], pointsSinglesDict[player2Id])
 
     pointsDeltaP1 = int(coefMatchResult * kFactorsTuple[0] * probabilityP1Wins)
