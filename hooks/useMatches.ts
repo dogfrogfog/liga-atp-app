@@ -4,7 +4,7 @@ import type { MatchWithTournamentType } from 'utils/getOpponents';
 
 const useMatches = (playerId: number) => {
   const { data, isLoading, error, mutate } = useSWR<MatchWithTournamentType[]>(
-    playerId ? `/api/matches?id=${playerId}` : null
+    `/api/matches?id=${playerId}`
   );
 
   return {

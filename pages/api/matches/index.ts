@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { match as MatchT } from '@prisma/client';
 
 import { prisma } from 'services/db';
+import getPlayersChangedEloPoins from 'utils/elo/getPlayersChangedEloPoins';
 
 export default async (
   req: NextApiRequest,
@@ -11,51 +12,46 @@ export default async (
   if (req.method === 'GET') {
     const intId = parseInt(req.query.id as string, 10);
 
-    let matches = [];
-    if (intId) {
-      matches = await prisma.match.findMany({
-        where: {
-          OR: [
-            {
-              player1_id: {
-                equals: intId,
-              },
-            },
-            {
-              player2_id: {
-                equals: intId,
-              },
-            },
-            {
-              player3_id: {
-                equals: intId,
-              },
-            },
-            {
-              player4_id: {
-                equals: intId,
-              },
-            },
-          ],
-        },
-        include: {
-          player_match_player1_idToplayer: true,
-          player_match_player2_idToplayer: true,
-          player_match_player3_idToplayer: true,
-          player_match_player4_idToplayer: true,
-          tournament: true,
-        },
-        orderBy: {
-          id: 'desc',
-        },
-      });
-    } else {
-      matches = await prisma.match.findMany({
-        orderBy: {
-          id: 'desc',
-        },
-      });
+    if (!intId) {
+      res.status(404);
     }
+
+    const matches = await prisma.match.findMany({
+      where: {
+        OR: [
+          {
+            player1_id: {
+              equals: intId,
+            },
+          },
+          {
+            player2_id: {
+              equals: intId,
+            },
+          },
+          {
+            player3_id: {
+              equals: intId,
+            },
+          },
+          {
+            player4_id: {
+              equals: intId,
+            },
+          },
+        ],
+      },
+      include: {
+        player_match_player1_idToplayer: true,
+        player_match_player2_idToplayer: true,
+        player_match_player3_idToplayer: true,
+        player_match_player4_idToplayer: true,
+        tournament: true,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
 
     res.json(matches);
   }
@@ -74,14 +70,17 @@ export default async (
   }
 
   if (req.method === 'PUT') {
+    const { id, time, ...restData } = req.body.data
+    // match was edited, elo should change
+
     const updatedMatch = await prisma.match.update({
       where: {
-        id: req.body.data.id,
+        id,
       },
       data: {
-        ...req.body.data,
-        time: req.body.data?.time
-          ? new Date(req.body.data?.time).toISOString()
+        ...restData,
+        time: time
+          ? new Date(time).toISOString()
           : null,
       },
     });

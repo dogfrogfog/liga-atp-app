@@ -84,7 +84,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     setModalStatus(DEFAULT_MODAL);
   };
 
-  const registeredPlayersIds = tournament?.players_order
+  const registeredPlayersIds: number[] = tournament?.players_order
     ? JSON.parse(tournament?.players_order)?.players
     : [];
   const newSelectedPlayersIds = multiSelectToIds(newSelectedPlayers);
@@ -105,7 +105,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
 
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
       (acc, v) => [...acc, v.value],
-      [] as Option[]
+      [] as number[]
     );
 
     const res = await updateTournament({
@@ -189,6 +189,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
         }
       }
     } else {
+      // todo: change elo rating
       const matchRes = await updateMatch(match);
 
       if (matchRes.isOk) {
@@ -287,7 +288,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
                     </span>
                   </div>
                 ))
-              : 'нет зарегестрировавшихся игроков'}
+              : 'нет регистраций через форму'}
           </div>
           <p className={styles.playersListTitle}>Новые игроки</p>
           <MultiSelect
@@ -343,6 +344,10 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       )}
       {modalStatus.isOpen && (
         <Modal title="Редактировать матч" handleClose={handleReset}>
+          Рейтинг эло будет изменен, если указать победителя и результат матча
+          {'\n'}в уже СОЗДАННОМ матче {'('} если создавать матч сразу с
+          победителем и счетом, то ЭЛО не изменится{')'}
+          <br />
           <MatchForm
             isDoubles={
               !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(

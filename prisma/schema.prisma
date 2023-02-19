@@ -118,7 +118,8 @@ model other_pages {
 }
 
 model elo_ranking {
-  id         Int  @id @default(autoincrement())
-  elo_points Int?
-  player_id  Int? @unique
+  id                 Int        @id @default(autoincrement())
+  elo_points         Int?
+  player_id          Int?       @unique
+  last_matches_dates DateTime[] @db.Date
 }
