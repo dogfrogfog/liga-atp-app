@@ -117,10 +117,17 @@ model other_pages {
   content   String?
 }
 
-model elo_ranking {
+model player_elo_ranking {
   id          Int       @id @default(autoincrement())
   elo_points  Int?
-  match_id    Int?
-  change_date DateTime? @db.Date
+  player_id   Int?      @unique
+}
+
+model elo_ranking_change {
+  id          Int       @id @default(autoincrement())
   player_id   Int?
+  match_id    Int?
+  current_elo_points  Int?
+  new_points_after   Int?
+  change_date DateTime? @db.Date
 }
