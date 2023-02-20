@@ -8,7 +8,7 @@ import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './PlayersList.module.scss';
 
 type PlayersListProps = {
-  players: PlayerT[];
+  players: (PlayerT & { elo_points: number })[];
   shouldShowPlace?: boolean;
 };
 
@@ -17,40 +17,47 @@ export const PlayersList = ({
   shouldShowPlace = false,
 }: PlayersListProps) => (
   <div className={styles.list}>
-    {players.map(({ id, first_name, last_name, level, avatar }, i) => (
-      <Link key={id} href={'/players/' + id}>
-        <div
-          className={cl(
-            styles.listItem,
-            shouldShowPlace ? styles.withPlace : ''
-          )}
-        >
-          {shouldShowPlace && (
-            <div className={styles.placeColumn}>
-              <span className={styles.place}>{i + 1}</span>
+    {players.map(
+      ({ id, first_name, last_name, level, avatar, elo_points }, i) => (
+        <Link key={id} href={'/players/' + id}>
+          <div
+            className={cl(
+              styles.listItem,
+              shouldShowPlace ? styles.withPlace : ''
+            )}
+          >
+            {shouldShowPlace && (
+              <div className={styles.placeColumn}>
+                <span className={styles.place}>{i + 1}</span>
+              </div>
+            )}
+            <div className={styles.nameColumn}>
+              <div className={styles.image}>
+                {avatar?.includes('.userapi.com') ? (
+                  <Image
+                    alt="player-image"
+                    src={avatar}
+                    height={25}
+                    width={25}
+                  />
+                ) : (
+                  <BsFillPersonFill />
+                )}
+              </div>
+              <span className={styles.name}>{`${(
+                first_name as string
+              )[0].toUpperCase()}. ${last_name}`}</span>
             </div>
-          )}
-          <div className={styles.nameColumn}>
-            <div className={styles.image}>
-              {avatar?.includes('.userapi.com') ? (
-                <Image alt="player-image" src={avatar} height={25} width={25} />
-              ) : (
-                <BsFillPersonFill />
-              )}
+            <div className={styles.levelColumn}>
+              {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
             </div>
-            <span className={styles.name}>{`${(
-              first_name as string
-            )[0].toUpperCase()}. ${last_name}`}</span>
+            <div className={styles.rankColumn}>
+              <span className={styles.rankValue}>{elo_points}</span>
+            </div>
           </div>
-          <div className={styles.levelColumn}>
-            {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
-          </div>
-          <div className={styles.rankColumn}>
-            <span className={styles.rankValue}>1489</span>
-          </div>
-        </div>
-      </Link>
-    ))}
+        </Link>
+      )
+    )}
   </div>
 );
 
