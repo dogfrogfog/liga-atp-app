@@ -30,10 +30,11 @@ const PROFILE_TABS = [
   'Дайджесты',
 ];
 
-const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
-  player,
-  digests,
-}) => {
+const SingleProfilePage: NextPage<{
+  player: PlayerT;
+  digests: DigestT[];
+  eloPoints?: number;
+}> = ({ player, digests, eloPoints }) => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
@@ -181,8 +182,7 @@ const SingleProfilePage: NextPage<{ player: PlayerT; digests: DigestT[] }> = ({
         avavarUrl={avatar || ''}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
-        // todo: add real elo rank
-        points={'1490'}
+        points={eloPoints || undefined}
         tournamentsWins={(statsData as any)?.tournaments_wins}
         tournamentsFinals={(statsData as any)?.tournaments_finals}
       />
@@ -202,7 +202,7 @@ interface IProfileHeaderProps {
   avavarUrl: string;
   name: string;
   level: string;
-  points: string;
+  points?: number;
   tournamentsWins?: number;
   tournamentsFinals?: number;
 }
@@ -249,9 +249,17 @@ const ProfileHeader = ({
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
+  const id = parseInt(ctx.query.pid as string, 10);
+
   const player = await prisma.player.findUnique({
     where: {
-      id: parseInt(ctx.query.pid as string),
+      id,
+    },
+  });
+
+  const eloPoints = await prisma.player_elo_ranking.findUnique({
+    where: {
+      player_id: id,
     },
   });
 
@@ -267,6 +275,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     props: {
       player,
       digests,
+      eloPoints: eloPoints?.elo_points,
     },
   };
 };
