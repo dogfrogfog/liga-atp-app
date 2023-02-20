@@ -121,6 +121,7 @@ model player_elo_ranking {
   id          Int       @id @default(autoincrement())
   elo_points  Int?
   player_id   Int?      @unique
+  expire_date DateTime? @db.Date
 }
 
 model elo_ranking_change {
@@ -128,6 +129,6 @@ model elo_ranking_change {
   player_id   Int?
   match_id    Int?
   current_elo_points  Int?
-  new_points_after   Int?
+  new_elo_points   Int?
   change_date DateTime? @db.Date
 }
