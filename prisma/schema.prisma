@@ -23,10 +23,10 @@ model match {
   player4_id                      Int?
   youtube_link                    String?
   time                            DateTime?   @db.Timestamp(6)
-  player_match_player1_idToplayer player?     @relation("match_player1_idToplayer", fields: [player1_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "core_match_player1_id_fkey")
-  player_match_player2_idToplayer player?     @relation("match_player2_idToplayer", fields: [player2_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "core_match_player2_id_fkey")
-  player_match_player3_idToplayer player?     @relation("match_player3_idToplayer", fields: [player3_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "core_match_player3_id_fkey")
-  player_match_player4_idToplayer player?     @relation("match_player4_idToplayer", fields: [player4_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "core_match_player4_id_fkey")
+  player_match_player1_idToplayer player?     @relation("match_player1_idToplayer", fields: [player1_id], references: [id], onUpdate: NoAction, map: "core_match_player1_id_fkey")
+  player_match_player2_idToplayer player?     @relation("match_player2_idToplayer", fields: [player2_id], references: [id], onUpdate: NoAction, map: "core_match_player2_id_fkey")
+  player_match_player3_idToplayer player?     @relation("match_player3_idToplayer", fields: [player3_id], references: [id], onUpdate: NoAction, map: "core_match_player3_id_fkey")
+  player_match_player4_idToplayer player?     @relation("match_player4_idToplayer", fields: [player4_id], references: [id], onUpdate: NoAction, map: "core_match_player4_id_fkey")
   tournament                      tournament? @relation(fields: [tournament_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "core_match_tournament_id_fkey")
 
   @@index([player1_id], map: "idx_16888_core_match_26d85d6c")
@@ -85,8 +85,8 @@ model tournament {
   is_doubles               Boolean?
   status                   Int?
   unregistered_players     String?              @default("")
-  tournament               tournament?          @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
   match                    match[]
+  tournament               tournament?          @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
   other_tournament         tournament?          @relation("tournamentTotournament")
   tournament_players       tournament_players[]
 }
@@ -115,4 +115,20 @@ model other_pages {
   id        Int     @id(map: "otherpages_pkey") @default(autoincrement())
   page_name String? @unique(map: "otherpages_page_name_key")
   content   String?
+}
+
+model player_elo_ranking {
+  id          Int       @id @default(autoincrement())
+  elo_points  Int?
+  player_id   Int?      @unique
+  expire_date DateTime? @db.Date
+}
+
+model elo_ranking_change {
+  id          Int       @id @default(autoincrement())
+  player_id   Int?
+  match_id    Int?
+  current_elo_points  Int?
+  new_elo_points   Int?
+  change_date DateTime? @db.Date
 }

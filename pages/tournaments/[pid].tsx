@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, useMemo } from 'react';
 import html2canvas from 'html2canvas';
 import type { NextPage, NextPageContext } from 'next';
 import {
@@ -29,6 +29,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 import usePlayers from 'hooks/usePlayers';
+import useActivePlayersRankings from 'hooks/useActivePlayersRankings';
 import LoadingShadow from 'components/LoadingShadow';
 
 const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
@@ -42,6 +43,17 @@ const TournamentPage: NextPage<{
   const downloadImageRef = useRef();
 
   const { players: allPlayers } = usePlayers();
+  const { playersRankings } = useActivePlayersRankings();
+
+  const playersRankingsMap = useMemo(
+    () =>
+      playersRankings.reduce((acc, p) => {
+        acc.set(p.player_id as number, p?.elo_points);
+        return acc;
+      }, new Map<number, number | null>()),
+    [playersRankings]
+  );
+
   const [activeTab, setActiveTab] = useState(
     TOURNAMENT_TABS[tournament.status === 1 ? 1 : 0]
   );
@@ -199,10 +211,15 @@ const TournamentPage: NextPage<{
           );
         }
 
+        const playersWithElo = registeredPlayers.map((v) => ({
+          ...v,
+          elo_points: playersRankingsMap.get(v.id as number) as number,
+        }));
+
         return registeredPlayers.length > 0 ? (
           <>
             <PlayersListHeader />
-            <PlayersList players={registeredPlayers} />
+            <PlayersList players={playersWithElo} />
           </>
         ) : (
           <NotFoundMessage message="Нет зарегестрированных игроков" />

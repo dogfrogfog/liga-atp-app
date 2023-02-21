@@ -32,8 +32,18 @@ export default async (
       res.status(404);
     }
 
+    const { elo_points, ...playerData } = req.body.data;
     const createdPlayer = await prisma.player.create({
-      data: req.body.data,
+      data: playerData,
+    });
+
+    // make sure players and player_elo_ranking id matches
+    await prisma.player_elo_ranking.create({
+      data: {
+        player_id: createdPlayer.id,
+        elo_points,
+        expire_date: new Date(),
+      },
     });
 
     res.json(createdPlayer);
@@ -44,9 +54,17 @@ export default async (
       res.status(404);
     }
 
+    const id = parseInt(req.body, 10);
+
     const deletedPlayer = await prisma.player.delete({
       where: {
-        id: parseInt(req.body, 10),
+        id,
+      },
+    });
+
+    await prisma.player_elo_ranking.delete({
+      where: {
+        player_id: id,
       },
     });
 

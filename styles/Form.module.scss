@@ -14,3 +14,21 @@
   display: inline-block;
   width: 500px;
 }
+
+.formContainer {
+  display: flex;
+
+  input,
+  select {
+    margin: 5px;
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: aliceblue;
+
+    &:active {
+      margin: 0 5px 5px 0;
+    }
+  }
+}
