@@ -50,6 +50,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
   }>();
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
+  const [eloRatingChanged, setEloRatingChanged] = useState(false);
 
   const { players } = usePlayers();
   const { mutate: mutateTournaments } = useTournaments();
@@ -189,7 +190,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
         }
       }
     } else {
-      // todo: change elo rating
+      // logic to change elo ranking is inside this function
       const matchRes = await updateMatch(match);
 
       if (matchRes.isOk) {

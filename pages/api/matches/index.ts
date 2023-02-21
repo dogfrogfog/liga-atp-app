@@ -70,18 +70,15 @@ export default async (
   }
 
   if (req.method === 'PUT') {
-    const { id, time, ...restData } = req.body.data
-    // match was edited, elo should change
+    const { id, time, ...matchData } = req.body.data;
 
     const updatedMatch = await prisma.match.update({
       where: {
         id,
       },
       data: {
-        ...restData,
-        time: time
-          ? new Date(time).toISOString()
-          : null,
+        ...matchData,
+        time: time ? new Date(time).toISOString() : null,
       },
     });
 

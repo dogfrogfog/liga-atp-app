@@ -14,11 +14,15 @@ export const createMatch = async (tournament: MatchT) => {
 };
 
 export const updateMatch = async (match: MatchT) => {
-  const response = await axios.put<MatchT>('/api/matches', { data: match });
+  const [responseMatches, responseRanking] = await Promise.all([
+    axios.put('/api/matches', { data: match }),
+    // to update ranking
+    axios.post('/api/ranking', { data: match }),
+  ]);
 
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
+  if (responseMatches.status === 200 && responseRanking.status === 200) {
+    return { isOk: true };
   } else {
-    return { isOk: false, errorMessage: response.statusText };
+    return { isOk: false, errorMessage: responseMatches.statusText };
   }
 };

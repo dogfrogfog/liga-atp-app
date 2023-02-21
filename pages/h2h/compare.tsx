@@ -140,9 +140,7 @@ const CompareTwoPlayersPage: NextPage<{
           <>
             {playersMatches && playersMatches.length > 0 ? (
               playersMatches.map((match, i) => (
-                <>
-                  <MatchListElement key={i} match={match} />
-                </>
+                <MatchListElement key={i} match={match} />
               ))
             ) : (
               <NotFoundMessage

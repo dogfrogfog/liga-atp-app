@@ -1,6 +1,6 @@
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 
-type PlayerWithEloPoints = PlayerT & { elo_points: number };
+type PlayerWithEloPoints = { id: number; elo_points: number };
 
 const INITIAL_POINTS = 1100;
 const LEVEL_POINTS_DIFFERENCE = 200;
@@ -52,8 +52,8 @@ const getPlayersChangedEloPoins = (
   const p1IsWinner = parseInt(matchRecord.winner_id as string, 10) === p1.id;
 
   // not used
-  const levelDiff = (p1.level as number) - (p2.level as number);
-  const coefHigherLevel = COEF_MATCH_VS_HIGHER_LEVEL ** levelDiff;
+  // const levelDiff = (p1.level as number) - (p2.level as number);
+  // const coefHigherLevel = COEF_MATCH_VS_HIGHER_LEVEL ** levelDiff;
 
   const { kFactorP1, kFactorP2 } = getPlayersKFactor(
     matchesPlayedP1,
@@ -89,7 +89,10 @@ const getPlayersChangedEloPoins = (
   changedEloPointsP1 += POINTS_FOR_PLAYED_MATCH;
   changedEloPointsP2 += POINTS_FOR_PLAYED_MATCH;
 
-  return { changedEloPointsP1, changedEloPointsP2 };
+  return {
+    changedEloPointsP1: Math.round(changedEloPointsP1),
+    changedEloPointsP2: Math.round(changedEloPointsP2),
+  };
 };
 
 export default getPlayersChangedEloPoins;
