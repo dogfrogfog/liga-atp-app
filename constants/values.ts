@@ -125,3 +125,13 @@ export const OTHER_PAGES_KEYS = {
 export const DIGEST_PAGE_SIZE = 30;
 export const PLAYED_TOURNAMENT_PAGE_SIZE = 50;
 export const PLAYERS_PAGE_SIZE = 70;
+
+export const INITIAL_ELO_POINTS_BY_LEVEL: { [k: number]: number } = {
+  5: 2100,
+  4: 1500,
+  3: 1900,
+  2: 1700,
+  1: 1300,
+  0: 1100,
+  [-1]: 900,
+};

@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, player as PlayerT } from '@prisma/client';
 
+import { INITIAL_ELO_POINTS_BY_LEVEL } from 'constants/values';
 import { PLAYERS_PAGE_SIZE } from 'constants/values';
 import { prisma } from 'services/db';
 
@@ -35,6 +36,12 @@ export default async (
     const createdPlayer = await prisma.player.create({
       data: req.body.data,
     });
+    await prisma.player_elo_ranking.create({
+      data: {
+        player_id: createdPlayer.id,
+        elo_points: INITIAL_ELO_POINTS_BY_LEVEL[createdPlayer.level as number],
+      },
+    });
 
     res.json(createdPlayer);
   }
@@ -44,9 +51,17 @@ export default async (
       res.status(404);
     }
 
+    const id = parseInt(req.body, 10);
+
     const deletedPlayer = await prisma.player.delete({
       where: {
-        id: parseInt(req.body, 10),
+        id,
+      },
+    });
+
+    await prisma.player_elo_ranking.delete({
+      where: {
+        player_id: id,
       },
     });
 

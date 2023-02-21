@@ -2,7 +2,6 @@ import type { match as MatchT, player as PlayerT } from '@prisma/client';
 
 type PlayerWithEloPoints = { id: number; elo_points: number };
 
-const INITIAL_POINTS = 1100;
 const LEVEL_POINTS_DIFFERENCE = 200;
 const NO_POINTS_DIFFERENCE = 50;
 const POINTS_FOR_PLAYED_MATCH = 1;
