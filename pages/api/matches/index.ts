@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { match as MatchT } from '@prisma/client';
 
 import { prisma } from 'services/db';
-import getPlayersChangedEloPoins from 'utils/elo/getPlayersChangedEloPoins';
 
 export default async (
   req: NextApiRequest,
