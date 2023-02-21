@@ -82,6 +82,7 @@ export const DEFAULT_MODAL = { isOpen: false, type: '' };
 export const PLAYER_COLUMNS = [
   'first_name',
   'last_name',
+  'elo_points',
   'date_of_birth',
   'level',
   'height',

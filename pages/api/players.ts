@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, player as PlayerT } from '@prisma/client';
 
-import { INITIAL_ELO_POINTS_BY_LEVEL } from 'constants/values';
 import { PLAYERS_PAGE_SIZE } from 'constants/values';
 import { prisma } from 'services/db';
 
@@ -33,13 +32,17 @@ export default async (
       res.status(404);
     }
 
+    const { elo_points, ...playerData } = req.body.data;
     const createdPlayer = await prisma.player.create({
-      data: req.body.data,
+      data: playerData,
     });
+
+    // make sure players and player_elo_ranking id matches
     await prisma.player_elo_ranking.create({
       data: {
         player_id: createdPlayer.id,
-        elo_points: INITIAL_ELO_POINTS_BY_LEVEL[createdPlayer.level as number],
+        elo_points,
+        expire_date: new Date(),
       },
     });
 

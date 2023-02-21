@@ -1,6 +1,12 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react';
 import type { NextPage } from 'next';
-import type { player as PlayerT } from '@prisma/client';
+import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 
@@ -20,12 +26,14 @@ import {
   deleteSelectedPlayer,
 } from 'services/players';
 import usePlayers from 'hooks/usePlayers';
+import useEloPoints from 'hooks/useEloPoints';
 
 import tableStyles from './Table.module.scss';
 import formStyles from '../../styles/Form.module.scss';
 
 const Players: NextPage = () => {
   const { players, isLoading, mutate } = usePlayers();
+  const { eloPoints } = useEloPoints();
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
   const [selectedRow, setSelectedRow] = useState(-1);
@@ -58,14 +66,14 @@ const Players: NextPage = () => {
   }, [players, selectedRow, mutate]);
 
   const onSubmit = useCallback(
-    async (newPlayer: PlayerT) => {
+    async (props: PlayerT & { elo_points: number | null }) => {
       let res;
       if (modalStatus.type === 'add') {
-        res = await createPlayer(newPlayer);
+        res = await createPlayer(props);
       }
 
       if (modalStatus.type === 'update') {
-        res = await updatePlayer(newPlayer);
+        res = await updatePlayer(props);
       }
 
       if (res?.isOk) {
@@ -94,6 +102,7 @@ const Players: NextPage = () => {
         <LoadingSpinner />
       ) : (
         <PlayersTable
+          eloPoints={eloPoints}
           players={players}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
@@ -113,23 +122,24 @@ const PlayerForm = ({
   onSubmit,
 }: {
   player?: PlayerT;
-  onSubmit: (v: PlayerT) => Promise<void>;
+  onSubmit: (v: PlayerT & { elo_points: number | null }) => Promise<void>;
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PlayerT>({
+  } = useForm<PlayerT & { elo_points: number | null }>({
     defaultValues: {
       level: null,
       age: null,
       technique: 0,
       tactics: 0,
-      power: null,
+      power: 0,
       shakes: 0,
       serve: 0,
       behaviour: 0,
       height: null,
+      elo_points: null,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? (format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') as any)
@@ -271,6 +281,22 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
+        {!player && (
+          <InputWithError errorMessage={errors.elo_points?.message}>
+            очки, которые задаются при создании игрока один раз
+            <br />
+            в дальнейшие изменения происходят автоматически или через базу
+            данных
+            <input
+              type="number"
+              placeholder="Очки эло"
+              {...register('elo_points', {
+                required: false,
+                valueAsNumber: true,
+              })}
+            />
+          </InputWithError>
+        )}
         <h3>Характеристики</h3>
         <InputWithError errorMessage={errors.technique?.message}>
           <br />
@@ -352,7 +378,10 @@ const PlayerForm = ({
   );
 };
 
-const getTableValue = (p: PlayerT, k: keyof PlayerT) => {
+const getTableValue = (
+  p: PlayerT & { elo_points: number },
+  k: keyof (PlayerT & { elo_points: number })
+) => {
   if (k === 'date_of_birth' && p.date_of_birth) {
     return format(new Date(p.date_of_birth), 'dd.MM.yyyy');
   }
@@ -372,14 +401,25 @@ const PlayersTable = ({
   players,
   selectedRow,
   setSelectedRow,
+  eloPoints,
 }: {
   players: PlayerT[];
   selectedRow: number;
   setSelectedRow: Dispatch<SetStateAction<number>>;
+  eloPoints: player_elo_ranking[];
 }) => {
   const handleCheckboxClick = (i: number) => {
     setSelectedRow((v) => (v === i ? -1 : i));
   };
+
+  const eloPointsMap = useMemo(
+    () =>
+      eloPoints.reduce((acc, p) => {
+        acc.set(p.player_id as number, p?.elo_points);
+        return acc;
+      }, new Map<number, number | null>()),
+    [eloPoints]
+  );
 
   return (
     <div className={tableStyles.tableWrapper}>
@@ -406,7 +446,14 @@ const PlayersTable = ({
                 />
               </td>
               {PLAYER_COLUMNS.map((cellKey) => (
-                <td key={cellKey}>{getTableValue(p, cellKey) as any}</td>
+                <td key={cellKey}>
+                  {
+                    getTableValue(
+                      { ...p, elo_points: eloPointsMap.get(p.id) as number },
+                      cellKey
+                    ) as any
+                  }
+                </td>
               ))}
             </tr>
           ))}
