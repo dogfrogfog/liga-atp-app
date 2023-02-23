@@ -1,4 +1,8 @@
-import type { match as MatchT, player as PlayerT } from '@prisma/client';
+import type {
+  match as MatchT,
+  player as PlayerT,
+  player_elo_ranking,
+} from '@prisma/client';
 
 type PlayerWithEloPoints = { id: number; elo_points: number };
 
@@ -29,15 +33,26 @@ const getWinProbability = (p1EloPoints: number, p2EloPoints: number) => {
   return 1 / (1 + Math.pow(1 + 10, (p2EloPoints - p1EloPoints) / 250));
 };
 
-const getPlayersChangedEloPoins = (
+const getNewEloAfterMatch = (
   matchRecord: MatchT,
-  p1: PlayerWithEloPoints,
-  p2: PlayerWithEloPoints,
-  matchesPlayedP1: number,
-  matchesPlayedP2: number
-  // players: PlayerT[]
+  matchesPlayed: {
+    p1: MatchT[];
+    p2: MatchT[];
+    p3?: MatchT[];
+    p4?: MatchT[];
+  },
+  [p1, p2, p3, p4]: player_elo_ranking[]
 ) => {
+  const isDoubles = matchRecord.player3_id && matchRecord.player4_id;
   // if players has no points -> set initial points
+
+  // should be default values by level
+  // but we assume that when new player created -> we create elo points record with id
+  // need to make sure table in db is matching this
+  const p1Points = (p1.elo_points as number) || 0;
+  const p2Points = (p1.elo_points as number) || 0;
+  const p3Points = (p1.elo_points as number) || 0;
+  const p4Points = (p1.elo_points as number) || 0;
 
   // def setInitialPointsByLevel():
   // pointsForLevel = InitialPoints
@@ -55,18 +70,18 @@ const getPlayersChangedEloPoins = (
   // const coefHigherLevel = COEF_MATCH_VS_HIGHER_LEVEL ** levelDiff;
 
   const { kFactorP1, kFactorP2 } = getPlayersKFactor(
-    matchesPlayedP1,
-    matchesPlayedP2
+    matchesPlayed.p1.length,
+    matchesPlayed.p2.length
   );
-  const pointsDiff = Math.abs(p1.elo_points - p2.elo_points);
+  const pointsDiff = Math.abs(p1Points - p2Points);
   const coefMatchResult = inStraightSets ? COEF_STRAIGHT_SETS : 1;
 
-  const probabilityP1Wins = getWinProbability(p1.elo_points, p2.elo_points);
+  const probabilityP1Wins = getWinProbability(p1Points, p2Points);
   const pointsDeltaP1 = coefMatchResult * kFactorP1 * probabilityP1Wins;
   const pointsDeltaP2 = coefMatchResult * kFactorP2 * (1 - probabilityP1Wins);
 
-  let changedEloPointsP1 = p1.elo_points;
-  let changedEloPointsP2 = p2.elo_points;
+  let changedEloPointsP1 = p1Points;
+  let changedEloPointsP2 = p2Points;
   if (p1IsWinner) {
     if (pointsDiff <= NO_POINTS_DIFFERENCE) {
       changedEloPointsP1 += pointsDeltaP1;
@@ -87,11 +102,19 @@ const getPlayersChangedEloPoins = (
 
   changedEloPointsP1 += POINTS_FOR_PLAYED_MATCH;
   changedEloPointsP2 += POINTS_FOR_PLAYED_MATCH;
+  let changedEloPointsP3 = POINTS_FOR_PLAYED_MATCH;
+  let changedEloPointsP4 = POINTS_FOR_PLAYED_MATCH;
 
   return {
     changedEloPointsP1: Math.round(changedEloPointsP1),
     changedEloPointsP2: Math.round(changedEloPointsP2),
+    ...(changedEloPointsP3 && changedEloPointsP4
+      ? {
+          changedEloPointsP3: Math.round(changedEloPointsP3),
+          changedEloPointsP4: Math.round(changedEloPointsP4),
+        }
+      : {}),
   };
 };
 
-export default getPlayersChangedEloPoins;
+export default getNewEloAfterMatch;
