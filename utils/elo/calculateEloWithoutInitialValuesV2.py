@@ -288,7 +288,6 @@ def preActionMatches(matchRecord):
 
 
 def actionMatches(row):
-    matchDate = 'matchRecord.matchDate'
     player1Id = 'matchRecord.player1Id'
     player2Id = 'matchRecord.player2Id'
     player3Id = 'matchRecord.player3Id'
@@ -296,15 +295,6 @@ def actionMatches(row):
 
     isDoubles = len(player3Id) > 0
 
-    # проверка на то, что игроки есть в словаре
-    if not playersDict.__contains__(player1Id) or not playersDict.__contains__(player2Id) \
-      or (isDoubles and (not playersDict.__contains__(player3Id) or not playersDict.__contains__(player4Id))):
-        return
-
-    if len(comment) > 0 or (isDoubles and Config[ConfigProp_SkipDoubles]):
-        # print("retired or doubles : '{}'".format(player3Id))
-        return
-        
     score = 'matchRecord.score'
     winnerId = 'matchRecord.winnerId'
 

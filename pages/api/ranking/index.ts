@@ -69,14 +69,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       now
     );
 
-    const {
-      changedEloPointsP1,
-      changedEloPointsP2,
-      ...doublesChangedEloPoints
-    } = getNewEloAfterMatch(
+    const { p1NewElo, p2NewElo, ...doublesPNewEloPoints } = getNewEloAfterMatch(
       matchData,
       matchesPlayed,
-      playerEloRankings as player_elo_ranking[]
+      {
+        eloPoints: playerEloRankings[0]?.elo_points as number,
+        id: playerEloRankings[0]?.elo_points as number,
+      },
+      {
+        eloPoints: playerEloRankings[1]?.elo_points as number,
+        id: playerEloRankings[1]?.elo_points as number,
+      },
+      {
+        eloPoints: playerEloRankings[2]?.elo_points as number,
+        id: playerEloRankings[2]?.elo_points as number,
+      },
+      {
+        eloPoints: playerEloRankings[3]?.elo_points as number,
+        id: playerEloRankings[3]?.elo_points as number,
+      }
     );
 
     // NEW ELO IS READY
@@ -89,7 +100,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           player_id: matchData.player1_id,
         },
         data: {
-          elo_points: changedEloPointsP1,
+          elo_points: p1NewElo,
           ...(expireDates.p1 && { expire_date: expireDates.p1 }),
         },
       }),
@@ -98,7 +109,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           player_id: matchData.player2_id,
         },
         data: {
-          elo_points: changedEloPointsP2,
+          elo_points: p2NewElo,
           ...(expireDates.p1 && { expire_date: expireDates.p1 }),
         },
       }),
@@ -109,7 +120,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 player_id: matchData.player2_id,
               },
               data: {
-                elo_points: doublesChangedEloPoints.changedEloPointsP3,
+                elo_points: doublesPNewEloPoints.p3NewElo,
                 ...(expireDates.p1 && { expire_date: expireDates.p1 }),
               },
             }),
@@ -118,7 +129,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 player_id: matchData.player2_id,
               },
               data: {
-                elo_points: doublesChangedEloPoints.changedEloPointsP4,
+                elo_points: doublesPNewEloPoints.p4NewElo,
                 ...(expireDates.p1 && { expire_date: expireDates.p1 }),
               },
             }),
@@ -135,19 +146,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const [p1EloRankings, p2EloRankings, ...doublesEloRankings] =
       playerEloRankings;
 
-    console.log(playerEloRankings);
+    // console.log({
+    //   p1: {
+    //     old: p1EloRankings?.elo_points,
+    //     new: p1NewElo,
+    //   },
+    //   p2: {
+    //     old: p2EloRankings?.elo_points,
+    //     new: p2NewElo,
+    //   },
+    //   p3: {
+    //     old: doublesEloRankings[0]?.elo_points,
+    //     new: doublesPNewEloPoints.p3NewElo,
+    //   },
+    //   p4: {
+    //     old: doublesEloRankings[1]?.elo_points,
+    //     new: doublesPNewEloPoints.p4NewElo,
+    //   },
+    // });
+
     await prisma.elo_ranking_change.createMany({
       data: [
         {
           player_id: matchData.player1_id,
           current_elo_points: p1EloRankings?.elo_points,
-          new_elo_points: changedEloPointsP1,
+          new_elo_points: p1NewElo,
           ...commonData,
         },
         {
           player_id: matchData.player2_id,
           current_elo_points: p2EloRankings?.elo_points,
-          new_elo_points: changedEloPointsP2,
+          new_elo_points: p2NewElo,
           ...commonData,
         },
         ...(isDoubles
@@ -155,13 +184,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               {
                 player_id: matchData.player3_id,
                 current_elo_points: doublesEloRankings[0]?.elo_points,
-                new_elo_points: doublesChangedEloPoints.changedEloPointsP3,
+                new_elo_points: doublesPNewEloPoints.p3NewElo,
                 ...commonData,
               },
               {
                 player_id: matchData.player4_id,
                 current_elo_points: doublesEloRankings[1]?.elo_points,
-                new_elo_points: doublesChangedEloPoints.changedEloPointsP4,
+                new_elo_points: doublesPNewEloPoints.p4NewElo,
                 ...commonData,
               },
             ]

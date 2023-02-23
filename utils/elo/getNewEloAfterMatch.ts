@@ -1,38 +1,15 @@
-import type {
-  match as MatchT,
-  player as PlayerT,
-  player_elo_ranking,
-} from '@prisma/client';
+import type { match as MatchT } from '@prisma/client';
 
-type PlayerWithEloPoints = { id: number; elo_points: number };
+import {
+  getPlayersKFactor,
+  getWinProbability,
+  getMatchResultCoef,
+} from './utils';
 
-const LEVEL_POINTS_DIFFERENCE = 200;
-const NO_POINTS_DIFFERENCE = 50;
 const POINTS_FOR_PLAYED_MATCH = 1;
 
-const COEF_MATCH_VS_HIGHER_LEVEL = 1;
-const DEFAULT_K_FACTOR = 32;
-const TWO_SETS_MATCH_SCORE_LENGTH = 7;
-const COEF_STRAIGHT_SETS = 1;
-
-const getPlayersKFactor = (
-  matchesPlayedP1: number,
-  matchesPlayedP2: number
-) => {
-  const kFactorP1 = matchesPlayedP1
-    ? 250 / (matchesPlayedP1 + 5) ** 0.4
-    : DEFAULT_K_FACTOR;
-  const kFactorP2 = matchesPlayedP2
-    ? 250 / (matchesPlayedP2 + 5) ** 0.4
-    : DEFAULT_K_FACTOR;
-
-  return { kFactorP1, kFactorP2 };
-};
-
-const getWinProbability = (p1EloPoints: number, p2EloPoints: number) => {
-  return 1 / (1 + Math.pow(1 + 10, (p2EloPoints - p1EloPoints) / 250));
-};
-
+// but we assume that when new player created -> we create elo points record with id
+// need to make sure table in db is matching this
 const getNewEloAfterMatch = (
   matchRecord: MatchT,
   matchesPlayed: {
@@ -41,78 +18,83 @@ const getNewEloAfterMatch = (
     p3?: MatchT[];
     p4?: MatchT[];
   },
-  [p1, p2, p3, p4]: player_elo_ranking[]
+  p1: { id: number; eloPoints: number },
+  p2: { id: number; eloPoints: number },
+  p3: { id: number; eloPoints: number },
+  p4: { id: number; eloPoints: number }
 ) => {
   const isDoubles = matchRecord.player3_id && matchRecord.player4_id;
-  // if players has no points -> set initial points
 
-  // should be default values by level
-  // but we assume that when new player created -> we create elo points record with id
-  // need to make sure table in db is matching this
-  const p1Points = (p1.elo_points as number) || 0;
-  const p2Points = (p1.elo_points as number) || 0;
-  const p3Points = (p1.elo_points as number) || 0;
-  const p4Points = (p1.elo_points as number) || 0;
+  const team1IsWinner = matchRecord.winner_id === p1.id + '';
+  let team1Points = 0;
+  let team2Points = 0;
+  if (isDoubles) {
+    team1Points = p1.eloPoints + p3.eloPoints;
+    team2Points = p2.eloPoints + p2.eloPoints;
+  } else {
+    team1Points = p1.eloPoints;
+    team2Points = p2.eloPoints;
+  }
 
-  // def setInitialPointsByLevel():
-  // pointsForLevel = InitialPoints
-
-  // for level in Levels:
-  //   InitPointsByLevelDict[level] = pointsForLevel
-  // pointsForLevel += LevelPointsDifference
-
-  const inStraightSets =
-    (matchRecord.score || '').length === TWO_SETS_MATCH_SCORE_LENGTH;
-  const p1IsWinner = parseInt(matchRecord.winner_id as string, 10) === p1.id;
-
-  // not used
-  // const levelDiff = (p1.level as number) - (p2.level as number);
-  // const coefHigherLevel = COEF_MATCH_VS_HIGHER_LEVEL ** levelDiff;
-
+  const coefMatchResult = getMatchResultCoef(matchRecord.score || '');
+  // matches includes doubles
   const { kFactorP1, kFactorP2 } = getPlayersKFactor(
     matchesPlayed.p1.length,
     matchesPlayed.p2.length
   );
-  const pointsDiff = Math.abs(p1Points - p2Points);
-  const coefMatchResult = inStraightSets ? COEF_STRAIGHT_SETS : 1;
 
-  const probabilityP1Wins = getWinProbability(p1Points, p2Points);
-  const pointsDeltaP1 = coefMatchResult * kFactorP1 * probabilityP1Wins;
-  const pointsDeltaP2 = coefMatchResult * kFactorP2 * (1 - probabilityP1Wins);
+  const team1WinProbavility = getWinProbability(team1Points, team2Points);
 
-  let changedEloPointsP1 = p1Points;
-  let changedEloPointsP2 = p2Points;
-  if (p1IsWinner) {
-    if (pointsDiff <= NO_POINTS_DIFFERENCE) {
-      changedEloPointsP1 += pointsDeltaP1;
-      changedEloPointsP2 -= pointsDeltaP2;
+  const deltaTeam1Wins =
+    coefMatchResult * kFactorP1 * (1 - team1WinProbavility);
+  const deltaTeam1Loses = coefMatchResult * kFactorP1 * team1WinProbavility;
+
+  const deltaTeam2Wins = coefMatchResult * kFactorP2 * team1WinProbavility;
+  const deltaTeam2Loses =
+    coefMatchResult * kFactorP2 * (1 - team1WinProbavility);
+
+  let p1Delta = 0;
+  let p2Delta = 0;
+  let p3Delta = 0;
+  let p4Delta = 0;
+
+  if (team1IsWinner) {
+    if (isDoubles) {
+      p1Delta = deltaTeam1Wins / 2;
+      p3Delta = deltaTeam1Wins / 2;
+      p2Delta = -deltaTeam2Loses / 2;
+      p4Delta = -deltaTeam2Loses / 2;
+    } else {
+      p1Delta = deltaTeam1Wins;
+      p2Delta = -deltaTeam2Loses;
     }
-
-    // if there is a points difference
-    // what do we do ?
   } else {
-    if (pointsDiff <= NO_POINTS_DIFFERENCE) {
-      changedEloPointsP2 += pointsDeltaP1;
-      changedEloPointsP1 -= pointsDeltaP2;
+    if (isDoubles) {
+      p1Delta = -deltaTeam1Wins / 2;
+      p3Delta = -deltaTeam1Wins / 2;
+      p2Delta = deltaTeam2Loses / 2;
+      p4Delta = deltaTeam2Loses / 2;
+    } else {
+      p1Delta = -deltaTeam1Loses;
+      p2Delta = deltaTeam2Wins;
     }
-
-    // if there is a points difference
-    // what do we do ?
   }
 
-  changedEloPointsP1 += POINTS_FOR_PLAYED_MATCH;
-  changedEloPointsP2 += POINTS_FOR_PLAYED_MATCH;
-  let changedEloPointsP3 = POINTS_FOR_PLAYED_MATCH;
-  let changedEloPointsP4 = POINTS_FOR_PLAYED_MATCH;
+  const p1NewElo = p1.eloPoints + p1Delta + POINTS_FOR_PLAYED_MATCH;
+  const p2NewElo = p2.eloPoints + p2Delta + POINTS_FOR_PLAYED_MATCH;
+
+  let p3NewElo = 0;
+  let p4NewElo = 0;
+  if (isDoubles) {
+    p3NewElo = p3.eloPoints + p3Delta + POINTS_FOR_PLAYED_MATCH;
+    p4NewElo = p4.eloPoints + p4Delta + POINTS_FOR_PLAYED_MATCH;
+  }
 
   return {
-    changedEloPointsP1: Math.round(changedEloPointsP1),
-    changedEloPointsP2: Math.round(changedEloPointsP2),
-    ...(changedEloPointsP3 && changedEloPointsP4
-      ? {
-          changedEloPointsP3: Math.round(changedEloPointsP3),
-          changedEloPointsP4: Math.round(changedEloPointsP4),
-        }
+    p1NewElo: Math.round(p1NewElo),
+    p2NewElo: Math.round(p2NewElo),
+    ...(isDoubles
+      ? { p3NewElo: Math.round(p3NewElo), p4NewElo: Math.round(p4NewElo) }
       : {}),
   };
 };
