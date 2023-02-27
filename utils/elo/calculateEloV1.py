@@ -306,7 +306,8 @@ def writeRankingsToFile(fileName):
             fullName
         ]
 
-        resultValuesString = ""
+    
+    uesString = ""
 
         for idx, valString in enumerate(resultValues):
             resultValuesString += valString + (columnSeparator if idx < len(resultValues) - 1 else newLine)

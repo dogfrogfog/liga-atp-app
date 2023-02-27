@@ -17,7 +17,9 @@ export const updateMatch = async (match: MatchT) => {
   const [responseMatches, responseRanking] = await Promise.all([
     axios.put('/api/matches', { data: match }),
     // to update ranking
-    axios.post('/api/ranking', { data: match }),
+    match.score && match.winner_id
+      ? axios.post('/api/ranking', { data: match })
+      : { status: 200 },
   ]);
 
   if (responseMatches.status === 200 && responseRanking.status === 200) {
