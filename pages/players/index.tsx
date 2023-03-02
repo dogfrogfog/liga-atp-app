@@ -8,23 +8,23 @@ import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
 import usePlayers from 'hooks/usePlayers';
-import useActivePlayersRankings from 'hooks/useActivePlayersRankings';
+import useEloPoints from 'hooks/useEloPoints';
 import styles from 'styles/Players.module.scss';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
 const PlayersIndexPage: NextPage = () => {
   const router = useRouter();
   const { players } = usePlayers();
-  const { playersRankings } = useActivePlayersRankings();
+  const { eloPoints } = useEloPoints();
   const [playersPageNumber, setPlayersPageNumber] = useState(1);
 
   const playersRankingsMap = useMemo(
     () =>
-      playersRankings.reduce((acc, p) => {
+      eloPoints.reduce((acc, p) => {
         acc.set(p.player_id as number, p?.elo_points);
         return acc;
       }, new Map<number, number | null>()),
-    [playersRankings]
+    [eloPoints]
   );
 
   const onSuggestionClick = (p: PlayerT) => {

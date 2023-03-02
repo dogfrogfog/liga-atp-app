@@ -15,6 +15,7 @@ import {
   TOURNAMENT_COLUMNS,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
+import LoadingShadow from 'components/LoadingShadow';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import InputWithError from 'ui-kit/InputWithError';
 import Modal from 'ui-kit/Modal';
@@ -32,6 +33,7 @@ import formStyles from '../../../styles/Form.module.scss';
 const Tournaments: NextPage = () => {
   const router = useRouter();
   const { tournaments, isLoading, mutate } = useTournaments();
+  const [isLoadingState, setIsLoadingState] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState(-1);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
@@ -57,6 +59,7 @@ const Tournaments: NextPage = () => {
   }, [tournaments, selectedRow]);
 
   const handleDeleteClick = useCallback(async () => {
+    setIsLoadingState(true);
     const { id } = tournaments[selectedRow];
 
     const { isOk } = await deleteSelectedTournament(id);
@@ -64,8 +67,9 @@ const Tournaments: NextPage = () => {
     if (isOk) {
       handleReset();
 
-      mutate();
+      await mutate();
     }
+    setIsLoadingState(false);
   }, [tournaments, selectedRow, mutate]);
 
   const handlePickClick = useCallback(() => {
@@ -75,6 +79,7 @@ const Tournaments: NextPage = () => {
   }, [selectedRow, tournaments, router]);
 
   const onSubmit = async (newTournament: TournamentT) => {
+    setIsLoadingState(true);
     const normalizedNewTournament = {
       ...newTournament,
       tournament_type: parseInt(newTournament.tournament_type as any as string),
@@ -95,14 +100,16 @@ const Tournaments: NextPage = () => {
     if (res?.isOk) {
       handleReset();
 
-      mutate();
+      await mutate();
     } else {
       console.error(res?.errorMessage);
     }
+    setIsLoadingState(false);
   };
 
   return (
     <div>
+      {(isLoading || isLoadingState) && <LoadingShadow />}
       <PageTitle>Управление турнирами</PageTitle>
       <TableControls
         isLoading={isLoading}

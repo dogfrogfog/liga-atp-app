@@ -37,10 +37,10 @@ model match {
 }
 
 model player {
-  id                             Int                  @id(map: "idx_16917_core_player_pkey") @default(autoincrement())
+  id                             Int       @id(map: "idx_16917_core_player_pkey") @default(autoincrement())
   first_name                     String?
   last_name                      String?
-  date_of_birth                  DateTime?            @db.Date
+  date_of_birth                  DateTime? @db.Date
   city                           String?
   country                        String?
   email                          String?
@@ -53,30 +53,29 @@ model player {
   beckhand                       String?
   insta_link                     String?
   is_coach                       Boolean?
-  in_tennis_from                 DateTime?            @db.Date
+  in_tennis_from                 DateTime? @db.Date
   job_description                String?
-  technique                      Int                  @default(0)
-  tactics                        Int                  @default(0)
-  power                          Int?                 @default(0)
-  shakes                         Int                  @default(0)
-  serve                          Int                  @default(0)
-  behaviour                      Int                  @default(0)
+  technique                      Int       @default(0)
+  tactics                        Int       @default(0)
+  power                          Int?      @default(0)
+  shakes                         Int       @default(0)
+  serve                          Int       @default(0)
+  behaviour                      Int       @default(0)
   height                         Int?
-  match_match_player1_idToplayer match[]              @relation("match_player1_idToplayer")
-  match_match_player2_idToplayer match[]              @relation("match_player2_idToplayer")
-  match_match_player3_idToplayer match[]              @relation("match_player3_idToplayer")
-  match_match_player4_idToplayer match[]              @relation("match_player4_idToplayer")
-  tournament_players             tournament_players[]
+  match_match_player1_idToplayer match[]   @relation("match_player1_idToplayer")
+  match_match_player2_idToplayer match[]   @relation("match_player2_idToplayer")
+  match_match_player3_idToplayer match[]   @relation("match_player3_idToplayer")
+  match_match_player4_idToplayer match[]   @relation("match_player4_idToplayer")
 }
 
 model tournament {
-  id                       Int                  @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
+  id                       Int         @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
   name                     String?
   address                  String?
-  start_date               DateTime?            @db.Date
+  start_date               DateTime?   @db.Date
   is_finished              Boolean?
   surface                  Int?
-  associated_tournament_id Int?                 @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
+  associated_tournament_id Int?        @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
   draw_type                Int?
   players_order            String?
   draw                     String?
@@ -84,23 +83,10 @@ model tournament {
   tournament_type          Int?
   is_doubles               Boolean?
   status                   Int?
-  unregistered_players     String?              @default("")
+  unregistered_players     String?     @default("")
   match                    match[]
-  tournament               tournament?          @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
-  other_tournament         tournament?          @relation("tournamentTotournament")
-  tournament_players       tournament_players[]
-}
-
-model tournament_players {
-  id            Int         @id(map: "idx_16849_core_tournament_players_pkey") @default(autoincrement())
-  tournament_id Int?
-  player_id     Int?
-  player        player?     @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_players_player_id_fkey")
-  tournament    tournament? @relation(fields: [tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_players_tournament_id_fkey")
-
-  @@unique([tournament_id, player_id], map: "idx_16849_sqlite_autoindex_core_tournament_players_1")
-  @@index([tournament_id], map: "idx_16849_core_tournament_players_656a3fdb")
-  @@index([player_id], map: "idx_16849_core_tournament_players_afe72417")
+  tournament               tournament? @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
+  other_tournament         tournament? @relation("tournamentTotournament")
 }
 
 model digest {
@@ -125,10 +111,10 @@ model player_elo_ranking {
 }
 
 model elo_ranking_change {
-  id          Int       @id @default(autoincrement())
-  player_id   Int?
-  match_id    Int?
-  current_elo_points  Int?
-  new_elo_points   Int?
-  change_date DateTime? @db.Date
+  id                 Int       @id @default(autoincrement())
+  player_id          Int?
+  match_id           Int?
+  change_date        DateTime? @db.Date
+  current_elo_points Int?
+  new_elo_points     Int?
 }

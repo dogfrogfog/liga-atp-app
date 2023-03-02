@@ -29,7 +29,7 @@ import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 import usePlayers from 'hooks/usePlayers';
-import useActivePlayersRankings from 'hooks/useActivePlayersRankings';
+import useEloPoints from 'hooks/useEloPoints';
 import LoadingShadow from 'components/LoadingShadow';
 
 const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
@@ -43,15 +43,15 @@ const TournamentPage: NextPage<{
   const downloadImageRef = useRef();
 
   const { players: allPlayers } = usePlayers();
-  const { playersRankings } = useActivePlayersRankings();
+  const { eloPoints } = useEloPoints();
 
   const playersRankingsMap = useMemo(
     () =>
-      playersRankings.reduce((acc, p) => {
+      eloPoints.reduce((acc, p) => {
         acc.set(p.player_id as number, p?.elo_points);
         return acc;
       }, new Map<number, number | null>()),
-    [playersRankings]
+    [eloPoints]
   );
 
   const [activeTab, setActiveTab] = useState(
@@ -234,7 +234,6 @@ const TournamentPage: NextPage<{
   };
 
   const handleDownloadClick = async () => {
-    console.log(downloadImageRef.current);
     if (downloadImageRef.current) {
       const canvas = await html2canvas(downloadImageRef.current);
 
