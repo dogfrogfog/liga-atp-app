@@ -15,6 +15,7 @@ import PageTitle from 'ui-kit/PageTitle';
 import Modal from 'ui-kit/Modal';
 import InputWithError from 'ui-kit/InputWithError';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import LoadingShadow from 'components/LoadingShadow';
 import {
   DEFAULT_MODAL,
   LEVEL_NUMBER_VALUES,
@@ -32,6 +33,7 @@ import tableStyles from './Table.module.scss';
 import formStyles from '../../styles/Form.module.scss';
 
 const Players: NextPage = () => {
+  const [isLoadingState, setIsLoadingState] = useState(false);
   const { players, isLoading, mutate } = usePlayers();
   const { eloPoints } = useEloPoints();
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
@@ -56,17 +58,20 @@ const Players: NextPage = () => {
   }, [players, selectedRow]);
 
   const handleDeleteClick = useCallback(async () => {
+    setIsLoadingState(true);
     const { id } = players[selectedRow];
     const res = await deleteSelectedPlayer(id);
 
     if (res.isOk) {
-      mutate();
+      await mutate();
       handleReset();
     }
+    setIsLoadingState(false);
   }, [players, selectedRow, mutate]);
 
   const onSubmit = useCallback(
     async (props: PlayerT & { elo_points: number | null }) => {
+      setIsLoadingState(true);
       let res;
       if (modalStatus.type === 'add') {
         res = await createPlayer(props);
@@ -79,16 +84,18 @@ const Players: NextPage = () => {
       if (res?.isOk) {
         handleReset();
 
-        mutate();
+        await mutate();
       } else {
         console.error(res?.errorMessage);
       }
+      setIsLoadingState(false);
     },
     [modalStatus, mutate]
   );
 
   return (
     <div>
+      {(isLoading || isLoadingState) && <LoadingShadow />}
       <PageTitle>Управление игроками</PageTitle>
       <TableControls
         isLoading={isLoading}
