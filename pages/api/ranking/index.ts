@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         expire_date: {
           // even if we create new player elo ranking expire_date will be today and we will not see it in the response
           // 1 day ahead just in case of missing some time
-          gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
+          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
         },
       },
     });
@@ -91,6 +91,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // NEW ELO IS READY
     // UPDATE ELO RANKING AND CREATE ELO RANKING CHANGE RECORDS for all 2/4 players in match
 
+    const commonData = {
+      change_date: now,
+      match_id: matchId,
+    };
+
+    // [0, 1, 2, 3] = [p1, p2, p3, p4]
+    const [p1EloRankings, p2EloRankings, ...doublesEloRankings] =
+      playerEloRankings;
+
     // we update expireDates if needed
     await prisma.$transaction([
       prisma.player_elo_ranking.update({
@@ -133,68 +142,39 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }),
           ]
         : []),
+      prisma.elo_ranking_change.createMany({
+        data: [
+          {
+            player_id: matchData.player1_id,
+            current_elo_points: p1EloRankings?.elo_points,
+            new_elo_points: p1NewElo,
+            ...commonData,
+          },
+          {
+            player_id: matchData.player2_id,
+            current_elo_points: p2EloRankings?.elo_points,
+            new_elo_points: p2NewElo,
+            ...commonData,
+          },
+          ...(isDoubles
+            ? [
+                {
+                  player_id: matchData.player3_id,
+                  current_elo_points: doublesEloRankings[0]?.elo_points,
+                  new_elo_points: doublesPNewEloPoints.p3NewElo,
+                  ...commonData,
+                },
+                {
+                  player_id: matchData.player4_id,
+                  current_elo_points: doublesEloRankings[1]?.elo_points,
+                  new_elo_points: doublesPNewEloPoints.p4NewElo,
+                  ...commonData,
+                },
+              ]
+            : []),
+        ],
+      }),
     ]);
-
-    const commonData = {
-      change_date: now,
-      match_id: matchId,
-    };
-
-    // [0, 1, 2, 3] = [p1, p2, p3, p4]
-    const [p1EloRankings, p2EloRankings, ...doublesEloRankings] =
-      playerEloRankings;
-
-    // console.log({
-    //   p1: {
-    //     old: p1EloRankings?.elo_points,
-    //     new: p1NewElo,
-    //   },
-    //   p2: {
-    //     old: p2EloRankings?.elo_points,
-    //     new: p2NewElo,
-    //   },
-    //   p3: {
-    //     old: doublesEloRankings[0]?.elo_points,
-    //     new: doublesPNewEloPoints.p3NewElo,
-    //   },
-    //   p4: {
-    //     old: doublesEloRankings[1]?.elo_points,
-    //     new: doublesPNewEloPoints.p4NewElo,
-    //   },
-    // });
-
-    await prisma.elo_ranking_change.createMany({
-      data: [
-        {
-          player_id: matchData.player1_id,
-          current_elo_points: p1EloRankings?.elo_points,
-          new_elo_points: p1NewElo,
-          ...commonData,
-        },
-        {
-          player_id: matchData.player2_id,
-          current_elo_points: p2EloRankings?.elo_points,
-          new_elo_points: p2NewElo,
-          ...commonData,
-        },
-        ...(isDoubles
-          ? [
-              {
-                player_id: matchData.player3_id,
-                current_elo_points: doublesEloRankings[0]?.elo_points,
-                new_elo_points: doublesPNewEloPoints.p3NewElo,
-                ...commonData,
-              },
-              {
-                player_id: matchData.player4_id,
-                current_elo_points: doublesEloRankings[1]?.elo_points,
-                new_elo_points: doublesPNewEloPoints.p4NewElo,
-                ...commonData,
-              },
-            ]
-          : []),
-      ],
-    });
 
     res.status(200).json({});
   }

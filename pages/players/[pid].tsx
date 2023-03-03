@@ -3,7 +3,12 @@ import type { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
-import type { player as PlayerT, digest as DigestT } from '@prisma/client';
+import type {
+  player as PlayerT,
+  digest as DigestT,
+  elo_ranking_change,
+} from '@prisma/client';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
@@ -34,7 +39,8 @@ const SingleProfilePage: NextPage<{
   player: PlayerT;
   digests: DigestT[];
   eloPoints?: number;
-}> = ({ player, digests, eloPoints }) => {
+  eloChanges: elo_ranking_change[];
+}> = ({ player, digests, eloPoints, eloChanges }) => {
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
@@ -126,6 +132,17 @@ const SingleProfilePage: NextPage<{
           />
         );
       case PROFILE_TABS[4]:
+        const eloChartData = eloChanges
+          .filter(
+            (v) =>
+              (v.change_date as Date) >
+              new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 12) // 12 months
+          )
+          .sort((a, b) =>
+            (a.change_date as Date) > (b.change_date as Date) ? 1 : -1
+          )
+          .map((v, i) => ({ eloPoints: v.new_elo_points }));
+
         return (
           <div className={styles.specs}>
             {[
@@ -150,6 +167,40 @@ const SingleProfilePage: NextPage<{
                 />
               </div>
             ))}
+            <br />
+            <p>График изменения рейтинга эло</p>
+            <div style={{ height: 420, width: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={eloChartData}
+                  margin={{
+                    top: 50,
+                    right: 30,
+                  }}
+                >
+                  <XAxis
+                    label="Последние 12 месяцев"
+                    tick={false}
+                    stroke="#fff"
+                  />
+                  <YAxis
+                    tickCount={15}
+                    domain={[0, 'dataMax + 200']}
+                    dataKey="eloPoints"
+                    stroke="#fff"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="eloPoints"
+                    stroke="#4cc4d1"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         );
       case PROFILE_TABS[5]:
@@ -263,6 +314,12 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     },
   });
 
+  const eloChanges = await prisma.elo_ranking_change.findMany({
+    where: {
+      player_id: id,
+    },
+  });
+
   const digests = await prisma.digest.findMany({
     where: {
       mentioned_players_ids: {
@@ -276,6 +333,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       player,
       digests,
       eloPoints: eloPoints?.elo_points,
+      eloChanges,
     },
   };
 };

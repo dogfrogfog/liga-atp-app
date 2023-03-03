@@ -35,7 +35,7 @@ import formStyles from '../../styles/Form.module.scss';
 const Players: NextPage = () => {
   const [isLoadingState, setIsLoadingState] = useState(false);
   const { players, isLoading, mutate } = usePlayers();
-  const { eloPoints } = useEloPoints();
+  const { eloPoints, mutate: mutateElo } = useEloPoints();
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
   const [editingPlayer, setEditingPlayer] = useState<PlayerT>();
   const [selectedRow, setSelectedRow] = useState(-1);
@@ -75,6 +75,8 @@ const Players: NextPage = () => {
       let res;
       if (modalStatus.type === 'add') {
         res = await createPlayer(props);
+
+        await mutateElo();
       }
 
       if (modalStatus.type === 'update') {
@@ -90,7 +92,7 @@ const Players: NextPage = () => {
       }
       setIsLoadingState(false);
     },
-    [modalStatus, mutate]
+    [modalStatus, mutate, mutateElo]
   );
 
   return (
