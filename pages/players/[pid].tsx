@@ -8,7 +8,7 @@ import type {
   digest as DigestT,
   elo_ranking_change,
 } from '@prisma/client';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, AreaChart } from 'recharts';
 
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
@@ -167,19 +167,21 @@ const SingleProfilePage: NextPage<{
                 />
               </div>
             ))}
-            <br />
-            <p>График изменения рейтинга эло</p>
-            <div style={{ height: 420, width: '100%' }}>
+            <div className={styles.eloChartContainer}>
+              <p className={styles.chartName}>График изменения рейтинга эло</p>
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  width={500}
-                  height={300}
+                <AreaChart
+                  width={730}
+                  height={250}
                   data={eloChartData}
-                  margin={{
-                    top: 50,
-                    right: 30,
-                  }}
+                  margin={{ top: 25, right: 30 }}
                 >
+                  <defs>
+                    <linearGradient id="colorAqua" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4cc4d1" stopOpacity={1} />
+                      <stop offset="95%" stopColor="#4cc4d1" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
                   <XAxis
                     label="Последние 12 месяцев"
                     tick={false}
@@ -191,14 +193,9 @@ const SingleProfilePage: NextPage<{
                     dataKey="eloPoints"
                     stroke="#fff"
                   />
-                  <Line
-                    type="monotone"
-                    dataKey="eloPoints"
-                    stroke="#4cc4d1"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area type="monotone" dataKey="eloPoints" stroke="#4cc4d1" fillOpacity={1} fill="url(#colorAqua)" />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
