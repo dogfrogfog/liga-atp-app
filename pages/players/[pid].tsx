@@ -8,7 +8,14 @@ import type {
   digest as DigestT,
   elo_ranking_change,
 } from '@prisma/client';
-import { Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, AreaChart } from 'recharts';
+import {
+  Area,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  CartesianGrid,
+  AreaChart,
+} from 'recharts';
 
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
@@ -194,7 +201,13 @@ const SingleProfilePage: NextPage<{
                     stroke="#fff"
                   />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Area type="monotone" dataKey="eloPoints" stroke="#4cc4d1" fillOpacity={1} fill="url(#colorAqua)" />
+                  <Area
+                    type="monotone"
+                    dataKey="eloPoints"
+                    stroke="#4cc4d1"
+                    fillOpacity={1}
+                    fill="url(#colorAqua)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
