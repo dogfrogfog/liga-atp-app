@@ -33,9 +33,12 @@ export default async (
     }
 
     const { elo_points, ...playerData } = req.body.data;
+    console.log(playerData);
     const createdPlayer = await prisma.player.create({
       data: playerData,
     });
+
+    console.log(createdPlayer);
 
     // make sure players and player_elo_ranking id matches
     await prisma.player_elo_ranking.create({

@@ -5,6 +5,7 @@ import {
   useState,
   useMemo,
 } from 'react';
+import axios from 'axios';
 import type { NextPage } from 'next';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 import { useForm } from 'react-hook-form';
@@ -93,9 +94,16 @@ const Players: NextPage = () => {
     [modalStatus, mutate]
   );
 
+  const handleCustom = async () => {
+    await axios.get('/api/custom');
+  };
+
   return (
     <div>
       {(isLoading || isLoadingState) && <LoadingShadow />}
+      <button onClick={handleCustom}>
+        удалить всех игроков
+      </button>
       <PageTitle>Управление игроками</PageTitle>
       <TableControls
         isLoading={isLoading}
