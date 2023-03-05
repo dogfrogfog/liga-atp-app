@@ -22,9 +22,11 @@ import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
+type PlayerWithEloPoints = PlayerT & { elo_points: number };
+
 const CompareTwoPlayersPage: NextPage<{
-  p1?: PlayerT;
-  p2?: PlayerT;
+  p1?: PlayerWithEloPoints;
+  p2?: PlayerWithEloPoints;
 }> = ({ p1, p2 }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
 
@@ -105,8 +107,6 @@ const CompareTwoPlayersPage: NextPage<{
             <StatsTab
               p1Stats={p1StatsData as any}
               p2Stats={p2StatsData as any}
-              p1Style={p1.gameplay_style || ''}
-              p2Style={p2.gameplay_style || ''}
               p1Years={
                 p1.in_tennis_from
                   ? calculateYearsFromDate(p1.in_tennis_from) + ''
@@ -161,11 +161,19 @@ const CompareTwoPlayersPage: NextPage<{
       <div className={styles.images}>
         <div
           className={cl(styles.img, styles.side)}
-          style={{ background: `url(${p1.avatar})`, backgroundSize: 'cover' }}
+          style={{
+            background: `url(${p1.avatar})`,
+            backgroundSize: 'cover',
+            backgroundPositionX: 'center',
+          }}
         ></div>
         <div
           className={cl(styles.img, styles.side)}
-          style={{ background: `url(${p2.avatar})`, backgroundSize: 'cover' }}
+          style={{
+            background: `url(${p2.avatar})`,
+            backgroundSize: 'cover',
+            backgroundPositionX: 'center',
+          }}
         ></div>
       </div>
       <div className={styles.score}>
@@ -186,8 +194,7 @@ const CompareTwoPlayersPage: NextPage<{
             <span className={styles.lvl}>
               {LEVEL_NUMBER_VALUES[p1.level as number]}
             </span>
-            {/* <span className={styles.top}>{'<318>'}</span> */}
-            <span className={styles.rank}>1434</span>
+            <span className={styles.rank}>{p1?.elo_points}</span>
           </div>
         </div>
         <div className={cl(styles.playerInfo, styles.side)}>
@@ -204,8 +211,7 @@ const CompareTwoPlayersPage: NextPage<{
             <span className={styles.lvl}>
               {LEVEL_NUMBER_VALUES[p2.level as number]}
             </span>
-            {/* <span className={styles.top}>{'<39>'}</span> */}
-            <span className={styles.rank}>188</span>
+            <span className={styles.rank}>{p2?.elo_points}</span>
           </div>
         </div>
       </div>
@@ -228,24 +234,40 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   let p1;
   if (p1IdInt) {
-    const p1Data = await prisma.player.findUnique({
-      where: {
-        id: p1IdInt,
-      },
-    });
+    // @ts-ignore
+    const [p1Data, { elo_points }] = await prisma.$transaction([
+      prisma.player.findUnique({
+        where: {
+          id: p1IdInt,
+        },
+      }),
+      prisma.player_elo_ranking.findUnique({
+        where: {
+          player_id: p1IdInt,
+        },
+      }),
+    ]);
 
-    p1 = p1Data;
+    p1 = { ...p1Data, elo_points };
   }
 
   let p2;
   if (p2IdInt) {
-    const p2Data = await prisma.player.findUnique({
-      where: {
-        id: p2IdInt,
-      },
-    });
+    // @ts-ignore
+    const [p2Data, { elo_points }] = await prisma.$transaction([
+      prisma.player.findUnique({
+        where: {
+          id: p2IdInt,
+        },
+      }),
+      prisma.player_elo_ranking.findUnique({
+        where: {
+          player_id: p2IdInt,
+        },
+      }),
+    ]);
 
-    p2 = p2Data;
+    p2 = { ...p2Data, elo_points };
   }
 
   return {

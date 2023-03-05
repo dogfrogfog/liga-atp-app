@@ -100,7 +100,7 @@ const RankingPage: NextPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <PageTitle>Рейтинг</PageTitle>
+      <PageTitle>Эло</PageTitle>
       <Tabs
         tabNames={RANKING_TABS}
         activeTab={activeTab}

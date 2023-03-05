@@ -10,6 +10,7 @@
     width: 100%;
     color: $custom-white;
     text-align: left;
+    padding: 5px;
 
     &:active {
       background-color: $custom-aqua;
@@ -57,12 +58,8 @@
       padding: 10px;
       margin: 0;
 
-      li {
-        margin-bottom: 10px;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
+      li:first-child {
+        margin-top: -5px;
       }
     }
   }

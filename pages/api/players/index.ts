@@ -9,19 +9,10 @@ export default async (
   res: NextApiResponse<PlayerT[] | PlayerT | Prisma.BatchPayload>
 ) => {
   if (req.method === 'GET') {
-    const page = parseInt(req.query.page as string, 10);
-    const paginationParams = page
-      ? {
-          skip: (page - 1) * PLAYERS_PAGE_SIZE,
-          take: PLAYERS_PAGE_SIZE,
-        }
-      : undefined;
-
     const players = await prisma.player.findMany({
       orderBy: {
         id: 'desc',
       },
-      ...paginationParams,
     });
 
     res.json(players);

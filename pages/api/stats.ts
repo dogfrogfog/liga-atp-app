@@ -104,7 +104,7 @@ export default async (
         // we get matchId from brackets if exists
         // and increase counter if player was in finals/won the tournament
         // if no data in brackets field then we should skip tournament and not count
-        if (brackets && brackets[0].id) {
+        if (brackets && brackets.length > 0 && brackets[0].id) {
           isOldFormat = true;
           const lastMatchId = brackets[brackets.length - 1]?.matchId;
           lastMatch = lastMatchId ? matchesMap.get(lastMatchId) : undefined;

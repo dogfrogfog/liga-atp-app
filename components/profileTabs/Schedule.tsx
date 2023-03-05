@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { format } from 'date-fns';
 
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
@@ -6,7 +7,7 @@ import styles from './Schedule.module.scss';
 type MatchProps = {
   tournamentName: string;
   time: Date | null;
-  opponent: string;
+  opponent: string | ReactNode;
 };
 
 const Match = ({ tournamentName, time, opponent }: MatchProps) => {

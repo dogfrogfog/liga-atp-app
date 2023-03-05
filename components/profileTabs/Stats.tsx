@@ -10,7 +10,6 @@ type StatsTabProps = {
   setSelectedLvl: Dispatch<SetStateAction<number>>;
   statsData?: StatsDataType;
   yearsInTennis: string;
-  gameplayStyle: string;
 };
 
 const StatsTab = ({
@@ -18,7 +17,6 @@ const StatsTab = ({
   setSelectedLvl,
   statsData,
   yearsInTennis,
-  gameplayStyle,
 }: StatsTabProps) => {
   const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedLvl(parseInt(e.target.value, 10));
@@ -39,13 +37,7 @@ const StatsTab = ({
         </select>
       </div>
       <div className={styles.lvlSelectContainer}></div>
-      {statsData && (
-        <StatsData
-          p1Stats={statsData}
-          p1Years={yearsInTennis}
-          p1Style={gameplayStyle}
-        />
-      )}
+      {statsData && <StatsData p1Stats={statsData} p1Years={yearsInTennis} />}
     </div>
   );
 };
