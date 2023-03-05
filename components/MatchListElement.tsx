@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { AiOutlineYoutube } from 'react-icons/ai';
-import { GiTabletopPlayers } from 'react-icons/gi';
 import { format } from 'date-fns';
 import cl from 'classnames';
 
 import { MatchWithTournamentType, getOpponents } from 'utils/getOpponents';
 import { isPlayerWon } from 'utils/isPlayerWon';
 import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
+import { HeadToHead } from 'layouts/MainAppLayoutIcons';
 import styles from './MatchListElement.module.scss';
 
 type MatchProps = {
@@ -39,7 +39,9 @@ const Match = ({ match, playerId }: MatchProps) => {
         <div className={styles.buttons}>
           {youtube_link && (
             <Link href={youtube_link}>
-              <AiOutlineYoutube />
+              <a>
+                <AiOutlineYoutube />
+              </a>
             </Link>
           )}
           {!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
@@ -48,7 +50,15 @@ const Match = ({ match, playerId }: MatchProps) => {
             <Link
               href={`/h2h/compare?p1Id=${match.player1_id}&p2Id=${match.player2_id}`}
             >
-              <GiTabletopPlayers />
+              <a>
+                <HeadToHead
+                  withText={false}
+                  style={{
+                    position: 'relative',
+                    top: 5,
+                  }}
+                />
+              </a>
             </Link>
           )}
         </div>
