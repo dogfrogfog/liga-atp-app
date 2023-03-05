@@ -64,7 +64,7 @@ const InfoTab = ({
       <span>{forehand}</span>
     </div>
     <div className={styles.infoRow}>
-      <span>Бэкэнд</span>
+      <span>Бэкхэнд</span>
       <span>{beckhand}</span>
     </div>
     <div className={styles.infoRow}>
