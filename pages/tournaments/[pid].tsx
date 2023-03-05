@@ -298,9 +298,9 @@ const TournamentPage: NextPage<{
           className={styles.tournamentItem}
           name={tournament.name || 'tbd'}
           status={
-            tournament.status
-              ? TOURNAMENT_STATUS_NUMBER_VALUES[tournament.status]
-              : 'tbd'
+            tournament.is_finished
+              ? TOURNAMENT_STATUS_NUMBER_VALUES[3]
+              : TOURNAMENT_STATUS_NUMBER_VALUES[tournament.status as number]
           }
           startDate={
             tournament.start_date
