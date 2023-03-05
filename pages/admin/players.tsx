@@ -80,7 +80,8 @@ const Players: NextPage = () => {
       }
 
       if (modalStatus.type === 'update') {
-        res = await updatePlayer(props);
+        const { elo_points, ...propsToUpdate } = props;
+        res = await updatePlayer(propsToUpdate);
       }
 
       if (res?.isOk) {
