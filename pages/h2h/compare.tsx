@@ -22,9 +22,11 @@ import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
 
+type PlayerWithEloPoints = PlayerT & { elo_points: number };
+
 const CompareTwoPlayersPage: NextPage<{
-  p1?: PlayerT;
-  p2?: PlayerT;
+  p1?: PlayerWithEloPoints;
+  p2?: PlayerWithEloPoints;
 }> = ({ p1, p2 }) => {
   const [activeTab, setActiveTab] = useState(STATS_TABS[0]);
 
@@ -192,8 +194,7 @@ const CompareTwoPlayersPage: NextPage<{
             <span className={styles.lvl}>
               {LEVEL_NUMBER_VALUES[p1.level as number]}
             </span>
-            {/* <span className={styles.top}>{'<318>'}</span> */}
-            <span className={styles.rank}>1434</span>
+            <span className={styles.rank}>{p1?.elo_points}</span>
           </div>
         </div>
         <div className={cl(styles.playerInfo, styles.side)}>
@@ -210,8 +211,7 @@ const CompareTwoPlayersPage: NextPage<{
             <span className={styles.lvl}>
               {LEVEL_NUMBER_VALUES[p2.level as number]}
             </span>
-            {/* <span className={styles.top}>{'<39>'}</span> */}
-            <span className={styles.rank}>188</span>
+            <span className={styles.rank}>{p2?.elo_points}</span>
           </div>
         </div>
       </div>
@@ -234,24 +234,40 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   let p1;
   if (p1IdInt) {
-    const p1Data = await prisma.player.findUnique({
-      where: {
-        id: p1IdInt,
-      },
-    });
+    // @ts-ignore
+    const [p1Data, { elo_points }] = await prisma.$transaction([
+      prisma.player.findUnique({
+        where: {
+          id: p1IdInt,
+        },
+      }),
+      prisma.player_elo_ranking.findUnique({
+        where: {
+          player_id: p1IdInt,
+        },
+      }),
+    ]);
 
-    p1 = p1Data;
+    p1 = { ...p1Data, elo_points };
   }
 
   let p2;
   if (p2IdInt) {
-    const p2Data = await prisma.player.findUnique({
-      where: {
-        id: p2IdInt,
-      },
-    });
+    // @ts-ignore
+    const [p2Data, { elo_points }] = await prisma.$transaction([
+      prisma.player.findUnique({
+        where: {
+          id: p2IdInt,
+        },
+      }),
+      prisma.player_elo_ranking.findUnique({
+        where: {
+          player_id: p2IdInt,
+        },
+      }),
+    ]);
 
-    p2 = p2Data;
+    p2 = { ...p2Data, elo_points };
   }
 
   return {
