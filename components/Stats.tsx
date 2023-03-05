@@ -50,7 +50,7 @@ const Stats = ({
       <span>{p1Stats?.win_lose_in_level_proportion || '0/0'}</span>
     </div>
     <div className={styles.row}>
-      {p2Years !== undefined && <span>{p2Years}</span>}
+      {p2Years !== undefined && <span>{p2Years || 0}</span>}
       <span>Лет в теннисе</span>
       <span>{p1Years || '0'}</span>
     </div>
