@@ -345,7 +345,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       )}
       {modalStatus.isOpen && (
         <Modal title="Редактировать матч" handleClose={handleReset}>
-          Рейтинг эло будет изменен, если указать победителя и результат матча
+          Рейтинг ЭЛО будет изменен, если указать победителя и результат матча
           {'\n'}в уже СОЗДАННОМ матче {'('} если создавать матч сразу с
           победителем и счетом, то ЭЛО не изменится{')'}
           <br />

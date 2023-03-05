@@ -70,6 +70,6 @@ export const PlayersListHeader = ({
     {shouldShowPlace && <span className={styles.placeColumn}>Топ</span>}
     <span className={styles.nameColumn}>Имя</span>
     <span className={styles.levelColumn}>Уровень</span>
-    <span className={styles.rankColumn}>Рейт</span>
+    <span className={styles.rankColumn}>Эло</span>
   </div>
 );

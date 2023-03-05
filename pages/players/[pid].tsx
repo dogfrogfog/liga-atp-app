@@ -312,6 +312,12 @@ const ProfileHeader = ({
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const id = parseInt(ctx.query.pid as string, 10);
 
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
   const player = await prisma.player.findUnique({
     where: {
       id,
