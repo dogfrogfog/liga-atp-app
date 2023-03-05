@@ -278,7 +278,11 @@ const ProfileHeader = ({
   return (
     <div
       className={styles.profileHeader}
-      style={{ background: `url(${avavarUrl})`, backgroundSize: 'cover' }}
+      style={{
+        background: `url(${avavarUrl})`,
+        backgroundSize: 'cover',
+        backgroundPositionX: 'center',
+      }}
     >
       {!avavarUrl && (
         <div className={styles.noAvatarBlock}>

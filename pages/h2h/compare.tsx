@@ -159,11 +159,19 @@ const CompareTwoPlayersPage: NextPage<{
       <div className={styles.images}>
         <div
           className={cl(styles.img, styles.side)}
-          style={{ background: `url(${p1.avatar})`, backgroundSize: 'cover' }}
+          style={{
+            background: `url(${p1.avatar})`,
+            backgroundSize: 'cover',
+            backgroundPositionX: 'center',
+          }}
         ></div>
         <div
           className={cl(styles.img, styles.side)}
-          style={{ background: `url(${p2.avatar})`, backgroundSize: 'cover' }}
+          style={{
+            background: `url(${p2.avatar})`,
+            backgroundSize: 'cover',
+            backgroundPositionX: 'center',
+          }}
         ></div>
       </div>
       <div className={styles.score}>
