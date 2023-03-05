@@ -23,6 +23,7 @@ import usePlayers from 'hooks/usePlayers';
 import useTournaments from 'hooks/useTournaments';
 import useSingleTournament from 'hooks/useSingleTournament';
 import { playersToMultiSelect, multiSelectToIds } from 'utils/multiselect';
+import { getRegPlayersIds } from 'utils/parsePlayersOrder';
 import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
 import styles from './AdminSingleTournamentPape.module.scss';
 import { useRouter } from 'next/router';
@@ -85,9 +86,14 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     setModalStatus(DEFAULT_MODAL);
   };
 
+  const isDoubles = !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+    initialTournamentValues.tournament_type as number
+  );
+
   const registeredPlayersIds: number[] = tournament?.players_order
-    ? JSON.parse(tournament?.players_order)?.players
+    ? getRegPlayersIds(JSON.parse(tournament?.players_order), isDoubles)
     : [];
+
   const newSelectedPlayersIds = multiSelectToIds(newSelectedPlayers);
   const brackets =
     tournament?.draw &&
@@ -328,11 +334,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       </div>
       {tournament?.draw_type ? (
         <TournamentDraw
-          isDoubles={
-            !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
-              tournament.tournament_type as number
-            )
-          }
+          isDoubles={isDoubles}
           isDisabled={isDisabled}
           matches={tournament?.match || []}
           brackets={brackets || [[]]}
@@ -350,11 +352,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
           победителем и счетом, то ЭЛО не изменится{')'}
           <br />
           <MatchForm
-            isDoubles={
-              !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
-                tournament?.tournament_type as number
-              )
-            }
+            isDoubles={isDoubles}
             match={editingMatchData?.newMatch as MatchT}
             onSubmit={submitMatch}
             registeredPlayers={registeredPlayers}

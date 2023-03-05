@@ -30,6 +30,7 @@ import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
 import usePlayers from 'hooks/usePlayers';
 import useEloPoints from 'hooks/useEloPoints';
+import { getRegPlayersIds } from 'utils/parsePlayersOrder';
 import LoadingShadow from 'components/LoadingShadow';
 
 const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
@@ -78,7 +79,7 @@ const TournamentPage: NextPage<{
       case TOURNAMENT_TABS[0]:
         // for old tournaments with no brackets data or brackets data in old format
         if (
-          isFinished &&
+          tournament.is_finished &&
           (!brackets || (brackets && !Array.isArray(brackets[0])))
         ) {
           const lastMatch = tournamentMatches[tournamentMatches.length - 1];
@@ -87,17 +88,12 @@ const TournamentPage: NextPage<{
           if (isDoubles) {
             const winnersIds = lastMatch.winner_id?.split('012340');
 
-            const playersWhoWin = allPlayers.reduce((acc, p) => {
-              const targetPlayer = winnersIds?.includes(p.id + '');
-
-              if (targetPlayer) {
-                acc.push(p);
-              }
-
-              return acc;
-            }, [] as PlayerT[]);
+            const playersWhoWin = allPlayers.filter((p) => {
+              return winnersIds?.includes(p.id + '');
+            });
 
             winners = playersWhoWin;
+            console.log(playersWhoWin);
           } else {
             const targetPlayer = allPlayers.find(
               (p) => lastMatch.winner_id === p.id + ''
@@ -111,14 +107,17 @@ const TournamentPage: NextPage<{
               Победитель турнира:
               <br />
               <br />
-              {winners.map((p, i) => (
-                <Fragment key={p.id}>
-                  {p?.first_name +
-                    ' ' +
-                    p?.last_name +
-                    `${i + 1 != winners.length ? ' / ' : ''}`}
-                </Fragment>
-              ))}
+              {winners.map(
+                (p, i) =>
+                  p && (
+                    <Fragment key={p.id}>
+                      {p?.first_name +
+                        ' ' +
+                        p?.last_name +
+                        `${i + 1 != winners.length ? ' / ' : ''}`}
+                    </Fragment>
+                  )
+              )}
             </p>
           );
         }
@@ -136,7 +135,7 @@ const TournamentPage: NextPage<{
           : null;
         let winnerName;
         if (!isDoubles) {
-          const winner = allPlayers.find(
+          const winner = registeredPlayers.find(
             (v) => v.id + '' === lastMatch?.winner_id
           );
 
@@ -405,12 +404,15 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   });
 
   const { match, ...rest } = tournament || {};
+  const isDoubles = !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
+    tournament?.tournament_type as number
+  );
 
   const brackets = tournament?.draw
     ? JSON.parse(tournament.draw)?.brackets
     : null;
   const registeredPlayersIds = tournament?.players_order
-    ? JSON.parse(tournament.players_order)?.players
+    ? getRegPlayersIds(JSON.parse(tournament.players_order), isDoubles)
     : null;
 
   let registeredPlayers = [] as PlayerT[];
