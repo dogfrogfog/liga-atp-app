@@ -8,15 +8,11 @@ const Stats = ({
   p2Stats,
   p1Years,
   p2Years,
-  p1Style,
-  p2Style,
 }: {
   p1Stats: StatsDataType;
   p2Stats?: StatsDataType;
   p1Years: string;
   p2Years?: string;
-  p1Style: string;
-  p2Style?: string;
 }) => (
   <div className={cl(styles.statsContainer, p2Stats ? styles.compare : '')}>
     <div className={styles.row}>
@@ -51,11 +47,6 @@ const Stats = ({
       {p2Years !== undefined && <span>{p2Years}</span>}
       <span>Лет в теннисе</span>
       <span>{p1Years || '0'}</span>
-    </div>
-    <div className={styles.row}>
-      {p2Style !== undefined && <span>{p2Style}</span>}
-      <span>Стиль игры</span>
-      <span>{p1Style || ''}</span>
     </div>
   </div>
 );

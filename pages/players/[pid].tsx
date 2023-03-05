@@ -132,7 +132,6 @@ const SingleProfilePage: NextPage<{
             yearsInTennis={
               in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
             }
-            gameplayStyle={gameplay_style || ''}
             selectedLvl={statsTabTournamentType}
             setSelectedLvl={setStatsTabTournamentTypeDropdown}
             statsData={statsData as any}

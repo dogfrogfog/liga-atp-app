@@ -105,8 +105,6 @@ const CompareTwoPlayersPage: NextPage<{
             <StatsTab
               p1Stats={p1StatsData as any}
               p2Stats={p2StatsData as any}
-              p1Style={p1.gameplay_style || ''}
-              p2Style={p2.gameplay_style || ''}
               p1Years={
                 p1.in_tennis_from
                   ? calculateYearsFromDate(p1.in_tennis_from) + ''
