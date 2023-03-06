@@ -26,7 +26,12 @@ function MainAppLayout({
 
   return (
     <>
-      <div className={styles.pageContainer}>
+      <div
+        className={cl(
+          styles.pageContainer,
+          currentRoute === '/' && styles.homePageContainer
+        )}
+      >
         {loading && <LoadingShadow />}
         {children}
       </div>
