@@ -3,9 +3,9 @@
 .pageContainer {
   height: calc(100vh - 130px);
   overflow-y: scroll;
-
+  
   &.homePageContainer {
-    height: 100vh;
+    overflow: hidden;
   }
 }
 
