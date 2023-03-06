@@ -5,7 +5,7 @@
   overflow-y: scroll;
 
   &.homePageContainer {
-    height: 100vh;
+    overflow: hidden;
   }
 }
 
