@@ -150,6 +150,7 @@ const PlayerForm = ({
       behaviour: 0,
       height: null,
       elo_points: null,
+      premium: player?.premium || false,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? (format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') as any)
@@ -301,12 +302,23 @@ const PlayerForm = ({
               type="number"
               placeholder="Очки эло"
               {...register('elo_points', {
-                required: false,
+                required: true,
                 valueAsNumber: true,
               })}
             />
           </InputWithError>
         )}
+        <br />
+        <InputWithError errorMessage={errors.technique?.message}>
+          Премиум (из Аллеи славы):
+          <input
+            type="checkbox"
+            {...register('premium', {
+              required: true,
+            })}
+          />
+        </InputWithError>
+        <br />
         <h3>Характеристики</h3>
         <InputWithError errorMessage={errors.technique?.message}>
           <br />
@@ -402,6 +414,10 @@ const getTableValue = (
 
   if (k === 'level' && p.level !== null) {
     return LEVEL_NUMBER_VALUES[p.level];
+  }
+
+  if (k === 'premium' && p.premium !== null) {
+    return p.premium + '';
   }
 
   return p[k];

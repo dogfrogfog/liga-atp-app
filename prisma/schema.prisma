@@ -62,6 +62,7 @@ model player {
   serve                          Int       @default(0)
   behaviour                      Int       @default(0)
   height                         Int?
+  premium                        Boolean?  @default(false)
   match_match_player1_idToplayer match[]   @relation("match_player1_idToplayer")
   match_match_player2_idToplayer match[]   @relation("match_player2_idToplayer")
   match_match_player3_idToplayer match[]   @relation("match_player3_idToplayer")
