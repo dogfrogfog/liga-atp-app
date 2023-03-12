@@ -97,17 +97,19 @@ const Players: NextPage = () => {
   );
 
   return (
-    <div>
+    <>
       {(isLoading || isLoadingState) && <LoadingShadow />}
-      <PageTitle>Управление игроками</PageTitle>
-      <TableControls
-        isLoading={isLoading}
-        selectedRow={selectedRow}
-        handleAddClick={handleAddClick}
-        handleUpdateClick={handleUpdateClick}
-        handleDeleteClick={handleDeleteClick}
-        handleResetClick={handleReset}
-      />
+      <div className={tableStyles.tableHeader}>
+        <PageTitle>Управление игроками</PageTitle>
+        <TableControls
+          isLoading={isLoading}
+          selectedRow={selectedRow}
+          handleAddClick={handleAddClick}
+          handleUpdateClick={handleUpdateClick}
+          handleDeleteClick={handleDeleteClick}
+          handleResetClick={handleReset}
+        />
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -123,7 +125,7 @@ const Players: NextPage = () => {
           <PlayerForm player={editingPlayer} onSubmit={onSubmit} />
         </Modal>
       ) : null}
-    </div>
+    </>
   );
 };
 
