@@ -108,10 +108,7 @@ const Match = ({ match, playerId }: MatchProps) => {
               : ''
           )}
         >
-          {score
-            ? <Score score={score.trim()} />
-            : comment
-          }
+          {score ? <Score score={score.trim()} /> : comment}
         </span>
       </div>
     </div>
