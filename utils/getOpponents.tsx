@@ -37,7 +37,7 @@ export const getOpponents = (
 
   // to get opponent name in singles match
   if (!isDoubles) {
-    let opponentName: string | ReactNode = 'tbd';
+    let opponentName: string | ReactNode = 'unknown';
 
     if (playerId === p1.id) {
       if (p2) {
@@ -61,8 +61,8 @@ export const getOpponents = (
 
     return opponentName;
   } else {
-    let opponentOneName: string | ReactNode = 'tbd';
-    let opponentTwoName: string | ReactNode = 'tbd';
+    let opponentOneName: string | ReactNode = 'unknown';
+    let opponentTwoName: string | ReactNode = 'unknown';
 
     // OLD FORMAT
     // team 1 = [p1, p2]
@@ -90,7 +90,7 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p3.id || playerId === p4.id) {
+      if (playerId === p3?.id || playerId === p4?.id) {
         if (p1) {
           opponentOneName = (
             <Link href={`/players/${p1.id}`}>{`${
