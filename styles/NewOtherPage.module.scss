@@ -1,0 +1,20 @@
+@import './variables.scss';
+
+.inputField {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.markdownWrapper {
+    margin-bottom: 10px;
+}
+
+.save {
+    background-color: $custom-green;
+    font-size: 20px;
+    padding: 5px;
+
+    &:active {
+        opacity: 0.5;
+    }
+}

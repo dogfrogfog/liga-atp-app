@@ -98,12 +98,6 @@ model digest {
   mentioned_players_ids Int[]
 }
 
-model other_pages {
-  id        Int     @id(map: "otherpages_pkey") @default(autoincrement())
-  page_name String? @unique(map: "otherpages_page_name_key")
-  content   String?
-}
-
 model player_elo_ranking {
   id          Int       @id @default(autoincrement())
   elo_points  Int?
@@ -118,4 +112,11 @@ model elo_ranking_change {
   change_date        DateTime? @db.Date
   current_elo_points Int?
   new_elo_points     Int?
+}
+
+model other_page {
+  id       Int     @id @default(autoincrement())
+  markdown String?
+  slug     String? @unique
+  title    String?
 }

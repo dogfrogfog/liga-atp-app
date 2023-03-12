@@ -1,41 +1,23 @@
 @import './variables.scss';
 
-.select {
-  font-size: 18px;
-  margin: 0 20px 20px 0;
-  padding: 5px 10px;
-}
+.pageContainer {
+  position: relative;
 
-.markdownWrapper {
-  margin-bottom: 10px;
-}
+  .createPageButton {
+    text-decoration: none;
+    background-color: $custom-green;
+    font-size: 20px;
+    padding: 5px;
+    border: 2px solid black;
+  }
 
-.submitButton {
-  background-color: $custom-green;
-  border: none;
-  color: $custom-black;
-  font-size: 20px;
-  padding: 5px;
-  width: 200px;
-  border: 2px solid $custom-green;
+  a {
+    text-decoration: underline;
+    font-size: 20px;
 
-  &:active {
-    border-color: $custom-black;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 
-.pageContainer {
-  position: relative;
-}
-
-.savedIndicator {
-  color: $custom-green;
-  border: 5px solid $custom-green;
-  padding: 5px 15px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 18px;
-}
