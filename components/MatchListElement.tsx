@@ -20,7 +20,6 @@ const Match = ({ match, playerId }: MatchProps) => {
     start_date,
     youtube_link,
     score,
-    winner_id,
     player1_id,
     player2_id,
   } = match;
@@ -108,7 +107,10 @@ const Match = ({ match, playerId }: MatchProps) => {
               : ''
           )}
         >
-          <Score score={score || ''} />
+          {score
+            ? <Score score={score.trim()} />
+            : 'unknown'
+          }
         </span>
       </div>
     </div>
