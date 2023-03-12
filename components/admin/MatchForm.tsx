@@ -45,6 +45,10 @@ const MatchForm = ({
     setValue('time', new Date(e.target.value));
   };
 
+  const sortedPlayers = registeredPlayers.sort((a, b) =>
+    (a.last_name as string).localeCompare(b.last_name as string)
+  );
+
   return (
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,7 +62,7 @@ const MatchForm = ({
             })}
           >
             <option>не выбран</option>
-            {registeredPlayers.map((p) => (
+            {sortedPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
               </option>
@@ -74,7 +78,7 @@ const MatchForm = ({
             })}
           >
             <option>не выбран</option>
-            {registeredPlayers.map((p) => (
+            {sortedPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
               </option>
@@ -88,7 +92,7 @@ const MatchForm = ({
               Пара игрока 1 - игрок 3:
               <select {...register('player3_id', { valueAsNumber: true })}>
                 <option>не выбран</option>
-                {registeredPlayers.map((p) => (
+                {sortedPlayers.map((p) => (
                   <option key={p.id} value={p.id}>
                     {`${p.last_name} ${(p.first_name as string)[0]}`}
                   </option>
@@ -100,7 +104,7 @@ const MatchForm = ({
               Пара игрока 2 - игрок 4:
               <select {...register('player4_id', { valueAsNumber: true })}>
                 <option>не выбран</option>
-                {registeredPlayers.map((p) => (
+                {sortedPlayers.map((p) => (
                   <option key={p.id} value={p.id}>
                     {`${p.last_name} ${(p.first_name as string)[0]}`}
                   </option>
@@ -114,7 +118,7 @@ const MatchForm = ({
           Победитель - игрок 1 или игрок 2:
           <select {...register('winner_id')}>
             <option value="">не выбран</option>
-            {registeredPlayers.map((p) => (
+            {sortedPlayers.map((p) => (
               <option key={p.id} value={p.id}>
                 {`${p.last_name} ${(p.first_name as string)[0]}`}
               </option>
