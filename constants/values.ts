@@ -69,6 +69,7 @@ export const SURFACE_TYPE_NUMBER_VALUES: NumberValuesT = {
   0: 'Хард',
   1: 'Грунт',
   2: 'Трава',
+  3: 'Хард', // indoor hard
 };
 
 export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
