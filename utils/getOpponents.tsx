@@ -39,7 +39,7 @@ export const getOpponents = (
   if (!isDoubles) {
     let opponentName: string | ReactNode = 'unknown';
 
-    if (playerId === p1.id) {
+    if (playerId === p1?.id) {
       if (p2) {
         opponentName = (
           <Link href={`/players/${p2.id}`}>{`${(p2.first_name as string)[0]}. ${
@@ -49,7 +49,7 @@ export const getOpponents = (
       }
     }
 
-    if (playerId === p2.id) {
+    if (playerId === p2?.id) {
       if (p1) {
         opponentName = (
           <Link href={`/players/${p1.id}`}>{`${(p1.first_name as string)[0]}. ${
