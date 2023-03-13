@@ -4,9 +4,9 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import slug from 'slug';
-import axios from 'axios';
 import type { other_page as OtherPageT } from '@prisma/client';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import { createOtherPage } from 'services/other';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
@@ -18,61 +18,59 @@ const MDEditor = dynamic(
   { ssr: false, loading: () => <LoadingSpinner /> }
 );
 
-const createOtherPage = async (
-  data: Omit<OtherPageT, "id">
-): Promise<{ isOk: boolean; errorMessage?: string; data?: Omit<OtherPageT, 'id'> }> => {
-  const response = await axios.post<Omit<OtherPageT, 'id'>>('/api/otherPages/new', { data });
-
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-};
-
 import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
 
 const CreateOtherPagePage: NextPage = () => {
   const [markdown, setMarkdown] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { mutate } = useOtherPages();
-  const { register, handleSubmit } = useForm<Omit<OtherPageT, "id" | "slug" | "markdown">>();
-  
-  const onSubmit = async (formData: Omit<OtherPageT, "id" | "slug" | "markdown">) => {
+  const { register, handleSubmit } =
+    useForm<Omit<OtherPageT, 'id' | 'slug' | 'markdown'>>();
+
+  const onSubmit = async (
+    formData: Omit<OtherPageT, 'id' | 'slug' | 'markdown'>
+  ) => {
+    setIsLoading(true);
     const res = await createOtherPage({
-        ...formData,
-        markdown,
-        slug: slug(formData.title as string),
+      ...formData,
+      markdown,
+      slug: slug(formData.title as string),
     });
 
     if (res.isOk) {
-      router.push(`/admin/other/${res.data?.slug}`);
       mutate();
+      router.push(`/admin/other/${res.data?.slug}`);
     } else {
       console.error(res.errorMessage);
     }
+    setIsLoading(false);
   };
 
   return (
     <>
       <PageTitle>Новая страница прочее</PageTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
             className={styles.inputField}
             placeholder="Заголовок"
             {...register('title', {
-            required: true,
+              required: true,
             })}
-        />
-        <div data-color-mode="light" className={styles.markdownWrapper}>
+          />
+          <div data-color-mode="light" className={styles.markdownWrapper}>
             {/* @ts-ignore */}
             <MDEditor value={markdown} onChange={setMarkdown} />
-        </div>
-        <button className={styles.save} type="submit">
+          </div>
+          <button className={styles.save} type="submit">
             Сохранить
-        </button>
-    </form>
+          </button>
+        </form>
+      )}
     </>
   );
 };

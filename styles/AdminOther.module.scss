@@ -21,3 +21,45 @@
   }
 }
 
+.buttons {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    font-size: 18px;
+    margin-left: 10px;
+    padding: 5px 15px;
+    border: none;
+  }
+}
+
+.reset {
+  background-color: $custom-lightgray;
+  font-weight: 500;
+}
+
+.action {
+  background-color: orange;
+  color: white;
+  font-weight: 500;
+}
+.delete {
+  background-color: rgb(255, 0, 102);
+  color: white;
+  font-weight: 500;
+}
+
+.titleInput {
+  font-size: 20px;
+}
+
+.markdownWrapper {
+  margin-top: 20px;
+}
+
+.save {
+  background-color: $custom-green;
+  font-weight: 500;
+  font-size: 20px;
+}
