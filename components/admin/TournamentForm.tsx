@@ -106,7 +106,7 @@ const TournamentForm = ({ register, setValue }: any) => {
           })}
         >
           <option>not selected</option>
-          <option>{SURFACE_TYPE_NUMBER_VALUES[0]}</option>
+          <option value={0}>{SURFACE_TYPE_NUMBER_VALUES[0]}</option>
           <option value={1}>{SURFACE_TYPE_NUMBER_VALUES[1]}</option>
           <option value={2}>{SURFACE_TYPE_NUMBER_VALUES[2]}</option>
         </select>

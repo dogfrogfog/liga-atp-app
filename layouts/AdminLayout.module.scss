@@ -10,7 +10,8 @@
     .pageContainer {
       padding: $padding;
       width: calc(100% - $sidebar-width);
-      height: calc(100% - $sidebar-width);
+      height: calc(100vh - $header-height);
+      overflow-x: scroll;
     }
   }
 }

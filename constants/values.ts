@@ -69,6 +69,7 @@ export const SURFACE_TYPE_NUMBER_VALUES: NumberValuesT = {
   0: 'Хард',
   1: 'Грунт',
   2: 'Трава',
+  3: 'Хард', // indoor hard
 };
 
 export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
@@ -82,6 +83,7 @@ export const DEFAULT_MODAL = { isOpen: false, type: '' };
 export const PLAYER_COLUMNS = [
   'first_name',
   'last_name',
+  'premium',
   'elo_points',
   'date_of_birth',
   'level',
@@ -116,12 +118,6 @@ export const TOURNAMENT_COLUMNS = [
   'surface',
   'status',
 ] as const;
-
-export const OTHER_PAGES_KEYS = {
-  fame: 'fame',
-  events: 'events',
-  schedule: 'schedule',
-} as const;
 
 export const DIGEST_PAGE_SIZE = 30;
 export const PLAYED_TOURNAMENT_PAGE_SIZE = 50;

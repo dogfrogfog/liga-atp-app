@@ -22,6 +22,7 @@ const Match = ({ match, playerId }: MatchProps) => {
     score,
     player1_id,
     player2_id,
+    comment,
   } = match;
 
   return (
@@ -107,10 +108,11 @@ const Match = ({ match, playerId }: MatchProps) => {
               : ''
           )}
         >
-          {score
-            ? <Score score={score.trim()} />
-            : 'unknown'
-          }
+          {score ? (
+            <Score score={score.trim()} />
+          ) : (
+            <span className={styles.resultComment}>{comment}</span>
+          )}
         </span>
       </div>
     </div>

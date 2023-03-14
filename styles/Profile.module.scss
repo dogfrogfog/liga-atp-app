@@ -107,6 +107,43 @@
   }
 }
 
+.premium {
+  background-color: rgba(0, 0, 0, 0.563);
+  border: 2px solid gold;
+  border-radius: 5px;
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.open {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  svg {
+    color: gold;
+    height: 25px;
+    width: 25px;
+  }
+}
+
+.premiumMessage {
+  width: 200px;
+  background-color: gold;
+  color: black;
+  position: absolute;
+  right: 38px;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 .noAvatarBlock {
   text-align: center;
   padding-top: 50px;

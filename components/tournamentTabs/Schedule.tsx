@@ -1,5 +1,6 @@
 import { isValidElement, forwardRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
@@ -176,22 +177,38 @@ const Match = ({
   const p4 = match?.player4_id ? playersMap.get(match.player4_id) : undefined;
 
   const p1Name = p1 ? (
-    `${(p1.first_name as string)[0]}. ${p1.last_name}`
+    <Link href={`/players/${p1.id}`}>
+      <a>
+        {(p1.first_name as string)[0]}. {p1.last_name}
+      </a>
+    </Link>
   ) : (
     <FaQuestion />
   );
   const p2Name = p2 ? (
-    `${(p2.first_name as string)[0]}. ${p2.last_name}`
+    <Link href={`/players/${p2.id}`}>
+      <a>
+        {(p2.first_name as string)[0]}. {p2.last_name}
+      </a>
+    </Link>
   ) : (
     <FaQuestion />
   );
   const p3Name = p3 ? (
-    `${(p3.first_name as string)[0]}. ${p3.last_name}`
+    <Link href={`/players/${p3.id}`}>
+      <a>
+        {(p3.first_name as string)[0]}. {p3.last_name}
+      </a>
+    </Link>
   ) : (
     <FaQuestion />
   );
   const p4Name = p4 ? (
-    `${(p4.first_name as string)[0]}. ${p4.last_name}`
+    <Link href={`/players/${p4.id}`}>
+      <a>
+        {(p4.first_name as string)[0]}. {p4.last_name}
+      </a>
+    </Link>
   ) : (
     <FaQuestion />
   );

@@ -43,4 +43,16 @@
 .tableWrapper {
   width: 100%;
   overflow-x: scroll;
+  margin-top: 50px;
+}
+
+.tableHeader {
+  width: calc(100% - $sidebar-width - 30%);
+  width: 100%;
+  background-color: $custom-white;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  margin-top: -15px;
+  padding-top: 15px;
 }

@@ -60,7 +60,7 @@ export default async (
           )
         : playedMatches;
 
-    // just to remove same tournaments
+    // to remove same tournaments
     const uniqueTournamentsIds = [] as number[];
     const { tournamentsPlayed, wins, losses } = filteredPlayedMatches.reduce(
       (acc, m) => {

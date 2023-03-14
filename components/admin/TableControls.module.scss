@@ -1,16 +1,12 @@
 @import '../../styles/variables.scss';
 
 .tableControls {
-  width: 100%;
-  padding: $padding;
-  border-bottom: 1px solid $border-color;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  margin-right: 100px;
 
   button {
     font-size: 18px;
     margin-left: 20px;
+    margin-bottom: 20px;
     cursor: pointer;
 
     &.pick {

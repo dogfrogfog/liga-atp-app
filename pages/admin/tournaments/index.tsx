@@ -108,18 +108,20 @@ const Tournaments: NextPage = () => {
   };
 
   return (
-    <div>
+    <>
       {(isLoading || isLoadingState) && <LoadingShadow />}
-      <PageTitle>Управление турнирами</PageTitle>
-      <TableControls
-        isLoading={isLoading}
-        selectedRow={selectedRow}
-        handlePickClick={handlePickClick}
-        handleAddClick={handleAddClick}
-        handleUpdateClick={handleUpdateClick}
-        handleDeleteClick={handleDeleteClick}
-        handleResetClick={handleReset}
-      />
+      <div className={tableStyles.tableHeader}>
+        <PageTitle>Управление турнирами</PageTitle>
+        <TableControls
+          isLoading={isLoading}
+          selectedRow={selectedRow}
+          handlePickClick={handlePickClick}
+          handleAddClick={handleAddClick}
+          handleUpdateClick={handleUpdateClick}
+          handleDeleteClick={handleDeleteClick}
+          handleResetClick={handleReset}
+        />
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -134,7 +136,7 @@ const Tournaments: NextPage = () => {
           <TournamentForm tournament={editingTournament} onSubmit={onSubmit} />
         </Modal>
       ) : null}
-    </div>
+    </>
   );
 };
 

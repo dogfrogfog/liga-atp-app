@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
+import { AiFillStar } from 'react-icons/ai';
 import type {
   player as PlayerT,
   digest as DigestT,
@@ -16,6 +17,7 @@ import {
   CartesianGrid,
   AreaChart,
 } from 'recharts';
+import cl from 'classnames';
 
 import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
@@ -275,6 +277,25 @@ const ProfileHeader = ({
   tournamentsWins,
   tournamentsFinals,
 }: IProfileHeaderProps) => {
+  const [isStarActive, setStarActiveStatus] = useState(false);
+  const handleStarClick = () => {
+    if (!isStarActive) {
+      setStarActiveStatus(true);
+    }
+  };
+
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      if (isStarActive) {
+        setStarActiveStatus(false);
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isStarActive]);
+
   return (
     <div
       className={styles.profileHeader}
@@ -284,6 +305,17 @@ const ProfileHeader = ({
         backgroundPositionX: 'center',
       }}
     >
+      <div
+        onClick={handleStarClick}
+        className={cl(styles.premium, isStarActive && styles.open)}
+      >
+        <AiFillStar />
+        {isStarActive && (
+          <div className={styles.premiumMessage}>
+            Игрок из &quot;Аллеи Славы&quot;
+          </div>
+        )}
+      </div>
       {!avavarUrl && (
         <div className={styles.noAvatarBlock}>
           <FaUserAlt />

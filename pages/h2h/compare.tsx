@@ -18,6 +18,7 @@ import {
 import useStats from 'hooks/useStats';
 import useMatches from 'hooks/useMatches';
 import calculateYearsFromDate from 'utils/calculateYearsFromDate';
+import removeMatchesDuplicates from 'utils/removeMatchesDuplicates';
 import styles from 'styles/Compare.module.scss';
 
 const STATS_TABS = ['Статистика', 'Характеристика', 'Матчи'];
@@ -39,7 +40,7 @@ const CompareTwoPlayersPage: NextPage<{
   const { playersMatches, p1Wins, p2Wins } = useMemo(
     () =>
       p1 && p2
-        ? [...p1Matches, ...p2Matches].reduce(
+        ? removeMatchesDuplicates([...p1Matches, ...p2Matches]).reduce(
             (acc, m) => {
               // count only singles
               const isDoubles =
@@ -139,6 +140,7 @@ const CompareTwoPlayersPage: NextPage<{
         return (
           <>
             {playersMatches && playersMatches.length > 0 ? (
+              // @ts-ignore
               playersMatches.map((match, i) => (
                 <MatchListElement key={i} match={match} />
               ))
