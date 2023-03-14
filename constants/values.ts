@@ -119,12 +119,6 @@ export const TOURNAMENT_COLUMNS = [
   'status',
 ] as const;
 
-export const OTHER_PAGES_KEYS = {
-  fame: 'fame',
-  events: 'events',
-  schedule: 'schedule',
-} as const;
-
 export const DIGEST_PAGE_SIZE = 30;
 export const PLAYED_TOURNAMENT_PAGE_SIZE = 50;
 export const PLAYERS_PAGE_SIZE = 70;

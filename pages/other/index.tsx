@@ -2,22 +2,25 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 
 import PageTitle from 'ui-kit/PageTitle';
-import { OTHER_PAGES_KEYS } from 'constants/values';
+import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import useOtherPages from 'hooks/useOtherPages';
 import styles from 'styles/Other.module.scss';
 
 const Other: NextPage = () => {
+  const { otherPages, isLoading } = useOtherPages();
+
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Прочее</PageTitle>
-      <Link href={`/other/${OTHER_PAGES_KEYS.fame}`}>
-        <a className={styles.pageLink}>Аллея славы</a>
-      </Link>
-      <Link href={`/other/${OTHER_PAGES_KEYS.schedule}`}>
-        <a className={styles.pageLink}>Расписание матчей / турниров</a>
-      </Link>
-      <Link href={`/other/${OTHER_PAGES_KEYS.events}`}>
-        <a className={styles.pageLink}>Расписание мероприятий</a>
-      </Link>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        otherPages.map(({ title, slug }) => (
+          <Link key={slug} href={`/other/${slug}`}>
+            <a className={styles.pageLink}>{title}</a>
+          </Link>
+        ))
+      )}
     </div>
   );
 };
