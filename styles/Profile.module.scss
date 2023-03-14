@@ -121,11 +121,27 @@
   align-items: center;
   justify-content: center;
 
+  &.open {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   svg {
     color: gold;
     height: 25px;
     width: 25px;
   }
+}
+
+.premiumMessage {
+  width: 200px;
+  background-color: gold;
+  color: black;
+  position: absolute;
+  right: 38px;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .noAvatarBlock {
