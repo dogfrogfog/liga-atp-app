@@ -9,7 +9,7 @@ datasource db {
 }
 
 model match {
-  id                              Int         @id(map: "idx_16888_match_pkey") @default(autoincrement())
+  id                              Int         @id @default(autoincrement())
   tournament_id                   Int?
   player1_id                      Int?
   player2_id                      Int?
@@ -28,16 +28,10 @@ model match {
   player_match_player3_idToplayer player?     @relation("match_player3_idToplayer", fields: [player3_id], references: [id], onUpdate: NoAction, map: "core_match_player3_id_fkey")
   player_match_player4_idToplayer player?     @relation("match_player4_idToplayer", fields: [player4_id], references: [id], onUpdate: NoAction, map: "core_match_player4_id_fkey")
   tournament                      tournament? @relation(fields: [tournament_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "core_match_tournament_id_fkey")
-
-  @@index([player1_id], map: "idx_16888_core_match_26d85d6c")
-  @@index([tournament_id], map: "idx_16888_core_match_656a3fdb")
-  @@index([player3_id], map: "idx_16888_core_match_6bbfd55d")
-  @@index([player2_id], map: "idx_16888_core_match_863818d8")
-  @@index([player4_id], map: "idx_16888_core_match_9c006b3a")
 }
 
 model player {
-  id                             Int       @id(map: "idx_16917_core_player_pkey") @default(autoincrement())
+  id                             Int       @id @default(autoincrement())
   first_name                     String?
   last_name                      String?
   date_of_birth                  DateTime? @db.Date
@@ -70,24 +64,21 @@ model player {
 }
 
 model tournament {
-  id                       Int         @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
-  name                     String?
-  address                  String?
-  start_date               DateTime?   @db.Date
-  is_finished              Boolean?
-  surface                  Int?
-  associated_tournament_id Int?        @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
-  draw_type                Int?
-  players_order            String?
-  draw                     String?
-  city                     String?
-  tournament_type          Int?
-  is_doubles               Boolean?
-  status                   Int?
-  unregistered_players     String?     @default("")
-  match                    match[]
-  tournament               tournament? @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
-  other_tournament         tournament? @relation("tournamentTotournament")
+  id                   Int       @id @default(autoincrement())
+  name                 String?
+  address              String?
+  start_date           DateTime? @db.Date
+  is_finished          Boolean?
+  surface              Int?
+  draw_type            Int?
+  players_order        String?
+  draw                 String?
+  city                 String?
+  tournament_type      Int?
+  is_doubles           Boolean?
+  status               Int?
+  unregistered_players String?   @default("")
+  match                match[]
 }
 
 model digest {
