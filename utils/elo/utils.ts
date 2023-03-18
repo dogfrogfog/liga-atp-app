@@ -7,13 +7,13 @@ export const getPlayersKFactor = (
 ) => {
   let kFactorP1 = DEFAULT_K_FACTOR;
   let kFactorP2 = DEFAULT_K_FACTOR;
-  if(K_FACTOR_IS_DYNAMIC) {
+  if (K_FACTOR_IS_DYNAMIC) {
     kFactorP1 = matchesPlayedP1
-    ? 250 / ((matchesPlayedP1 + 5) ** 0.4)
-    : DEFAULT_K_FACTOR;
+      ? 250 / (matchesPlayedP1 + 5) ** 0.4
+      : DEFAULT_K_FACTOR;
     kFactorP2 = matchesPlayedP2
-    ? 250 / ((matchesPlayedP2 + 5) ** 0.4)
-    : DEFAULT_K_FACTOR;
+      ? 250 / (matchesPlayedP2 + 5) ** 0.4
+      : DEFAULT_K_FACTOR;
   }
 
   return { kFactorP1, kFactorP2 };

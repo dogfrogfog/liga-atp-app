@@ -45,11 +45,13 @@ const getNewEloAfterMatch = (
 
   const team1WinProbavility = getWinProbability(team1Points, team2Points);
 
-  const deltaTeam1Wins = coefMatchResult * kFactorP1 * (1 - team1WinProbavility);
+  const deltaTeam1Wins =
+    coefMatchResult * kFactorP1 * (1 - team1WinProbavility);
   const deltaTeam1Loses = coefMatchResult * kFactorP1 * team1WinProbavility;
 
   const deltaTeam2Wins = coefMatchResult * kFactorP2 * team1WinProbavility;
-  const deltaTeam2Loses = coefMatchResult * kFactorP2 * (1 - team1WinProbavility);
+  const deltaTeam2Loses =
+    coefMatchResult * kFactorP2 * (1 - team1WinProbavility);
 
   let p1Delta = 0;
   let p2Delta = 0;
