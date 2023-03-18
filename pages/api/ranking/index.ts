@@ -72,19 +72,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       matchesPlayed,
       {
         eloPoints: playerEloRankings[0]?.elo_points as number,
-        id: playerEloRankings[0]?.elo_points as number,
+        id: playerEloRankings[0]?.player_id as number,
       },
       {
         eloPoints: playerEloRankings[1]?.elo_points as number,
-        id: playerEloRankings[1]?.elo_points as number,
+        id: playerEloRankings[1]?.player_id as number,
       },
       {
         eloPoints: playerEloRankings[2]?.elo_points as number,
-        id: playerEloRankings[2]?.elo_points as number,
+        id: playerEloRankings[2]?.player_id as number,
       },
       {
         eloPoints: playerEloRankings[3]?.elo_points as number,
-        id: playerEloRankings[3]?.elo_points as number,
+        id: playerEloRankings[3]?.player_id as number,
       }
     );
 
@@ -99,6 +99,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // [0, 1, 2, 3] = [p1, p2, p3, p4]
     const [p1EloRankings, p2EloRankings, ...doublesEloRankings] =
       playerEloRankings;
+
+    // console.log('old elo: p1, p2');
+    // console.log(p1EloRankings?.elo_points, p2EloRankings?.elo_points);
+    // console.log('new elo: p1, p2');
+    // console.log(p1NewElo, p2NewElo);
 
     // we update expireDates if needed
     await prisma.$transaction([

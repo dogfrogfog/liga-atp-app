@@ -45,13 +45,11 @@ const getNewEloAfterMatch = (
 
   const team1WinProbavility = getWinProbability(team1Points, team2Points);
 
-  const deltaTeam1Wins =
-    coefMatchResult * kFactorP1 * (1 - team1WinProbavility);
+  const deltaTeam1Wins = coefMatchResult * kFactorP1 * (1 - team1WinProbavility);
   const deltaTeam1Loses = coefMatchResult * kFactorP1 * team1WinProbavility;
 
   const deltaTeam2Wins = coefMatchResult * kFactorP2 * team1WinProbavility;
-  const deltaTeam2Loses =
-    coefMatchResult * kFactorP2 * (1 - team1WinProbavility);
+  const deltaTeam2Loses = coefMatchResult * kFactorP2 * (1 - team1WinProbavility);
 
   let p1Delta = 0;
   let p2Delta = 0;
@@ -79,6 +77,14 @@ const getNewEloAfterMatch = (
       p2Delta = deltaTeam2Wins;
     }
   }
+
+  // console.log('team1WinProbavility: ', team1WinProbavility)
+  // console.log(matchesPlayed.p1.length, matchesPlayed.p2.length)
+  // console.log('coefMatchResult: ', coefMatchResult)
+  // console.log('kFactorP1, kFactorP2: ', kFactorP1, kFactorP2)
+  // console.log('deltaTeam1Wins', 'deltaTeam1Loses', deltaTeam1Wins, deltaTeam1Loses)
+  // console.log('deltaTeam2Wins', 'deltaTeam2Loses', deltaTeam2Wins, deltaTeam2Loses)
+  // console.log(p1Delta, p2Delta, p3Delta, p4Delta)
 
   const p1NewElo = p1.eloPoints + p1Delta + POINTS_FOR_PLAYED_MATCH;
   const p2NewElo = p2.eloPoints + p2Delta + POINTS_FOR_PLAYED_MATCH;
