@@ -80,6 +80,14 @@ const getNewEloAfterMatch = (
     }
   }
 
+  // console.log('team1WinProbavility: ', team1WinProbavility)
+  // console.log(matchesPlayed.p1.length, matchesPlayed.p2.length)
+  // console.log('coefMatchResult: ', coefMatchResult)
+  // console.log('kFactorP1, kFactorP2: ', kFactorP1, kFactorP2)
+  // console.log('deltaTeam1Wins', 'deltaTeam1Loses', deltaTeam1Wins, deltaTeam1Loses)
+  // console.log('deltaTeam2Wins', 'deltaTeam2Loses', deltaTeam2Wins, deltaTeam2Loses)
+  // console.log(p1Delta, p2Delta, p3Delta, p4Delta)
+
   const p1NewElo = p1.eloPoints + p1Delta + POINTS_FOR_PLAYED_MATCH;
   const p2NewElo = p2.eloPoints + p2Delta + POINTS_FOR_PLAYED_MATCH;
 
