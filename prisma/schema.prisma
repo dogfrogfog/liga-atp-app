@@ -85,7 +85,6 @@ model tournament {
   status                   Int?
   unregistered_players     String?     @default("")
   match                    match[]
-  other_tournament         tournament? @relation("tournamentTotournament")
 }
 
 model digest {
