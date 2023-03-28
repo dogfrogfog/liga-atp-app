@@ -76,7 +76,6 @@ model tournament {
   start_date               DateTime?   @db.Date
   is_finished              Boolean?
   surface                  Int?
-  associated_tournament_id Int?        @unique(map: "idx_16929_sqlite_autoindex_core_tournament_1")
   draw_type                Int?
   players_order            String?
   draw                     String?
@@ -86,7 +85,6 @@ model tournament {
   status                   Int?
   unregistered_players     String?     @default("")
   match                    match[]
-  tournament               tournament? @relation("tournamentTotournament", fields: [associated_tournament_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "core_tournament_associated_tournament_id_fkey")
   other_tournament         tournament? @relation("tournamentTotournament")
 }
 
