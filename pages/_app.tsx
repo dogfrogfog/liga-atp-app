@@ -15,6 +15,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import MainAppLayout from '../layouts/MainAppLayout';
 import SecondaryPageLayout from '../layouts/SecondaryPageLayout';
 
+
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { events } = useRouter();
   const [loading, setLoading] = useState(false);
