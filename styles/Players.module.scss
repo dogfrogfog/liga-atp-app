@@ -39,3 +39,24 @@
     background-color: $custom-mediumdarkgray;
   }
 }
+
+.titleWithFilter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lvlFilter {
+  font-size: initial;
+
+  select {
+    font-weight: 400;
+    width: 150px;
+    outline: none;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 2px solid $custom-lightgray;
+    color: $custom-lightgray;
+    background-color: $custom-black;
+  }
+}
