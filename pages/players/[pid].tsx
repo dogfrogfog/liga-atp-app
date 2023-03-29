@@ -81,6 +81,7 @@ const SingleProfilePage: NextPage<{
     shakes,
     serve,
     behaviour,
+    premium,
   } = player;
 
   const { upcomingMatches, playedMatches } = matches.reduce(
@@ -247,6 +248,7 @@ const SingleProfilePage: NextPage<{
         points={eloPoints || undefined}
         tournamentsWins={(statsData as any)?.tournaments_wins}
         tournamentsFinals={(statsData as any)?.tournaments_finals}
+        isPremium={!!premium}
       />
       <section>
         <Tabs
@@ -267,6 +269,7 @@ interface IProfileHeaderProps {
   points?: number;
   tournamentsWins?: number;
   tournamentsFinals?: number;
+  isPremium?: boolean;
 }
 
 const ProfileHeader = ({
@@ -274,6 +277,7 @@ const ProfileHeader = ({
   name,
   level,
   points,
+  isPremium = false,
   tournamentsWins,
   tournamentsFinals,
 }: IProfileHeaderProps) => {
@@ -305,6 +309,7 @@ const ProfileHeader = ({
         backgroundPositionX: 'center',
       }}
     >
+      {p}
       <div
         onClick={handleStarClick}
         className={cl(styles.premium, isStarActive && styles.open)}
