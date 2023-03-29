@@ -309,18 +309,19 @@ const ProfileHeader = ({
         backgroundPositionX: 'center',
       }}
     >
-      {p}
-      <div
-        onClick={handleStarClick}
-        className={cl(styles.premium, isStarActive && styles.open)}
-      >
-        <AiFillStar />
-        {isStarActive && (
-          <div className={styles.premiumMessage}>
-            Игрок из &quot;Аллеи Славы&quot;
-          </div>
-        )}
-      </div>
+      {isPremium && (
+        <div
+          onClick={handleStarClick}
+          className={cl(styles.premium, isStarActive && styles.open)}
+        >
+          <AiFillStar />
+          {isStarActive && (
+            <div className={styles.premiumMessage}>
+              Игрок из &quot;Аллеи Славы&quot;
+            </div>
+          )}
+        </div>
+      )}
       {!avavarUrl && (
         <div className={styles.noAvatarBlock}>
           <FaUserAlt />
