@@ -104,7 +104,7 @@ const TournamentPage: NextPage<{
 
           return (
             <p className={styles.newDrawWinner}>
-              Победитель турнира:
+              {isDoubles ? 'Победители' : 'Победитель(ница)'} турнира:
               <br />
               <br />
               {winners.map(
@@ -177,7 +177,7 @@ const TournamentPage: NextPage<{
           <>
             {isFinished && (
               <p className={styles.newDrawWinner}>
-                Победитель:
+                {isDoubles ? 'Победители' : 'Победитель(ница)'}:
                 <br />
                 <br />
                 {winnerName}

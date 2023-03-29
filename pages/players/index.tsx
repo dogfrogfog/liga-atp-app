@@ -1,15 +1,9 @@
-import {
-  useEffect,
-  useState,
-  memo,
-  Dispatch,
-  SetStateAction,
-  useMemo,
-} from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { player as PlayerT } from '@prisma/client';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 
+import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import { getShuffledPlayersWithEloPoints } from 'services/players';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
@@ -21,7 +15,8 @@ import LoadingSpinner from 'ui-kit/LoadingSpinner';
 const PlayersIndexPage: NextPage = () => {
   const router = useRouter();
   const { players } = usePlayers();
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedLvl, setSelectedLvl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [shuffledPlayers, setShuffledPlayers] = useState<
     (PlayerT & { elo_points: number })[]
   >([]);
@@ -49,6 +44,14 @@ const PlayersIndexPage: NextPage = () => {
       .toLowerCase()
       .includes(inputValue);
 
+  const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLvl(e.target.value);
+  };
+
+  const filteredPlayers = selectedLvl
+    ? shuffledPlayers.filter((v) => v.level + '' === selectedLvl)
+    : shuffledPlayers;
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.searchInputContainer}>
@@ -59,12 +62,24 @@ const PlayersIndexPage: NextPage = () => {
           onSuggestionClick={onSuggestionClick}
         />
       </div>
-      <PageTitle>Игроки</PageTitle>
+      <PageTitle className={styles.titleWithFilter}>
+        Игроки
+        <div className={styles.lvlFilter}>
+          <select onChange={handleLevelChange} value={selectedLvl}>
+            <option value={''}>Все</option>
+            {Object.entries(LEVEL_NUMBER_VALUES).map(([key, name]) => (
+              <option key={key} value={key}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </PageTitle>
       <PlayersListHeader />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <PlayersList players={shuffledPlayers} />
+        <PlayersList players={filteredPlayers} />
       )}
     </div>
   );
