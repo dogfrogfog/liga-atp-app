@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         expire_date: {
           // even if we create new player elo ranking expire_date will be today and we will not see it in the response
           // 1 day ahead just in case of missing some time
-          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
+          gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
         },
       },
     });
@@ -122,27 +122,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data: {
           elo_points: p2NewElo,
-          ...(expireDates.p1 && { expire_date: expireDates.p1 }),
+          ...(expireDates.p2 && { expire_date: expireDates.p2 }),
         },
       }),
       ...(isDoubles
         ? [
             prisma.player_elo_ranking.update({
               where: {
-                player_id: matchData.player2_id,
+                player_id: matchData.player3_id,
               },
               data: {
                 elo_points: doublesPNewEloPoints.p3NewElo,
-                ...(expireDates.p1 && { expire_date: expireDates.p1 }),
+                ...(expireDates.p3 && { expire_date: expireDates.p3 }),
               },
             }),
             prisma.player_elo_ranking.update({
               where: {
-                player_id: matchData.player2_id,
+                player_id: matchData.player4_id,
               },
               data: {
                 elo_points: doublesPNewEloPoints.p4NewElo,
-                ...(expireDates.p1 && { expire_date: expireDates.p1 }),
+                ...(expireDates.p4 && { expire_date: expireDates.p4 }),
               },
             }),
           ]
@@ -254,52 +254,40 @@ const parsePlayedMatches = async (
       m.player4_id,
     ].filter((v) => v);
 
-    // the date of the last 5th match played in last 6 months
-    // is the expire date
     // if player played more then 5 matches in last 6 months and the date of the last 5th match is no more than 6 months ago
     // then we need to update expire date for players
-    const is5thMatchStartDate_NO_MoreThan6MonthsAgo =
+
+    // is match played in last 6 months
+    const isMatchWithin6MonthsFromNow =
       m.start_date &&
       m.start_date.getTime() + HALF_A_YEAR_IN_MILLISECONDS >= now.getTime();
-    if (playersIds.includes(matchData.player1_id)) {
-      matchesPlayedP1.push(m);
 
-      if (
-        matchesPlayedP1.length === 5 &&
-        is5thMatchStartDate_NO_MoreThan6MonthsAgo
-      ) {
-        p1ExpireDate = m.start_date;
+    if (isMatchWithin6MonthsFromNow) {
+      if (playersIds.includes(matchData.player1_id)) {
+        matchesPlayedP1.push(m);
+
+        if (matchesPlayedP1.length === 5) {
+          p1ExpireDate = m.start_date;
+        }
       }
-    }
-    if (playersIds.includes(matchData.player2_id)) {
-      matchesPlayedP2.push(m);
+      if (playersIds.includes(matchData.player2_id)) {
+        matchesPlayedP2.push(m);
 
-      if (
-        matchesPlayedP2.length === 5 &&
-        is5thMatchStartDate_NO_MoreThan6MonthsAgo
-      ) {
-        p2ExpireDate = m.start_date;
+        if (matchesPlayedP2.length === 5) {
+          p2ExpireDate = m.start_date;
+        }
       }
-    }
-
-    if (isDoubles) {
       if (playersIds.includes(matchData.player3_id)) {
         matchesPlayedP3.push(m);
 
-        if (
-          matchesPlayedP3.length === 5 &&
-          is5thMatchStartDate_NO_MoreThan6MonthsAgo
-        ) {
+        if (matchesPlayedP3.length === 5) {
           p3ExpireDate = m.start_date;
         }
       }
       if (playersIds.includes(matchData.player4_id)) {
         matchesPlayedP4.push(m);
 
-        if (
-          matchesPlayedP4.length === 5 &&
-          is5thMatchStartDate_NO_MoreThan6MonthsAgo
-        ) {
+        if (matchesPlayedP4.length === 5) {
           p4ExpireDate = m.start_date;
         }
       }
