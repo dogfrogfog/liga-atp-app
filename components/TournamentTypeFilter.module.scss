@@ -1,0 +1,26 @@
+@import'../styles/variables.scss';
+
+.finishedTournamentsFilters {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  
+    .tournamentType {
+      span {
+        margin-right: 5px;
+      }
+  
+      select {
+        font-weight: 400;
+        width: 150px;
+        outline: none;
+        font-size: 14px;
+        margin-right: 5px;
+        border-radius: 5px;
+        border: 2px solid $custom-lightgray;
+        color: $custom-lightgray;
+        background-color: $custom-black;
+      }
+    }
+  }
