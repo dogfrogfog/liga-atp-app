@@ -317,7 +317,10 @@ const ProfileHeader = ({
           <AiFillStar />
           {isStarActive && (
             <div className={styles.premiumMessage}>
-              Игрок из &quot;Аллеи Славы&quot;
+              {/* should be in sync with database slug field of vip page */}
+              <Link href="/other/vip-igroki">
+                Игрок из списка &quot;VIP&quot;
+              </Link>
             </div>
           )}
         </div>
