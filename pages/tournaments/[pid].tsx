@@ -93,7 +93,6 @@ const TournamentPage: NextPage<{
             });
 
             winners = playersWhoWin;
-            console.log(playersWhoWin);
           } else {
             const targetPlayer = allPlayers.find(
               (p) => lastMatch.winner_id === p.id + ''

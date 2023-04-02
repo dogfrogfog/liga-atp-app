@@ -51,7 +51,6 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
   }>();
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>([]);
   const [modalStatus, setModalStatus] = useState(DEFAULT_MODAL);
-  const [eloRatingChanged, setEloRatingChanged] = useState(false);
 
   const { players } = usePlayers();
   const { mutate: mutateTournaments } = useTournaments();
@@ -109,7 +108,6 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
   // submit tournament changes
   const submitTournaments = async (tournamentFields: any) => {
     setIsLoading(true);
-
     const newSelectedPlayersIds = newSelectedPlayers.reduce(
       (acc, v) => [...acc, v.value],
       [] as number[]

@@ -20,9 +20,9 @@ import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import TournamentListItem from 'components/TournamentListItem';
+import TournamentTypeFilter from 'components/TournamentTypeFilter';
 import {
   TOURNAMENT_STATUS_NUMBER_VALUES,
-  TOURNAMENT_TYPE_NUMBER_VALUES,
   PLAYED_TOURNAMENT_PAGE_SIZE,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
@@ -44,7 +44,7 @@ const TournamentsPage: NextPage = () => {
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
 
-  const { tournaments, isLoading } = useTournaments(false);
+  const { tournaments, isLoading } = useTournaments();
   const { players } = usePlayers();
   const router = useRouter();
 
@@ -225,26 +225,10 @@ const TournamentsPage: NextPage = () => {
 
         return (
           <>
-            <div className={styles.finishedTournamentsFilters}>
-              <div className={styles.tournamentType}>
-                <span>Тип турнира</span>
-                <select
-                  onChange={handleLevelChange}
-                  value={finishedTournamentsType}
-                >
-                  <option value={999}>Все</option>
-                  {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
-                    ([key, name]) => {
-                      return (
-                        <option key={key} value={key}>
-                          {name as string}
-                        </option>
-                      );
-                    }
-                  )}
-                </select>
-              </div>
-            </div>
+            <TournamentTypeFilter
+              onChange={handleLevelChange}
+              tournamentTypeValue={finishedTournamentsType}
+            />
             {pages}
           </>
         );
