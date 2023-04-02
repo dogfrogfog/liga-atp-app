@@ -44,7 +44,7 @@ const TournamentsPage: NextPage = () => {
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
 
-  const { tournaments, isLoading } = useTournaments(false);
+  const { tournaments, isLoading } = useTournaments();
   const { players } = usePlayers();
   const router = useRouter();
 
