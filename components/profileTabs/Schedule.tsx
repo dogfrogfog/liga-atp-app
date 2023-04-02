@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import { getOpponents, MatchWithTournamentType } from 'utils/getOpponents';
 import styles from './Schedule.module.scss';
@@ -18,12 +19,14 @@ const Match = ({ tournamentName, time, opponent }: MatchProps) => {
       <div className={styles.row}>
         <span className={styles.tournamentName}>{tournamentName}</span>
         <span className={styles.matchDate}>
-          {date && format(date, 'dd.MM')}
+          {date && format(date, 'EEEEEE H:mm', { locale: ru })}
         </span>
       </div>
       <div className={styles.row}>
         <span className={styles.opponent}>vs {opponent}</span>
-        <span className={styles.matchDate}>{date && format(date, 'H:mm')}</span>
+        <span className={styles.matchDate}>
+          {date && format(date, 'dd.MM')}
+        </span>
       </div>
     </div>
   );

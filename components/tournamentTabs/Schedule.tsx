@@ -4,6 +4,7 @@ import Link from 'next/link';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
 import { GiTrophyCup } from 'react-icons/gi';
@@ -291,7 +292,7 @@ const Match = ({
             matchDateTime && (
               <span className={styles.matchDate}>
                 <span className={styles.timeUnit}>
-                  {format(matchDateTime, 'EEEEEE H:mm')}
+                  {format(matchDateTime, 'EEEEEE H:mm', { locale: ru })}
                 </span>
                 <span className={styles.timeUnit}>
                   {format(matchDateTime, 'dd.MM')}

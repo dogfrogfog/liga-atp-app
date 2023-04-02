@@ -164,14 +164,6 @@ const SingleProfilePage: NextPage<{
               />
             )}
           </>
-          // <StatsTab
-          //   yearsInTennis={
-          //     in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
-          //   }
-          //   selectedLvl={statsTabTournamentType}
-          //   setSelectedLvl={setStatsTabTournamentTypeDropdown}
-          //   statsData={statsData as any}
-          // />
         );
       case PROFILE_TABS[4]:
         const eloChartData = eloChanges
