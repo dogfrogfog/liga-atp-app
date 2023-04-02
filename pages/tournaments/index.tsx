@@ -225,7 +225,10 @@ const TournamentsPage: NextPage = () => {
 
         return (
           <>
-            <TournamentTypeFilter onChange={handleLevelChange} tournamentTypeValue={finishedTournamentsType} />
+            <TournamentTypeFilter
+              onChange={handleLevelChange}
+              tournamentTypeValue={finishedTournamentsType}
+            />
             {pages}
           </>
         );

@@ -23,8 +23,9 @@ import { prisma } from 'services/db';
 import InfoTab from 'components/profileTabs/Info';
 import ScheduleTab from 'components/profileTabs/Schedule';
 import MatchesHistoryTab from 'components/profileTabs/MatchesHistory';
-import StatsTab from 'components/profileTabs/Stats';
 import DigestListEl from 'components/DigestListEl';
+import TournamentTypeFilter from 'components/TournamentTypeFilter';
+import StatsData from 'components/Stats';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
 import useMatches from 'hooks/useMatches';
@@ -99,6 +100,12 @@ const SingleProfilePage: NextPage<{
     }
   );
 
+  const handleTournamentTypeFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setStatsTabTournamentTypeDropdown(parseInt(e.target.value));
+  };
+
   const activeTabContent = (() => {
     switch (activeTab) {
       case PROFILE_TABS[0]:
@@ -124,21 +131,47 @@ const SingleProfilePage: NextPage<{
         );
       case PROFILE_TABS[2]:
         return (
-          <MatchesHistoryTab
-            playerId={player.id}
-            playedMatches={playedMatches}
-          />
+          <>
+            <TournamentTypeFilter
+              tournamentTypeValue={statsTabTournamentType}
+              onChange={handleTournamentTypeFilterChange}
+            />
+            <MatchesHistoryTab
+              playerId={player.id}
+              playedMatches={playedMatches.filter((v) =>
+                statsTabTournamentType !== 999
+                  ? v.tournament.tournament_type === statsTabTournamentType
+                  : true
+              )}
+            />
+          </>
         );
       case PROFILE_TABS[3]:
         return (
-          <StatsTab
-            yearsInTennis={
-              in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
-            }
-            selectedLvl={statsTabTournamentType}
-            setSelectedLvl={setStatsTabTournamentTypeDropdown}
-            statsData={statsData as any}
-          />
+          <>
+            <TournamentTypeFilter
+              tournamentTypeValue={statsTabTournamentType}
+              onChange={handleTournamentTypeFilterChange}
+            />
+            {statsData && (
+              <StatsData
+                p1Stats={statsData as any}
+                p1Years={
+                  in_tennis_from
+                    ? calculateYearsFromDate(in_tennis_from) + ''
+                    : ''
+                }
+              />
+            )}
+          </>
+          // <StatsTab
+          //   yearsInTennis={
+          //     in_tennis_from ? calculateYearsFromDate(in_tennis_from) + '' : ''
+          //   }
+          //   selectedLvl={statsTabTournamentType}
+          //   setSelectedLvl={setStatsTabTournamentTypeDropdown}
+          //   statsData={statsData as any}
+          // />
         );
       case PROFILE_TABS[4]:
         const eloChartData = eloChanges

@@ -313,10 +313,7 @@ const PlayerForm = ({
         <br />
         <InputWithError errorMessage={errors.premium?.message}>
           Премиум (из Аллеи славы):
-          <input
-            type="checkbox"
-            {...register('premium')}
-          />
+          <input type="checkbox" {...register('premium')} />
         </InputWithError>
         <br />
         <h3>Характеристики</h3>
