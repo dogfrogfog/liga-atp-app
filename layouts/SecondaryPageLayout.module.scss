@@ -5,10 +5,11 @@
   .back {
     z-index: 3;
     position: absolute;
-    top: 45px;
-    left: 30px;
-    height: 50px;
-    width: 50px;
+    opacity: 0.5;
+    top: 40px;
+    left: 15px;
+    height: 40px;
+    width: 40px;
     background-color: $custom-white;
     color: $custom-black;
     padding: 10px;
