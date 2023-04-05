@@ -19,7 +19,7 @@ export const isPlayerWon = (
   const isOldDoublesFormat =
     isDoubles &&
     m.tournament.status === null &&
-    (m.winner_id as string).length > 4;
+    (m.winner_id as string)?.length > 4;
 
   // handle old doubles format
   if (isOldDoublesFormat) {
