@@ -1,39 +1,22 @@
-import { useEffect, useState, ChangeEvent } from 'react';
+import { useMemo, useState, ChangeEvent } from 'react';
 import { player as PlayerT } from '@prisma/client';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
-import { getShuffledPlayersWithEloPoints } from 'services/players';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
 import usePlayers from 'hooks/usePlayers';
+import useEloPoints from 'hooks/useEloPoints';
 import styles from 'styles/Players.module.scss';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
 const PlayersIndexPage: NextPage = () => {
   const router = useRouter();
-  const { players } = usePlayers();
+  const { players, isLoading } = usePlayers();
   const [selectedLvl, setSelectedLvl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [shuffledPlayers, setShuffledPlayers] = useState<
-    (PlayerT & { elo_points: number })[]
-  >([]);
-
-  useEffect(() => {
-    const fetchShuffledPlayers = async () => {
-      setIsLoading(true);
-      const res = await getShuffledPlayersWithEloPoints();
-
-      if (res.isOk) {
-        setShuffledPlayers(res.data as (PlayerT & { elo_points: number })[]);
-      }
-      setIsLoading(false);
-    };
-
-    fetchShuffledPlayers();
-  }, []);
+  const { eloPoints } = useEloPoints();
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -48,9 +31,24 @@ const PlayersIndexPage: NextPage = () => {
     setSelectedLvl(e.target.value);
   };
 
-  const filteredPlayers = selectedLvl
-    ? shuffledPlayers.filter((v) => v.level + '' === selectedLvl)
-    : shuffledPlayers;
+  const playersRankingsMap = useMemo(
+    () =>
+      eloPoints.reduce((acc, p) => {
+        acc.set(p.player_id as number, p?.elo_points);
+        return acc;
+      }, new Map<number, number | null>()),
+    [eloPoints]
+  );
+
+  const filteredPlayers = useMemo(() => {
+    const filtered = selectedLvl
+      ? players.filter((v) => v.level + '' === selectedLvl)
+      : players;
+
+    return filtered
+      .map((v) => ({ ...v, elo_points: playersRankingsMap.get(v.id) }))
+      .sort((a, b) => (b.elo_points as number) - (a.elo_points as number));
+  }, [selectedLvl, players, playersRankingsMap]);
 
   return (
     <div className={styles.pageContainer}>

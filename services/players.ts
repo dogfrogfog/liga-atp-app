@@ -1,18 +1,6 @@
 import axios from 'axios';
 import type { player as PlayerT } from '@prisma/client';
 
-export const getShuffledPlayersWithEloPoints = async () => {
-  const response = await axios.get<(PlayerT & { elo_points: number })[]>(
-    '/api/players/shuffled'
-  );
-
-  if (response.status === 200) {
-    return { isOk: true, data: response.data };
-  } else {
-    return { isOk: false, errorMessage: response.statusText };
-  }
-};
-
 export const createPlayer = async (
   playerWElo: PlayerT & { elo_points: number | null }
 ) => {
