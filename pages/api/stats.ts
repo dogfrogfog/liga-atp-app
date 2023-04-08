@@ -29,6 +29,28 @@ export default async (
 
     const playerIdInt = parseInt(id as string, 10);
 
+    const tournamentsPlayed = await prisma.tournament.findMany({
+      where: {
+        ...(tournament_type && {
+          tournament_type: parseInt(tournament_type as string, 10),
+        }),
+        match: {
+          some: {
+            OR: [
+              { player1_id: playerIdInt },
+              { player2_id: playerIdInt },
+              { player3_id: playerIdInt },
+              { player4_id: playerIdInt },
+            ],
+          },
+        },
+      },
+      select: {
+        draw: true,
+        match: true,
+      },
+    });
+
     const matches = await prisma.match.findMany({
       where: {
         OR: [
@@ -47,10 +69,6 @@ export default async (
       isMatchPlayed(m as any)
     ) as (MatchT & { tournament: TournamentT })[];
 
-    const matchesMap = playedMatches.reduce(
-      (acc, m) => acc.set(m.id, m),
-      new Map<number, MatchT>()
-    );
     const filteredPlayedMatches =
       tournament_type !== undefined
         ? playedMatches.filter(
@@ -60,15 +78,8 @@ export default async (
           )
         : playedMatches;
 
-    // to remove same tournaments
-    const uniqueTournamentsIds = [] as number[];
-    const { tournamentsPlayed, wins, losses } = filteredPlayedMatches.reduce(
+    const { wins, losses } = filteredPlayedMatches.reduce(
       (acc, m) => {
-        if (!uniqueTournamentsIds.includes(m.tournament_id as number)) {
-          uniqueTournamentsIds.push(m.tournament_id as number);
-          acc.tournamentsPlayed.push(m.tournament as TournamentT);
-        }
-
         const isPlayerWonTheMatch = isPlayerWon(playerIdInt, m);
 
         if (isPlayerWonTheMatch) {
@@ -80,92 +91,49 @@ export default async (
         return acc;
       },
       {
-        tournamentsPlayed: [] as TournamentT[],
         wins: 0,
         losses: 0,
       }
     );
 
-    const { tournamentFinals, tournamentWins } = tournamentsPlayed.reduce(
-      (acc, t) => {
-        const brackets = t?.draw ? JSON.parse(t.draw).brackets : null;
+    let tWins = 0;
+    let tFinals = 0;
+    for (const t of tournamentsPlayed) {
+      const brackets = t.draw && JSON.parse(t.draw)?.brackets;
+      let lastMatch;
+      // COPY PASTE FROM STATS getTournamentWinners
+      // new brackets format
+      if (brackets && Array.isArray(brackets[0])) {
+        const lastMatchId = brackets[brackets.length - 1][0].matchId;
+        lastMatch = t.match.find((v) => v.id === lastMatchId);
+      } else {
+        // final in old match format is stage 10 foir every tournament
+        lastMatch = t.match.find((v) => v.stage === 10);
+        // find match with biggest stage
+      }
 
-        let lastMatch: undefined | MatchT;
-        let isOldFormat = false;
-
-        // new brackets format
-        if (brackets && Array.isArray(brackets[0])) {
-          const lastMatchId = brackets[brackets.length - 1][0]?.matchId;
-          lastMatch = lastMatchId ? matchesMap.get(lastMatchId) : undefined;
+      if (
+        lastMatch?.player1_id === playerIdInt ||
+        lastMatch?.player2_id === playerIdInt ||
+        lastMatch?.player3_id === playerIdInt ||
+        lastMatch?.player4_id === playerIdInt
+      ) {
+        if (lastMatch.winner_id?.includes(id as string)) {
+          tWins++;
+        } else {
+          tFinals++;
         }
+      }
+    }
 
-        // old brackets format
-        // to support legacy data in db
-        // we get matchId from brackets if exists
-        // and increase counter if player was in finals/won the tournament
-        // if no data in brackets field then we should skip tournament and not count
-        if (brackets && brackets.length > 0 && brackets[0].id) {
-          isOldFormat = true;
-          const lastMatchId = brackets[brackets.length - 1]?.matchId;
-          lastMatch = lastMatchId ? matchesMap.get(lastMatchId) : undefined;
-        }
-
-        if (lastMatch) {
-          if (isOldFormat) {
-            const team1 = [lastMatch.player1_id, lastMatch.player2_id];
-            const team2 = [lastMatch.player3_id, lastMatch.player4_id];
-
-            if ([...team1, ...team2].includes(playerIdInt)) {
-              acc.tournamentFinals += 1;
-            }
-
-            if (
-              team1.includes(playerIdInt) &&
-              lastMatch.winner_id?.split('012340').includes(id as string)
-            ) {
-              acc.tournamentWins += 1;
-            }
-
-            if (
-              team2.includes(playerIdInt) &&
-              lastMatch.winner_id?.split('012340').includes(id as string)
-            ) {
-              acc.tournamentWins += 1;
-            }
-          } else {
-            const team1 = [lastMatch.player1_id, lastMatch.player3_id];
-            const team2 = [lastMatch.player2_id, lastMatch.player4_id];
-
-            if ([...team1, ...team2].includes(playerIdInt)) {
-              acc.tournamentFinals += 1;
-            }
-
-            if (
-              team1.includes(playerIdInt) &&
-              lastMatch.winner_id === team1[0] + ''
-            ) {
-              acc.tournamentWins += 1;
-            }
-
-            if (
-              team2.includes(playerIdInt) &&
-              lastMatch.winner_id === team2[0] + ''
-            ) {
-              acc.tournamentWins += 1;
-            }
-          }
-        }
-
-        return acc;
-      },
-      { tournamentFinals: 0, tournamentWins: 0 }
-    );
+    // console.log(`tournamentWins/finals, ${tWins}/${tFinals}`);
+    // console.log(`${lastMatchNumer} number last matches for tournament played by player`, 'number of tournaments: ', tournamentsPlayed.length)
 
     const statsData = {
       tournaments_played: tournamentsPlayed.length,
       matches_played: filteredPlayedMatches.length,
-      tournaments_wins: tournamentWins,
-      tournaments_finals: tournamentFinals,
+      tournaments_wins: tWins,
+      tournaments_finals: tFinals,
       win_lose_in_level_proportion: `${wins}/${losses}`,
     };
 
