@@ -47,8 +47,8 @@ const CreateDigestPage: NextPage = () => {
     });
 
     if (res.isOk) {
+      await mutate();
       router.push(`/admin/digests/${res.data?.id}`);
-      mutate();
     } else {
       console.error(res.errorMessage);
     }
