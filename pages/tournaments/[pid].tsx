@@ -312,8 +312,8 @@ const TournamentPage: NextPage<{
           {/* show only for schedule tab  */}
           {activeTab === TOURNAMENT_TABS[0] && tournament.status === 2 && (
             <button
-            onClick={handleDownloadClick}
-            className={styles.nearTabButton}
+              onClick={handleDownloadClick}
+              className={styles.nearTabButton}
             >
               <AiOutlineDownload />
             </button>
