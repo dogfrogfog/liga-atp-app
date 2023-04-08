@@ -65,7 +65,15 @@ const PlayersIndexPage: NextPage = () => {
         <div className={styles.lvlFilter}>
           <select onChange={handleLevelChange} value={selectedLvl}>
             <option value={''}>Все</option>
-            {Object.entries(LEVEL_NUMBER_VALUES).map(([key, name]) => (
+            {[
+              [3, 'Про'],
+              [5, 'S-Мастерс'],
+              [2, 'Мастерс'],
+              [1, 'Челленджер'],
+              [4, 'Леджер'],
+              [0, 'Фьючерс'],
+              [-1, 'Сателлит'],
+            ].map(([key, name]) => (
               <option key={key} value={key}>
                 {name}
               </option>
