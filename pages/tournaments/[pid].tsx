@@ -309,15 +309,17 @@ const TournamentPage: NextPage<{
       </div>
       <section className={styles.tabsContainer}>
         <>
-          {tournament.status === 2 && (
+          {/* show only for schedule tab  */}
+          {activeTab === TOURNAMENT_TABS[0] && tournament.status === 2 && (
             <button
-              onClick={handleDownloadClick}
-              className={styles.nearTabButton}
+            onClick={handleDownloadClick}
+            className={styles.nearTabButton}
             >
               <AiOutlineDownload />
             </button>
           )}
-          {tournament.status === 1 && (
+          {/* show only for players list tab  */}
+          {activeTab === TOURNAMENT_TABS[1] && tournament.status === 1 && (
             <button
               onClick={toggleAddPlayerModal}
               className={styles.nearTabButton}
