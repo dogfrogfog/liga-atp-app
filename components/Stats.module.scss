@@ -6,6 +6,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 0.5px solid #1b2223;
+  line-height: 24px;
 
   &:first-child {
     padding-top: 0;
@@ -20,7 +21,6 @@
     display: inline-block;
     min-width: 70px;
     font-weight: bold;
-    line-height: 24px;
     text-align: right;
   }
 }
