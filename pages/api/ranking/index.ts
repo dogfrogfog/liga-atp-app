@@ -4,12 +4,11 @@ import {
   prisma,
   match as MatchT,
   tournament as TournamentT,
-  player_elo_ranking,
 } from 'services/db';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
 import getNewEloAfterMatch from 'utils/elo/getNewEloAfterMatch';
 
-const HALF_A_YEAR_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 30 * 6;
+const YEAR_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 30 * 6 * 2;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
@@ -258,36 +257,36 @@ const parsePlayedMatches = async (
     // then we need to update expire date for players
 
     // is match played in last 6 months
-    const isMatchWithin6MonthsFromNow =
+    const isMatchWithinYearFromNow =
       m.start_date &&
-      m.start_date.getTime() + HALF_A_YEAR_IN_MILLISECONDS >= now.getTime();
+      m.start_date.getTime() + YEAR_IN_MILLISECONDS >= now.getTime();
 
-    if (isMatchWithin6MonthsFromNow) {
+    if (isMatchWithinYearFromNow) {
       if (playersIds.includes(matchData.player1_id)) {
         matchesPlayedP1.push(m);
 
-        if (matchesPlayedP1.length === 5) {
+        if (matchesPlayedP1.length === 1) {
           p1ExpireDate = m.start_date;
         }
       }
       if (playersIds.includes(matchData.player2_id)) {
         matchesPlayedP2.push(m);
 
-        if (matchesPlayedP2.length === 5) {
+        if (matchesPlayedP2.length === 1) {
           p2ExpireDate = m.start_date;
         }
       }
       if (playersIds.includes(matchData.player3_id)) {
         matchesPlayedP3.push(m);
 
-        if (matchesPlayedP3.length === 5) {
+        if (matchesPlayedP3.length === 1) {
           p3ExpireDate = m.start_date;
         }
       }
       if (playersIds.includes(matchData.player4_id)) {
         matchesPlayedP4.push(m);
 
-        if (matchesPlayedP4.length === 5) {
+        if (matchesPlayedP4.length === 1) {
           p4ExpireDate = m.start_date;
         }
       }
