@@ -151,7 +151,6 @@ const TournamentForm = ({
     register,
     handleSubmit,
     formState: { errors },
-    control,
   } = useForm<TournamentT>({
     defaultValues: {
       tournament_type: null,
@@ -167,25 +166,25 @@ const TournamentForm = ({
   return (
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWithError errorMessage={errors.name?.message}>
+        <InputWithError error={errors.name}>
           <input
             placeholder="Название турнира"
             {...register('name', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.address?.message}>
+        <InputWithError error={errors.address}>
           <input
             placeholder="Адрес"
             {...register('address', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.city?.message}>
+        <InputWithError error={errors.city}>
           <input
             placeholder="Город"
             {...register('city', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.tournament_type?.message}>
+        <InputWithError error={errors.tournament_type}>
           <br />
           Тип турнира:
           <select
@@ -203,7 +202,7 @@ const TournamentForm = ({
             )}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.surface?.message}>
+        <InputWithError error={errors.surface}>
           <br />
           Поверхность:
           <select
@@ -216,7 +215,7 @@ const TournamentForm = ({
             ))}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.status?.message}>
+        <InputWithError error={errors.status}>
           <br />
           Статус:
           <select
@@ -231,7 +230,7 @@ const TournamentForm = ({
             )}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.start_date?.message}>
+        <InputWithError error={errors.start_date}>
           <input
             placeholder="Начало турнира"
             type="date"

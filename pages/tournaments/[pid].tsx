@@ -309,7 +309,8 @@ const TournamentPage: NextPage<{
       </div>
       <section className={styles.tabsContainer}>
         <>
-          {tournament.status === 2 && (
+          {/* show only for schedule tab  */}
+          {activeTab === TOURNAMENT_TABS[0] && tournament.status === 2 && (
             <button
               onClick={handleDownloadClick}
               className={styles.nearTabButton}
@@ -317,7 +318,8 @@ const TournamentPage: NextPage<{
               <AiOutlineDownload />
             </button>
           )}
-          {tournament.status === 1 && (
+          {/* show only for players list tab  */}
+          {activeTab === TOURNAMENT_TABS[1] && tournament.status === 1 && (
             <button
               onClick={toggleAddPlayerModal}
               className={styles.nearTabButton}
@@ -339,21 +341,21 @@ const TournamentPage: NextPage<{
             <p className={styles.formTitle}>Форма регистрации игрока</p>
             {!isPlayerLoading ? (
               <form onSubmit={handleSubmit(submitPlayerRegistration)}>
-                <InputWithError errorMessage={errors.first_name?.message}>
+                <InputWithError error={errors.first_name}>
                   <input
                     className={styles.input}
                     placeholder="Имя"
                     {...register('first_name', { required: true })}
                   />
                 </InputWithError>
-                <InputWithError errorMessage={errors.last_name?.message}>
+                <InputWithError error={errors.last_name}>
                   <input
                     className={styles.input}
                     placeholder="Фамилия"
                     {...register('last_name', { required: true })}
                   />
                 </InputWithError>
-                <InputWithError errorMessage={errors.phone?.message}>
+                <InputWithError error={errors.phone}>
                   <input
                     className={cl(styles.input, styles.phone)}
                     placeholder="Номер телефона"

@@ -9,10 +9,10 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 0.5px solid $custom-darkgray;
+  line-height: 24px;
 
   span:last-child {
     font-weight: bold;
-    line-height: 24px;
   }
 }
 

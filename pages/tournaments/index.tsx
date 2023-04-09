@@ -114,11 +114,13 @@ const TournamentsPage: NextPage = () => {
           startDateStr: string;
           endDateStr: string;
         }[] = [];
-        const firstWeekNumber = parseInt(format(now, 'I'));
+        // + 1 because filters is for upcoming tournaments
+        // so we should start from next week
+        const firstWeekNumber = parseInt(format(now, 'I')) + 1;
 
         let filteredTournaments: TournamentT[] = [];
         // 4 is number of weeks available in filter
-        for (let i = 0; i < 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           const skipWeeks = i * 7 * DAY_IN_MILLISECONDS;
           const tennisWeekStart =
             startOfISOWeek(now).getTime() + skipWeeks + DAY_IN_MILLISECONDS * 3;

@@ -166,25 +166,25 @@ const PlayerForm = ({
   return (
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWithError errorMessage={errors.avatar?.message}>
+        <InputWithError error={errors.avatar}>
           <input
             placeholder="Ссылка на авку"
             {...register('avatar', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.first_name?.message}>
+        <InputWithError error={errors.first_name}>
           <input
             placeholder="Имя"
             {...register('first_name', { required: true })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.last_name?.message}>
+        <InputWithError error={errors.last_name}>
           <input
             placeholder="Фамилия"
             {...register('last_name', { required: true })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.date_of_birth?.message}>
+        <InputWithError error={errors.date_of_birth}>
           <br />
           Дата рождения:
           <input
@@ -195,19 +195,19 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.city?.message}>
+        <InputWithError error={errors.city}>
           <input
             placeholder="Город"
             {...register('city', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.country?.message}>
+        <InputWithError error={errors.country}>
           <input
             placeholder="Страна"
             {...register('country', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.phone?.message}>
+        <InputWithError error={errors.phone}>
           <input
             placeholder="Номер телефона"
             {...register('phone', {
@@ -218,7 +218,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.email?.message}>
+        <InputWithError error={errors.email}>
           <input
             placeholder="E-mail"
             {...register('email', {
@@ -229,7 +229,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.level?.message}>
+        <InputWithError error={errors.level}>
           Уровень
           <select
             {...register('level', { required: true, valueAsNumber: true })}
@@ -241,37 +241,37 @@ const PlayerForm = ({
             ))}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.gameplay_style?.message}>
+        <InputWithError error={errors.gameplay_style}>
           <input
             placeholder="Стиль игры"
             {...register('gameplay_style', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.forehand?.message}>
+        <InputWithError error={errors.forehand}>
           <input
             placeholder="Форхэнд"
             {...register('forehand', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.height?.message}>
+        <InputWithError error={errors.height}>
           <input
             placeholder="Рост"
             {...register('height', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.beckhand?.message}>
+        <InputWithError error={errors.beckhand}>
           <input
             placeholder="Бэкхэнд"
             {...register('beckhand', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.job_description?.message}>
+        <InputWithError error={errors.job_description}>
           <input
             placeholder="Род деятельности"
             {...register('job_description', { required: false })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.in_tennis_from?.message}>
+        <InputWithError error={errors.in_tennis_from}>
           <br />
           Когда начал играть:
           <input
@@ -282,7 +282,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.insta_link?.message}>
+        <InputWithError error={errors.insta_link}>
           <input
             placeholder="Ссылка на инсту"
             {...register('insta_link', {
@@ -295,7 +295,7 @@ const PlayerForm = ({
           />
         </InputWithError>
         {!player && (
-          <InputWithError errorMessage={errors.elo_points?.message}>
+          <InputWithError error={errors.elo_points}>
             очки, которые задаются при создании игрока один раз
             <br />
             в дальнейшие изменения происходят автоматически или через базу
@@ -311,13 +311,13 @@ const PlayerForm = ({
           </InputWithError>
         )}
         <br />
-        <InputWithError errorMessage={errors.premium?.message}>
+        <InputWithError error={errors.premium}>
           Премиум (из Аллеи славы):
           <input type="checkbox" {...register('premium')} />
         </InputWithError>
         <br />
         <h3>Характеристики</h3>
-        <InputWithError errorMessage={errors.technique?.message}>
+        <InputWithError error={errors.technique}>
           <br />
           Техника:
           <input
@@ -329,7 +329,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.tactics?.message}>
+        <InputWithError error={errors.tactics}>
           <br />
           Тактика:
           <input
@@ -341,7 +341,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.power?.message}>
+        <InputWithError error={errors.power}>
           <br />
           Мощь:
           <input
@@ -353,7 +353,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.shakes?.message}>
+        <InputWithError error={errors.shakes}>
           <br />
           Кач:
           <input
@@ -365,7 +365,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.serve?.message}>
+        <InputWithError error={errors.serve}>
           <br />
           Подача:
           <input
@@ -377,7 +377,7 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError errorMessage={errors.behaviour?.message}>
+        <InputWithError error={errors.behaviour}>
           <br />
           Поведение:
           <input

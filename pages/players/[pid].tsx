@@ -329,9 +329,7 @@ const ProfileHeader = ({
     <div
       className={styles.profileHeader}
       style={{
-        background: `url(${avavarUrl})`,
-        backgroundSize: 'cover',
-        backgroundPositionX: 'center',
+        background: `url(${avavarUrl}) top / cover`,
       }}
     >
       {isPremium && (
