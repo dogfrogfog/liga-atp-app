@@ -3,7 +3,7 @@
 .field {
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 10px;
   background-color: $custom-lightgray;
   margin-bottom: 10px;
   align-items: center;
@@ -56,25 +56,14 @@
     }
   }
 
-  &.inputField input {
+  &.inputField input,
+  &.inputField select {
     width: 50%;
     outline: none;
-    background-color: $custom-olive;
-    height: 30px;
+    height: 25px;
     font-size: 16px;
     border: none;
     padding: 0 5px;
-  }
-
-  &.surface select {
-    width: 50%;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    background-color: $custom-olive;
-    text-align: center;
-    outline: none;
-    font-size: 20px;
   }
 
   &[disabled] {
