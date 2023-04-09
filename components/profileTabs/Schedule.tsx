@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
@@ -9,15 +10,23 @@ type MatchProps = {
   tournamentName: string;
   time: Date | null;
   opponent: string | ReactNode;
+  tournamentId: number;
 };
 
-const Match = ({ tournamentName, time, opponent }: MatchProps) => {
+const Match = ({
+  tournamentName,
+  time,
+  opponent,
+  tournamentId,
+}: MatchProps) => {
   const date = time && new Date(time);
 
   return (
     <div className={styles.match}>
       <div className={styles.row}>
-        <span className={styles.tournamentName}>{tournamentName}</span>
+        <Link href={`/tournaments/${tournamentId}`}>
+          <span className={styles.tournamentName}>{tournamentName}</span>
+        </Link>
         <span className={styles.matchDate}>
           {date && format(date, 'EEEEEE H:mm', { locale: ru })}
         </span>
@@ -46,6 +55,7 @@ const ScheduleTab = ({
           <Match
             key={v.id}
             tournamentName={v.tournament.name || ''}
+            tournamentId={v.tournament.id}
             time={v.time}
             opponent={getOpponents(playerId, v)}
           />
