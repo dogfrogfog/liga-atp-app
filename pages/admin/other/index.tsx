@@ -22,11 +22,9 @@ const AdminOtherPage: NextPage = () => {
         <LoadingSpinner />
       ) : (
         otherPages.map((v) => (
-          <Fragment key={v.slug}>
-            <Link href={`/admin/other/${v.slug}`}>{v.title}</Link>
-            <br />
-            <br />
-          </Fragment>
+          <Link key={v.slug} href={`/admin/other/${v.slug}`}>
+            <a className={styles.pageLink}>{v.title}</a>
+          </Link>
         ))
       )}
     </div>

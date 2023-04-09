@@ -9,6 +9,7 @@ import { prisma } from 'services/db';
 import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import LoadingShadow from 'components/LoadingShadow';
 import { deleteOtherPage, updateOtherPage } from 'services/other';
 import styles from 'styles/AdminOther.module.scss';
 
@@ -71,6 +72,7 @@ const AdminOtherPage: NextPage<{ page: OtherPageT }> = ({ page }) => {
   };
 
   const handleDeleteClick = async () => {
+    setIsLoading(true);
     const { isOk } = await deleteOtherPage(page.id);
 
     if (isOk) {
@@ -78,10 +80,12 @@ const AdminOtherPage: NextPage<{ page: OtherPageT }> = ({ page }) => {
 
       router.push('/admin/other');
     }
+    setIsLoading(false);
   };
 
   return (
     <div className={styles.pageContainer}>
+      {isLoading && <LoadingShadow />}
       <PageTitle>{activePage.title}</PageTitle>
       <div className={styles.buttons}>
         <button className={styles.delete} onClick={handleDeleteClick}>
@@ -134,6 +138,15 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       slug: ctx.query.slug as string,
     },
   });
+
+  if (!page) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/other',
+      },
+    };
+  }
 
   return {
     props: {

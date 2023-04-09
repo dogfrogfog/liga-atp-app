@@ -16,6 +16,7 @@ import styles from './styles.module.scss';
 import { updateDigest, deleteDigest } from 'services/digests';
 import usePlayers from 'hooks/usePlayers';
 import useDigests from 'hooks/useDigests';
+import LoadingShadow from 'components/LoadingShadow';
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
@@ -31,6 +32,7 @@ const SingleDigestPage: NextPage<{
   const { mutate } = useDigests();
   const [activeDigest, setActiveDigest] = useState(digest);
   const [isEditing, setEditingStatus] = useState(false);
+  const [isLoadingState, setLoadingState] = useState(false);
   const [newSelectedPlayers, setNewSelectedPlayers] = useState<Option[]>(
     playersToMultiSelect(mentionedPlayers)
   );
@@ -44,6 +46,7 @@ const SingleDigestPage: NextPage<{
   };
 
   const onSubmit = async (formData: NoCustomFieldsType) => {
+    setLoadingState(true);
     const res = await updateDigest({
       id: digest.id,
       ...formData,
@@ -59,6 +62,7 @@ const SingleDigestPage: NextPage<{
     }
 
     setEditingStatus(false);
+    setLoadingState(false);
   };
 
   const edit = () => {
@@ -66,6 +70,7 @@ const SingleDigestPage: NextPage<{
   };
 
   const handleDeleteClick = async () => {
+    setLoadingState(true);
     const { isOk } = await deleteDigest(activeDigest.id);
 
     if (isOk) {
@@ -73,10 +78,12 @@ const SingleDigestPage: NextPage<{
 
       router.push('/admin/digests');
     }
+    setLoadingState(false);
   };
 
   return (
     <div className={styles.singleDigestPage}>
+      {isLoadingState && <LoadingShadow />}
       <div className={styles.buttons}>
         <button className={styles.delete} onClick={handleDeleteClick}>
           Удалить

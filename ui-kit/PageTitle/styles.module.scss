@@ -5,4 +5,8 @@
   margin: 0 0 20px;
   font-size: 20px;
   font-weight: 600;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
