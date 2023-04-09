@@ -28,7 +28,7 @@ import {
 } from 'services/tournaments';
 
 import tableStyles from '../Table.module.scss';
-import formStyles from '../../../styles/Form.module.scss';
+import formStyles from 'styles/Form.module.scss';
 
 const Tournaments: NextPage = () => {
   const router = useRouter();
@@ -169,26 +169,23 @@ const TournamentForm = ({
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWithError error={errors.name}>
-          <input
-            placeholder="Название турнира"
-            {...register('name', { required: false })}
-          />
+          Название турнира
+          <br />
+          <input {...register('name', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.address}>
-          <input
-            placeholder="Адрес"
-            {...register('address', { required: false })}
-          />
+          Адрес
+          <br />
+          <input {...register('address', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.city}>
-          <input
-            placeholder="Город"
-            {...register('city', { required: false })}
-          />
+          Город
+          <br />
+          <input {...register('city', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.tournament_type}>
+          Тип турнира
           <br />
-          Тип турнира:
           <select
             {...register('tournament_type', {
               required: true,
@@ -205,8 +202,8 @@ const TournamentForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.surface}>
+          Поверхность
           <br />
-          Поверхность:
           <select
             {...register('surface', { required: true, valueAsNumber: true })}
           >
@@ -218,8 +215,8 @@ const TournamentForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.status}>
+          Статус
           <br />
-          Статус:
           <select
             {...register('status', { required: true, valueAsNumber: true })}
           >
@@ -233,14 +230,19 @@ const TournamentForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.start_date}>
+          Начало турнира
+          <br />
           <input
-            placeholder="Начало турнира"
             type="date"
             {...register('start_date', { required: false, valueAsDate: true })}
           />
         </InputWithError>
         <div className={formStyles.formActions}>
-          <input className={formStyles.submitButton} type="submit" />
+          <input
+            className={formStyles.submitButton}
+            type="submit"
+            value="Создать турнир"
+          />
         </div>
       </form>
     </div>

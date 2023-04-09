@@ -169,26 +169,23 @@ const PlayerForm = ({
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWithError error={errors.avatar}>
-          <input
-            placeholder="Ссылка на авку"
-            {...register('avatar', { required: false })}
-          />
+          Ссылка на авку
+          <br />
+          <input {...register('avatar', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.first_name}>
-          <input
-            placeholder="Имя"
-            {...register('first_name', { required: true })}
-          />
+          Имя
+          <br />
+          <input {...register('first_name', { required: true })} />
         </InputWithError>
         <InputWithError error={errors.last_name}>
-          <input
-            placeholder="Фамилия"
-            {...register('last_name', { required: true })}
-          />
+          Фамилия
+          <br />
+          <input {...register('last_name', { required: true })} />
         </InputWithError>
         <InputWithError error={errors.date_of_birth}>
+          Дата рождения
           <br />
-          Дата рождения:
           <input
             type="date"
             {...register('date_of_birth', {
@@ -198,20 +195,19 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.city}>
-          <input
-            placeholder="Город"
-            {...register('city', { required: false })}
-          />
+          Город
+          <br />
+          <input {...register('city', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.country}>
-          <input
-            placeholder="Страна"
-            {...register('country', { required: false })}
-          />
+          Страна
+          <br />
+          <input {...register('country', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.phone}>
+          Номер телефона
+          <br />
           <input
-            placeholder="Номер телефона"
             {...register('phone', {
               pattern: {
                 value: /^375\d{9}$/,
@@ -221,8 +217,9 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.email}>
+          E-mail
+          <br />
           <input
-            placeholder="E-mail"
             {...register('email', {
               pattern: {
                 value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -233,6 +230,7 @@ const PlayerForm = ({
         </InputWithError>
         <InputWithError error={errors.level}>
           Уровень
+          <br />
           <select
             {...register('level', { required: true, valueAsNumber: true })}
           >
@@ -244,38 +242,35 @@ const PlayerForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.gameplay_style}>
-          <input
-            placeholder="Стиль игры"
-            {...register('gameplay_style', { required: false })}
-          />
+          Стиль игры
+          <br />
+          <input {...register('gameplay_style', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.forehand}>
-          <input
-            placeholder="Форхэнд"
-            {...register('forehand', { required: false })}
-          />
+          Форхэнд
+          <br />
+          <input {...register('forehand', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.height}>
+          Рост
+          <br />
           <input
-            placeholder="Рост"
             {...register('height', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
         <InputWithError error={errors.beckhand}>
-          <input
-            placeholder="Бэкхэнд"
-            {...register('beckhand', { required: false })}
-          />
+          Бэкхэнд
+          <br />
+          <input {...register('beckhand', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.job_description}>
-          <input
-            placeholder="Род деятельности"
-            {...register('job_description', { required: false })}
-          />
+          Род деятельности
+          <br />
+          <input {...register('job_description', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.in_tennis_from}>
+          Когда начал играть
           <br />
-          Когда начал играть:
           <input
             type="date"
             {...register('in_tennis_from', {
@@ -285,8 +280,9 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.insta_link}>
+          Ссылка на инсту
+          <br />
           <input
-            placeholder="Ссылка на инсту"
             {...register('insta_link', {
               pattern: {
                 value: /(?:(?:https):\/\/)?(?:www.)?(?:instagram.com)\//,
@@ -314,14 +310,15 @@ const PlayerForm = ({
         )}
         <br />
         <InputWithError error={errors.premium}>
-          Премиум (из Аллеи славы):
+          Премиум (из Аллеи славы)
+          <br />
           <input type="checkbox" {...register('premium')} />
         </InputWithError>
         <br />
         <h3>Характеристики</h3>
         <InputWithError error={errors.technique}>
+          Техника
           <br />
-          Техника:
           <input
             {...register('technique', {
               required: true,
@@ -332,8 +329,8 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.tactics}>
+          Тактика
           <br />
-          Тактика:
           <input
             {...register('tactics', {
               required: true,
@@ -344,8 +341,8 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.power}>
+          Мощь
           <br />
-          Мощь:
           <input
             {...register('power', {
               required: true,
@@ -356,8 +353,8 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.shakes}>
+          Кач
           <br />
-          Кач:
           <input
             {...register('shakes', {
               required: true,
@@ -368,8 +365,8 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.serve}>
+          Подача
           <br />
-          Подача:
           <input
             {...register('serve', {
               required: true,
@@ -380,8 +377,8 @@ const PlayerForm = ({
           />
         </InputWithError>
         <InputWithError error={errors.behaviour}>
+          Поведение
           <br />
-          Поведение:
           <input
             {...register('behaviour', {
               required: true,

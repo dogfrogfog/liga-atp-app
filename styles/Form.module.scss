@@ -1,12 +1,12 @@
 .formActions {
   width: 100%;
-  display: flex;
-  justify-content: flex-end;
+  margin-top: 50px;
 
   .submitButton {
     width: 150px;
     padding: 10px;
-    border: 1px solid;
+    background-color: #2f80ed;
+    color: white;
   }
 }
 
@@ -16,6 +16,7 @@
 }
 
 .formContainer {
+  max-width: 90vw;
   display: flex;
 
   input,
@@ -26,6 +27,7 @@
     border: none;
     outline: none;
     background-color: aliceblue;
+    width: 210px;
 
     &:active {
       margin: 0 5px 5px 0;
