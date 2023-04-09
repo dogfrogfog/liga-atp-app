@@ -345,16 +345,17 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       )}
       {modalStatus.isOpen && (
         <Modal title="Редактировать матч" handleClose={handleReset}>
-          Рейтинг ЭЛО будет изменен, если указать победителя и результат матча
-          {'\n'}в уже СОЗДАННОМ матче {'('} если создавать матч сразу с
-          победителем и счетом, то ЭЛО не изменится{')'}
-          <br />
           <MatchForm
             isDoubles={isDoubles}
             match={editingMatchData?.newMatch as MatchT}
             onSubmit={submitMatch}
             registeredPlayers={registeredPlayers}
           />
+          <span style={{ color: 'grey', fontSize: 14 }}>
+            Рейтинг ЭЛО будет изменен, если указать победителя и результат матча
+            {'\n'}в уже СОЗДАННОМ матче {'('} если создавать матч сразу с
+            победителем и счетом, то ЭЛО не изменится{')'}
+          </span>
         </Modal>
       )}
     </div>

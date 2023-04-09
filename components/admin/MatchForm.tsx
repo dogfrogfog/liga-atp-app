@@ -53,8 +53,8 @@ const MatchForm = ({
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWithError error={errors.player1_id}>
+          Игрок 1
           <br />
-          Игрок 1:
           <select
             {...register('player1_id', {
               required: true,
@@ -70,8 +70,8 @@ const MatchForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.player2_id}>
+          Игрок 2
           <br />
-          Игрок 2:
           <select
             {...register('player2_id', {
               valueAsNumber: true,
@@ -88,8 +88,8 @@ const MatchForm = ({
         {isDoubles && (
           <>
             <InputWithError error={errors.player3_id}>
+              Пара игрока 1 - игрок 3
               <br />
-              Пара игрока 1 - игрок 3:
               <select {...register('player3_id', { valueAsNumber: true })}>
                 <option>не выбран</option>
                 {sortedPlayers.map((p) => (
@@ -100,8 +100,8 @@ const MatchForm = ({
               </select>
             </InputWithError>
             <InputWithError error={errors.player4_id}>
+              Пара игрока 2 - игрок 4
               <br />
-              Пара игрока 2 - игрок 4:
               <select {...register('player4_id', { valueAsNumber: true })}>
                 <option>не выбран</option>
                 {sortedPlayers.map((p) => (
@@ -114,8 +114,8 @@ const MatchForm = ({
           </>
         )}
         <InputWithError error={errors.winner_id}>
+          Победитель - игрок 1 или игрок 2
           <br />
-          Победитель - игрок 1 или игрок 2:
           <select {...register('winner_id')}>
             <option value="">не выбран</option>
             {sortedPlayers.map((p) => (
@@ -126,8 +126,8 @@ const MatchForm = ({
           </select>
         </InputWithError>
         <InputWithError error={errors.time}>
+          Дата и время матча
           <br />
-          Дата и время матча:
           <input
             value={dateTimeLocal || undefined}
             placeholder="Начало матча"
@@ -138,8 +138,9 @@ const MatchForm = ({
         <br />
         <p>если матч завершился без счета - указывать {'"w/o"'}</p>
         <InputWithError error={errors.score}>
+          Счет
+          <br />
           <input
-            placeholder="Счет"
             {...register('score', {
               pattern: {
                 value: /^((\d{1,2}-\d{1,2} )|w\/o){1,5}/,
@@ -148,11 +149,11 @@ const MatchForm = ({
             })}
           />
         </InputWithError>
-        <br />
         <InputWithError error={errors.youtube_link}>
+          Ссылка на ютюб
+          <br />
           <input
             className={formStyles.youtubeLink}
-            placeholder="Ссылка на ютюб"
             {...register('youtube_link', {
               pattern: {
                 value: /^(https:\/\/)/,
