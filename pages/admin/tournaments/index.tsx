@@ -110,17 +110,19 @@ const Tournaments: NextPage = () => {
   return (
     <>
       {(isLoading || isLoadingState) && <LoadingShadow />}
-      <div className={tableStyles.tableHeader}>
-        <PageTitle>Управление турнирами</PageTitle>
-        <TableControls
-          isLoading={isLoading}
-          selectedRow={selectedRow}
-          handlePickClick={handlePickClick}
-          handleAddClick={handleAddClick}
-          handleUpdateClick={handleUpdateClick}
-          handleDeleteClick={handleDeleteClick}
-          handleResetClick={handleReset}
-        />
+      <div className={tableStyles.tableHeaderWrapper}>
+        <div className={tableStyles.tableHeader}>
+          <PageTitle>Управление турнирами</PageTitle>
+          <TableControls
+            isLoading={isLoading}
+            selectedRow={selectedRow}
+            handlePickClick={handlePickClick}
+            handleAddClick={handleAddClick}
+            handleUpdateClick={handleUpdateClick}
+            handleDeleteClick={handleDeleteClick}
+            handleResetClick={handleReset}
+          />
+        </div>
       </div>
       {isLoading ? (
         <LoadingSpinner />

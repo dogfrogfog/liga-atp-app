@@ -99,16 +99,18 @@ const Players: NextPage = () => {
   return (
     <>
       {(isLoading || isLoadingState) && <LoadingShadow />}
-      <div className={tableStyles.tableHeader}>
-        <PageTitle>Управление игроками</PageTitle>
-        <TableControls
-          isLoading={isLoading}
-          selectedRow={selectedRow}
-          handleAddClick={handleAddClick}
-          handleUpdateClick={handleUpdateClick}
-          handleDeleteClick={handleDeleteClick}
-          handleResetClick={handleReset}
-        />
+      <div className={tableStyles.tableHeaderWrapper}>
+        <div className={tableStyles.tableHeader}>
+          <PageTitle>Управление игроками</PageTitle>
+          <TableControls
+            isLoading={isLoading}
+            selectedRow={selectedRow}
+            handleAddClick={handleAddClick}
+            handleUpdateClick={handleUpdateClick}
+            handleDeleteClick={handleDeleteClick}
+            handleResetClick={handleReset}
+          />
+        </div>
       </div>
       {isLoading ? (
         <LoadingSpinner />
