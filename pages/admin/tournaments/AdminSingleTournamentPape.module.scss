@@ -6,12 +6,13 @@
 
 .twoSides {
   display: flex;
-  flex: 1;
+  flex-wrap: wrap;
 
   .side {
-    width: 50%;
+    width: min(100%, 500px);
     margin: 20px;
   }
+
   .sideTitle {
     margin: 0 0 10px;
     font-size: 20px;
@@ -50,21 +51,17 @@
 }
 
 .addPlayersContainer {
-  max-width: 50%;
   overflow: hidden;
 }
 
 .buttons {
-  position: absolute;
-  display: flex;
-  justify-content: flex-end;
   top: 0;
   right: 0;
   margin-bottom: 20px;
 
   button {
     font-size: 18px;
-    margin-left: 10px;
+    margin-right: 10px;
     padding: 5px 15px;
     border: none;
 
