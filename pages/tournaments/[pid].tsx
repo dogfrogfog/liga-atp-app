@@ -341,21 +341,21 @@ const TournamentPage: NextPage<{
             <p className={styles.formTitle}>Форма регистрации игрока</p>
             {!isPlayerLoading ? (
               <form onSubmit={handleSubmit(submitPlayerRegistration)}>
-                <InputWithError errorMessage={errors.first_name?.message}>
+                <InputWithError error={errors.first_name}>
                   <input
                     className={styles.input}
                     placeholder="Имя"
                     {...register('first_name', { required: true })}
                   />
                 </InputWithError>
-                <InputWithError errorMessage={errors.last_name?.message}>
+                <InputWithError error={errors.last_name}>
                   <input
                     className={styles.input}
                     placeholder="Фамилия"
                     {...register('last_name', { required: true })}
                   />
                 </InputWithError>
-                <InputWithError errorMessage={errors.phone?.message}>
+                <InputWithError error={errors.phone}>
                   <input
                     className={cl(styles.input, styles.phone)}
                     placeholder="Номер телефона"

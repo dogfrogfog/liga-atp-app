@@ -10,7 +10,11 @@ const InputWithError = ({ error, children }: InputWithErrorProps) => {
     <div style={{ display: 'inline-block', position: 'relative' }}>
       {children}
       {!!error && (
-        <span style={{color: 'red', position: 'absolute', bottom: 0, left: 10 }}>{error.message || error.type}</span>
+        <span
+          style={{ color: 'red', position: 'absolute', bottom: 0, left: 10 }}
+        >
+          {error.message || error.type}
+        </span>
       )}
     </div>
   );

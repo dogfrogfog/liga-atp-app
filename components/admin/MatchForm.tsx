@@ -52,7 +52,7 @@ const MatchForm = ({
   return (
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWithError errorMessage={errors.player1_id?.message}>
+        <InputWithError error={errors.player1_id}>
           <br />
           Игрок 1:
           <select
@@ -69,7 +69,7 @@ const MatchForm = ({
             ))}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.player2_id?.message}>
+        <InputWithError error={errors.player2_id}>
           <br />
           Игрок 2:
           <select
@@ -87,7 +87,7 @@ const MatchForm = ({
         </InputWithError>
         {isDoubles && (
           <>
-            <InputWithError errorMessage={errors.player3_id?.message}>
+            <InputWithError error={errors.player3_id}>
               <br />
               Пара игрока 1 - игрок 3:
               <select {...register('player3_id', { valueAsNumber: true })}>
@@ -99,7 +99,7 @@ const MatchForm = ({
                 ))}
               </select>
             </InputWithError>
-            <InputWithError errorMessage={errors.player4_id?.message}>
+            <InputWithError error={errors.player4_id}>
               <br />
               Пара игрока 2 - игрок 4:
               <select {...register('player4_id', { valueAsNumber: true })}>
@@ -113,7 +113,7 @@ const MatchForm = ({
             </InputWithError>
           </>
         )}
-        <InputWithError errorMessage={errors.winner_id?.message}>
+        <InputWithError error={errors.winner_id}>
           <br />
           Победитель - игрок 1 или игрок 2:
           <select {...register('winner_id')}>
@@ -125,7 +125,7 @@ const MatchForm = ({
             ))}
           </select>
         </InputWithError>
-        <InputWithError errorMessage={errors.time?.message}>
+        <InputWithError error={errors.time}>
           <br />
           Дата и время матча:
           <input
@@ -137,7 +137,7 @@ const MatchForm = ({
         </InputWithError>
         <br />
         <p>если матч завершился без счета - указывать {'"w/o"'}</p>
-        <InputWithError errorMessage={errors.score?.message}>
+        <InputWithError error={errors.score}>
           <input
             placeholder="Счет"
             {...register('score', {
@@ -149,7 +149,7 @@ const MatchForm = ({
           />
         </InputWithError>
         <br />
-        <InputWithError errorMessage={errors.youtube_link?.message}>
+        <InputWithError error={errors.youtube_link}>
           <input
             className={formStyles.youtubeLink}
             placeholder="Ссылка на ютюб"
