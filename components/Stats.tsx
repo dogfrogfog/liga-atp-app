@@ -32,10 +32,7 @@ const Stats = ({
         </span>
       )}
       <span className={styles.valueName}>Финалы</span>
-      <span>
-        {p1Stats &&
-          (p1Stats.tournaments_finals || 0) - (p1Stats.tournaments_wins || 0)}
-      </span>
+      <span>{p1Stats && (p1Stats.tournaments_finals || 0)}</span>
     </div>
     <div className={styles.row}>
       {p2Stats && <span>{p2Stats?.matches_played || '0'}</span>}
