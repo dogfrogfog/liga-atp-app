@@ -28,7 +28,7 @@ const Stats = ({
     <div className={styles.row}>
       {p2Stats && (
         <span>
-          {(p2Stats.tournaments_finals || 0) - (p2Stats.tournaments_wins || 0)}
+          {(p2Stats.tournaments_finals || 0)}
         </span>
       )}
       <span className={styles.valueName}>Финалы</span>
