@@ -94,6 +94,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     : [];
 
   const newSelectedPlayersIds = multiSelectToIds(newSelectedPlayers);
+  // может быть в ддвух форматах в старом и новом
   const brackets =
     tournament?.draw &&
     (JSON.parse(tournament.draw)?.brackets as IBracketsUnit[][]);
