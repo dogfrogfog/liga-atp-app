@@ -1,28 +1,42 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { other_page } from '@prisma/client';
 
 import PageTitle from 'ui-kit/PageTitle';
-import LoadingSpinner from 'ui-kit/LoadingSpinner';
-import useOtherPages from 'hooks/useOtherPages';
+import { prisma } from 'services/db';
 import styles from 'styles/Other.module.scss';
 
-const Other: NextPage = () => {
-  const { otherPages, isLoading } = useOtherPages();
+type OtherPageProps = {
+  pages: Pick<other_page, 'title' | 'slug'>[];
+};
 
+const OtherPage: NextPage<OtherPageProps> = ({ pages }) => {
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Прочее</PageTitle>
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        otherPages.map(({ title, slug }) => (
-          <Link key={slug} href={`/other/${slug}`}>
-            <a className={styles.pageLink}>{title}</a>
-          </Link>
-        ))
-      )}
+      {pages.map(({ title, slug }) => (
+        <Link key={slug} href={`/other/${slug}`}>
+          <a className={styles.pageLink}>{title}</a>
+        </Link>
+      ))}
     </div>
   );
 };
 
-export default Other;
+export const getStaticProps = async () => {
+  const pages = await prisma.other_page.findMany({
+    select: {
+      title: true,
+      slug: true,
+    },
+  });
+
+  return {
+    props: {
+      pages,
+    },
+    revalidate: 84600, // 1 day
+  };
+};
+
+export default OtherPage;
