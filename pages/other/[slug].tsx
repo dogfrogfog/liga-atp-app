@@ -30,28 +30,28 @@ export const getStaticPaths = async () => {
   const pages = await prisma.other_page.findMany();
 
   if (!pages) {
-      return null;
+    return null;
   }
 
   return {
-      paths: [],
-      fallback: 'blocking',
+    paths: [],
+    fallback: 'blocking',
   };
-}
+};
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   let page;
   // @ts-ignore
-  if(ctx.params?.slug) {
+  if (ctx.params?.slug) {
     page = await prisma.other_page.findUnique({
       where: {
         // @ts-ignore
         slug: ctx.params.slug,
-      }
+      },
     });
-  } 
+  }
 
-  if(!page) {
+  if (!page) {
     return {
       redirect: {
         permanent: false,
@@ -65,7 +65,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
       pageData: page,
     },
     revalidate: 600, // 10 minutes
-  }
+  };
 };
 
 export default OtherSinglePage;

@@ -32,29 +32,29 @@ export const getStaticPaths = async () => {
   const digests = await prisma.digest.findMany();
 
   if (!digests) {
-      return null;
+    return null;
   }
 
   return {
-      paths: [],
-      fallback: 'blocking',
+    paths: [],
+    fallback: 'blocking',
   };
-}
+};
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   // @ts-ignore
   const id = ctx.params?.pid ? parseInt(ctx.params.pid as string, 10) : null;
 
   let digest;
-  if(id) {
+  if (id) {
     digest = await prisma.digest.findUnique({
       where: {
         id,
-      }
+      },
     });
-  } 
+  }
 
-  if(!digest) {
+  if (!digest) {
     return {
       redirect: {
         permanent: false,

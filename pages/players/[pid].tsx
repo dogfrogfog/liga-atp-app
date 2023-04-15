@@ -379,14 +379,14 @@ const ProfileHeader = ({
 export const getStaticPaths = async () => {
   const players = await prisma.player.findMany();
   if (!players) {
-      return null;
+    return null;
   }
 
   return {
-      paths: [],
-      fallback: 'blocking',
+    paths: [],
+    fallback: 'blocking',
   };
-}
+};
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   // @ts-ignore
