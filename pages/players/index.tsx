@@ -10,10 +10,13 @@ import styles from 'styles/Players.module.scss';
 
 type PlayersPageProps = {
   players: PlayerT[];
-  eloPoints: player_elo_ranking[];
+  playerEloRanking: player_elo_ranking[];
 };
 
-const PlayersPage: NextPage<PlayersPageProps> = ({ players, eloPoints }) => {
+const PlayersPage: NextPage<PlayersPageProps> = ({
+  players,
+  playerEloRanking,
+}) => {
   const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
 
@@ -32,11 +35,11 @@ const PlayersPage: NextPage<PlayersPageProps> = ({ players, eloPoints }) => {
 
   const playersRankingsMap = useMemo(
     () =>
-      eloPoints.reduce((acc, p) => {
+      playerEloRanking.reduce((acc, p) => {
         acc.set(p.player_id as number, p?.elo_points);
         return acc;
       }, new Map<number, number | null>()),
-    [eloPoints]
+    [playerEloRanking]
   );
 
   const filteredPlayers = useMemo(() => {
@@ -88,9 +91,6 @@ const PlayersPage: NextPage<PlayersPageProps> = ({ players, eloPoints }) => {
 
 export const getStaticProps = async () => {
   const players = await prisma.player.findMany({
-    orderBy: {
-      id: 'desc',
-    },
     select: {
       id: true,
       first_name: true,
@@ -103,7 +103,7 @@ export const getStaticProps = async () => {
   // todo
   // if create relation between player and elo_points we dont need this call
   // we can extend select: {} of player.findMany and get this data in one query
-  const eloPoints = await prisma.player_elo_ranking.findMany({
+  const playerEloRanking = await prisma.player_elo_ranking.findMany({
     select: {
       player_id: true,
       elo_points: true,
@@ -113,7 +113,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       players,
-      eloPoints,
+      playerEloRanking,
     },
     revalidate: 3600, // 1 hour
   };

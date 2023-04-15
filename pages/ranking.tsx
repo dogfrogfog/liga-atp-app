@@ -1,14 +1,12 @@
 import { useState, useMemo } from 'react';
 import type { NextPage } from 'next';
-import type { player as PlayerT } from '@prisma/client';
+import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 
 import Tabs from 'ui-kit/Tabs';
 import PageTitle from 'ui-kit/PageTitle';
 import { PlayersList, PlayersListHeader } from 'components/PlayersList';
-import usePlayers from 'hooks/usePlayers';
-import useActivePlayersRankings from 'hooks/useActivePlayersRankings';
 import styles from 'styles/Ranking.module.scss';
-import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import { prisma } from 'services/db';
 
 const RANKING_TABS = [
   'Все',
@@ -21,11 +19,16 @@ const RANKING_TABS = [
   'Сателлит', // -1
 ];
 
-const RankingPage: NextPage = () => {
+type RankingPageProps = {
+  players: PlayerT[];
+  playerEloRanking: Pick<player_elo_ranking, 'elo_points' | 'player_id'>[];
+};
+
+const RankingPage: NextPage<RankingPageProps> = ({
+  players,
+  playerEloRanking,
+}) => {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
-  const { players, isLoading } = usePlayers();
-  const { playersRankings, isLoading: isRankingLoading } =
-    useActivePlayersRankings();
 
   const playersMap = useMemo(
     () =>
@@ -37,7 +40,7 @@ const RankingPage: NextPage = () => {
   );
 
   const filteredPlayers = (() => {
-    let result = playersRankings
+    let result = playerEloRanking
       .map((v) => {
         const p = playersMap.get(v.player_id as number);
 
@@ -106,16 +109,47 @@ const RankingPage: NextPage = () => {
         activeTab={activeTab}
         onChange={handleTabChange}
       />
-      {isLoading || isRankingLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <PlayersListHeader shouldShowPlace />
-          <PlayersList players={filteredPlayers} shouldShowPlace />
-        </>
-      )}
+      <PlayersListHeader shouldShowPlace />
+      <PlayersList players={filteredPlayers} shouldShowPlace />
     </div>
   );
+};
+
+export const getStaticProps = async () => {
+  const players = await prisma.player.findMany({
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      level: true,
+      avatar: true,
+    },
+  });
+
+  // todo
+  // if create relation between player and elo_points we dont need this call
+  // we can extend select: {} of player.findMany and get this data in one query
+  const playerEloRanking = await prisma.player_elo_ranking.findMany({
+    select: {
+      player_id: true,
+      elo_points: true,
+    },
+    where: {
+      expire_date: {
+        // even if we create new player elo ranking expire_date will be today and we will not see it in the response
+        // 1 day ahead just in case of missing some time
+        gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
+      },
+    },
+  });
+
+  return {
+    props: {
+      players,
+      playerEloRanking,
+    },
+    revalidate: 3600, // 1 hour
+  };
 };
 
 export default RankingPage;
