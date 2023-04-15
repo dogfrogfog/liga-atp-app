@@ -2,14 +2,16 @@ import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 import type { player as PlayerT } from '@prisma/client';
-
-import usePlayers from 'hooks/usePlayers';
 import PageTitle from 'ui-kit/PageTitle';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
+import { prisma } from 'services/db';
 import styles from 'styles/H2h.module.scss';
 
-const H2hPage: NextPage = () => {
-  const { players } = usePlayers();
+type H2hPageProps = {
+  players: PlayerT[];
+};
+
+const H2hPage: NextPage<H2hPageProps> = ({ players }) => {
   const router = useRouter();
   const [selectedPlayers, setPlayers] = useState<PlayerT[]>([]);
 
@@ -74,6 +76,23 @@ const H2hPage: NextPage = () => {
       </div>
     </div>
   );
+};
+
+export const getStaticProps = async () => {
+  const players = await prisma.player.findMany({
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+    },
+  });
+
+  return {
+    props: {
+      players,
+    },
+    revalidate: 3600, // 1 hour
+  };
 };
 
 export default H2hPage;
