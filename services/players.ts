@@ -4,7 +4,7 @@ import type { player as PlayerT } from '@prisma/client';
 export const createPlayer = async (
   playerWElo: PlayerT & { elo_points: number | null }
 ) => {
-  const response = await axios.post<PlayerT>('/api/players', {
+  const response = await axios.post<PlayerT>('/api/player', {
     data: playerWElo,
   });
 
@@ -16,7 +16,7 @@ export const createPlayer = async (
 };
 
 export const updatePlayer = async (player: PlayerT) => {
-  const response = await axios.put<PlayerT>('/api/players', { data: player });
+  const response = await axios.put<PlayerT>('/api/player', { data: player });
 
   if (response.status === 200) {
     return { isOk: true };
@@ -26,7 +26,7 @@ export const updatePlayer = async (player: PlayerT) => {
 };
 
 export const deleteSelectedPlayer = async (id: number) => {
-  const response = await axios.delete('/api/players', { data: id });
+  const response = await axios.delete('/api/player', { data: id });
 
   if (response.status === 200) {
     return { isOk: true };
