@@ -1,22 +1,24 @@
 import { useMemo, useState, ChangeEvent } from 'react';
-import { player as PlayerT } from '@prisma/client';
+import { player as PlayerT, player_elo_ranking } from '@prisma/client';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
-
-import { LEVEL_NUMBER_VALUES } from 'constants/values';
+import { prisma } from 'services/db';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
-import usePlayers from 'hooks/usePlayers';
-import useEloPoints from 'hooks/useEloPoints';
 import styles from 'styles/Players.module.scss';
-import LoadingSpinner from 'ui-kit/LoadingSpinner';
 
-const PlayersIndexPage: NextPage = () => {
+type PlayersPageProps = {
+  players: PlayerT[];
+  playerEloRanking: player_elo_ranking[];
+};
+
+const PlayersPage: NextPage<PlayersPageProps> = ({
+  players,
+  playerEloRanking,
+}) => {
   const router = useRouter();
-  const { players, isLoading } = usePlayers();
   const [selectedLvl, setSelectedLvl] = useState('');
-  const { eloPoints } = useEloPoints();
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -33,11 +35,11 @@ const PlayersIndexPage: NextPage = () => {
 
   const playersRankingsMap = useMemo(
     () =>
-      eloPoints.reduce((acc, p) => {
+      playerEloRanking.reduce((acc, p) => {
         acc.set(p.player_id as number, p?.elo_points);
         return acc;
       }, new Map<number, number | null>()),
-    [eloPoints]
+    [playerEloRanking]
   );
 
   const filteredPlayers = useMemo(() => {
@@ -82,13 +84,39 @@ const PlayersIndexPage: NextPage = () => {
         </div>
       </PageTitle>
       <PlayersListHeader />
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <PlayersList players={filteredPlayers} />
-      )}
+      <PlayersList players={filteredPlayers} />
     </div>
   );
 };
 
-export default PlayersIndexPage;
+export const getStaticProps = async () => {
+  const players = await prisma.player.findMany({
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      level: true,
+      avatar: true,
+    },
+  });
+
+  // todo
+  // if create relation between player and elo_points we dont need this call
+  // we can extend select: {} of player.findMany and get this data in one query
+  const playerEloRanking = await prisma.player_elo_ranking.findMany({
+    select: {
+      player_id: true,
+      elo_points: true,
+    },
+  });
+
+  return {
+    props: {
+      players,
+      playerEloRanking,
+    },
+    revalidate: 600, // 10 min
+  };
+};
+
+export default PlayersPage;

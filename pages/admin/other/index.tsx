@@ -1,7 +1,5 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import { Fragment } from 'react';
-
 import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';

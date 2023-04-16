@@ -11,20 +11,6 @@ import getNewEloAfterMatch from 'utils/elo/getNewEloAfterMatch';
 const YEAR_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 30 * 6 * 2;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'GET') {
-    const playersEloRankings = await prisma.player_elo_ranking.findMany({
-      where: {
-        expire_date: {
-          // even if we create new player elo ranking expire_date will be today and we will not see it in the response
-          // 1 day ahead just in case of missing some time
-          gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
-        },
-      },
-    });
-
-    res.json(playersEloRankings);
-  }
-
   if (req.method === 'POST') {
     const now = new Date();
     const { id: matchId, ...matchData } = req.body.data;

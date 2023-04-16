@@ -28,17 +28,47 @@ const DigestPage: NextPage<{ digest: DigestT }> = ({ digest }) => {
   );
 };
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const digest = await prisma.digest.findUnique({
-    where: {
-      id: parseInt(ctx.query.pid as string, 10),
-    },
-  });
+export const getStaticPaths = async () => {
+  const digests = await prisma.digest.findMany();
+
+  if (!digests) {
+    return null;
+  }
+
+  return {
+    paths: [],
+    // paths: digests.map(({ id }) => ({ params: { pid: `${id}` } })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps = async (ctx: NextPageContext) => {
+  // @ts-ignore
+  const id = ctx.params?.pid ? parseInt(ctx.params.pid as string, 10) : null;
+
+  let digest;
+  if (id) {
+    digest = await prisma.digest.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  if (!digest) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
+  }
 
   return {
     props: {
       digest,
     },
+    revalidate: 600, // 10 min
   };
 };
 

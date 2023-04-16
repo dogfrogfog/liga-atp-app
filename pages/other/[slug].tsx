@@ -26,26 +26,47 @@ const OtherSinglePage: NextPage<OtherPageProps> = ({ pageData }) => {
   );
 };
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const pageData = await prisma.other_page.findUnique({
-    where: {
-      slug: ctx.query.slug as string,
-    },
-  });
+export const getStaticPaths = async () => {
+  const pages = await prisma.other_page.findMany();
 
-  if (!pageData) {
+  if (!pages) {
+    return null;
+  }
+
+  return {
+    paths: [],
+
+    // paths: pages.map(({ slug }) => ({ params: { slug } })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps = async (ctx: NextPageContext) => {
+  let page;
+  // @ts-ignore
+  if (ctx.params?.slug) {
+    page = await prisma.other_page.findUnique({
+      where: {
+        // @ts-ignore
+        slug: ctx.params.slug,
+      },
+    });
+  }
+
+  if (!page) {
     return {
       redirect: {
         permanent: false,
-        destination: '/other',
+        destination: '/404',
       },
     };
   }
 
   return {
     props: {
-      pageData,
+      pageData: page,
     },
+    revalidate: 600, // 10 min
   };
 };
 

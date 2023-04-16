@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { NextPage, NextPageContext } from 'next';
+import type { NextPage, NextPageContext, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { FaUserAlt } from 'react-icons/fa';
@@ -376,8 +376,22 @@ const ProfileHeader = ({
   );
 };
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const id = parseInt(ctx.query.pid as string, 10);
+export const getStaticPaths = async () => {
+  const players = await prisma.player.findMany();
+  if (!players) {
+    return null;
+  }
+
+  return {
+    paths: [],
+    // paths: players.map(({ id }) => ({ params: { pid: `${id}` } })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps = async (ctx: NextPageContext) => {
+  // @ts-ignore
+  const id = parseInt(ctx.params.pid as string, 10);
 
   if (!id) {
     return {
@@ -406,7 +420,8 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   const digests = await prisma.digest.findMany({
     where: {
       mentioned_players_ids: {
-        has: parseInt(ctx.query.pid as string, 10),
+        // @ts-ignore
+        has: parseInt(ctx.params.pid as string, 10),
       },
     },
   });
@@ -418,6 +433,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       eloPoints: eloPoints?.elo_points,
       eloChanges,
     },
+    revalidate: 600, // 10 min
   };
 };
 
