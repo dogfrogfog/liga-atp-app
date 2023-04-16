@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import { format, startOfISOWeek } from 'date-fns';
 import cl from 'classnames';
-
 import useTournaments from 'hooks/useTournaments';
 import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
 import Tabs from 'ui-kit/Tabs';
@@ -27,8 +26,8 @@ import {
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
-import usePlayers from 'hooks/usePlayers';
 import getTournamentWinners from 'utils/getTournamentWinners';
+import { prisma } from 'services/db';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
@@ -38,53 +37,33 @@ const filterFn = (inputValue: string) => (t: TournamentT) =>
 
 const now = new Date();
 
-const TournamentsPage: NextPage = () => {
+type TournamentsPageProps = {
+  activeTournaments: TournamentT[];
+  openToRegistrationTournaments: TournamentT[];
+  players: PlayerT[];
+};
+
+const TournamentsPage: NextPage<TournamentsPageProps> = ({
+  activeTournaments,
+  openToRegistrationTournaments,
+  players,
+}) => {
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
 
   const { tournaments, isLoading } = useTournaments();
-  const { players } = usePlayers();
   const router = useRouter();
-
-  const playersMap = useMemo(
-    () =>
-      players.reduce((acc, p) => {
-        acc.set(p.id, p);
-        return acc;
-      }, new Map<number, PlayerT>()),
-    [players]
-  );
-
-  const { active, recording } = useMemo(
-    () =>
-      tournaments.reduce(
-        (acc, v) => {
-          if (v.status === 1) {
-            acc.recording.push(v);
-          }
-          if (v.status === 2) {
-            acc.active.push(v);
-          }
-          return acc;
-        },
-        {
-          active: [] as TournamentT[],
-          recording: [] as TournamentT[],
-        }
-      ),
-    [tournaments]
-  );
 
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
-        if (active.length === 0) {
+        if (activeTournaments.length === 0) {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
-        return active.map((v) => (
+        return activeTournaments.map((v) => (
           <Link key={v.id} href={'/tournaments/' + v.id}>
             <a className={styles.link}>
               <TournamentListItem
@@ -105,7 +84,7 @@ const TournamentsPage: NextPage = () => {
           </Link>
         ));
       case TOURNAMENT_TABS[1]:
-        if (recording.length === 0) {
+        if (openToRegistrationTournaments.length === 0) {
           return <NotFoundMessage message="Нет доступных турниров" />;
         }
 
@@ -130,7 +109,7 @@ const TournamentsPage: NextPage = () => {
             DAY_IN_MILLISECONDS * 10;
 
           if (weekFilterIndex === i) {
-            filteredTournaments = recording.filter((v) => {
+            filteredTournaments = openToRegistrationTournaments.filter((v) => {
               if (!v.start_date) {
                 return false;
               }
@@ -216,7 +195,7 @@ const TournamentsPage: NextPage = () => {
           pages.push(
             <FinishedTournamentsList
               key={i}
-              playersMap={playersMap}
+              players={players}
               playedTournamentsPage={i + 1}
               finishedTournamentsType={finishedTournamentsType}
               isLastPage={i + 1 === playedTournamentsPage}
@@ -272,7 +251,7 @@ type FinishedTournamentsListProps = {
   playedTournamentsPage: number;
   finishedTournamentsType: number;
   isLastPage: boolean;
-  playersMap: Map<number, PlayerT>;
+  players: PlayerT[];
   setPlayedTournamentsPage: Dispatch<SetStateAction<number>>;
 };
 
@@ -281,11 +260,20 @@ const FinishedTournamentsList = memo(
     playedTournamentsPage,
     finishedTournamentsType,
     isLastPage,
-    playersMap,
+    players,
     setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
     const { playedTournaments, isLoading } = usePlayedTournamnts(
       playedTournamentsPage
+    );
+
+    const playersMap = useMemo(
+      () =>
+        players.reduce((acc, p) => {
+          acc.set(p.id, p);
+          return acc;
+        }, new Map<number, PlayerT>()),
+      [players]
     );
 
     const filteredFinishedTournaments = playedTournaments.filter((v) =>
@@ -339,5 +327,49 @@ const FinishedTournamentsList = memo(
     );
   }
 );
+
+export const getStaticProps = async () => {
+  const players = await prisma.player.findMany({
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+    },
+  });
+
+  const tournaments = await prisma.tournament.findMany({
+    where: {
+      status: {
+        in: [1, 2],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      start_date: true,
+      is_finished: true,
+    },
+  });
+
+  let activeTournaments = [];
+  let openToRegistrationTournaments = [];
+  for (const t of tournaments) {
+    if (t.status === 1) {
+      openToRegistrationTournaments.push(t);
+    } else if (t.status === 2) {
+      activeTournaments.push(t);
+    }
+  }
+
+  return {
+    props: {
+      players,
+      activeTournaments,
+      openToRegistrationTournaments,
+    },
+    revalidate: 600, // 10 min
+  };
+};
 
 export default TournamentsPage;
