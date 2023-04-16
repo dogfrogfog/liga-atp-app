@@ -36,7 +36,7 @@ export const getStaticPaths = async () => {
   }
 
   return {
-    paths: [],
+    paths: digests.map(({ id }) => ({ params: { pid: `${id}` } })),
     fallback: 'blocking',
   };
 };

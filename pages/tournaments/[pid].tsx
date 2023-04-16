@@ -1,6 +1,6 @@
 import { useState, Fragment, useRef, useMemo } from 'react';
 import html2canvas from 'html2canvas';
-import type { NextPage, NextPageContext } from 'next';
+import type { NextPage } from 'next';
 import {
   tournament as TournamentT,
   match as MatchT,
@@ -394,10 +394,30 @@ const TournamentPage: NextPage<{
   );
 };
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
+export const getStaticPaths = async () => {
+  const tournaments = await prisma.tournament.findMany();
+  if (!tournaments) {
+    return null;
+  }
+
+  return {
+    paths: tournaments.map(({ id }) => ({ params: { pid: `${id}` } })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps = async (ctx: any) => {
+  const id = parseInt(ctx.params.pid as string, 10);
+
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
   const tournament = await prisma.tournament.findUnique({
     where: {
-      id: parseInt(ctx.query.pid as string, 10),
+      id,
     },
     include: {
       match: true,
@@ -434,6 +454,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       brackets,
       registeredPlayers,
     },
+    revalidate: 600, // 10 min
   };
 };
 

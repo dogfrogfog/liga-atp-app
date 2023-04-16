@@ -34,7 +34,7 @@ export const getStaticPaths = async () => {
   }
 
   return {
-    paths: [],
+    paths: pages.map(({ slug }) => ({ params: { slug } })),
     fallback: 'blocking',
   };
 };
@@ -64,7 +64,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
     props: {
       pageData: page,
     },
-    revalidate: 600, // 10 minutes
+    revalidate: 600, // 10 min
   };
 };
 

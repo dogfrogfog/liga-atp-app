@@ -115,7 +115,7 @@ export const getStaticProps = async () => {
       players,
       playerEloRanking,
     },
-    revalidate: 3600, // 1 hour
+    revalidate: 600, // 10 min
   };
 };
 

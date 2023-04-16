@@ -432,7 +432,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
       eloPoints: eloPoints?.elo_points,
       eloChanges,
     },
-    revalidate: 60, // 1 min
+    revalidate: 600, // 10 min
   };
 };
 
