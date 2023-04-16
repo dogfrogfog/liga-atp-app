@@ -34,7 +34,9 @@ export const getStaticPaths = async () => {
   }
 
   return {
-    paths: pages.map(({ slug }) => ({ params: { slug } })),
+    paths: [], 
+
+    // paths: pages.map(({ slug }) => ({ params: { slug } })),
     fallback: 'blocking',
   };
 };

@@ -401,7 +401,9 @@ export const getStaticPaths = async () => {
   }
 
   return {
-    paths: tournaments.map(({ id }) => ({ params: { pid: `${id}` } })),
+    paths: [], 
+
+    // paths: tournaments.map(({ id }) => ({ params: { pid: `${id}` } })),
     fallback: 'blocking',
   };
 };

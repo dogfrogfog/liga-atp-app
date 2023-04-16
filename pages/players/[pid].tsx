@@ -383,7 +383,8 @@ export const getStaticPaths = async () => {
   }
 
   return {
-    paths: players.map(({ id }) => ({ params: { pid: `${id}` } })),
+    paths: [],
+    // paths: players.map(({ id }) => ({ params: { pid: `${id}` } })),
     fallback: 'blocking',
   };
 };
