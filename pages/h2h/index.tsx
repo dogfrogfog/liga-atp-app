@@ -91,7 +91,7 @@ export const getStaticProps = async () => {
     props: {
       players,
     },
-    revalidate: 600, // 10 min
+    revalidate: 10, // 10 min
   };
 };
 
