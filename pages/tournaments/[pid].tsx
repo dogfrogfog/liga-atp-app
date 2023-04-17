@@ -456,7 +456,7 @@ export const getStaticProps = async (ctx: any) => {
       brackets,
       registeredPlayers,
     },
-    revalidate: 600, // 10 min
+    revalidate: 60, // 10 min
   };
 };
 
