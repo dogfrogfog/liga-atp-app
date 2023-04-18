@@ -8,7 +8,7 @@ import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './PlayersList.module.scss';
 
 type PlayersListProps = {
-  players: (PlayerT & { elo_points: any })[];
+  players: (PlayerT & { elo_points: number })[];
   shouldShowPlace?: boolean;
 };
 
@@ -17,7 +17,7 @@ export const PlayersList = ({
   shouldShowPlace = false,
 }: PlayersListProps) => (
   <div className={styles.list}>
-    {players.map(
+    {players.sort((a, b) => b.elo_points - a.elo_points).map(
       ({ id, first_name, last_name, level, avatar, elo_points }, i) => (
         <Link key={id} href={'/players/' + id}>
           <div

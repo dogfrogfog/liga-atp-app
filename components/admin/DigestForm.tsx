@@ -69,7 +69,7 @@ const DigestForm = ({
             options={playersToMultiSelect(players)}
             value={newSelectedPlayers}
             onChange={setNewSelectedPlayers}
-            labelledBy="Выбирите игроков из списка"
+            labelledBy="Выберите игроков из списка"
           />
         </div>
       </div>

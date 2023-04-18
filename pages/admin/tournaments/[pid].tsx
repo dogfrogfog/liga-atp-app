@@ -302,7 +302,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
             options={playersToMultiSelect(players)}
             value={newSelectedPlayers}
             onChange={setNewSelectedPlayers}
-            labelledBy="Выбирите игроков из списка"
+            labelledBy="Выберите игроков из списка"
           />
           {newSelectedPlayersIds.length > 0 ? (
             <div className={styles.playersList}>
@@ -341,7 +341,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
           openModalForExistingMatch={openModalForExistingMatch}
         />
       ) : (
-        'Выбирите тип сетки турнира чтобы создать турнир'
+        'Выберите тип сетки турнира чтобы создать турнир'
       )}
       {modalStatus.isOpen && (
         <Modal title="Редактировать матч" handleClose={handleReset}>
