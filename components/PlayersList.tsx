@@ -8,7 +8,7 @@ import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './PlayersList.module.scss';
 
 type PlayersListProps = {
-  players: (PlayerT & { elo_points: number })[];
+  players: (PlayerT & { elo_points: any })[];
   shouldShowPlace?: boolean;
 };
 
