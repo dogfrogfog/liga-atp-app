@@ -28,7 +28,7 @@ import TournamentTypeFilter from 'components/TournamentTypeFilter';
 import StatsData from 'components/Stats';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import Tabs from 'ui-kit/Tabs';
-import useMatches from 'hooks/useMatches';
+import usePlayerMatches from 'hooks/usePlayerMatches';
 import useStats from 'hooks/useStats';
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import type { MatchWithTournamentType } from 'utils/getOpponents';
@@ -55,7 +55,7 @@ const SingleProfilePage: NextPage<{
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
 
-  const { matches } = useMatches(player.id);
+  const { matches } = usePlayerMatches(player.id);
   const { statsData } = useStats(
     player.id,
     statsTabTournamentType === 999 ? undefined : statsTabTournamentType
