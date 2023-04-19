@@ -113,15 +113,20 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       [] as number[]
     );
 
+    const drawWasChanged = tournament?.draw_type !== tournamentFields.draw_type;
+    const newDraw = drawWasChanged
+      ? tournamentFields.draw
+      : JSON.stringify({
+          brackets,
+        });
+
     const res = await updateTournament({
       id: tournament?.id as number,
       ...tournamentFields,
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
-      draw: !tournamentFields.draw ? JSON.stringify({
-        brackets: brackets,
-      }) : tournamentFields.draw,
+      draw: newDraw,
     });
 
     if (res.isOk) {
