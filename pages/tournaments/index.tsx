@@ -52,7 +52,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   openToRegistrationTournaments,
   players,
 }) => {
-  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[1]);
+  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
