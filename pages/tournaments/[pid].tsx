@@ -28,7 +28,7 @@ import {
 import styles from 'styles/Tournament.module.scss';
 import { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { addPlayerToTheTournament } from 'services/tournaments';
-import usePlayers from 'hooks/usePlayers';
+import useTournamentMatches from 'hooks/useTournamentMatches';
 import useEloPoints from 'hooks/useEloPoints';
 import { getRegPlayersIds } from 'utils/parsePlayersOrder';
 import LoadingShadow from 'components/LoadingShadow';
@@ -38,12 +38,10 @@ const TOURNAMENT_TABS = ['Сетка', 'Список игроков'];
 const TournamentPage: NextPage<{
   brackets: IBracketsUnit[][];
   tournament: TournamentT;
-  tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
-}> = ({ tournament, tournamentMatches, brackets, registeredPlayers }) => {
+}> = ({ tournament, brackets, registeredPlayers }) => {
   const downloadImageRef = useRef();
-
-  const { players: allPlayers } = usePlayers();
+  const { matches } = useTournamentMatches(tournament.id);
   const { eloPoints } = useEloPoints();
 
   const playersRankingsMap = useMemo(
@@ -82,19 +80,19 @@ const TournamentPage: NextPage<{
           tournament.is_finished &&
           (!brackets || (brackets && !Array.isArray(brackets[0])))
         ) {
-          const lastMatch = tournamentMatches[tournamentMatches.length - 1];
+          const lastMatch = matches[matches.length - 1];
 
           let winners = [] as PlayerT[];
           if (isDoubles) {
             const winnersIds = lastMatch.winner_id?.split('012340');
 
-            const playersWhoWin = allPlayers.filter((p) => {
+            const playersWhoWin = registeredPlayers.filter((p) => {
               return winnersIds?.includes(p.id + '');
             });
 
             winners = playersWhoWin;
           } else {
-            const targetPlayer = allPlayers.find(
+            const targetPlayer = registeredPlayers.find(
               (p) => lastMatch.winner_id === p.id + ''
             ) as PlayerT;
 
@@ -128,7 +126,7 @@ const TournamentPage: NextPage<{
 
         // new brackets.draw format
         const lastMatch = isFinished
-          ? tournamentMatches.find(
+          ? matches.find(
               (v) => v.id === brackets[brackets.length - 1][0].matchId
             )
           : null;
@@ -146,7 +144,7 @@ const TournamentPage: NextPage<{
           const team2 = [lastMatch?.player2_id, lastMatch?.player4_id];
 
           if (team1.includes(parseInt(lastMatch?.winner_id as string, 10))) {
-            winnerName = allPlayers.reduce((acc, p) => {
+            winnerName = registeredPlayers.reduce((acc, p) => {
               if (team1.includes(p.id)) {
                 if (acc) {
                   acc += ` / ${(p.first_name as string)[0]}. ${p.last_name}`;
@@ -159,7 +157,7 @@ const TournamentPage: NextPage<{
           }
 
           if (team2.includes(parseInt(lastMatch?.winner_id as string, 10))) {
-            winnerName = allPlayers.reduce((acc, p) => {
+            winnerName = registeredPlayers.reduce((acc, p) => {
               if (team2.includes(p.id)) {
                 if (acc) {
                   acc += ` / ${(p.first_name as string)[0]}. ${p.last_name}`;
@@ -191,7 +189,7 @@ const TournamentPage: NextPage<{
               }
               isDoubles={isDoubles}
               brackets={brackets}
-              tournamentMatches={tournamentMatches}
+              tournamentMatches={matches}
               registeredPlayers={registeredPlayers}
             />
           </>
@@ -394,19 +392,12 @@ const TournamentPage: NextPage<{
   );
 };
 
-export const getStaticPaths = async () => {
-  const tournaments = await prisma.tournament.findMany();
-  if (!tournaments) {
-    return null;
-  }
-
+export async function getStaticPaths() {
   return {
     paths: [],
-
-    // paths: tournaments.map(({ id }) => ({ params: { pid: `${id}` } })),
     fallback: 'blocking',
   };
-};
+}
 
 export const getStaticProps = async (ctx: any) => {
   const id = parseInt(ctx.params.pid as string, 10);
@@ -421,12 +412,8 @@ export const getStaticProps = async (ctx: any) => {
     where: {
       id,
     },
-    include: {
-      match: true,
-    },
   });
 
-  const { match, ...rest } = tournament || {};
   const isDoubles = !!DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
     tournament?.tournament_type as number
   );
@@ -451,12 +438,11 @@ export const getStaticProps = async (ctx: any) => {
 
   return {
     props: {
-      tournament: rest,
-      tournamentMatches: match,
+      tournament,
       brackets,
       registeredPlayers,
     },
-    revalidate: 60, // 10 min
+    revalidate: 60, // 1 min
   };
 };
 

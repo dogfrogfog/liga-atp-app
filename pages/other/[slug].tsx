@@ -26,20 +26,12 @@ const OtherSinglePage: NextPage<OtherPageProps> = ({ pageData }) => {
   );
 };
 
-export const getStaticPaths = async () => {
-  const pages = await prisma.other_page.findMany();
-
-  if (!pages) {
-    return null;
-  }
-
+export async function getStaticPaths() {
   return {
     paths: [],
-
-    // paths: pages.map(({ slug }) => ({ params: { slug } })),
     fallback: 'blocking',
   };
-};
+}
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   let page;
@@ -66,7 +58,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
     props: {
       pageData: page,
     },
-    revalidate: 60, // 10 min
+    revalidate: 60, // 1 min
   };
 };
 

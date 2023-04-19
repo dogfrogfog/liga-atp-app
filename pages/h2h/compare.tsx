@@ -16,7 +16,7 @@ import {
   DOUBLES_TOURNAMENT_TYPES_NUMBER,
 } from 'constants/values';
 import useStats from 'hooks/useStats';
-import useMatches from 'hooks/useMatches';
+import usePlayerMatches from 'hooks/usePlayerMatches';
 import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import removeMatchesDuplicates from 'utils/removeMatchesDuplicates';
 import styles from 'styles/Compare.module.scss';
@@ -33,8 +33,8 @@ const CompareTwoPlayersPage: NextPage<{
 
   const { statsData: p1StatsData } = useStats(p1?.id);
   const { statsData: p2StatsData } = useStats(p2?.id);
-  const { matches: p1Matches } = useMatches(p1?.id as number);
-  const { matches: p2Matches } = useMatches(p2?.id as number);
+  const { matches: p1Matches } = usePlayerMatches(p1?.id as number);
+  const { matches: p2Matches } = usePlayerMatches(p2?.id as number);
 
   // @ts-ignore
   const { playersMatches, p1Wins, p2Wins } = useMemo(

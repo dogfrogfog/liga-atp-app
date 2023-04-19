@@ -9,48 +9,77 @@ export default async (
   res: NextApiResponse<MatchT[] | MatchT>
 ) => {
   if (req.method === 'GET') {
-    const intId = parseInt(req.query.id as string, 10);
+    const tournamentId = parseInt(req.query.tournamentId as string, 10);
+    const playerId = parseInt(req.query.playerId as string, 10);
 
-    if (!intId) {
+    console.log(tournamentId)
+
+    if (!playerId || !tournamentId) {
       res.status(404);
     }
 
-    const matches = await prisma.match.findMany({
-      where: {
-        OR: [
-          {
-            player1_id: {
-              equals: intId,
-            },
+    let matches: MatchT[] = [];
+
+    if (tournamentId) {
+      matches = await prisma.match.findMany({
+        where: {
+          tournament_id: {
+            equals: tournamentId,
           },
-          {
-            player2_id: {
-              equals: intId,
+        },
+        include: {
+          player_match_player1_idToplayer: true,
+          player_match_player2_idToplayer: true,
+          player_match_player3_idToplayer: true,
+          player_match_player4_idToplayer: true,
+          tournament: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+      });
+    }
+
+    if (playerId) {
+      matches = await prisma.match.findMany({
+        where: {
+          OR: [
+            {
+              player1_id: {
+                equals: playerId,
+              },
             },
-          },
-          {
-            player3_id: {
-              equals: intId,
+            {
+              player2_id: {
+                equals: playerId,
+              },
             },
-          },
-          {
-            player4_id: {
-              equals: intId,
+            {
+              player3_id: {
+                equals: playerId,
+              },
             },
-          },
-        ],
-      },
-      include: {
-        player_match_player1_idToplayer: true,
-        player_match_player2_idToplayer: true,
-        player_match_player3_idToplayer: true,
-        player_match_player4_idToplayer: true,
-        tournament: true,
-      },
-      orderBy: {
-        id: 'desc',
-      },
-    });
+            {
+              player4_id: {
+                equals: playerId,
+              },
+            },
+          ],
+        },
+        include: {
+          player_match_player1_idToplayer: true,
+          player_match_player2_idToplayer: true,
+          player_match_player3_idToplayer: true,
+          player_match_player4_idToplayer: true,
+          tournament: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+      });
+    }
+
+    console.log(matches)
 
     res.json(matches);
   }
