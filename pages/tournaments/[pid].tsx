@@ -394,19 +394,12 @@ const TournamentPage: NextPage<{
   );
 };
 
-export const getStaticPaths = async () => {
-  const tournaments = await prisma.tournament.findMany();
-  if (!tournaments) {
-    return null;
-  }
-
+export async function getStaticPaths() {
   return {
-    paths: [],
-
-    // paths: tournaments.map(({ id }) => ({ params: { pid: `${id}` } })),
-    fallback: 'blocking',
+      paths: [],
+      fallback: 'blocking',
   };
-};
+}
 
 export const getStaticProps = async (ctx: any) => {
   const id = parseInt(ctx.params.pid as string, 10);
