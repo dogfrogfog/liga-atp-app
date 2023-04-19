@@ -12,4 +12,4 @@ export default async (
 
     res.json(players);
   }
-}
+};

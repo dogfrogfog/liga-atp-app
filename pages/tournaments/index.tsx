@@ -10,7 +10,14 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
-import { format, startOfISOWeek } from 'date-fns';
+import {
+  format,
+  startOfWeek,
+  addDays,
+  endOfWeek,
+  addWeeks,
+  getWeek,
+} from 'date-fns';
 import cl from 'classnames';
 import useTournaments from 'hooks/useTournaments';
 import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
@@ -30,12 +37,9 @@ import getTournamentWinners from 'utils/getTournamentWinners';
 import { prisma } from 'services/db';
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
-const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
 const filterFn = (inputValue: string) => (t: TournamentT) =>
   (t?.name as string).toLowerCase().includes(inputValue);
-
-const now = new Date();
 
 type TournamentsPageProps = {
   activeTournaments: TournamentT[];
@@ -48,7 +52,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   openToRegistrationTournaments,
   players,
 }) => {
-  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
+  const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[1]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
@@ -84,29 +88,27 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
           </Link>
         ));
       case TOURNAMENT_TABS[1]:
-        if (openToRegistrationTournaments.length === 0) {
-          return <NotFoundMessage message="Нет доступных турниров" />;
-        }
-
-        let weeksFilterData: {
-          weekNumber: number;
-          startDateStr: string;
-          endDateStr: string;
-        }[] = [];
-        // + 1 because filters is for upcoming tournaments
-        // so we should start from next week
-        const firstWeekNumber = parseInt(format(now, 'I')) + 1;
-
+        const now = Date.now();
         let filteredTournaments: TournamentT[] = [];
+
+        // since we filtering only upcoming tournaments with open registration
+        // first filter option should be start of next tennis week
+        // tennis week starts on Thursday and finishes on Wednesday
+        const filterFirstWeekStartDate = startOfWeek(addWeeks(now, 1), {
+          weekStartsOn: 4,
+        });
+        const filterWeekOptions = [] as any[];
+
         // 4 is number of weeks available in filter
-        for (let i = 1; i <= 4; i++) {
-          const skipWeeks = i * 7 * DAY_IN_MILLISECONDS;
-          const tennisWeekStart =
-            startOfISOWeek(now).getTime() + skipWeeks + DAY_IN_MILLISECONDS * 3;
-          const tennisWeekEnd =
-            startOfISOWeek(now).getTime() +
-            skipWeeks +
-            DAY_IN_MILLISECONDS * 10;
+        for (let i = 0; i < 4; i++) {
+          const weekStartDate = addDays(filterFirstWeekStartDate, i * 7);
+          const weekEndDate = endOfWeek(weekStartDate, { weekStartsOn: 4 });
+
+          filterWeekOptions.push({
+            startDate: format(weekStartDate, 'dd.MM'),
+            endDate: format(weekEndDate, 'dd.MM'),
+            week: getWeek(weekStartDate),
+          });
 
           if (weekFilterIndex === i) {
             filteredTournaments = openToRegistrationTournaments.filter((v) => {
@@ -114,46 +116,37 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
                 return false;
               }
 
-              const tournamentStartTime = new Date(v.start_date).getTime();
-
+              const tournamentStartTime = new Date(v.start_date);
               if (
-                tournamentStartTime > tennisWeekStart &&
-                tournamentStartTime < tennisWeekEnd
+                tournamentStartTime > weekStartDate &&
+                tournamentStartTime < weekEndDate
               ) {
                 return true;
               }
             });
           }
-
-          weeksFilterData.push({
-            weekNumber: firstWeekNumber + i,
-            startDateStr: format(tennisWeekStart, 'dd.MM'),
-            endDateStr: format(tennisWeekEnd, 'dd.MM'),
-          });
         }
 
         return (
           <div>
             <div className={styles.weekFiltersContainer}>
-              {weeksFilterData.map(
-                ({ startDateStr, endDateStr, weekNumber }, i) => (
-                  <button
-                    key={startDateStr}
-                    onClick={() => setWeekFilterIndex(i)}
-                    className={cl(
-                      styles.week,
-                      weekFilterIndex === i ? styles.active : ''
-                    )}
-                  >
-                    <p className={styles.weekNumber}>{weekNumber} неделя</p>
-                    <p className={styles.weekRange}>
-                      <i>
-                        {startDateStr}-{endDateStr}
-                      </i>
-                    </p>
-                  </button>
-                )
-              )}
+              {filterWeekOptions.map(({ startDate, endDate, week }, i) => (
+                <button
+                  key={startDate}
+                  onClick={() => setWeekFilterIndex(i)}
+                  className={cl(
+                    styles.week,
+                    weekFilterIndex === i ? styles.active : ''
+                  )}
+                >
+                  <p className={styles.weekNumber}>{week} неделя</p>
+                  <p className={styles.weekRange}>
+                    <i>
+                      {startDate}-{endDate}
+                    </i>
+                  </p>
+                </button>
+              ))}
             </div>
             {filteredTournaments.length > 0 ? (
               filteredTournaments.map((v) => (
