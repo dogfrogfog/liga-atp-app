@@ -376,18 +376,12 @@ const ProfileHeader = ({
   );
 };
 
-export const getStaticPaths = async () => {
-  const players = await prisma.player.findMany();
-  if (!players) {
-    return null;
-  }
-
+export async function getStaticPaths() {
   return {
-    paths: [],
-    // paths: players.map(({ id }) => ({ params: { pid: `${id}` } })),
-    fallback: 'blocking',
+      paths: [],
+      fallback: 'blocking',
   };
-};
+}
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   // @ts-ignore

@@ -28,19 +28,12 @@ const DigestPage: NextPage<{ digest: DigestT }> = ({ digest }) => {
   );
 };
 
-export const getStaticPaths = async () => {
-  const digests = await prisma.digest.findMany();
-
-  if (!digests) {
-    return null;
-  }
-
+export async function getStaticPaths() {
   return {
-    paths: [],
-    // paths: digests.map(({ id }) => ({ params: { pid: `${id}` } })),
-    fallback: 'blocking',
+      paths: [],
+      fallback: 'blocking',
   };
-};
+}
 
 export const getStaticProps = async (ctx: NextPageContext) => {
   // @ts-ignore
