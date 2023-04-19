@@ -378,8 +378,8 @@ const ProfileHeader = ({
 
 export async function getStaticPaths() {
   return {
-      paths: [],
-      fallback: 'blocking',
+    paths: [],
+    fallback: 'blocking',
   };
 }
 
@@ -427,7 +427,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
       eloPoints: eloPoints?.elo_points,
       eloChanges,
     },
-    revalidate: 60, // 10 min
+    revalidate: 60, // 1 min
   };
 };
 
