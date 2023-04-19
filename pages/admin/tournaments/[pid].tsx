@@ -119,9 +119,9 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       players_order: JSON.stringify({
         players: registeredPlayersIds.concat(newSelectedPlayersIds),
       }),
-      draw: JSON.stringify({
+      draw: !tournamentFields.draw ? JSON.stringify({
         brackets: brackets,
-      }),
+      }) : tournamentFields.draw,
     });
 
     if (res.isOk) {
