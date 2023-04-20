@@ -214,10 +214,12 @@ const TournamentPage: NextPage<{
           elo_points: playersRankingsMap.get(v.id as number) as number,
         }));
 
+        const sortedPlayersWithElo = playersWithElo.sort((a, b) => b.elo_points - a.elo_points);
+
         return registeredPlayers.length > 0 ? (
           <>
             <PlayersListHeader />
-            <PlayersList players={playersWithElo} />
+            <PlayersList players={sortedPlayersWithElo} />
           </>
         ) : (
           <NotFoundMessage message="Нет зарегестрированных игроков" />
