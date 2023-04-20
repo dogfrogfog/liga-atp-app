@@ -36,7 +36,8 @@ import styles from '../../styles/Tournaments.module.scss';
 import getTournamentWinners from 'utils/getTournamentWinners';
 import { prisma } from 'services/db';
 
-const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие'];
+/* const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие']; */ //TODO: replace
+const TOURNAMENT_TABS = ['Идут сейчас', 'Прошедшие'];
 
 const filterFn = (inputValue: string) => (t: TournamentT) =>
   (t?.name as string).toLowerCase().includes(inputValue);
