@@ -1,41 +1,52 @@
 @import '../../styles/variables.scss';
 
-.loadingSpinnerContainer {
-  text-align: center;
+.skCubeGrid {
+  width: 60px;
+  height: 60px;
+  margin: auto;
 }
 
-.loadingSpinner {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
+.skCube {
+  width: 33%;
+  height: 33%;
+  background-color: $custom-aqua;
+  float: left;
+  animation: sk-cube-grid-scale-delay 1.4s infinite ease-in-out;
 }
 
-.loadingSpinner:after {
-  content: ' ';
-  display: block;
-  border-radius: 50%;
-  width: 0;
-  height: 0;
-  margin: 8px;
-  box-sizing: border-box;
-  border: 32px solid $custom-aqua;
-  border-color: $custom-aqua transparent $custom-aqua transparent;
-  animation: loadingSpinner 1.2s infinite;
+.skCube1 {
+  animation-delay: 0.4s;
+}
+.skCube2 {
+  animation-delay: 0.6s;
+}
+.skCube3 {
+  animation-delay: 0.8s;
+}
+.skCube4 {
+  animation-delay: 0.2s;
+}
+.skCube5 {
+  animation-delay: 0.4s;
+}
+.skCube6 {
+  animation-delay: 0.6s;
+}
+.skCube7 {
+  animation-delay: 0s;
+}
+.skCube8 {
+  animation-delay: 0.2s;
+}
+.skCube9 {
+  animation-delay: 0.4s;
 }
 
-@keyframes loadingSpinner {
-  0% {
-    transform: rotate(0);
-    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+@keyframes sk-cube-grid-scale-delay {
+  0%, 70%, 100% {
+  transform: scale3D(1,1,1);
   }
-
-  50% {
-    transform: rotate(900deg);
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-
-  100% {
-    transform: rotate(1800deg);
+  35% {
+  transform: scale3D(0,0,1);
   }
 }
