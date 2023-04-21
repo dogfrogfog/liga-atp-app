@@ -4,7 +4,6 @@ import Link from 'next/link';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
-/* import { ru } from 'date-fns/locale'; */
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
 import { GiTrophyCup } from 'react-icons/gi';
@@ -173,8 +172,6 @@ const Match = ({
   playersMap: Map<number, PlayerT>;
   className?: string;
 }) => {
-  console.log(match);
-  
   const isPlayed = match?.winner_id && match.score;
   const p1 = match?.player1_id ? playersMap.get(match.player1_id) : undefined;
   const p2 = match?.player2_id ? playersMap.get(match.player2_id) : undefined;
@@ -223,7 +220,7 @@ const Match = ({
   return (
     <div className={cl(styles.match, className)}>
       <div className={styles.row}>
-        <div className={styles.col}>
+        <div className={isDoubles ? styles.doublesCol : styles.col}>
           <div className={styles.singleNameWrapper}>
             {!isDoubles && !isValidElement(p1Name) && (
               <span className={styles.img}>
@@ -241,7 +238,7 @@ const Match = ({
             )}
             <span
               className={cl(
-                styles.name,
+                isDoubles ? styles.doublesName : styles.name,
                 isPlayed &&
                   parseInt(match?.winner_id as string, 10) === match?.player1_id
                   ? styles.winner
@@ -266,10 +263,10 @@ const Match = ({
                 )}
               </span>
             )}
-            &nbsp;-&nbsp;
+            {!isDoubles && <span>&nbsp;-&nbsp;</span>}
             <span
               className={cl(
-                styles.name,
+                isDoubles ? styles.doublesName : styles.name,
                 isPlayed &&
                   parseInt(match?.winner_id as string, 10) === match?.player2_id
                   ? styles.winner
@@ -280,32 +277,6 @@ const Match = ({
             </span>
           </div>
         </div>
-        {/* <div className={styles.col}>
-          {isPlayed ? (
-            <span className={styles.score}>
-              {match.score?.split(' ').map((set, i) => (
-                <span key={i} className={styles.setCol}>
-                  {(set.split('-') as [string, string]).map((v) => (
-                    <span key={v} className={styles.game}>
-                      {v}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </span>
-          ) : (
-            matchDateTime && (
-              <span className={styles.matchDate}>
-                <span className={styles.timeUnit}>
-                  {format(matchDateTime, 'EEEEEE H:mm', { locale: ru })}
-                </span>
-                <span className={styles.timeUnit}>
-                  {format(matchDateTime, 'dd.MM')}
-                </span>
-              </span>
-            )
-          )}
-        </div> */}
 
         <div className={styles.col}>
           {isPlayed ? (
