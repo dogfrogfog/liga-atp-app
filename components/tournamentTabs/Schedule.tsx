@@ -4,7 +4,7 @@ import Link from 'next/link';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+/* import { ru } from 'date-fns/locale'; */
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
 import { GiTrophyCup } from 'react-icons/gi';
@@ -15,7 +15,7 @@ import type { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { singleStagesNames, groupStagesNames } from 'constants/values';
 import styles from './Schedule.module.scss';
 
-type ScheculeTabProps = {
+type ScheduleTabProps = {
   brackets: IBracketsUnit[][];
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
@@ -23,7 +23,7 @@ type ScheculeTabProps = {
   hasGroups: boolean;
 };
 
-const ScheculeTab = forwardRef<any, ScheculeTabProps>(
+const ScheduleTab = forwardRef<any, ScheduleTabProps>(
   (
     { brackets, tournamentMatches, registeredPlayers, isDoubles, hasGroups },
     downloadImageRef
@@ -80,7 +80,7 @@ const ScheculeTab = forwardRef<any, ScheculeTabProps>(
     );
 
     return (
-      <div className={styles.container}>
+      <>
         <div ref={downloadImageRef} className={styles.fakeBracket}>
           {brackets.map((stage, i) => (
             <Stage
@@ -94,8 +94,10 @@ const ScheculeTab = forwardRef<any, ScheculeTabProps>(
           ))}
         </div>
         <div className={styles.stageButtons}>{thumbsFragment}</div>
-        {carouselFragment}
-      </div>
+        <div className={styles.carouselFragmentWrapper}>
+          {carouselFragment}
+        </div>
+      </>
     );
   }
 );
@@ -171,6 +173,8 @@ const Match = ({
   playersMap: Map<number, PlayerT>;
   className?: string;
 }) => {
+  console.log(match);
+  
   const isPlayed = match?.winner_id && match.score;
   const p1 = match?.player1_id ? playersMap.get(match.player1_id) : undefined;
   const p2 = match?.player2_id ? playersMap.get(match.player2_id) : undefined;
@@ -180,7 +184,7 @@ const Match = ({
   const p1Name = p1 ? (
     <Link href={`/players/${p1.id}`}>
       <a>
-        {(p1.first_name as string)[0]}. {p1.last_name}
+        {p1.last_name} {(p1.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -189,7 +193,7 @@ const Match = ({
   const p2Name = p2 ? (
     <Link href={`/players/${p2.id}`}>
       <a>
-        {(p2.first_name as string)[0]}. {p2.last_name}
+        {p2.last_name} {(p2.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -198,7 +202,7 @@ const Match = ({
   const p3Name = p3 ? (
     <Link href={`/players/${p3.id}`}>
       <a>
-        {(p3.first_name as string)[0]}. {p3.last_name}
+        {p3.last_name} {(p3.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -207,7 +211,7 @@ const Match = ({
   const p4Name = p4 ? (
     <Link href={`/players/${p4.id}`}>
       <a>
-        {(p4.first_name as string)[0]}. {p4.last_name}
+        {p4.last_name} {(p4.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -262,6 +266,7 @@ const Match = ({
                 )}
               </span>
             )}
+            &nbsp;-&nbsp;
             <span
               className={cl(
                 styles.name,
@@ -275,7 +280,7 @@ const Match = ({
             </span>
           </div>
         </div>
-        <div className={styles.col}>
+        {/* <div className={styles.col}>
           {isPlayed ? (
             <span className={styles.score}>
               {match.score?.split(' ').map((set, i) => (
@@ -300,6 +305,26 @@ const Match = ({
               </span>
             )
           )}
+        </div> */}
+
+        <div className={styles.col}>
+          {isPlayed ? (
+            <span className={styles.score}>
+              {match.score}
+            </span>
+          ) : (
+            matchDateTime && (
+              <span className={styles.matchDate}>
+                <span className={styles.timeUnit}>
+                  {format(matchDateTime, 'H:mm')}
+                </span>
+                  &nbsp;
+                <span className={styles.timeUnit}>
+                  {format(matchDateTime, 'dd.MM')}
+                </span>
+              </span>
+            )
+          )}
         </div>
       </div>
       {isFinal && (
@@ -311,4 +336,4 @@ const Match = ({
   );
 };
 
-export default ScheculeTab;
+export default ScheduleTab;

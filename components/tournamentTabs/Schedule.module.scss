@@ -32,6 +32,7 @@
 
 .name {
   display: block;
+  max-width: 150px;
 
   svg {
     width: 12px;
@@ -43,12 +44,12 @@
   }
 }
 
-.right {
+/* .right {
   width: 30%;
   display: flex;
   justify-content: flex-end;
 }
-
+ */
 .groupWrapper {
   padding: 10px;
   background-color: $custom-darkgray;
@@ -70,12 +71,15 @@
 .match {
   position: relative;
   text-align: center;
-  padding: 10px;
-  border: 1px solid $custom-white;
-  background-color: black;
+  /* padding: 10px; */
+  /* border: 1px solid $custom-white; */
+  /* background-color: black; */
+  background-color: #1b2223;
   border-radius: 4px;
   width: 85%;
-  margin-bottom: 20px;
+  /* width: 100%; */
+  /* margin-bottom: 20px; */
+  margin-bottom: 10px;
 
   &:last-child {
     margin-bottom: 0;
@@ -98,6 +102,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 3px 5px;
 }
 
 .nameContainer {
@@ -112,11 +117,11 @@
   overflow: hidden;
 }
 
-.singleNameWrapper:first-child,
+/* .singleNameWrapper:first-child,
 .game:first-child,
 .timeUnit:first-child {
   margin-bottom: 10px;
-}
+} */
 
 .singleNameWrapper {
   display: flex;
@@ -125,7 +130,7 @@
 
 .col {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   max-width: 65%;
 }
 
@@ -142,7 +147,7 @@
 .matchDate {
   display: flex;
   margin-right: 10px;
-  flex-direction: column;
+  /* flex-direction: column; */
 
   &:last-child {
     margin: 0;
@@ -181,3 +186,10 @@
     width: 500px;
   }
 }
+
+.carouselFragmentWrapper > div > div {
+  width: 118% !important;
+}
+
+
+
