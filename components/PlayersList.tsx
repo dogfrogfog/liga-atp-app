@@ -15,51 +15,54 @@ type PlayersListProps = {
 export const PlayersList = ({
   players,
   shouldShowPlace = false,
-}: PlayersListProps) => (
-  <div className={styles.list}>
-    {players.filter((a) => a.first_name === 'Кирилл').map(
-      ({ id, first_name, last_name, level, avatar, elo_points }, i) => (
-        <Link key={id} href={'/players/' + id}>
-          <div
-            className={cl(
-              styles.listItem,
-              shouldShowPlace ? styles.withPlace : ''
-            )}
-          >
-            {shouldShowPlace && (
-              <div className={styles.placeColumn}>
-                <span className={styles.place}>{i + 1}</span>
+}: PlayersListProps) => {
+  console.log(players.filter((a) => a.first_name === 'Кирилл'))
+  return (
+    <div className={styles.list}>
+      {players.filter((a) => a.first_name === 'Кирилл').map(
+        ({ id, first_name, last_name, level, avatar, elo_points }, i) => (
+          <Link key={id} href={'/players/' + id}>
+            <div
+              className={cl(
+                styles.listItem,
+                shouldShowPlace ? styles.withPlace : ''
+              )}
+            >
+              {shouldShowPlace && (
+                <div className={styles.placeColumn}>
+                  <span className={styles.place}>{i + 1}</span>
+                </div>
+              )}
+              <div className={styles.nameColumn}>
+                <div className={styles.image}>
+                  {avatar?.includes('.userapi.com') ? (
+                    <Image
+                      alt="player-image"
+                      src={avatar}
+                      height={25}
+                      width={25}
+                    />
+                  ) : (
+                    <BsFillPersonFill />
+                  )}
+                </div>
+                <span className={styles.name}>{`${(
+                  first_name as string
+                )[0].toUpperCase()}. ${last_name}`}</span>
               </div>
-            )}
-            <div className={styles.nameColumn}>
-              <div className={styles.image}>
-                {avatar?.includes('.userapi.com') ? (
-                  <Image
-                    alt="player-image"
-                    src={avatar}
-                    height={25}
-                    width={25}
-                  />
-                ) : (
-                  <BsFillPersonFill />
-                )}
+              <div className={styles.levelColumn}>
+                {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
               </div>
-              <span className={styles.name}>{`${(
-                first_name as string
-              )[0].toUpperCase()}. ${last_name}`}</span>
+              <div className={styles.rankColumn}>
+                <span className={styles.rankValue}>{elo_points}</span>
+              </div>
             </div>
-            <div className={styles.levelColumn}>
-              {level !== null ? LEVEL_NUMBER_VALUES[level] : ''}
-            </div>
-            <div className={styles.rankColumn}>
-              <span className={styles.rankValue}>{elo_points}</span>
-            </div>
-          </div>
-        </Link>
-      )
-    )}
-  </div>
-);
+          </Link>
+        )
+      )}
+    </div>
+  );
+}
 
 export const PlayersListHeader = ({
   shouldShowPlace = false,
