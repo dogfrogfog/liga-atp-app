@@ -27,59 +27,65 @@ const InfoTab = ({
   forehand,
   beckhand,
   instaLink,
-}: InfoTabProps) => (
-  <>
-    <div className={styles.infoRow}>
-      <span>Город</span>
-      <span>
-        {country}, {city}
-      </span>
-    </div>
-    {age && (
-      <div className={styles.infoRow}>
-        <span>Возраст</span>
-        <span>{age}</span>
-      </div>
-    )}
-    <div className={styles.infoRow}>
-      <span>Рост</span>
-      <span>{height} см</span>
-    </div>
-    <div className={styles.infoRow}>
-      <span>Сфера деятельности</span>
-      <span>{jobDescription}</span>
-    </div>
-    {yearsInTennis && (
-      <div className={styles.infoRow}>
-        <span>Лет в теннисе</span>
-        <span>{yearsInTennis}</span>
-      </div>
-    )}
-    <div className={styles.infoRow}>
-      <span>Стиль игры</span>
-      <span>{gameplayStyle}</span>
-    </div>
-    <div className={styles.infoRow}>
-      <span>Форхэнд</span>
-      <span>{forehand}</span>
-    </div>
-    <div className={styles.infoRow}>
-      <span>Бэкхэнд</span>
-      <span>{beckhand}</span>
-    </div>
-    <div className={styles.infoRow}>
-      <span>Инстаграм</span>
-      <span>
-        {instaLink && (
-          <Link href={instaLink}>
-            <span>
-              <BsInstagram /> {instaLink.split('https://www.instagram.com/')[1]}
-            </span>
-          </Link>
+}: InfoTabProps) => {
+  console.log(yearsInTennis);
+  
+  return (
+    (
+      <>
+        <div className={styles.infoRow}>
+          <span>Город</span>
+          <span>
+            {country}, {city}
+          </span>
+        </div>
+        {age && (
+          <div className={styles.infoRow}>
+            <span>Возраст</span>
+            <span>{age}</span>
+          </div>
         )}
-      </span>
-    </div>
-  </>
-);
+        <div className={styles.infoRow}>
+          <span>Рост</span>
+          <span>{height} см</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span>Сфера деятельности</span>
+          <span>{jobDescription}</span>
+        </div>
+        {yearsInTennis && (
+          <div className={styles.infoRow}>
+            <span>Лет в теннисе</span>
+            <span>{yearsInTennis}</span>
+          </div>
+        )}
+        <div className={styles.infoRow}>
+          <span>Стиль игры</span>
+          <span>{gameplayStyle}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span>Форхэнд</span>
+          <span>{forehand}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span>Бэкхэнд</span>
+          <span>{beckhand}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span>Инстаграм</span>
+          <span>
+            {instaLink && (
+              <Link href={instaLink}>
+                <span>
+                  <BsInstagram /> {instaLink.split('https://www.instagram.com/')[1]}
+                </span>
+              </Link>
+            )}
+          </span>
+        </div>
+      </>
+    );
+  )
+}
 
 export default InfoTab;
