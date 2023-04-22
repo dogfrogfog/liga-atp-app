@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
-import { FaUserAlt } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
 import type {
   player as PlayerT,
@@ -35,6 +34,7 @@ import type { MatchWithTournamentType } from 'utils/getOpponents';
 import { isMatchPlayed } from 'utils/isMatchPlayed';
 import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import styles from 'styles/Profile.module.scss';
+import { DEFAULT_PROFILE_IMAGE } from 'constants/values';
 
 const PROFILE_TABS = [
   'Информация',
@@ -329,7 +329,7 @@ const ProfileHeader = ({
     <div
       className={styles.profileHeader}
       style={{
-        background: `url(${avavarUrl}) top / cover`,
+        background: `url(${avavarUrl || DEFAULT_PROFILE_IMAGE}) center top / cover`,
       }}
     >
       {isPremium && (
@@ -346,11 +346,6 @@ const ProfileHeader = ({
               </Link>
             </div>
           )}
-        </div>
-      )}
-      {!avavarUrl && (
-        <div className={styles.noAvatarBlock}>
-          <FaUserAlt />
         </div>
       )}
       <div className={styles.info}>
