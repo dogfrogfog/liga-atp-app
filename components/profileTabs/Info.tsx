@@ -29,6 +29,7 @@ const InfoTab = ({
   instaLink,
 }: InfoTabProps) => {
   console.log(yearsInTennis);
+  console.log(Boolean(yearsInTennis));
   
   return (
       <>
