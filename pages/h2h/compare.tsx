@@ -14,6 +14,7 @@ import { MatchWithTournamentType } from 'utils/getOpponents';
 import {
   LEVEL_NUMBER_VALUES,
   DOUBLES_TOURNAMENT_TYPES_NUMBER,
+  DEFAULT_PROFILE_IMAGE
 } from 'constants/values';
 import useStats from 'hooks/useStats';
 import useMatches from 'hooks/useMatches';
@@ -164,7 +165,7 @@ const CompareTwoPlayersPage: NextPage<{
         <div
           className={cl(styles.img, styles.side)}
           style={{
-            background: `url(${p1.avatar})`,
+            background: `url(${p1.avatar || DEFAULT_PROFILE_IMAGE})`,
             backgroundSize: 'cover',
             backgroundPositionX: 'center',
           }}
@@ -172,7 +173,7 @@ const CompareTwoPlayersPage: NextPage<{
         <div
           className={cl(styles.img, styles.side)}
           style={{
-            background: `url(${p2.avatar})`,
+            background: `url(${p2.avatar || DEFAULT_PROFILE_IMAGE})`,
             backgroundSize: 'cover',
             backgroundPositionX: 'center',
           }}

@@ -2,6 +2,8 @@ type NumberValuesT = {
   [k: number]: string;
 };
 
+export const DEFAULT_PROFILE_IMAGE: string = "/roger.webp";
+
 export const LEVEL_NUMBER_VALUES: NumberValuesT = {
   5: 'S-Мастерс',
   4: 'Леджер',
