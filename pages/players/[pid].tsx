@@ -51,6 +51,8 @@ const SingleProfilePage: NextPage<{
   eloPoints?: number;
   eloChanges: elo_ranking_change[];
 }> = ({ player, digests, eloPoints, eloChanges }) => {
+  console.log(player);
+  
   const [activeTab, setActiveTab] = useState(PROFILE_TABS[0]);
   const [statsTabTournamentType, setStatsTabTournamentTypeDropdown] =
     useState(999);
