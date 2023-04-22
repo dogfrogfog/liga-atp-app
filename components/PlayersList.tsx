@@ -17,7 +17,7 @@ export const PlayersList = ({
   shouldShowPlace = false,
 }: PlayersListProps) => (
   <div className={styles.list}>
-    {players.map(
+    {players.filter((a) => a.first_name === 'Кирилл').map(
       ({ id, first_name, last_name, level, avatar, elo_points }, i) => (
         <Link key={id} href={'/players/' + id}>
           <div
