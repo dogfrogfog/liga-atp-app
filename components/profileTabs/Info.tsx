@@ -31,7 +31,6 @@ const InfoTab = ({
   console.log(yearsInTennis);
   
   return (
-    (
       <>
         <div className={styles.infoRow}>
           <span>Город</span>
@@ -85,7 +84,6 @@ const InfoTab = ({
         </div>
       </>
     );
-  )
 }
 
 export default InfoTab;
