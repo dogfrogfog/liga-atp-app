@@ -49,7 +49,7 @@ const InfoTab = ({
       <span>Сфера деятельности</span>
       <span>{jobDescription}</span>
     </div>
-    {yearsInTennis && (
+    {!!yearsInTennis && (
       <div className={styles.infoRow}>
         <span>Лет в теннисе</span>
         <span>{yearsInTennis}</span>
