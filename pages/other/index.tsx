@@ -35,7 +35,7 @@ export const getStaticProps = async () => {
     props: {
       pages,
     },
-    revalidate: 60, // 10 min
+    revalidate: 600, // sec
   };
 };
 
