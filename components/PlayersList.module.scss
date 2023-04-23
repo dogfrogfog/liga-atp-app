@@ -67,7 +67,7 @@
 .listItem {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid rgba(153, 153, 153, 0.445);
+  border-bottom: 2px solid $border-color;
   padding: 7px 0;
 
   &:last-child {

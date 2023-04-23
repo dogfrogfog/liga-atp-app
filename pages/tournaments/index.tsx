@@ -362,7 +362,7 @@ export const getStaticProps = async () => {
       activeTournaments,
       openToRegistrationTournaments,
     },
-    revalidate: 60, // 10 min
+    revalidate: 600, // sec
   };
 };
 

@@ -66,7 +66,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
     props: {
       pageData: page,
     },
-    revalidate: 60, // 10 min
+    revalidate: 600, // sec
   };
 };
 
