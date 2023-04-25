@@ -17,6 +17,8 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
   players,
   playerEloRanking,
 }) => {
+  console.log(playerEloRanking);
+  
   const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
 
