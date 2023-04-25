@@ -88,7 +88,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
             </a>
           </Link>
         ));
-       case TOURNAMENT_TABS[2]: //TODO: when uncomment TOURNAMENT_TABS replace case 1 and 2
+      case TOURNAMENT_TABS[2]: //TODO: when uncomment TOURNAMENT_TABS replace case 1 and 2
         const now = Date.now();
         let filteredTournaments: TournamentT[] = [];
 
@@ -362,7 +362,7 @@ export const getStaticProps = async () => {
       activeTournaments,
       openToRegistrationTournaments,
     },
-    revalidate: 60, // 10 min
+    revalidate: 600, // sec
   };
 };
 

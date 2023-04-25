@@ -4,7 +4,6 @@ import Link from 'next/link';
 import cl from 'classnames';
 import type { match as MatchT, player as PlayerT } from '@prisma/client';
 import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
 import { useSpringCarousel } from 'react-spring-carousel';
 import { FaQuestion } from 'react-icons/fa';
 import { GiTrophyCup } from 'react-icons/gi';
@@ -15,7 +14,7 @@ import type { IBracketsUnit } from 'components/admin/TournamentDraw';
 import { singleStagesNames, groupStagesNames } from 'constants/values';
 import styles from './Schedule.module.scss';
 
-type ScheculeTabProps = {
+type ScheduleTabProps = {
   brackets: IBracketsUnit[][];
   tournamentMatches: MatchT[];
   registeredPlayers: PlayerT[];
@@ -23,7 +22,7 @@ type ScheculeTabProps = {
   hasGroups: boolean;
 };
 
-const ScheculeTab = forwardRef<any, ScheculeTabProps>(
+const ScheduleTab = forwardRef<any, ScheduleTabProps>(
   (
     { brackets, tournamentMatches, registeredPlayers, isDoubles, hasGroups },
     downloadImageRef
@@ -80,7 +79,7 @@ const ScheculeTab = forwardRef<any, ScheculeTabProps>(
     );
 
     return (
-      <div className={styles.container}>
+      <>
         <div ref={downloadImageRef} className={styles.fakeBracket}>
           {brackets.map((stage, i) => (
             <Stage
@@ -94,8 +93,10 @@ const ScheculeTab = forwardRef<any, ScheculeTabProps>(
           ))}
         </div>
         <div className={styles.stageButtons}>{thumbsFragment}</div>
-        {carouselFragment}
-      </div>
+        <div className={styles.carouselFragmentWrapper}>
+          {carouselFragment}
+        </div>
+      </>
     );
   }
 );
@@ -180,7 +181,7 @@ const Match = ({
   const p1Name = p1 ? (
     <Link href={`/players/${p1.id}`}>
       <a>
-        {(p1.first_name as string)[0]}. {p1.last_name}
+        {p1.last_name} {(p1.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -189,7 +190,7 @@ const Match = ({
   const p2Name = p2 ? (
     <Link href={`/players/${p2.id}`}>
       <a>
-        {(p2.first_name as string)[0]}. {p2.last_name}
+        {p2.last_name} {(p2.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -198,7 +199,7 @@ const Match = ({
   const p3Name = p3 ? (
     <Link href={`/players/${p3.id}`}>
       <a>
-        {(p3.first_name as string)[0]}. {p3.last_name}
+        {p3.last_name} {(p3.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -207,7 +208,7 @@ const Match = ({
   const p4Name = p4 ? (
     <Link href={`/players/${p4.id}`}>
       <a>
-        {(p4.first_name as string)[0]}. {p4.last_name}
+        {p4.last_name} {(p4.first_name as string)[0]}
       </a>
     </Link>
   ) : (
@@ -219,7 +220,7 @@ const Match = ({
   return (
     <div className={cl(styles.match, className)}>
       <div className={styles.row}>
-        <div className={styles.col}>
+        <div className={isDoubles ? styles.doublesCol : styles.col}>
           <div className={styles.singleNameWrapper}>
             {!isDoubles && !isValidElement(p1Name) && (
               <span className={styles.img}>
@@ -237,7 +238,7 @@ const Match = ({
             )}
             <span
               className={cl(
-                styles.name,
+                isDoubles ? styles.doublesName : styles.name,
                 isPlayed &&
                   parseInt(match?.winner_id as string, 10) === match?.player1_id
                   ? styles.winner
@@ -262,9 +263,10 @@ const Match = ({
                 )}
               </span>
             )}
+            {!isDoubles && <span>&nbsp;-&nbsp;</span>}
             <span
               className={cl(
-                styles.name,
+                isDoubles ? styles.doublesName : styles.name,
                 isPlayed &&
                   parseInt(match?.winner_id as string, 10) === match?.player2_id
                   ? styles.winner
@@ -275,25 +277,19 @@ const Match = ({
             </span>
           </div>
         </div>
+
         <div className={styles.col}>
           {isPlayed ? (
             <span className={styles.score}>
-              {match.score?.split(' ').map((set, i) => (
-                <span key={i} className={styles.setCol}>
-                  {(set.split('-') as [string, string]).map((v) => (
-                    <span key={v} className={styles.game}>
-                      {v}
-                    </span>
-                  ))}
-                </span>
-              ))}
+              {match.score}
             </span>
           ) : (
             matchDateTime && (
               <span className={styles.matchDate}>
                 <span className={styles.timeUnit}>
-                  {format(matchDateTime, 'EEEEEE H:mm', { locale: ru })}
+                  {format(matchDateTime, 'H:mm')}
                 </span>
+                  &nbsp;
                 <span className={styles.timeUnit}>
                   {format(matchDateTime, 'dd.MM')}
                 </span>
@@ -311,4 +307,4 @@ const Match = ({
   );
 };
 
-export default ScheculeTab;
+export default ScheduleTab;

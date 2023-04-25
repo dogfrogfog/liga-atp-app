@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { NextPage, NextPageContext, GetStaticProps } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
@@ -267,7 +267,7 @@ const SingleProfilePage: NextPage<{
   return (
     <div className={styles.profileContainer}>
       <ProfileHeader
-        avavarUrl={avatar || ''}
+        avatarUrl={avatar || ''}
         name={first_name + ' ' + last_name}
         level={LEVEL_NUMBER_VALUES[(level as any)?.toString()]}
         points={eloPoints || undefined}
@@ -288,7 +288,7 @@ const SingleProfilePage: NextPage<{
 };
 
 interface IProfileHeaderProps {
-  avavarUrl: string;
+  avatarUrl: string;
   name: string;
   level: string;
   points?: number;
@@ -298,7 +298,7 @@ interface IProfileHeaderProps {
 }
 
 const ProfileHeader = ({
-  avavarUrl,
+  avatarUrl,
   name,
   level,
   points,
@@ -329,7 +329,11 @@ const ProfileHeader = ({
     <div
       className={styles.profileHeader}
       style={{
+<<<<<<< HEAD
         background: `url(${avavarUrl || DEFAULT_PROFILE_IMAGE}) center top / cover`,
+=======
+        background: `url(${avatarUrl || DEFAULT_PROFILE_IMAGE}) center top / cover`,
+>>>>>>> de4549a7e71690516c004ba2328df4c1fc378d8f
       }}
     >
       {isPremium && (
@@ -428,7 +432,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
       eloPoints: eloPoints?.elo_points,
       eloChanges,
     },
-    revalidate: 60, // 10 min
+    revalidate: 600, // sec
   };
 };
 
