@@ -134,13 +134,13 @@ export const getStaticProps = async () => {
       player_id: true,
       elo_points: true,
     },
-    where: {
+    /* where: {
       expire_date: {
         // even if we create new player elo ranking expire_date will be today and we will not see it in the response
         // 1 day ahead just in case of missing some time
         gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
       },
-    },
+    }, */ //TODO: uncomment or remove
   });
 
   return {
