@@ -28,6 +28,7 @@ const RankingPage: NextPage<RankingPageProps> = ({
   players,
   playerEloRanking,
 }) => {
+  console.log(players);
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
 
   const playersMap = useMemo(
@@ -56,6 +57,9 @@ const RankingPage: NextPage<RankingPageProps> = ({
         (a, b) => (b?.elo_points as number) - (a?.elo_points as number)
       ) as (PlayerT & { elo_points: number })[];
 
+      console.log('result before switch', result);
+      
+
     switch (activeTab) {
       case RANKING_TABS[0]: {
         break;
@@ -74,10 +78,13 @@ const RankingPage: NextPage<RankingPageProps> = ({
       }
       case RANKING_TABS[4]: {
         result = result.filter((p) => p.level === 1);
+        console.log(result);
         break;
       }
       case RANKING_TABS[5]: {
+        console.log('in lagger tab');
         result = result.filter((p) => p.level === 4);
+        console.log(result);
         break;
       }
       case RANKING_TABS[6]: {
@@ -96,6 +103,9 @@ const RankingPage: NextPage<RankingPageProps> = ({
 
     return result;
   })();
+
+  console.log('filteredPlayers', filteredPlayers);
+  
 
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(RANKING_TABS[value]);
@@ -148,7 +158,7 @@ export const getStaticProps = async () => {
       players,
       playerEloRanking,
     },
-    revalidate: 600, // sec
+    revalidate: 1, // sec
   };
 };
 
