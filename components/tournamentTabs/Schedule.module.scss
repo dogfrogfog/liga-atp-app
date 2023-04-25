@@ -43,10 +43,21 @@
   }
 }
 
-.right {
-  width: 30%;
-  display: flex;
-  justify-content: flex-end;
+.doublesName {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 300px;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &.winner {
+    color: $custom-aqua;
+  }
 }
 
 .groupWrapper {
@@ -70,12 +81,14 @@
 .match {
   position: relative;
   text-align: center;
-  padding: 10px;
-  border: 1px solid $custom-white;
-  background-color: black;
+  background-color: $custom-darkgray;
   border-radius: 4px;
   width: 85%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+
+  &:nth-child(4n) {
+    margin-bottom: 20px;
+  }
 
   &:last-child {
     margin-bottom: 0;
@@ -98,6 +111,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 3px 5px;
 }
 
 .nameContainer {
@@ -110,23 +124,21 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.singleNameWrapper:first-child,
-.game:first-child,
-.timeUnit:first-child {
-  margin-bottom: 10px;
+  max-width: 150px;
 }
 
 .singleNameWrapper {
   display: flex;
-  width: 100%;
 }
 
 .col {
   display: flex;
-  flex-direction: column;
   max-width: 65%;
+}
+.doublesCol {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
 }
 
 .score {
@@ -142,8 +154,16 @@
 .matchDate {
   display: flex;
   margin-right: 10px;
-  flex-direction: column;
 
+  &:last-child {
+    margin: 0;
+  }
+}
+.doublesMatchDate {
+  display: flex;
+  margin-right: 10px;
+  flex-direction: column;
+  
   &:last-child {
     margin: 0;
   }
@@ -161,8 +181,8 @@
 
 .finalsTrophy {
   position: absolute;
-  right: -50px;
-  top: 25px;
+  right: 50%;
+  bottom: 60px;
 
   svg {
     width: 35px;
@@ -180,4 +200,9 @@
   .stage {
     width: 500px;
   }
+}
+
+.carouselFragmentWrapper > div > div {
+  min-width: 118% !important;
+  align-items: center
 }
