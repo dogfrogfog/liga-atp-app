@@ -29,6 +29,8 @@ const RankingPage: NextPage<RankingPageProps> = ({
   playerEloRanking,
 }) => {
   console.log(players);
+  console.log('playerEloRanking', playerEloRanking);
+  
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
 
   const playersMap = useMemo(
@@ -39,6 +41,9 @@ const RankingPage: NextPage<RankingPageProps> = ({
       }, new Map<number, PlayerT>()),
     [players]
   );
+
+  console.log('playersMap',playersMap);
+  
 
   const filteredPlayers = (() => {
     let result = playerEloRanking
