@@ -10,7 +10,7 @@ function PWALayout({ children }: { children: ReactNode }) {
         <meta name="application-name" content="Liga Tennisa" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="ВВВВВВВВВВВВВВ" />
+        <meta name="apple-mobile-web-app-title" content="ВВВВВВВ" />
         <meta name="theme-color" content="#000000" />
 
         <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
