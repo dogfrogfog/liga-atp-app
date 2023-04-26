@@ -50,7 +50,7 @@ function PWALayout({ children }: { children: ReactNode }) {
         <link rel="shortcut icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=optional"
         />
         <meta
           name="viewport"
