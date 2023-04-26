@@ -17,7 +17,8 @@ type MatchProps = {
 const Match = ({ match, playerId }: MatchProps) => {
   const {
     tournament,
-    start_date,
+    start_date, // field for old matches
+    time, // field for new matches that need match time
     youtube_link,
     score,
     player1_id,
@@ -33,6 +34,7 @@ const Match = ({ match, playerId }: MatchProps) => {
           <span className={styles.time}>
             {' ('}
             {start_date && format(new Date(start_date), 'dd.MM.yyyy')}
+            {time && format(new Date(time), 'dd.MM.yyyy')}
             {')'}
           </span>
         </span>
