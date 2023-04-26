@@ -18,12 +18,16 @@ const Match = ({ match, playerId }: MatchProps) => {
   const {
     tournament,
     start_date,
+    time,
     youtube_link,
     score,
     player1_id,
     player2_id,
     comment,
   } = match;
+
+  console.log(match);
+  
 
   return (
     <div className={styles.match}>
@@ -32,7 +36,8 @@ const Match = ({ match, playerId }: MatchProps) => {
           <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
           <span className={styles.time}>
             {' ('}
-            {start_date && format(new Date(start_date), 'dd.MM.yyyy')}
+            {(start_date) && format(new Date(start_date), 'dd.MM.yyyy')}
+            {(time) && format(new Date(time), 'dd.MM.yyyy')}
             {')'}
           </span>
         </span>
