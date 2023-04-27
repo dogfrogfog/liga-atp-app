@@ -15,7 +15,7 @@ const OtherPage: NextPage<OtherPageProps> = ({ pages }) => {
     <div className={styles.pageContainer}>
       <PageTitle>Прочее</PageTitle>
       {pages.map(({ title, slug }) => (
-        <Link key={slug} href={`/other/${slug}`}>
+        <Link key={slug} href={`/${slug}`}>
           <a className={styles.pageLink}>{title}</a>
         </Link>
       ))}
