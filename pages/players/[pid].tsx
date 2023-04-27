@@ -329,11 +329,7 @@ const ProfileHeader = ({
     <div
       className={styles.profileHeader}
       style={{
-<<<<<<< HEAD
-        background: `url(${avavarUrl || DEFAULT_PROFILE_IMAGE}) center top / cover`,
-=======
         background: `url(${avatarUrl || DEFAULT_PROFILE_IMAGE}) center top / cover`,
->>>>>>> de4549a7e71690516c004ba2328df4c1fc378d8f
       }}
     >
       {isPremium && (
