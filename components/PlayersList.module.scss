@@ -30,16 +30,9 @@
 }
 
 .place {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 25px;
-  width: 25px;
-  padding: 5px;
-  background-color: $custom-aqua;
-  border-radius: 50%;
-  color: $custom-black;
-  font-size: 10px;
+  color: $custom-aqua;
+  font-size: 13px;
+  margin: 0 5px;
 }
 
 .rankColumn {
