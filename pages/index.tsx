@@ -1,15 +1,13 @@
 import { NextPage } from 'next';
-import {useState, useEffect} from 'react';
-import {BsApple} from 'react-icons/bs';
-import {DiAndroid} from 'react-icons/di';
-import {MdIosShare} from 'react-icons/md';
-import {HiDotsVertical} from 'react-icons/hi';
+import { useState, useEffect } from 'react';
+import { BsApple } from 'react-icons/bs';
+import { DiAndroid } from 'react-icons/di';
+import { MdIosShare } from 'react-icons/md';
+import { HiDotsVertical } from 'react-icons/hi';
 
 import styles from 'styles/Home.module.scss';
 
-
 const HomePage: NextPage = () => {
-
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isShowInfoIOS, setisShowInfoIOS] = useState<boolean>(false);
   const [isShowInfoAndroid, setisShowInfoAndroid] = useState<boolean>(false);
@@ -30,8 +28,7 @@ const HomePage: NextPage = () => {
   const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      console.log(`User ${choiceResult.outcome}`);
+      await deferredPrompt.userChoice;
       setDeferredPrompt(null);
     }
   };
@@ -78,7 +75,7 @@ const HomePage: NextPage = () => {
                       приложения <br />
                       на IOS, нажмите на <MdIosShare className={styles.iconText} /> <br />
                       внизу экрана, а затем <br />
-                      на экран "Домой"
+                      на экран &#34;Домой&#34;
                     </p>
                   )
                 }
@@ -93,7 +90,7 @@ const HomePage: NextPage = () => {
                       приложения <br />
                       на ANDROID, нажмите вверху экрана 
                       <HiDotsVertical className={styles.iconText} /> <br />
-                      а затем "Установить приложение"
+                      а затем &#34;Установить приложение&#34;
                     </p>
                   )
                 }
