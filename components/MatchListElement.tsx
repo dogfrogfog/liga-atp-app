@@ -26,6 +26,11 @@ const Match = ({ match, playerId }: MatchProps) => {
     comment,
   } = match;
 
+  console.log('playerId', playerId);
+  console.log(match);
+  
+  
+
   return (
     <div className={styles.match}>
       <div className={styles.row}>
@@ -69,7 +74,6 @@ const Match = ({ match, playerId }: MatchProps) => {
         <span className={styles.players}>
           {playerId ? (
             <>
-              <i> vs. </i>
               {getOpponents(playerId, match)}
             </>
           ) : (

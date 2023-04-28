@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_ENV=production next build",
+    "build": "next build",
     "turbo-go": "turbo lint",
     "start": "next start",
     "lint": "next lint",

@@ -12,23 +12,38 @@ const HomePage: NextPage = () => {
   const [isShowInfoIOS, setIsShowInfoIOS] = useState<boolean>(false);
   const [isShowInfoAndroid, setIsShowInfoAndroid] = useState<boolean>(false);
 
+  console.log(deferredPrompt);
+
   useEffect(() => {
+    console.log('in use effect');
+
     const handleBeforeInstallPrompt = (event: Event) => {
+      console.log('handleBeforeInstallPrompt');
       event.preventDefault();
       setDeferredPrompt(event);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
+    console.log('in use effect 2');
     return () => {
+      console.log('in return');
+      
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
 
   const handleInstallClick = async () => {
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    setDeferredPrompt(null);
+    const choiceResult = await deferredPrompt.userChoice;
+    console.log(choiceResult);
+    
+    if (choiceResult.outcome === 'accepted') {
+      setDeferredPrompt(null);
+      return;
+    }
+
+    return;
   };
 
   const handleShowInfoIOS = () => {
@@ -87,7 +102,7 @@ const HomePage: NextPage = () => {
                       Для установки <br />
                       приложения <br />
                       на ANDROID, нажмите вверху экрана 
-                      <HiDotsVertical className={styles.iconText} /> <br />
+                      <HiDotsVertical className={styles.iconText} /> ,<br />
                       а затем &#34;Установить приложение&#34;
                     </p>
                   )
