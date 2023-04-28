@@ -9,8 +9,8 @@ import styles from 'styles/Home.module.scss';
 
 const HomePage: NextPage = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isShowInfoIOS, setisShowInfoIOS] = useState<boolean>(false);
-  const [isShowInfoAndroid, setisShowInfoAndroid] = useState<boolean>(false);
+  const [isShowInfoIOS, setIsShowInfoIOS] = useState<boolean>(false);
+  const [isShowInfoAndroid, setIsShowInfoAndroid] = useState<boolean>(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (event: Event) => {
@@ -26,25 +26,23 @@ const HomePage: NextPage = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      setDeferredPrompt(null);
-    }
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    setDeferredPrompt(null);
   };
 
   const handleShowInfoIOS = () => {
     if(isShowInfoAndroid) {
-      setisShowInfoAndroid(false);
+      setIsShowInfoAndroid(false);
     }
-    setisShowInfoIOS(!isShowInfoIOS)
+    setIsShowInfoIOS(!isShowInfoIOS)
   }
 
   const handleShowInfoAndroid = () => {
     if(isShowInfoIOS) {
-      setisShowInfoIOS(false);
+      setIsShowInfoIOS(false);
     }
-    setisShowInfoAndroid(!isShowInfoAndroid);
+    setIsShowInfoAndroid(!isShowInfoAndroid);
   }
 
   return (
