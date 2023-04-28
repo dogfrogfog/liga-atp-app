@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .homePage {
   position: relative;
   width: 100%;
@@ -7,7 +9,69 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  color: #ffffff;
+  color: $custom-white;
+}
+
+.wrapperIcons{
+  display: flex;
+  justify-content: space-between;
+  width: 90px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.installIconIOS, .installIconAndroid {
+  color: $custom-gray;
+  font-size: 40px;
+
+  &:active{
+    color: $custom-aqua;
+    transform: scale(1.1);
+  }
+}
+
+.infoIconIOS, .infoIconAndroid {
+  position: relative;
+  color: $custom-gray;
+  font-size: 40px;
+}
+
+.infoIOS, .infoAndroid{
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 240px;
+  height: 150px;
+  background-color: $custom-gray;
+  opacity: 0.7;
+  border-radius: 10px 0 10px 0;
+  color: $custom-black;
+  font-weight: 800;
+  font-size: 17px;
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+
+  &::before{
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    width: 18px;
+    height: 18px;
+    transform: rotate(45deg);
+    background-color: $custom-gray;
+  }
+}
+
+.iconText{
+  vertical-align: middle;
+  font-size: 25px;
+}
+
+.activeIcon{
+  color: $custom-aqua;
 }
 
 .description {
@@ -21,8 +85,7 @@
     font-size: 30px;
     line-height: 36px;
     letter-spacing: -0.165px;
-    color: #ffffff;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    color: $custom-white;
   }
 
   p {
@@ -31,7 +94,7 @@
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.165px;
-    color: #ffffff;
+    color: $custom-white;
   }
 
   .secondaryDesc {
