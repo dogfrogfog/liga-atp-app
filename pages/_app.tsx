@@ -19,6 +19,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const { events } = useRouter();
   const [loading, setLoading] = useState(false);
 
+  
   useEffect(() => {
     const handleRouteChange = () => {
       setLoading((v) => !v);
