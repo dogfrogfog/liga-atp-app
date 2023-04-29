@@ -5,13 +5,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+<<<<<<< HEAD
+=======
+    "vercel-build": "prisma generate && prisma db push && next build",
+>>>>>>> develop
     "turbo-go": "turbo lint",
     "start": "next start",
     "lint": "next lint",
     "lint:quiet": "next lint --quiet",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "all": "yarn format && yarn lint"
+    "all": "yarn format && yarn lint",
+    "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",

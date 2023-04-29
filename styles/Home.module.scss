@@ -14,63 +14,68 @@
 
 .wrapperIcons{
   display: flex;
-  justify-content: space-between;
-  width: 90px;
+  flex-direction: column;
+  align-items: center;
   position: absolute;
   top: 30px;
   right: 30px;
-}
 
-.installIconIOS, .installIconAndroid {
-  color: $custom-gray;
-  font-size: 40px;
-
-  &:active{
-    color: $custom-aqua;
-    transform: scale(1.1);
+  span {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
   }
-}
 
-.infoIconIOS, .infoIconAndroid {
-  position: relative;
-  color: $custom-gray;
-  font-size: 40px;
-}
+  .installIcon {
+    color: $custom-gray;
+    font-size: 40px;
+  
+    &:active{
+      color: $custom-aqua;
+      transform: scale(1.1);
+    }
+  }
 
-.infoIOS, .infoAndroid{
-  position: absolute;
-  top: 60px;
-  right: 0;
-  width: 240px;
-  background-color: $custom-gray;
-  opacity: 0.7;
-  border-radius: 10px 0 10px 0;
-  color: $custom-black;
-  font-weight: 800;
-  font-size: 17px;
-  padding: 10px;
-  margin: 0;
-  text-align: center;
-
-  &::before{
-    content: '';
+  .infoIcon {
+    position: relative;
+    color: $custom-gray;
+    font-size: 40px;
+  }
+  
+  .infoText{
     position: absolute;
-    top: -8px;
-    right: 15px;
-    width: 18px;
-    height: 18px;
-    transform: rotate(45deg);
+    top: 60px;
+    right: 0;
+    width: 240px;
     background-color: $custom-gray;
+    opacity: 0.7;
+    border-radius: 10px 0 10px 0;
+    color: $custom-black;
+    font-weight: 800;
+    font-size: 17px;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+  
+    &::before{
+      content: '';
+      position: absolute;
+      top: -8px;
+      right: 15px;
+      width: 18px;
+      height: 18px;
+      transform: rotate(45deg);
+      background-color: $custom-gray;
+    }
   }
-}
-
-.iconText{
-  vertical-align: middle;
-  font-size: 25px;
-}
-
-.activeIcon{
-  color: $custom-aqua;
+  
+  .iconText{
+    vertical-align: middle;
+    font-size: 25px;
+  }
+  
+  .activeIcon{
+    color: $custom-aqua;
+  }  
 }
 
 .description {
