@@ -14,28 +14,34 @@ function SecondaryLayout({
   loading: boolean;
 }) {
   const router = useRouter();
-  const handleSwiping = (eventData: SwipeEventData) => {
-    const { deltaX } = eventData;
-    const swipeThreshold = window.innerWidth / 2; // 50% экрана
-
-    if (deltaX > 0 && deltaX < swipeThreshold) {
-      const percentage = (deltaX / swipeThreshold) * 100;
-      const translateX = `translateX(${percentage}%)`;
-      document.documentElement.style.setProperty('--swipe-translate', translateX);
-    }
+  const config = {
+    delta: 10,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
   };
-
-  const handleSwipeEnd = (eventData: SwipeEventData) => {
-    const { deltaX } = eventData;
-    if (deltaX > window.innerWidth / 2) {
-      router.push("/");
+  const swipeThreshold = window.innerHeight;
+  const handleSwiping = (eventData: SwipeEventData) => {
+    const {deltaY, absY, velocity} = eventData;
+    if (deltaY < 0) return;
+    else if(deltaY >= 0 && window.pageYOffset === 0 && velocity >= 0.4){
+      const percentage = (deltaY / swipeThreshold) * 100;
+      const translateY = `translateY(${percentage}%)`;
+      document.documentElement.style.setProperty('--swipe-translate', translateY);
+      if (absY >= 200) {
+        router.push('/');
+        document.documentElement.style.removeProperty('--swipe-translate');
+      }
+    }
+    else if (window.pageYOffset > 0){
       document.documentElement.style.removeProperty('--swipe-translate');
     }
+
   };
+
 
   const swipeHandlers = useSwipeable({
     onSwiping: handleSwiping,
-    onSwiped: handleSwipeEnd,
+    ...config
   });
   return (
     <div className={styles.pageContainer} {...swipeHandlers}>

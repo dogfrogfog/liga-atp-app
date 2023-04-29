@@ -2,7 +2,7 @@
 .pageContainer {
   position: relative;
   transition: transform 0.3s ease-out;
-  transform: var(--swipe-translate, translateX(0));
+  transform: var(--swipe-translate, translateY(0));
 
   .back {
     z-index: 3;
