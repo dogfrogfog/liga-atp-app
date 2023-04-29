@@ -46,7 +46,8 @@ export const isPlayerWon = (
       targetPlayerInFirstTeam &&
       team1.includes(parseInt(m.winner_id as string, 10))
     ) {
-      console.log();
+      console.log(targetPlayerInFirstTeam &&
+        team1.includes(parseInt(m.winner_id as string, 10)));
       
       return true;
     } else {
