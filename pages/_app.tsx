@@ -1,6 +1,7 @@
 import { SWRConfig } from 'swr';
 import { useState } from 'react';
 import type { AppProps } from 'next/app';
+import { Analytics } from '@vercel/analytics/react'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPasswordProtect } from 'next-password-protect';
@@ -84,6 +85,7 @@ const SWRMyApp = (props: AppProps) => (
     }}
   >
     <MyApp {...props} />
+    <Analytics />
   </SWRConfig>
 );
 
