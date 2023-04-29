@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_ENV=production next build",
+    "build": "next build",
     "turbo-go": "turbo lint",
     "start": "next start",
     "lint": "next lint",
     "lint:quiet": "next lint --quiet",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "all": "yarn format && yarn lint"
+    "all": "yarn format && yarn lint",
+    "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
