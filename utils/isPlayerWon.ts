@@ -32,6 +32,9 @@ export const isPlayerWon = (
     }
   }
 
+  console.log('isDoubles',isDoubles);
+  console.log('isOldDoublesFormat', isOldDoublesFormat);
+  
   // handle new doubles format
   if (isDoubles) {
     const team1 = [m.player1_id, m.player3_id];
@@ -43,6 +46,8 @@ export const isPlayerWon = (
       targetPlayerInFirstTeam &&
       team1.includes(parseInt(m.winner_id as string, 10))
     ) {
+      console.log();
+      
       return true;
     } else {
       return false;
