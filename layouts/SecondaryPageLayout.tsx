@@ -4,8 +4,7 @@ import { BiArrowBack } from 'react-icons/bi';
 
 import LoadingShadow from 'components/LoadingShadow';
 import styles from './SecondaryPageLayout.module.scss';
-import { useSwipeable } from "react-swipeable";
-import { useState } from "react";
+import { SwipeEventData, useSwipeable } from "react-swipeable";
 
 function SecondaryLayout({
   children,
@@ -15,19 +14,31 @@ function SecondaryLayout({
   loading: boolean;
 }) {
   const router = useRouter();
-  const [swipePosition, setSwipePosition] = useState<number>(0);
-  const swipe = useSwipeable({
-    onSwipedRight: (eventData) => handleSwipe(eventData.deltaX)
-  });
-  const handleSwipe = (deltaX: number) => {
-    setSwipePosition((prevPosition) => prevPosition + deltaX);
-    if (swipePosition > window.innerWidth * 0.75){
-      router.push("/");
+  const handleSwiping = (eventData: SwipeEventData) => {
+    const { deltaX } = eventData;
+    const swipeThreshold = window.innerWidth / 2; // 50% экрана
+
+    if (deltaX > 0 && deltaX < swipeThreshold) {
+      const percentage = (deltaX / swipeThreshold) * 100;
+      const translateX = `translateX(${percentage}%)`;
+      document.documentElement.style.setProperty('--swipe-translate', translateX);
     }
   };
 
+  const handleSwipeEnd = (eventData: SwipeEventData) => {
+    const { deltaX } = eventData;
+    if (deltaX > window.innerWidth / 2) {
+      router.push("/");
+      document.documentElement.style.removeProperty('--swipe-translate');
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwiping: handleSwiping,
+    onSwiped: handleSwipeEnd,
+  });
   return (
-    <div className={styles.pageContainer} {...swipe}>
+    <div className={styles.pageContainer} {...swipeHandlers}>
       <button className={styles.back} onClick={() => router.back()}>
         {loading && <LoadingShadow />}
         <BiArrowBack size="xl" />
