@@ -4,6 +4,7 @@ import { BiArrowBack } from 'react-icons/bi';
 
 import LoadingShadow from 'components/LoadingShadow';
 import styles from './SecondaryPageLayout.module.scss';
+import { useSwipeable } from "react-swipeable";
 
 function SecondaryLayout({
   children,
@@ -13,9 +14,12 @@ function SecondaryLayout({
   loading: boolean;
 }) {
   const router = useRouter();
+  const handlerSwipe = useSwipeable({
+    onSwipedRight: () => router.push("/")
+  });
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={styles.pageContainer} {...handlerSwipe}>
       <button className={styles.back} onClick={() => router.back()}>
         {loading && <LoadingShadow />}
         <BiArrowBack size="xl" />
