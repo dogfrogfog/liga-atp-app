@@ -67,6 +67,7 @@ model player {
   match_match_player2_idToplayer match[]   @relation("match_player2_idToplayer")
   match_match_player3_idToplayer match[]   @relation("match_player3_idToplayer")
   match_match_player4_idToplayer match[]   @relation("match_player4_idToplayer")
+  isHyped                        Boolean  @default(false)
 }
 
 model tournament {
