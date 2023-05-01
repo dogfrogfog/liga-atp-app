@@ -49,8 +49,8 @@ export const isPlayerWon = (
     ) {
       return true; // player in second team, that won the match
     } else {
-        return false;
-      }
+      return false;
+    }
   }
 
   // handle singles format

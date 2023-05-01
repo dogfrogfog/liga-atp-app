@@ -59,12 +59,7 @@ export const getOpponents = (
       }
     }
 
-    return (
-      <>
-        <i> vs. </i>
-        {opponentName}
-      </>
-    );
+    return <>{opponentName}</>;
   } else {
     let opponentOneName: string | ReactNode = 'unknown';
     let opponentTwoName: string | ReactNode = 'unknown';

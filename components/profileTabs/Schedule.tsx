@@ -11,6 +11,7 @@ type MatchProps = {
   time: Date | null;
   opponent: string | ReactNode;
   tournamentId: number;
+  isDoubles: boolean;
 };
 
 const Match = ({
@@ -18,6 +19,7 @@ const Match = ({
   time,
   opponent,
   tournamentId,
+  isDoubles,
 }: MatchProps) => {
   const date = time && new Date(time);
 
@@ -32,7 +34,10 @@ const Match = ({
         </span>
       </div>
       <div className={styles.row}>
-        <span className={styles.opponent}>vs {opponent}</span>
+        <span className={styles.opponent}>
+          {!isDoubles && <i>vs.{' '}</i>}
+          {opponent}
+        </span>
         <span className={styles.matchDate}>
           {date && format(date, 'dd.MM')}
         </span>
@@ -56,6 +61,7 @@ const ScheduleTab = ({
             key={v.id}
             tournamentName={v.tournament.name || ''}
             tournamentId={v.tournament.id}
+            isDoubles={!!(v.tournament.is_doubles || ((v.player3_id && v.player4_id))) || false} // we have cases where 'is_doubles' is null but it's still a double tournament (has player3 and player4)
             time={v.time}
             opponent={getOpponents(playerId, v)}
           />

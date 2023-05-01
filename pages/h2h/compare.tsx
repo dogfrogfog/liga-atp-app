@@ -91,7 +91,7 @@ const CompareTwoPlayersPage: NextPage<{
       <div className={styles.errorContainer}>
         <NotFoundMessage
           className={styles.notFound}
-          message="Выбирите двух игроков"
+          message="Выберите двух игроков"
         />
       </div>
     );

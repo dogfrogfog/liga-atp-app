@@ -23,6 +23,8 @@ const Match = ({ match, playerId }: MatchProps) => {
     score,
     player1_id,
     player2_id,
+    player3_id,
+    player4_id,
     comment,
   } = match;
 
@@ -69,6 +71,7 @@ const Match = ({ match, playerId }: MatchProps) => {
         <span className={styles.players}>
           {playerId ? (
             <>
+              {!(tournament.is_doubles || (player3_id && player4_id)) && <i>{' '}vs.{' '}</i>}
               {getOpponents(playerId, match)}
             </>
           ) : (
