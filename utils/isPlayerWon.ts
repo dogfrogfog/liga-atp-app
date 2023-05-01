@@ -38,19 +38,27 @@ export const isPlayerWon = (
   // handle new doubles format
   if (isDoubles) {
     const team1 = [m.player1_id, m.player3_id];
+    console.log('team1', team1);
 
     const targetPlayerInFirstTeam = team1.includes(playerId);
+    console.log('targetPlayerInFirstTeam', targetPlayerInFirstTeam);
+
+    console.log(team1.includes(parseInt(m.winner_id as string, 10)));
 
     // player in first team, that won the match
     if (
       targetPlayerInFirstTeam &&
       team1.includes(parseInt(m.winner_id as string, 10))
     ) {
+      console.log('in if');
+      
       console.log(targetPlayerInFirstTeam &&
         team1.includes(parseInt(m.winner_id as string, 10)));
       
       return true;
     } else {
+      console.log('in else');
+      
       return false;
     }
   }
