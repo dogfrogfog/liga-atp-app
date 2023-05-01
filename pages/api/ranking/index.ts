@@ -98,7 +98,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data: {
           elo_points: p1NewElo,
-          ...(expireDates.p1 && { expire_date: expireDates.p1 }),
+          expire_date: now
+          // ...(expireDates.p1 && { expire_date: expireDates.p1 }),
         },
       }),
       prisma.player_elo_ranking.update({
@@ -107,7 +108,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data: {
           elo_points: p2NewElo,
-          ...(expireDates.p2 && { expire_date: expireDates.p2 }),
+          expire_date: now
+          // ...(expireDates.p2 && { expire_date: expireDates.p2 }),
         },
       }),
       ...(isDoubles
@@ -118,7 +120,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               },
               data: {
                 elo_points: doublesPNewEloPoints.p3NewElo,
-                ...(expireDates.p3 && { expire_date: expireDates.p3 }),
+                expire_date: now
+                // ...(expireDates.p3 && { expire_date: expireDates.p3 }),
               },
             }),
             prisma.player_elo_ranking.update({
@@ -127,7 +130,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               },
               data: {
                 elo_points: doublesPNewEloPoints.p4NewElo,
-                ...(expireDates.p4 && { expire_date: expireDates.p4 }),
+                expire_date: now
+                // ...(expireDates.p4 && { expire_date: expireDates.p4 }),
               },
             }),
           ]

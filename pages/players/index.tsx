@@ -19,6 +19,7 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
 }) => {
   const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
+  
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -43,9 +44,10 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
   );
 
   const filteredPlayers = useMemo(() => {
+
     const filtered = selectedLvl
       ? players.filter((v) => v.level + '' === selectedLvl)
-      : players;
+      : players.filter((v) => v.isHyped === true);
 
     return filtered
       .map((v) => ({ ...v, elo_points: playersRankingsMap.get(v.id) }))
@@ -66,7 +68,7 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
         Игроки
         <div className={styles.lvlFilter}>
           <select onChange={handleLevelChange} value={selectedLvl}>
-            <option value={''}>Все</option>
+            <option value={''}>На хайпе</option>
             {[
               [3, 'Про'],
               [5, 'S-Мастерс'],
@@ -89,6 +91,7 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
   );
 };
 
+
 export const getStaticProps = async () => {
   const players = await prisma.player.findMany({
     select: {
@@ -97,6 +100,7 @@ export const getStaticProps = async () => {
       last_name: true,
       level: true,
       avatar: true,
+      isHyped: true
     },
   });
 
@@ -115,7 +119,7 @@ export const getStaticProps = async () => {
       players,
       playerEloRanking,
     },
-    revalidate: 600, // sec
+    revalidate: 600,
   };
 };
 
