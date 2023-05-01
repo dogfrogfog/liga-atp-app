@@ -9,7 +9,7 @@ import styles from 'styles/Ranking.module.scss';
 import { prisma } from 'services/db';
 
 const RANKING_TABS = [
-  'Все',
+  'На хайпе',
   'Про', // 3
   'S-Мастерс', // 5
   'Мастерс', // 2
@@ -39,6 +39,7 @@ const RankingPage: NextPage<RankingPageProps> = ({
     [players]
   );
 
+
   const filteredPlayers = (() => {
     let result = playerEloRanking
       .map((v) => {
@@ -55,9 +56,11 @@ const RankingPage: NextPage<RankingPageProps> = ({
       .sort(
         (a, b) => (b?.elo_points as number) - (a?.elo_points as number)
       ) as (PlayerT & { elo_points: number })[];
+      
 
     switch (activeTab) {
       case RANKING_TABS[0]: {
+        result = result.filter((p) => p.isHyped === true);
         break;
       }
       case RANKING_TABS[1]: {
@@ -123,24 +126,20 @@ export const getStaticProps = async () => {
       last_name: true,
       level: true,
       avatar: true,
+      isHyped: true
     },
   });
 
-  // todo
-  // if create relation between player and elo_points we dont need this call
-  // we can extend select: {} of player.findMany and get this data in one query
   const playerEloRanking = await prisma.player_elo_ranking.findMany({
     select: {
       player_id: true,
       elo_points: true,
     },
-    /* where: {
+    where: {
       expire_date: {
-        // even if we create new player elo ranking expire_date will be today and we will not see it in the response
-        // 1 day ahead just in case of missing some time
-        gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24),
+        gte: new Date(new Date().getFullYear() - 1, new Date().getMonth(), new Date().getDate()),
       },
-    }, */ //TODO: uncomment or remove
+    },
   });
 
   return {
@@ -148,7 +147,7 @@ export const getStaticProps = async () => {
       players,
       playerEloRanking,
     },
-    revalidate: 600, // sec
+    revalidate: 600,
   };
 };
 

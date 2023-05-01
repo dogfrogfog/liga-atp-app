@@ -155,6 +155,7 @@ const PlayerForm = ({
       height: null,
       elo_points: null,
       premium: player?.premium || false,
+      isHyped: player?.isHyped || false,
       ...player,
       in_tennis_from: player?.in_tennis_from
         ? (format(new Date(player?.in_tennis_from), 'yyyy-MM-dd') as any)
@@ -313,6 +314,10 @@ const PlayerForm = ({
           Премиум (из Аллеи славы)
           <br />
           <input type="checkbox" {...register('premium')} />
+        </InputWithError>
+        <InputWithError error={errors.isHyped}>
+          <p style={{ textAlign: 'center', margin: '0' }}>На хайпе</p>
+          <input type="checkbox" {...register('isHyped')} />
         </InputWithError>
         <br />
         <h3>Характеристики</h3>
