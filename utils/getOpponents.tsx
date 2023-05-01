@@ -59,10 +59,16 @@ export const getOpponents = (
       }
     }
 
-    return opponentName;
+    return (
+      <>
+        <i> vs. </i>
+        {opponentName}
+      </>
+    );
   } else {
     let opponentOneName: string | ReactNode = 'unknown';
     let opponentTwoName: string | ReactNode = 'unknown';
+    let partner: string | ReactNode = 'unknown';
 
     // OLD FORMAT
     // team 1 = [p1, p2]
@@ -73,7 +79,14 @@ export const getOpponents = (
     // only new tournaments have status field
     const isOldFormat = !match.tournament.status;
     if (isOldFormat) {
-      if (playerId === p1.id || playerId === p2.id) {
+      if (playerId === p1.id) {
+        if (p2) {
+          partner = (
+            <Link href={`/players/${p2.id}`}>{`${
+              (p2.first_name as string)[0]
+            }. ${p2.last_name}`}</Link>
+          );
+        }
         if (p3) {
           opponentOneName = (
             <Link href={`/players/${p3.id}`}>{`${
@@ -90,7 +103,62 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p3?.id || playerId === p4?.id) {
+      if (playerId === p2.id) {
+        if (p1) {
+          partner = (
+            <Link href={`/players/${p1.id}`}>{`${
+              (p1.first_name as string)[0]
+            }. ${p1.last_name}`}</Link>
+          );
+        }
+        if (p3) {
+          opponentOneName = (
+            <Link href={`/players/${p3.id}`}>{`${
+              (p3.first_name as string)[0]
+            }. ${p3.last_name}`}</Link>
+          );
+        }
+        if (p4) {
+          opponentTwoName = (
+            <Link href={`/players/${p4.id}`}>{`${
+              (p4.first_name as string)[0]
+            }. ${p4.last_name}`}</Link>
+          );
+        }
+      }
+
+      if (playerId === p3?.id) {
+        if (p4) {
+          partner = (
+            <Link href={`/players/${p4.id}`}>{`${
+              (p4.first_name as string)[0]
+            }. ${p4.last_name}`}</Link>
+          );
+        }
+        if (p1) {
+          opponentOneName = (
+            <Link href={`/players/${p1.id}`}>{`${
+              (p1.first_name as string)[0]
+            }. ${p1.last_name}`}</Link>
+          );
+        }
+        if (p2) {
+          opponentTwoName = (
+            <Link href={`/players/${p2.id}`}>{`${
+              (p2.first_name as string)[0]
+            }. ${p2.last_name}`}</Link>
+          );
+        }
+      }
+
+      if (playerId === p4?.id) {
+        if (p3) {
+          partner = (
+            <Link href={`/players/${p3.id}`}>{`${
+              (p3.first_name as string)[0]
+            }. ${p3.last_name}`}</Link>
+          );
+        }
         if (p1) {
           opponentOneName = (
             <Link href={`/players/${p1.id}`}>{`${
@@ -107,7 +175,14 @@ export const getOpponents = (
         }
       }
     } else {
-      if (playerId === p1.id || playerId === p3.id) {
+      if (playerId === p1.id) {
+        if (p3) {
+          partner = (
+            <Link href={`/players/${p3.id}`}>{`${
+              (p3.first_name as string)[0]
+            }. ${p3.last_name}`}</Link>
+          );
+        }
         if (p2) {
           opponentOneName = (
             <Link href={`/players/${p2.id}`}>{`${
@@ -124,7 +199,62 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p2.id || playerId === p4.id) {
+      if (playerId === p3.id) {
+        if (p1) {
+          partner = (
+            <Link href={`/players/${p1.id}`}>{`${
+              (p1.first_name as string)[0]
+            }. ${p1.last_name}`}</Link>
+          );
+        }
+        if (p2) {
+          opponentOneName = (
+            <Link href={`/players/${p2.id}`}>{`${
+              (p2.first_name as string)[0]
+            }. ${p2.last_name}`}</Link>
+          );
+        }
+        if (p4) {
+          opponentTwoName = (
+            <Link href={`/players/${p4.id}`}>{`${
+              (p4.first_name as string)[0]
+            }. ${p4.last_name}`}</Link>
+          );
+        }
+      }
+
+      if (playerId === p2.id) {
+        if (p4) {
+          partner = (
+            <Link href={`/players/${p4.id}`}>{`${
+              (p4.first_name as string)[0]
+            }. ${p4.last_name}`}</Link>
+          );
+        }
+        if (p1) {
+          opponentOneName = (
+            <Link href={`/players/${p1.id}`}>{`${
+              (p1.first_name as string)[0]
+            }. ${p1.last_name}`}</Link>
+          );
+        }
+        if (p3) {
+          opponentTwoName = (
+            <Link href={`/players/${p3.id}`}>{`${
+              (p3.first_name as string)[0]
+            }. ${p3.last_name}`}</Link>
+          );
+        }
+      }
+
+      if (playerId === p4.id) {
+        if (p2) {
+          partner = (
+            <Link href={`/players/${p2.id}`}>{`${
+              (p2.first_name as string)[0]
+            }. ${p2.last_name}`}</Link>
+          );
+        }
         if (p1) {
           opponentOneName = (
             <Link href={`/players/${p1.id}`}>{`${
@@ -144,6 +274,8 @@ export const getOpponents = (
 
     return (
       <>
+        / {partner} <br />
+        <i> vs. </i>
         {opponentOneName} / {opponentTwoName}
       </>
     );

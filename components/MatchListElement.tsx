@@ -69,7 +69,6 @@ const Match = ({ match, playerId }: MatchProps) => {
         <span className={styles.players}>
           {playerId ? (
             <>
-              <i> vs. </i>
               {getOpponents(playerId, match)}
             </>
           ) : (

@@ -21,7 +21,7 @@
   right: 30px;
 
   span {
-    font-family: 'Roboto', sans-serif;
+    font-family: $default-font-family;
     font-size: 18px;
   }
 
@@ -41,7 +41,7 @@
     font-size: 40px;
   }
   
-  .infoText{
+  .infoText {
     position: absolute;
     top: 60px;
     right: 0;
@@ -56,7 +56,7 @@
     margin: 0;
     text-align: center;
   
-    &::before{
+    &::before {
       content: '';
       position: absolute;
       top: -8px;
@@ -68,12 +68,12 @@
     }
   }
   
-  .iconText{
+  .iconText {
     vertical-align: middle;
     font-size: 25px;
   }
   
-  .activeIcon{
+  .activeIcon {
     color: $custom-aqua;
   }  
 }

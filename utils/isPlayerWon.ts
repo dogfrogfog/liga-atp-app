@@ -4,7 +4,6 @@ import type {
 } from '@prisma/client';
 
 import { DOUBLES_TOURNAMENT_TYPES_NUMBER } from 'constants/values';
-// import type { MatchWithTournamentType } from 'utils/getOpponents';
 
 export const isPlayerWon = (
   playerId: number,
@@ -35,18 +34,23 @@ export const isPlayerWon = (
   // handle new doubles format
   if (isDoubles) {
     const team1 = [m.player1_id, m.player3_id];
+    const team2 = [m.player2_id, m.player4_id];
 
     const targetPlayerInFirstTeam = team1.includes(playerId);
 
-    // player in first team, that won the match
     if (
       targetPlayerInFirstTeam &&
       team1.includes(parseInt(m.winner_id as string, 10))
     ) {
-      return true;
+      return true; // player in first team, that won the match
+    } else if (
+      !targetPlayerInFirstTeam &&
+      team2.includes(parseInt(m.winner_id as string, 10))
+    ) {
+      return true; // player in second team, that won the match
     } else {
-      return false;
-    }
+        return false;
+      }
   }
 
   // handle singles format
