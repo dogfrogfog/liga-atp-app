@@ -56,9 +56,13 @@ export const isPlayerWon = (
         team1.includes(parseInt(m.winner_id as string, 10)));
       
       return true;
-    } else {
-      console.log('in else');
-      
+    } else if ( // player in second team, that won the match
+      !targetPlayerInFirstTeam &&
+      !team1.includes(parseInt(m.winner_id as string, 10))
+    ) {
+      return true;
+    }
+    else {
       return false;
     }
   }
