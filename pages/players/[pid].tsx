@@ -79,7 +79,6 @@ const SingleProfilePage: NextPage<{
     technique,
     tactics,
     power,
-    shakes,
     serve,
     behaviour,
     premium,
@@ -179,11 +178,25 @@ const SingleProfilePage: NextPage<{
 
         return (
           <div className={styles.specs}>
+            <div className={styles.inputRow}>
+              <p className={styles.inputValue}>
+                {'Мощь '}<span className={styles.percent}>{power}%</span>
+              </p>
+              <input
+                disabled
+                className={styles.percentInput}
+                type="range"
+                max={100}
+                min={0}
+                defaultValue={power as any}
+              />
+              <p className={styles.shakes}>
+                {'Кач '}<span className={styles.percent}>{100 - (power || 0)}%</span>
+              </p>
+            </div>
             {[
               ['Техника', technique],
               ['Тактика', tactics],
-              ['Мощь', power],
-              ['Кач', shakes],
               ['Подача', serve],
               ['Поведение', behaviour],
             ].map(([k, v]) => (

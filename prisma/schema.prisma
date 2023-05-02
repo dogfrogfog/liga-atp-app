@@ -50,17 +50,18 @@ model player {
   age                            Int?
   gameplay_style                 String?
   forehand                       String?
-  beckhand                       String?
+  backhand                       String?
   insta_link                     String?
   is_coach                       Boolean?
   in_tennis_from                 DateTime? @db.Date
   job_description                String?
   technique                      Int       @default(0)
-  tactics                        Int       @default(0)
+  net_game                       Int       @default(0)
+  psychology                     Int       @default(0)
   power                          Int?      @default(0)
   shakes                         Int       @default(0)
   serve                          Int       @default(0)
-  behaviour                      Int       @default(0)
+  behavior                       Int       @default(0)
   height                         Int?
   premium                        Boolean?  @default(false)
   isHyped                        Boolean   @default(false)
@@ -71,21 +72,21 @@ model player {
 }
 
 model tournament {
-  id                       Int         @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
-  name                     String?
-  address                  String?
-  start_date               DateTime?   @db.Date
-  is_finished              Boolean?
-  surface                  Int?
-  draw_type                Int?
-  players_order            String?
-  draw                     String?
-  city                     String?
-  tournament_type          Int?
-  is_doubles               Boolean?
-  status                   Int?
-  unregistered_players     String?     @default("")
-  match                    match[]
+  id                   Int       @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
+  name                 String?
+  address              String?
+  start_date           DateTime? @db.Date
+  is_finished          Boolean?
+  surface              Int?
+  draw_type            Int?
+  players_order        String?
+  draw                 String?
+  city                 String?
+  tournament_type      Int?
+  is_doubles           Boolean?
+  status               Int?
+  unregistered_players String?   @default("")
+  match                match[]
 }
 
 model digest {
