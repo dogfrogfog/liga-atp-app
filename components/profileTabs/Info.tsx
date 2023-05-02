@@ -12,7 +12,7 @@ type InfoTabProps = {
   jobDescription: string;
   gameplayStyle: string;
   forehand: string;
-  beckhand: string;
+  backhand: string;
   instaLink: string;
 };
 
@@ -25,7 +25,7 @@ const InfoTab = ({
   yearsInTennis,
   gameplayStyle,
   forehand,
-  beckhand,
+  backhand,
   instaLink,
 }: InfoTabProps) => (
   <>
@@ -65,7 +65,7 @@ const InfoTab = ({
     </div>
     <div className={styles.infoRow}>
       <span>Бэкхэнд</span>
-      <span>{beckhand}</span>
+      <span>{backhand}</span>
     </div>
     <div className={styles.infoRow}>
       <span>Инстаграм</span>

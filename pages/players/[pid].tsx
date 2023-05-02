@@ -71,17 +71,17 @@ const SingleProfilePage: NextPage<{
     level,
     gameplay_style,
     forehand,
-    beckhand,
+    backhand,
+    net_game,
     insta_link,
     in_tennis_from,
     job_description,
     height,
     technique,
-    tactics,
+    psychology,
     power,
-    shakes,
     serve,
-    behaviour,
+    behavior,
     premium,
   } = player;
 
@@ -121,7 +121,7 @@ const SingleProfilePage: NextPage<{
             }
             gameplayStyle={gameplay_style || ''}
             forehand={forehand || ''}
-            beckhand={beckhand || ''}
+            backhand={backhand || ''}
             instaLink={insta_link || ''}
           />
         );
@@ -179,13 +179,28 @@ const SingleProfilePage: NextPage<{
 
         return (
           <div className={styles.specs}>
+            <div className={styles.inputRow}>
+              <p className={styles.inputValue}>
+                {'Мощь '}<span className={styles.percent}>{power}%</span>
+              </p>
+              <input
+                disabled
+                className={styles.percentInput}
+                type="range"
+                max={100}
+                min={0}
+                defaultValue={power as any}
+              />
+              <p className={styles.shakes}>
+                {'Кач '}<span className={styles.percent}>{100 - (power || 0)}%</span>
+              </p>
+            </div>
             {[
               ['Техника', technique],
-              ['Тактика', tactics],
-              ['Мощь', power],
-              ['Кач', shakes],
+              ['Игра на сетке', net_game],
               ['Подача', serve],
-              ['Поведение', behaviour],
+              ['Психология', psychology],
+              ['Поведение', behavior],
             ].map(([k, v]) => (
               <div key={k} className={styles.inputRow}>
                 <p className={styles.inputValue}>

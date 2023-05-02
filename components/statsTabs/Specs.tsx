@@ -4,20 +4,20 @@ import styles from './Specs.module.scss';
 
 type SpecsProps = {
   technique: [number, number];
-  tactics: [number, number];
+  psychology: [number, number];
   power: [number, number];
-  shakes: [number, number];
+  net_game: [number, number];
   serve: [number, number];
-  behaviour: [number, number];
+  behavior: [number, number];
 };
 
 const trans: { [k: string]: string } = {
   technique: 'Техника',
-  tactics: 'Тактика',
+  psychology: 'Психология',
   power: 'Мощь',
-  shakes: 'Кач',
+  net_game: 'Игра на сетке',
   serve: 'Подача',
-  behaviour: 'Поведение',
+  behavior: 'Поведение',
 };
 
 const Specs = (props: SpecsProps) => {

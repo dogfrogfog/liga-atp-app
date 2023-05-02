@@ -97,16 +97,16 @@ export const PLAYER_COLUMNS = [
   'phone',
   'gameplay_style',
   'forehand',
-  'beckhand',
+  'backhand',
   'insta_link',
   'job_description',
   'in_tennis_from',
   'technique',
-  'tactics',
+  'psychology',
   'power',
-  'shakes',
+  'net_game',
   'serve',
-  'behaviour',
+  'behavior',
 ] as const;
 
 export const TOURNAMENT_COLUMNS = [

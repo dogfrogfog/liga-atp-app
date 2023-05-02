@@ -152,6 +152,12 @@
     margin: 0;
   }
 
+  .shakes {
+    position: absolute;
+    top: -3px;
+    right: 0;
+  } 
+
   .inputValue {
     line-height: 12px;
   }
@@ -161,6 +167,7 @@
   }
 
   .inputRow {
+    position: relative;
     margin-bottom: 10px;
   }
 

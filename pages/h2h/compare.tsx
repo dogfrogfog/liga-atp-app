@@ -128,11 +128,11 @@ const CompareTwoPlayersPage: NextPage<{
           <div className={styles.tabContentWrapper}>
             <SpecsTab
               technique={[p1.technique, p2.technique]}
-              tactics={[p1.tactics, p2.tactics]}
+              psychology={[p1.psychology, p2.psychology]}
               power={[p1.power as number, p2.power as number]}
-              shakes={[p1.shakes, p2.shakes]}
+              net_game={[p1.net_game, p2.net_game]}
               serve={[p1.serve, p2.serve]}
-              behaviour={[p1.behaviour, p2.behaviour]}
+              behavior={[p1.behavior, p2.behavior]}
             />
           </div>
         );
