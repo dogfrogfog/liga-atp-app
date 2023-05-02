@@ -71,16 +71,17 @@ const SingleProfilePage: NextPage<{
     level,
     gameplay_style,
     forehand,
-    beckhand,
+    backhand,
+    net_game,
     insta_link,
     in_tennis_from,
     job_description,
     height,
     technique,
-    tactics,
+    psychology,
     power,
     serve,
-    behaviour,
+    behavior,
     premium,
   } = player;
 
@@ -120,7 +121,7 @@ const SingleProfilePage: NextPage<{
             }
             gameplayStyle={gameplay_style || ''}
             forehand={forehand || ''}
-            beckhand={beckhand || ''}
+            backhand={backhand || ''}
             instaLink={insta_link || ''}
           />
         );
@@ -196,9 +197,10 @@ const SingleProfilePage: NextPage<{
             </div>
             {[
               ['Техника', technique],
-              ['Тактика', tactics],
+              ['Игра на сетке', net_game],
               ['Подача', serve],
-              ['Поведение', behaviour],
+              ['Психология', psychology],
+              ['Поведение', behavior],
             ].map(([k, v]) => (
               <div key={k} className={styles.inputRow}>
                 <p className={styles.inputValue}>

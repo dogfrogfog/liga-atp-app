@@ -147,11 +147,10 @@ const PlayerForm = ({
       level: null,
       age: null,
       technique: 0,
-      tactics: 0,
       power: 0,
-      shakes: 0,
+      net_game: 0,
       serve: 0,
-      behaviour: 0,
+      behavior: 0,
       height: null,
       elo_points: null,
       premium: player?.premium || false,
@@ -259,10 +258,10 @@ const PlayerForm = ({
             {...register('height', { required: false, valueAsNumber: true })}
           />
         </InputWithError>
-        <InputWithError error={errors.beckhand}>
+        <InputWithError error={errors.backhand}>
           Бэкхэнд
           <br />
-          <input {...register('beckhand', { required: false })} />
+          <input {...register('backhand', { required: false })} />
         </InputWithError>
         <InputWithError error={errors.job_description}>
           Род деятельности
@@ -333,11 +332,11 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError error={errors.tactics}>
-          Тактика
+        <InputWithError error={errors.psychology}>
+          Психология
           <br />
           <input
-            {...register('tactics', {
+            {...register('psychology', {
               required: true,
               valueAsNumber: true,
               max: 100,
@@ -357,11 +356,11 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError error={errors.shakes}>
-          Кач
+        <InputWithError error={errors.net_game}>
+          Игра на сетке
           <br />
           <input
-            {...register('shakes', {
+            {...register('net_game', {
               required: true,
               valueAsNumber: true,
               max: 100,
@@ -381,11 +380,11 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        <InputWithError error={errors.behaviour}>
+        <InputWithError error={errors.behavior}>
           Поведение
           <br />
           <input
-            {...register('behaviour', {
+            {...register('behavior', {
               required: true,
               valueAsNumber: true,
               max: 100,
