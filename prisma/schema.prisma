@@ -59,7 +59,6 @@ model player {
   net_game                       Int       @default(0)
   psychology                     Int       @default(0)
   power                          Int?      @default(0)
-  shakes                         Int       @default(0)
   serve                          Int       @default(0)
   behavior                       Int       @default(0)
   height                         Int?
