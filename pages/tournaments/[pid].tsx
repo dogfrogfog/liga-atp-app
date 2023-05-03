@@ -257,7 +257,7 @@ const TournamentPage: NextPage<{
   };
 
   const submitPlayerRegistration = async (
-    data: { first_name: string; last_name: string; phone?: string } & any
+    data: { /* first_name: string; */ last_name: string; phone?: string } & any
   ) => {
     setPlayerLoadingStatus(true);
 
@@ -342,13 +342,13 @@ const TournamentPage: NextPage<{
             <p className={styles.formTitle}>Форма регистрации игрока</p>
             {!isPlayerLoading ? (
               <form onSubmit={handleSubmit(submitPlayerRegistration)}>
-                <InputWithError error={errors.first_name}>
+                {/* <InputWithError error={errors.first_name}>
                   <input
                     className={styles.input}
                     placeholder="Имя"
                     {...register('first_name', { required: true })}
                   />
-                </InputWithError>
+                </InputWithError> */}
                 <InputWithError error={errors.last_name}>
                   <input
                     className={styles.input}
