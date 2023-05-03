@@ -262,7 +262,7 @@ const FinishedTournamentsList = memo(
     );
 
     console.log('players', players);
-    console.log('name', players.map((el) => el.first_name === undefined));
+    console.log('name', players.filter((el) => el.first_name === undefined));
     
 
     const playersMap = useMemo(

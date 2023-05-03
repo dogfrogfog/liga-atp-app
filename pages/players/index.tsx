@@ -20,7 +20,6 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
   const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
   
-
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
   };
