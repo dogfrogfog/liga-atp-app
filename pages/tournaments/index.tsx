@@ -266,6 +266,7 @@ const FinishedTournamentsList = memo(
 
     console.log('players', players);
     
+    
 
     const playersMap = useMemo(
       () =>
