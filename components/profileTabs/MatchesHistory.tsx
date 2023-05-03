@@ -12,6 +12,8 @@ const MatchesHistoryTab = ({
   playedMatches: MatchWithTournamentType[];
 }) => {
   console.log('playedMatches', playedMatches);
+  console.log('playedMatchesFiler1', playedMatches.filter(el => el.player_match_player1_idToplayer === undefined));
+  console.log('playedMatchesFiler2', playedMatches.filter(el => el.player_match_player2_idToplayer === undefined));
   
   return (
     <>

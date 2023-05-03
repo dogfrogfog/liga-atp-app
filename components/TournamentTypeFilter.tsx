@@ -10,8 +10,6 @@ const TournamentTypeFilter = ({
   onChange,
   tournamentTypeValue,
 }: TournamentTypeFilterProps) => {
-  console.log('tournamentTypeValue', tournamentTypeValue);
-  
   return (
     <div className={styles.finishedTournamentsFilters}>
       <div className={styles.tournamentType}>
