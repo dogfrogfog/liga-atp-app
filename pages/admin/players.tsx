@@ -292,6 +292,19 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
+        <InputWithError error={errors.interview_link}>
+          Ссылка на интервью
+          <br />
+          <input
+            {...register('interview_link', {
+              pattern: {
+                value: /(?:(?:https):\/\/)?(?:www.)?(?:youtube.com)\//,
+                message:
+                  'correct format: https://www.youtube.com/',
+              },
+            })}
+          />
+        </InputWithError>
         {!player && (
           <InputWithError error={errors.elo_points}>
             очки, которые задаются при создании игрока один раз
