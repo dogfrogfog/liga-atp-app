@@ -110,8 +110,7 @@ const TournamentPage: NextPage<{
                 (p, i) =>
                   p && (
                     <Fragment key={p.id}>
-                      {p?.first_name || 'name' +
-                        ' ' +
+                      {
                         p?.last_name +
                         `${i + 1 != winners.length ? ' / ' : ''}`}
                     </Fragment>
@@ -139,7 +138,7 @@ const TournamentPage: NextPage<{
           );
 
           winnerName = winner
-            ? `${(winner.first_name as string || 'name')[0]}. ${winner.last_name}`
+            ? `${winner.last_name}`
             : '';
         } else {
           const team1 = [lastMatch?.player1_id, lastMatch?.player3_id];
@@ -149,9 +148,9 @@ const TournamentPage: NextPage<{
             winnerName = allPlayers.reduce((acc, p) => {
               if (team1.includes(p.id)) {
                 if (acc) {
-                  acc += ` / ${(p.first_name as string || 'name')[0]}. ${p.last_name}`;
+                  acc += ` / ${p.last_name}`;
                 } else {
-                  acc = `${(p.first_name as string || 'name')[0]}. ${p.last_name}`;
+                  acc = ` ${p.last_name}`;
                 }
               }
               return acc;
@@ -162,9 +161,9 @@ const TournamentPage: NextPage<{
             winnerName = allPlayers.reduce((acc, p) => {
               if (team2.includes(p.id)) {
                 if (acc) {
-                  acc += ` / ${(p.first_name as string || 'name')[0]}. ${p.last_name}`;
+                  acc += ` / ${p.last_name}`;
                 } else {
-                  acc = `${(p.first_name as string || 'name')[0]}. ${p.last_name}`;
+                  acc = ` ${p.last_name}`;
                 }
               }
               return acc;
