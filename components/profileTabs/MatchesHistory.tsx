@@ -10,12 +10,16 @@ const MatchesHistoryTab = ({
 }: {
   playerId: number;
   playedMatches: MatchWithTournamentType[];
-}) => (
-  <>
-    {playedMatches.map((match, index) => (
-      <MatchListElement playerId={playerId} match={match} key={index} />
-    ))}
-  </>
-);
+}) => {
+  console.log('playedMatches', playedMatches);
+  
+  return (
+    <>
+      {playedMatches.map((match, index) => (
+        <MatchListElement playerId={playerId} match={match} key={index} />
+      ))}
+    </>
+  );
+}
 
 export default MatchesHistoryTab;
