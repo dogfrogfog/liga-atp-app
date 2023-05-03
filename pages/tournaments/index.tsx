@@ -261,6 +261,9 @@ const FinishedTournamentsList = memo(
       playedTournamentsPage
     );
 
+    console.log('players', players);
+    
+
     const playersMap = useMemo(
       () =>
         players.reduce((acc, p) => {
@@ -269,6 +272,9 @@ const FinishedTournamentsList = memo(
         }, new Map<number, PlayerT>()),
       [players]
     );
+
+    console.log('playersMap', playersMap);
+    
 
     const filteredFinishedTournaments = playedTournaments.filter((v) =>
       finishedTournamentsType !== 999
