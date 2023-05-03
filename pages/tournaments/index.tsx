@@ -262,7 +262,7 @@ const FinishedTournamentsList = memo(
     );
 
     console.log('players', players);
-    console.log('name', players.map((el) => el.first_name));
+    console.log('name', players.map((el) => el.first_name === undefined));
     
 
     const playersMap = useMemo(
@@ -333,7 +333,7 @@ export const getStaticProps = async () => {
   const players = await prisma.player.findMany({
     select: {
       id: true,
-      first_name: true,
+      /* first_name: true, */
       last_name: true,
     },
   });
