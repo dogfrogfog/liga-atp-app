@@ -20,7 +20,7 @@ import {
 } from 'date-fns';
 import cl from 'classnames';
 import useTournaments from 'hooks/useTournaments';
-import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
+import usePlayedTournaments from 'hooks/usePlayedTournaments';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
@@ -35,6 +35,7 @@ import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
 import getTournamentWinners from 'utils/getTournamentWinners';
 import { prisma } from 'services/db';
+import { log } from 'console';
 
 /* const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие']; */ //TODO: replace
 const TOURNAMENT_TABS = ['Идут сейчас', 'Прошедшие'];
@@ -53,6 +54,8 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   openToRegistrationTournaments,
   players,
 }) => {
+  console.log(players);
+  
   const [activeTab, setActiveTab] = useState(TOURNAMENT_TABS[0]);
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
@@ -207,7 +210,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
             {pages}
           </>
         );
-    }
+      }
 
     return null;
   })();
@@ -257,9 +260,12 @@ const FinishedTournamentsList = memo(
     players,
     setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
-    const { playedTournaments, isLoading } = usePlayedTournamnts(
+    const { playedTournaments, isLoading } = usePlayedTournaments(
       playedTournamentsPage
     );
+
+    console.log('players', players);
+    
 
     const playersMap = useMemo(
       () =>
@@ -269,6 +275,9 @@ const FinishedTournamentsList = memo(
         }, new Map<number, PlayerT>()),
       [players]
     );
+
+    console.log('playersMap',playersMap);
+    
 
     const filteredFinishedTournaments = playedTournaments.filter((v) =>
       finishedTournamentsType !== 999
@@ -326,7 +335,7 @@ export const getStaticProps = async () => {
   const players = await prisma.player.findMany({
     select: {
       id: true,
-      first_name: true,
+      /* first_name: true, */
       last_name: true,
     },
   });

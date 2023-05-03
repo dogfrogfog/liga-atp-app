@@ -4,7 +4,7 @@ import type {
   match as MatchT,
 } from '@prisma/client';
 
-const usePlayedTournamnts = (page: number) => {
+const usePlayedTournaments = (page: number) => {
   const { data, isLoading, error, mutate } = useSWR<
     (TournamentT & { match: MatchT[] })[]
   >(`/api/tournaments/playedTournaments?page=${page}`);
@@ -17,4 +17,4 @@ const usePlayedTournamnts = (page: number) => {
   };
 };
 
-export default usePlayedTournamnts;
+export default usePlayedTournaments;

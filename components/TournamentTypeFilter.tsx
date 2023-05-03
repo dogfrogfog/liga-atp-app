@@ -1,4 +1,3 @@
-import { TOURNAMENT_TYPE_NUMBER_VALUES } from 'constants/values';
 import styles from './TournamentTypeFilter.module.scss';
 
 type TournamentTypeFilterProps = {
