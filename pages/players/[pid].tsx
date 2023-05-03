@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 import { FaMedal } from 'react-icons/fa';
+import { FiYoutube } from 'react-icons/fi';
 import { AiFillStar } from 'react-icons/ai';
 import type {
   player as PlayerT,
@@ -74,6 +75,7 @@ const SingleProfilePage: NextPage<{
     backhand,
     net_game,
     insta_link,
+    interview_link,
     in_tennis_from,
     job_description,
     height,
@@ -289,6 +291,7 @@ const SingleProfilePage: NextPage<{
         tournamentsWins={(statsData as any)?.tournaments_wins}
         tournamentsFinals={(statsData as any)?.tournaments_finals}
         isPremium={!!premium}
+        interviewLink={interview_link || ''}
       />
       <section>
         <Tabs
@@ -310,6 +313,7 @@ interface IProfileHeaderProps {
   tournamentsWins?: number;
   tournamentsFinals?: number;
   isPremium?: boolean;
+  interviewLink?: string;
 }
 
 const ProfileHeader = ({
@@ -320,6 +324,7 @@ const ProfileHeader = ({
   isPremium = false,
   tournamentsWins,
   tournamentsFinals,
+  interviewLink
 }: IProfileHeaderProps) => {
   const [isStarActive, setStarActiveStatus] = useState(false);
   const handleStarClick = () => {
@@ -378,6 +383,13 @@ const ProfileHeader = ({
               <FaMedal color="lightgrey" />
               {` ${tournamentsFinals || 0}`}
             </div>
+            {
+              interviewLink && (
+                <Link href={interviewLink}>
+                    <FiYoutube className={styles.interviewLink} />
+                </Link>
+              )
+            }
           </div>
           <span className={styles.elo}>{points}</span>
         </div>

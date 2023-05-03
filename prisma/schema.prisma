@@ -52,6 +52,7 @@ model player {
   forehand                       String?
   backhand                       String?
   insta_link                     String?
+  interview_link                 String?
   is_coach                       Boolean?
   in_tennis_from                 DateTime? @db.Date
   job_description                String?
