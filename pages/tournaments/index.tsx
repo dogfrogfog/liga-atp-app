@@ -333,7 +333,7 @@ export const getStaticProps = async () => {
   const players = await prisma.player.findMany({
     select: {
       id: true,
-      /* first_name: true, */
+      first_name: true,
       last_name: true,
     },
   });
