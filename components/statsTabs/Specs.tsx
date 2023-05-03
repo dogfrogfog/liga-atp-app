@@ -3,20 +3,20 @@ import { Fragment } from 'react';
 import styles from './Specs.module.scss';
 
 type SpecsProps = {
-  technique: [number, number];
-  psychology: [number, number];
   power: [number, number];
+  technique: [number, number];
   net_game: [number, number];
   serve: [number, number];
+  psychology: [number, number];
   behavior: [number, number];
 };
 
 const trans: { [k: string]: string } = {
-  technique: 'Техника',
-  psychology: 'Психология',
   power: 'Мощь',
+  technique: 'Техника',
   net_game: 'Игра на сетке',
   serve: 'Подача',
+  psychology: 'Психология',
   behavior: 'Поведение',
 };
 
