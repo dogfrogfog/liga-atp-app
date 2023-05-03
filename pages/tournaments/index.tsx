@@ -262,6 +262,7 @@ const FinishedTournamentsList = memo(
     );
 
     console.log('players', players);
+    console.log('name', players.map((el) => el.first_name));
     
 
     const playersMap = useMemo(
