@@ -26,6 +26,7 @@ export const getOpponents = (
     player_match_player3_idToplayer: p3,
     player_match_player4_idToplayer: p4,
   } = match;
+  
   const isDoubles =
     DOUBLES_TOURNAMENT_TYPES_NUMBER.includes(
       match.tournament.tournament_type as number
@@ -74,7 +75,7 @@ export const getOpponents = (
     // only new tournaments have status field
     const isOldFormat = !match.tournament.status;
     if (isOldFormat) {
-      if (playerId === p1.id) {
+      if (playerId === p1?.id) {
         if (p2) {
           partner = (
             <Link href={`/players/${p2.id}`}>{`${
@@ -98,7 +99,7 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p2.id) {
+      if (playerId === p2?.id) {
         if (p1) {
           partner = (
             <Link href={`/players/${p1.id}`}>{`${
@@ -170,7 +171,7 @@ export const getOpponents = (
         }
       }
     } else {
-      if (playerId === p1.id) {
+      if (playerId === p1?.id) {
         if (p3) {
           partner = (
             <Link href={`/players/${p3.id}`}>{`${
@@ -194,7 +195,7 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p3.id) {
+      if (playerId === p3?.id) {
         if (p1) {
           partner = (
             <Link href={`/players/${p1.id}`}>{`${
@@ -218,7 +219,7 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p2.id) {
+      if (playerId === p2?.id) {
         if (p4) {
           partner = (
             <Link href={`/players/${p4.id}`}>{`${
@@ -242,7 +243,7 @@ export const getOpponents = (
         }
       }
 
-      if (playerId === p4.id) {
+      if (playerId === p4?.id) {
         if (p2) {
           partner = (
             <Link href={`/players/${p2.id}`}>{`${
