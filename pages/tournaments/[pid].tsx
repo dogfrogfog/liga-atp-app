@@ -111,7 +111,7 @@ const TournamentPage: NextPage<{
                   p && (
                     <Fragment key={p.id}>
                       {
-                        p?.last_name +
+                        (p?.last_name ?? 'abc') +
                         `${i + 1 != winners.length ? ' / ' : ''}`}
                     </Fragment>
                   )
