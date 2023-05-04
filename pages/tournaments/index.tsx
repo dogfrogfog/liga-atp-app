@@ -20,7 +20,7 @@ import {
 } from 'date-fns';
 import cl from 'classnames';
 import useTournaments from 'hooks/useTournaments';
-import usePlayedTournamnts from 'hooks/usePlayedTournamnts';
+import usePlayedTournaments from 'hooks/usePlayedTournaments';
 import Tabs from 'ui-kit/Tabs';
 import NotFoundMessage from 'ui-kit/NotFoundMessage';
 import SuggestionsInput from 'ui-kit/SuggestionsInput';
@@ -257,9 +257,7 @@ const FinishedTournamentsList = memo(
     players,
     setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
-    const { playedTournaments, isLoading } = usePlayedTournamnts(
-      playedTournamentsPage
-    );
+    const { playedTournaments, isLoading } = usePlayedTournaments(playedTournamentsPage);
 
     const playersMap = useMemo(
       () =>
