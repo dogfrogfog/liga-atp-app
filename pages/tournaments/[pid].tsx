@@ -138,7 +138,7 @@ const TournamentPage: NextPage<{
           );
 
           winnerName = winner
-            ? `${winner?.last_name}`
+            ? `${winner?.last_name ?? 'abc'}`
             : '';
         } else {
           const team1 = [lastMatch?.player1_id, lastMatch?.player3_id];
@@ -148,9 +148,9 @@ const TournamentPage: NextPage<{
             winnerName = allPlayers.reduce((acc, p) => {
               if (team1.includes(p.id)) {
                 if (acc) {
-                  acc += ` / ${p?.last_name}`;
+                  acc += ` / ${p?.last_name ?? 'abc'}`;
                 } else {
-                  acc = ` ${p?.last_name}`;
+                  acc = ` ${p?.last_name ?? 'abc'}`;
                 }
               }
               return acc;
@@ -161,9 +161,9 @@ const TournamentPage: NextPage<{
             winnerName = allPlayers.reduce((acc, p) => {
               if (team2.includes(p.id)) {
                 if (acc) {
-                  acc += ` / ${p?.last_name}`;
+                  acc += ` / ${p?.last_name ?? 'abc'}`;
                 } else {
-                  acc = ` ${p?.last_name}`;
+                  acc = ` ${p?.last_name ?? 'abc'}`;
                 }
               }
               return acc;
