@@ -18,12 +18,15 @@ function SecondaryLayout({
     <div className={styles.pageContainer}>
       <button className={styles.back} onClick={() => router.back()}>
         {loading && <LoadingShadow />}
-        <BiArrowBack size="xl" />
+        <BiArrowBack/>
       </button>
-      <button className={styles.home} onClick={() => router.push("/")}>
-        {loading && <LoadingShadow />}
-        <BiHomeCircle size="xl" />
-      </button>
+        {
+          (router.asPath.startsWith('/players') ||  router.asPath.startsWith('/h2h')) &&
+            <button className={styles.home} onClick={() => router.push("/")}>
+              {loading && <LoadingShadow />}
+              <BiHomeCircle/>
+            </button>
+        }
       {children}
     </div>
   );
