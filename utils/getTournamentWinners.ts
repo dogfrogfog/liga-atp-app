@@ -10,6 +10,8 @@ const getTournamentWinners = (
 ) => {
   const brackets = t?.draw ? JSON.parse(t.draw)?.brackets : null;
 
+  console.log(t);
+  
   let lastMatch: undefined | MatchT;
   let isOldFormat = false;
 
@@ -29,6 +31,8 @@ const getTournamentWinners = (
 
   let winners = [] as PlayerT[];
   if (lastMatch) {
+    console.log('lastMatch', lastMatch);
+    
     if (isOldFormat) {
       const winnersIds = lastMatch.winner_id?.split('012340') as string[];
 
@@ -58,6 +62,7 @@ const getTournamentWinners = (
   }
 
   if (winners.length > 0) {
+    console.log('winners', winners);
     return winners.reduce(
       (acc, w, i) =>
         (acc += i === 1 ? ' / ' : '') +
