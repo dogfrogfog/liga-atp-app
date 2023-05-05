@@ -181,7 +181,7 @@ const Match = ({
   const p1Name = p1 ? (
     <Link href={`/players/${p1.id}`}>
       <a>
-        {p1.last_name} {(p1.first_name as string)[0]}
+        {(p1.first_name as string)[0]}. {p1.last_name}
       </a>
     </Link>
   ) : (
@@ -190,7 +190,7 @@ const Match = ({
   const p2Name = p2 ? (
     <Link href={`/players/${p2.id}`}>
       <a>
-        {p2.last_name} {(p2.first_name as string)[0]}
+        {(p2.first_name as string)[0]}. {p2.last_name}
       </a>
     </Link>
   ) : (
@@ -199,7 +199,7 @@ const Match = ({
   const p3Name = p3 ? (
     <Link href={`/players/${p3.id}`}>
       <a>
-        {p3.last_name} {(p3.first_name as string)[0]}
+        {(p3.first_name as string)[0]}. {p3.last_name}
       </a>
     </Link>
   ) : (
@@ -208,7 +208,7 @@ const Match = ({
   const p4Name = p4 ? (
     <Link href={`/players/${p4.id}`}>
       <a>
-        {p4.last_name} {(p4.first_name as string)[0]}
+        {(p4.first_name as string)[0]}. {p4.last_name}
       </a>
     </Link>
   ) : (
