@@ -109,7 +109,7 @@ const RankingPage: NextPage<RankingPageProps> = ({
     <div className={styles.pageContainer}>
       <Image
         className={styles.img}
-        src="/../public/test.jpg"
+        src="/test.jpg"
         width={1280}
         height={400}
         layout="responsive"
