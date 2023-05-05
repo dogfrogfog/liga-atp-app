@@ -113,7 +113,6 @@ const RankingPage: NextPage<RankingPageProps> = ({
         width={1280}
         height={400}
         layout="responsive"
-        loading="eager"
       />
       <PageTitle>Эло</PageTitle>
       <Tabs
