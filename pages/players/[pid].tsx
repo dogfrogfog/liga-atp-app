@@ -450,7 +450,7 @@ export const getStaticProps = async (ctx: NextPageContext) => {
   return {
     props: {
       player,
-      digests,
+      digests: digests.reverse(),
       eloPoints: eloPoints?.elo_points,
       eloChanges,
     },
