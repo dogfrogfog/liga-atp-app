@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 
 import Tabs from 'ui-kit/Tabs';
@@ -106,6 +107,14 @@ const RankingPage: NextPage<RankingPageProps> = ({
 
   return (
     <div className={styles.pageContainer}>
+      <Image
+        className={styles.img}
+        src="/../public/test.jpg"
+        width={1280}
+        height={400}
+        layout="responsive"
+        loading="eager"
+      />
       <PageTitle>Эло</PageTitle>
       <Tabs
         tabNames={RANKING_TABS}
