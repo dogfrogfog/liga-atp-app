@@ -268,10 +268,10 @@ const FinishedTournamentsList = memo(
       [players]
     );
 
-    const filteredFinishedTournaments = playedTournaments.filter((v) => v.tournament_type === 10
-      /* finishedTournamentsType !== 999
+    const filteredFinishedTournaments = playedTournaments.filter((v) =>
+      finishedTournamentsType !== 999
         ? finishedTournamentsType === v.tournament_type
-        : true */
+        : true
     );
 
     if (isLastPage && isLoading) {
