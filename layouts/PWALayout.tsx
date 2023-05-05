@@ -45,7 +45,7 @@ function PWALayout({ children }: { children: ReactNode }) {
         <link
           rel="mask-icon"
           href="/icons/safari-pinned-tab.svg"
-          color="#5bbad5"
+          color="transparent"
         />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link
