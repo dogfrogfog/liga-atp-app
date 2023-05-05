@@ -50,21 +50,21 @@ model player {
   age                            Int?
   gameplay_style                 String?
   forehand                       String?
-  backhand                       String?
   insta_link                     String?
-  interview_link                 String?
   is_coach                       Boolean?
   in_tennis_from                 DateTime? @db.Date
   job_description                String?
   technique                      Int       @default(0)
-  net_game                       Int       @default(0)
-  psychology                     Int       @default(0)
   power                          Int?      @default(0)
   serve                          Int       @default(0)
-  behavior                       Int       @default(0)
   height                         Int?
   premium                        Boolean?  @default(false)
   isHyped                        Boolean   @default(false)
+  backhand                       String?
+  behavior                       Int       @default(0)
+  net_game                       Int       @default(0)
+  psychology                     Int       @default(0)
+  interview_link                 String?
   match_match_player1_idToplayer match[]   @relation("match_player1_idToplayer")
   match_match_player2_idToplayer match[]   @relation("match_player2_idToplayer")
   match_match_player3_idToplayer match[]   @relation("match_player3_idToplayer")
@@ -118,4 +118,58 @@ model other_page {
   markdown String?
   slug     String? @unique
   title    String?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model match_backup {
+  id            Int @id @default(autoincrement())
+  tournament_id Int?
+  player1_id    Int?
+  player2_id    Int?
+  comment       String?
+  is_completed  Boolean?
+  stage         Int?
+  start_date    DateTime? @db.Date
+  winner_id     String?
+  score         String?
+  player3_id    Int?
+  player4_id    Int?
+  youtube_link  String?
+  time          DateTime? @db.Timestamp(6)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model player_backup {
+  id              Int @id @default(autoincrement())
+  first_name      String?
+  last_name       String?
+  date_of_birth   DateTime? @db.Date
+  city            String?
+  country         String?
+  email           String?
+  phone           String?
+  avatar          String?
+  level           Int?
+  age             Int?
+  gameplay_style  String?
+  forehand        String?
+  insta_link      String?
+  is_coach        Boolean?
+  in_tennis_from  DateTime? @db.Date
+  job_description String?
+  technique       Int?
+  power           Int?
+  serve           Int?
+  height          Int?
+  premium         Boolean?
+  isHyped         Boolean?
+  backhand        String?
+  behavior        Int?
+  net_game        Int?
+  psychology      Int?
+  interview_link  String?
+
+  @@ignore
 }
