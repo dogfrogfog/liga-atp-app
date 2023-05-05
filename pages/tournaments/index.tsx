@@ -296,7 +296,7 @@ const FinishedTournamentsList = memo(
                     : 'дата не определена'
                 }
                 winnerName={
-                  v.status === 3 || v.is_finished
+                  v.status === 3 || v.is_finished || v.tournament_type === 10
                     ? getTournamentWinners(v, playersMap)
                     : ''
                 }
