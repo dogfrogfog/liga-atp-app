@@ -65,7 +65,6 @@
 
       .achievements {
         display: flex;
-        justify-content: space-between;
 
         .rank {
           padding: 5px 5px 5px 0px;
@@ -97,11 +96,15 @@
         }
       }
 
-      .elo {
+      .elo, .statistics {
         background-color: rgba(27, 34, 35, 0.6);
         color: $custom-aqua;
         border-radius: 8px;
         padding: 3px 6px;
+      }
+
+      .statistics{
+        margin: 0 5px 0 auto;
       }
     }
   }

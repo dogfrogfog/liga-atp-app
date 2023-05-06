@@ -86,6 +86,9 @@ const SingleProfilePage: NextPage<{
     premium,
   } = player;
 
+  const statisticPlayer: number = 
+    Math.floor((serve + behavior + psychology + technique + net_game) / 5);
+
   const { upcomingMatches, playedMatches } = matches.reduce(
     (acc, match) => {
       if (isMatchPlayed(match)) {
@@ -239,7 +242,7 @@ const SingleProfilePage: NextPage<{
                   />
                   <YAxis
                     tickCount={15}
-                    domain={[0, 'dataMax + 200']}
+                    domain={['dataMin - 200', 'dataMax + 200']}
                     dataKey="eloPoints"
                     stroke="#fff"
                   />
@@ -291,6 +294,7 @@ const SingleProfilePage: NextPage<{
         tournamentsFinals={(statsData as any)?.tournaments_finals}
         isPremium={!!premium}
         interviewLink={interview_link || ''}
+        statisticPlayer={statisticPlayer}
       />
       <section>
         <Tabs
@@ -313,6 +317,7 @@ interface IProfileHeaderProps {
   tournamentsFinals?: number;
   isPremium?: boolean;
   interviewLink?: string;
+  statisticPlayer?: number;
 }
 
 const ProfileHeader = ({
@@ -323,7 +328,8 @@ const ProfileHeader = ({
   isPremium = false,
   tournamentsWins,
   tournamentsFinals,
-  interviewLink
+  interviewLink,
+  statisticPlayer
 }: IProfileHeaderProps) => {
   const [isStarActive, setStarActiveStatus] = useState(false);
   const handleStarClick = () => {
@@ -390,6 +396,10 @@ const ProfileHeader = ({
               )
             }
           </div>
+          <span 
+            className={styles.statistics}>
+            {statisticPlayer ?? 0}%
+          </span>
           <span className={styles.elo}>{points}</span>
         </div>
       </div>
