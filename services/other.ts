@@ -30,6 +30,8 @@ export const createOtherPage = async (
   errorMessage?: string;
   data?: Omit<OtherPageT, 'id'>;
 }> => {
+  console.log(data);
+  
   const response = await axios.post<Omit<OtherPageT, 'id'>>('/api/other/new', {
     data,
   });
