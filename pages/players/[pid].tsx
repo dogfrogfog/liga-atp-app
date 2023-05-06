@@ -36,6 +36,7 @@ import { isMatchPlayed } from 'utils/isMatchPlayed';
 import calculateYearsFromDate from 'utils/calculateYearsFromDate';
 import styles from 'styles/Profile.module.scss';
 import { DEFAULT_PROFILE_IMAGE } from 'constants/values';
+import { useRouter } from "next/router";
 
 const PROFILE_TABS = [
   'Информация',
@@ -60,7 +61,8 @@ const SingleProfilePage: NextPage<{
     player.id,
     statsTabTournamentType === 999 ? undefined : statsTabTournamentType
   );
-
+  const router = useRouter()
+  const {tab} = router.query
   const {
     date_of_birth,
     city,
@@ -85,6 +87,12 @@ const SingleProfilePage: NextPage<{
     behavior,
     premium,
   } = player;
+
+  useEffect(() => {
+    if(tab){
+      setActiveTab(PROFILE_TABS[+tab])
+    }
+  }, [tab])
 
   const { upcomingMatches, playedMatches } = matches.reduce(
     (acc, match) => {
@@ -278,6 +286,7 @@ const SingleProfilePage: NextPage<{
 
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(PROFILE_TABS[value]);
+    router.push({ pathname: router.asPath.split("?")[0], query: {tab: value}})
   };
 
   return (
