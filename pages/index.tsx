@@ -1,12 +1,10 @@
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import { DiSafari } from 'react-icons/di';
-import { DiChrome } from 'react-icons/di';
-import { DiOpera } from 'react-icons/di';
-import { DiFirefox } from 'react-icons/di';
+import { DiSafari, DiChrome, DiOpera, DiFirefox } from 'react-icons/di';
 import { MdIosShare } from 'react-icons/md';
 import { HiDotsVertical } from 'react-icons/hi';
 import { AiOutlineCloudDownload } from 'react-icons/ai';
+import { TbBrandTelegram } from 'react-icons/tb';
 
 import styles from 'styles/Home.module.scss';
 
@@ -206,6 +204,18 @@ const HomePage: NextPage = () => {
               </div>
             </>
         )}
+      </div>
+      <div className={styles.contacts}>
+        <div className={styles.inner}>
+          <div className={styles.contactsItem}>
+            <a href="#">
+              <TbBrandTelegram size={40} />
+            </a>
+          </div>
+          <div className={styles.contactsItem}>
+
+          </div>
+        </div>
       </div>
       <div className={styles.description}>
         <h3 className={styles.previeTitle}>ЛИГА ТЕННИСА</h3>

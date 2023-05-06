@@ -78,6 +78,36 @@
   }  
 }
 
+.contacts {
+  position: absolute;
+  top: 120px;
+  right: 30px;
+  border: 1px solid red;
+  width: 150px;
+  height: 80px;
+
+  .inner{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+  }
+}
+
+.contactsItem{
+  a path:first-child{
+    color: red;
+    stroke: green;
+    fill: yellow;
+  }
+
+  a path:last-child{
+    color: red;
+    stroke: green;
+    fill: yellow;
+  }
+}
+
 .description {
   padding: 20px;
   margin-bottom: 135px;
