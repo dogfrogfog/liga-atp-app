@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 
@@ -7,6 +7,8 @@ import PageTitle from 'ui-kit/PageTitle';
 import { PlayersList, PlayersListHeader } from 'components/PlayersList';
 import styles from 'styles/Ranking.module.scss';
 import { prisma } from 'services/db';
+import { useRouter } from "next/router";
+import { PlayerLevel } from "../constants/playerLevel";
 
 const RANKING_TABS = [
   'На хайпе',
@@ -29,6 +31,46 @@ const RankingPage: NextPage<RankingPageProps> = ({
   playerEloRanking,
 }) => {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
+  const router = useRouter();
+  const {level} = router.query
+
+  useEffect(() => {
+    switch (level) {
+      case PlayerLevel.Hype:{
+        setActiveTab(RANKING_TABS[0]);
+        break;
+      }
+      case PlayerLevel.Pro:{
+        setActiveTab(RANKING_TABS[1]);
+        break;
+      }
+      case PlayerLevel.SuperMasters: {
+        setActiveTab(RANKING_TABS[2]);
+        break;
+      }
+      case PlayerLevel.Masters: {
+        setActiveTab(RANKING_TABS[3]);
+        break;
+      }
+      case PlayerLevel.Challenger: {
+        setActiveTab(RANKING_TABS[4]);
+        break;
+      }
+      case PlayerLevel.Legger: {
+        setActiveTab(RANKING_TABS[5]);
+        break;
+      }
+      case PlayerLevel.Futures: {
+        setActiveTab(RANKING_TABS[6]);
+        break;
+      }
+      case PlayerLevel.Satellite: {
+        setActiveTab(RANKING_TABS[7]);
+        break;
+      }
+    }
+  }, [level])
+
 
   const playersMap = useMemo(
     () =>
@@ -102,6 +144,40 @@ const RankingPage: NextPage<RankingPageProps> = ({
 
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(RANKING_TABS[value]);
+    switch (value) {
+      case 0: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Hype}})
+        break;
+      }
+      case 1: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Pro}})
+        break;
+      }
+      case 2: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.SuperMasters}})
+        break;
+      }
+      case 3: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Masters}})
+        break;
+      }
+      case 4: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Challenger}})
+        break;
+      }
+      case 5: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Legger}})
+        break;
+      }
+      case 6: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Futures}})
+        break;
+      }
+      case 7: {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Satellite}})
+        break;
+      }
+    }
   };
 
   return (
