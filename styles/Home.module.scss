@@ -82,29 +82,40 @@
   position: absolute;
   top: 120px;
   right: 30px;
-  border: 1px solid red;
-  width: 150px;
-  height: 80px;
 
   .inner{
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid blue;
+    font-family: "Roboto", sans-serif;
+
+    h3 span{
+      font-weight: 400;
+      font-size: 16px;
+      border-bottom: 2px dotted $custom-aqua;
+    }
   }
 }
 
 .contactsItem{
-  a path:first-child{
-    color: red;
-    stroke: green;
-    fill: yellow;
-  }
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  font-size: 14px;
+  font-weight: 400;
 
-  a path:last-child{
-    color: red;
-    stroke: green;
-    fill: yellow;
+  svg {
+    font-size: 22px;
+
+    path:first-child{
+      stroke: $custom-aqua;
+      fill: $custom-aqua;
+    }
+  
+    path:last-child{
+      stroke: $custom-aqua;
+      fill: $custom-aqua;
+    }
   }
 }
 

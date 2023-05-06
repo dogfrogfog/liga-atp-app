@@ -1,10 +1,13 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { DiSafari, DiChrome, DiOpera, DiFirefox } from 'react-icons/di';
 import { MdIosShare } from 'react-icons/md';
 import { HiDotsVertical } from 'react-icons/hi';
 import { AiOutlineCloudDownload } from 'react-icons/ai';
 import { TbBrandTelegram } from 'react-icons/tb';
+import { BiPhoneCall } from 'react-icons/bi';
+import { GrContact } from 'react-icons/gr';
 
 import styles from 'styles/Home.module.scss';
 
@@ -207,13 +210,30 @@ const HomePage: NextPage = () => {
       </div>
       <div className={styles.contacts}>
         <div className={styles.inner}>
+          <h3><span>Наши контакты:</span></h3>
           <div className={styles.contactsItem}>
-            <a href="#">
-              <TbBrandTelegram size={40} />
-            </a>
+            <GrContact size={13} />
+            <Link href="https://ligatennisa.com/players/704">
+              <span>Александр Вабищевич</span>
+            </Link>
+            <Link href="https://t.me/vabishch">
+              <TbBrandTelegram />
+            </Link>
+            <Link href="tel:+375292010870">
+              <BiPhoneCall />
+            </Link>
           </div>
           <div className={styles.contactsItem}>
-
+            <GrContact size={13} />
+            <Link href="https://ligatennisa.com/players/551">
+              <span>Александр Прозоров</span>
+            </Link>
+            <Link href="https://t.me/mnimoe199">
+              <TbBrandTelegram />
+            </Link>
+            <Link href="tel:+375292010870">
+              <BiPhoneCall />
+            </Link>
           </div>
         </div>
       </div>
