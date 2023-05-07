@@ -1,4 +1,4 @@
-import { useMemo, useState, ChangeEvent } from 'react';
+import { useMemo, useState, ChangeEvent, useEffect } from 'react';
 import { player as PlayerT, player_elo_ranking } from '@prisma/client';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
@@ -7,6 +7,7 @@ import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import { PlayersListHeader, PlayersList } from 'components/PlayersList';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from 'styles/Players.module.scss';
+import { PlayerLevel } from "../../constants/playerLevel";
 
 type PlayersPageProps = {
   players: PlayerT[];
@@ -19,6 +20,44 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
 }) => {
   const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
+  const {level} = router.query;
+
+  useEffect(() => {
+    switch (level) {
+      case PlayerLevel.Hype:{
+       setSelectedLvl('');
+        break;
+      }
+      case PlayerLevel.Pro:{
+        setSelectedLvl('3');
+        break;
+      }
+      case PlayerLevel.SuperMasters: {
+        setSelectedLvl('5');
+        break;
+      }
+      case PlayerLevel.Masters: {
+        setSelectedLvl('2');
+        break;
+      }
+      case PlayerLevel.Challenger: {
+        setSelectedLvl('1');
+        break;
+      }
+      case PlayerLevel.Legger: {
+        setSelectedLvl('4');
+        break;
+      }
+      case PlayerLevel.Futures: {
+        setSelectedLvl('0');
+        break;
+      }
+      case PlayerLevel.Satellite: {
+        setSelectedLvl('-1');
+        break;
+      }
+    }
+  }, [level])
   
 
   const onSuggestionClick = (p: PlayerT) => {
@@ -32,6 +71,40 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
 
   const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedLvl(e.target.value);
+    switch (e.target.value) {
+      case '': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Hype}})
+        break;
+      }
+      case '3': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Pro}})
+        break;
+      }
+      case '5': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.SuperMasters}})
+        break;
+      }
+      case '2': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Masters}})
+        break;
+      }
+      case '1': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Challenger}})
+        break;
+      }
+      case '4': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Legger}})
+        break;
+      }
+      case '0': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Futures}})
+        break;
+      }
+      case '-1': {
+        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Satellite}})
+        break;
+      }
+    }
   };
 
   const playersRankingsMap = useMemo(
