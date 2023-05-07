@@ -15,14 +15,23 @@
 .wrapperIcons{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-between;
+  row-gap: 20px;
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 20px;
+  right: 20px;
+  font-family: $default-font-family;
+}
+
+.innerInstallIcons{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 
   span {
-    font-family: $default-font-family;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 400;
   }
 
   .installIcon {
@@ -34,48 +43,50 @@
       transform: scale(1.1);
     }
   }
+}
 
-  .infoIcon {
-    position: relative;
-    color: $custom-gray;
-    font-size: 40px;
-  }
-  
-  .infoText {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 240px;
-    background-color: $custom-gray;
-    opacity: 0.7;
-    border-radius: 10px 0 10px 0;
-    color: $custom-black;
-    font-weight: 800;
-    font-size: 17px;
-    padding: 10px;
+.infoIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: 30px;
+  width: 37px;
+  height: 37px;
+  border-radius: 5px;
+  color: $custom-gray;
+  margin-bottom: 5px;
+
+  &:last-child{
     margin: 0;
-    text-align: center;
-  
-    &::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      right: 15px;
-      width: 18px;
-      height: 18px;
-      transform: rotate(45deg);
-      background-color: $custom-gray;
-    }
   }
-  
-  .iconText {
-    vertical-align: middle;
-    font-size: 25px;
-  }
-  
-  .activeIcon {
-    color: $custom-aqua;
+
+  &.active {
+    border-radius: 0 5px 5px 0;
+    background-color: $custom-gray;
+    color: $custom-mediumdarkgray;
   }  
+}
+
+.infoText {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0px;
+  right: 37px;
+  height: 37px;
+  width: max-content;
+  padding: 0 10px;
+  border-radius: 5px 0 0 5px;
+  font-size: 14px;
+  background-color: $custom-gray;
+  color: $custom-mediumdarkgray;
+}
+
+.iconText{
+  font-size: 20px;
+  color: $custom-scarlet;
 }
 
 .description {

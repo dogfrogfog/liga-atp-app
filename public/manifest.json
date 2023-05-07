@@ -7,7 +7,7 @@
   "name": "Liga Tennisa",
   "short_name": "Лига Тенниса",
   "icons": [
-    {
+        {
       "src": "/180x180.png",
       "sizes": "180x180",
       "type": "image/png"
