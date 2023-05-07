@@ -2,6 +2,10 @@ import Head from 'next/head';
 import type { ReactNode } from 'react';
 
 function PWALayout({ children }: { children: ReactNode }) {
+
+  const isIOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  const appleTouchIcon = isIOS ? "/512x512.png" : "/512x512-transparent.png";
+
   return (
     <>
       <Head>
@@ -13,7 +17,11 @@ function PWALayout({ children }: { children: ReactNode }) {
         <meta name="apple-mobile-web-app-title" content="Liga" />
         <meta name="theme-color" content="#000000" />
 
-        <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
+        <link rel="manifest" href="/manifest.json" />
+        
+        <link rel="icon" href={appleTouchIcon} sizes="512x512" />
+
+        {/* <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
         <link
           rel="apple-touch-icon"
           sizes="152x152"
@@ -40,13 +48,13 @@ function PWALayout({ children }: { children: ReactNode }) {
           type="image/png"
           sizes="16x16"
           href="/icons/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <link
+        /> */}
+        
+        {/* <link
           rel="mask-icon"
           href="/icons/safari-pinned-tab.svg"
           color="#5bbad5"
-        />
+        /> */}
         <link rel="shortcut icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
