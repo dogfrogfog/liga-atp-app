@@ -4,7 +4,7 @@ import {
   useMemo,
   memo,
   Dispatch,
-  SetStateAction,
+  SetStateAction, useEffect,
 } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -36,7 +36,6 @@ import styles from '../../styles/Tournaments.module.scss';
 import getTournamentWinners from 'utils/getTournamentWinners';
 import { prisma } from 'services/db';
 
-/* const TOURNAMENT_TABS = ['Идут сейчас', 'Запись в новые', 'Прошедшие']; */ //TODO: replace
 const TOURNAMENT_TABS = ['Идут сейчас', 'Прошедшие'];
 
 const filterFn = (inputValue: string) => (t: TournamentT) =>
@@ -60,6 +59,27 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
 
   const { tournaments, isLoading } = useTournaments();
   const router = useRouter();
+  const {tournament, type} = router.query
+
+  useEffect(() => {
+    switch (tournament) {
+      case 'new': {
+        setActiveTab(TOURNAMENT_TABS[0]);
+        break;
+      }
+      case 'finished': {
+        setActiveTab(TOURNAMENT_TABS[1]);
+        break;
+      }
+    }
+  }, [tournament])
+
+  useEffect(() => {
+    if(type){
+      setFinishedTournamentsType(+type)
+    }
+
+  }, [type])
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -182,6 +202,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
       case TOURNAMENT_TABS[1]: //TODO: when uncomment TOURNAMENT_TABS replace case 1 and 2
         const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
           setFinishedTournamentsType(parseInt(e.target.value, 10));
+          router.push({ pathname: router.pathname, query: {tournament: router.query.tournament, type: e.target.value}})
         };
 
         const pages = [];
@@ -214,6 +235,16 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
 
   const handleTabChange = (_: any, value: number) => {
     setActiveTab(TOURNAMENT_TABS[value]);
+    switch (value) {
+      case 0: {
+        router.push({ pathname: router.pathname, query: {tournament: 'new'}})
+        break;
+      }
+      case 1: {
+        router.push({ pathname: router.pathname, query: {tournament: 'finished'}})
+        break;
+      }
+    }
   };
 
   const onSuggestionClick = (t: TournamentT) => {
