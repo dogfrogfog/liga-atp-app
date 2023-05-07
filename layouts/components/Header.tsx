@@ -19,7 +19,7 @@ const Header = ({ setSidebarOpen }: HeaderProps) => {
     <header className={styles.headerContainer}>
       <div className={styles.image}>
         <button onClick={handleBallIconClick}>
-          <Image alt="liga-logo" src={ligaLogo} />
+          <Image className={styles.logo} alt="liga-logo" src={ligaLogo} />
         </button>
       </div>
       <Link href="/admin/settings">

@@ -15,14 +15,22 @@
 .wrapperIcons{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-between;
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 20px;
+  right: 20px;
+  font-family: $default-font-family;
+}
+
+.innerInstallIcons{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 
   span {
-    font-family: $default-font-family;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 400;
   }
 
   .installIcon {
@@ -34,90 +42,91 @@
       transform: scale(1.1);
     }
   }
+}
 
-  .infoIcon {
-    position: relative;
-    color: $custom-gray;
-    font-size: 40px;
-  }
-  
-  .infoText {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 240px;
-    background-color: $custom-gray;
-    opacity: 0.7;
-    border-radius: 10px 0 10px 0;
-    color: $custom-black;
-    font-weight: 800;
-    font-size: 17px;
-    padding: 10px;
+.infoIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: 30px;
+  width: 37px;
+  height: 37px;
+  border-radius: 5px;
+  color: $custom-gray;
+  border: 2px solid $custom-gray;
+  background-color: $custom-mediumdarkgray;
+  margin-bottom: 10px;
+
+  &:last-child{
     margin: 0;
-    text-align: center;
-  
-    &::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      right: 15px;
-      width: 18px;
-      height: 18px;
-      transform: rotate(45deg);
-      background-color: $custom-gray;
-    }
   }
-  
-  .iconText {
-    vertical-align: middle;
-    font-size: 25px;
-  }
-  
-  .activeIcon {
-    color: $custom-aqua;
+
+  &.active {
+    border-radius: 0 5px 5px 0;
   }  
 }
 
-.contacts {
+.infoText {
   position: absolute;
-  top: 120px;
-  right: 30px;
-
-  .inner{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    font-family: "Roboto", sans-serif;
-
-    h3 span{
-      font-weight: 400;
-      font-size: 16px;
-      border-bottom: 2px dotted $custom-aqua;
-    }
-  }
-}
-
-.contactsItem{
   display: flex;
+  justify-content: center;
   align-items: center;
-  column-gap: 5px;
+  top: -2px;
+  right: 35px;
+  height: 37px;
+  width: 300px;
+  border-radius: 5px 0 0 5px;
   font-size: 14px;
-  font-weight: 400;
-
-  svg {
-    font-size: 22px;
-
-    path:first-child{
-      stroke: $custom-aqua;
-      fill: $custom-aqua;
-    }
-  
-    path:last-child{
-      stroke: $custom-aqua;
-      fill: $custom-aqua;
-    }
-  }
+  background-color: $custom-gray;
+  color: $custom-mediumdarkgray;
 }
+
+.iconText{
+  font-size: 20px;
+  color: $custom-scarlet;
+}
+
+// .contacts {
+//   position: absolute;
+//   top: 120px;
+//   right: 30px;
+
+//   .inner{
+//     position: relative;
+//     display: flex;
+//     flex-direction: column;
+//     font-family: "Roboto", sans-serif;
+
+//     h3 span{
+//       font-weight: 400;
+//       font-size: 16px;
+//       border-bottom: 2px dotted $custom-aqua;
+//     }
+//   }
+// }
+
+// .contactsItem{
+//   display: flex;
+//   align-items: center;
+//   column-gap: 5px;
+//   font-size: 14px;
+//   font-weight: 400;
+
+//   svg {
+//     font-size: 22px;
+
+//     path:first-child{
+//       stroke: $custom-aqua;
+//       fill: $custom-aqua;
+//     }
+  
+//     path:last-child{
+//       stroke: $custom-aqua;
+//       fill: $custom-aqua;
+//     }
+//   }
+// }
 
 .description {
   padding: 20px;

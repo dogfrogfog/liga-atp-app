@@ -1,24 +1,66 @@
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { DiSafari, DiChrome, DiOpera, DiFirefox } from 'react-icons/di';
 import { MdIosShare } from 'react-icons/md';
 import { HiDotsVertical } from 'react-icons/hi';
 import { AiOutlineCloudDownload } from 'react-icons/ai';
-import { TbBrandTelegram } from 'react-icons/tb';
-import { BiPhoneCall } from 'react-icons/bi';
-import { GrContact } from 'react-icons/gr';
+import { BsApple } from 'react-icons/bs';
+import { DiAndroid } from 'react-icons/di';
 
 import styles from 'styles/Home.module.scss';
 
-type TBrowser = 'Safari' | 'Chrome' | 'Firefox' | 'Opera';
+interface IShowInfo {
+  apple: boolean,
+  android: boolean,
+  telegramLiga: boolean,
+  instagram: boolean,
+  youtube: boolean,
+  tiktok: boolean,
+  telVabish: boolean,
+  telProzor: boolean,
+  telegramVabish: boolean
+}
+
+type TypeIcons =
+  'apple' 
+| 'android'
+| 'telegramLiga'
+| 'instagram'
+| 'youtube'
+| 'tiktok'
+| 'telVabish'
+| 'telProzor'
+| 'telegramVabish';
+
 
 const HomePage: NextPage = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isShowInfoSafari, setIsShowInfoSafari] = useState<boolean>(false);
-  const [isShowInfoChrome, setIsShowInfoChrome] = useState<boolean>(false);
-  const [isShowInfoOpera, setIsShowInfoOpera] = useState<boolean>(false);
-  const [isShowInfoFirefox, setIsShowInfoFirefox] = useState<boolean>(false);
+  const [isShowText, setIsShowText] = useState<IShowInfo>({
+    apple: false,
+    android: false,
+    telegramLiga: false,
+    instagram: false,
+    youtube: false,
+    tiktok: false,
+    telVabish: false,
+    telProzor: false,
+    telegramVabish: false
+  });
+
+
+  const handleShowInfo = (icon: TypeIcons) => {
+    setIsShowText(prev => {
+      const update: IShowInfo = {...prev}
+      for(const key in update) {
+        if (key === icon) {
+          update[key as keyof IShowInfo] = !update[key as keyof IShowInfo];
+        } else {
+          update[key as keyof IShowInfo] = false;
+        }
+      }
+      return update;
+    })
+  }
+  
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (event: Event) => {
@@ -41,200 +83,46 @@ const HomePage: NextPage = () => {
     }
   };
 
-  const handleShowInfo = (browser: TBrowser) => {
-    switch (browser) {
-      case 'Safari': {
-        if (isShowInfoChrome) {
-          setIsShowInfoChrome(false);
-          setIsShowInfoSafari(!isShowInfoSafari);
-          break;
-        }
-
-        if (isShowInfoOpera) {
-          setIsShowInfoOpera(false);
-          setIsShowInfoSafari(!isShowInfoSafari);
-          break;
-        }
-
-        if (isShowInfoFirefox) {
-          setIsShowInfoFirefox(false);
-          setIsShowInfoSafari(!isShowInfoSafari);
-          break;
-        }
-
-        setIsShowInfoSafari(!isShowInfoSafari);
-        break;
-      }
-      case 'Opera': {
-        if (isShowInfoChrome) {
-          setIsShowInfoChrome(false);
-          setIsShowInfoOpera(!isShowInfoOpera);
-          break;
-        }
-
-        if (isShowInfoSafari) {
-          setIsShowInfoSafari(false);
-          setIsShowInfoOpera(!isShowInfoSafari);
-          break;
-        }
-
-        if (isShowInfoFirefox) {
-          setIsShowInfoFirefox(false);
-          setIsShowInfoOpera(!isShowInfoOpera);
-          break;
-        }
-
-        setIsShowInfoOpera(!isShowInfoOpera);
-        break;
-      }
-      case 'Chrome': {
-        if (isShowInfoSafari) {
-          setIsShowInfoSafari(false);
-          setIsShowInfoChrome(!isShowInfoChrome);
-          break;
-        }
-
-        if (isShowInfoOpera) {
-          setIsShowInfoOpera(false);
-          setIsShowInfoChrome(!isShowInfoChrome);
-          break;
-        }
-
-        if (isShowInfoFirefox) {
-          setIsShowInfoFirefox(false);
-          setIsShowInfoChrome(!isShowInfoChrome);
-          break;
-        }
-
-        setIsShowInfoChrome(!isShowInfoChrome);
-        break;
-      }
-      case 'Firefox': {
-        if (isShowInfoChrome) {
-          setIsShowInfoChrome(false);
-          setIsShowInfoFirefox(!isShowInfoFirefox);
-          break;
-        }
-
-        if (isShowInfoOpera) {
-          setIsShowInfoOpera(false);
-          setIsShowInfoFirefox(!isShowInfoFirefox);
-          break;
-        }
-
-        if (isShowInfoSafari) {
-          setIsShowInfoSafari(false);
-          setIsShowInfoFirefox(!isShowInfoFirefox);
-          break;
-        }
-
-        setIsShowInfoFirefox(!isShowInfoFirefox);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  };
-
   return (
     <div className={styles.homePage}>
       <div className={styles.wrapperIcons}>
-        {deferredPrompt ? (
-          <>
-            <span>Установка: </span>
-            <a
-              className={styles.installIcon} 
-              onClick={handleInstallClick}>
-                <AiOutlineCloudDownload />
-            </a>
-        </>
-          ) : (
+        <div className={styles.innerInstallIcons}>
+          {deferredPrompt ? (
             <>
-              <span>Инструкция: </span>
-              <div>
-                <a 
-                  className={`${styles.infoIcon} ${isShowInfoSafari ? styles.activeIcon : ''}`}>
-                    <DiSafari onClick={() => handleShowInfo('Safari')} />
+              <span>Скачать:</span>
+              <a
+                className={styles.installIcon} 
+                onClick={handleInstallClick}>
+                  <AiOutlineCloudDownload />
+              </a>
+          </>
+            ) : (
+              <>
+                <div className={`${styles.infoIcon} ${isShowText.apple ? styles.active : ''}`}>
+                    <BsApple onClick={() => handleShowInfo('apple')} />
                   {
-                    isShowInfoSafari && (
-                      <p className={styles.infoText}>
-                        Для установки приложения из Safari,
-                        нажмите на <MdIosShare className={styles.iconText} />
-                        внизу экрана, а затем на экран &#34;Домой&#34;
-                      </p>
+                    isShowText.apple && (
+                      <a className={styles.infoText}>
+                        В Safari, нажмите на &nbsp; <MdIosShare className={styles.iconText} />
+                        &nbsp; и на экран &#34;Домой&#34;
+                      </a>
                     )
                   }
-                </a>
-                <a 
-                  className={`${styles.infoIcon} ${isShowInfoChrome ? styles.activeIcon : ''}`}>
-                    <DiChrome onClick={() => handleShowInfo('Chrome')} />
+                </div>
+                <div 
+                  className={`${styles.infoIcon} ${isShowText.android ? styles.active : ''}`}>
+                    <DiAndroid onClick={() => handleShowInfo('android')} />
                   {
-                    isShowInfoChrome && (
-                      <p className={styles.infoText}>
-                        Для установки приложения из Chrome, нажмите вверху экрана 
-                        <HiDotsVertical className={styles.iconText} /> ,
-                        а затем &#34;Установить приложение&#34;
-                      </p>
+                    isShowText.android && (
+                      <a className={styles.infoText}>
+                        В Chrome, нажмите <HiDotsVertical className={styles.iconText} />
+                        и &#34;Установить&#34;
+                      </a>
                     )
                   }
-                </a>
-                <a 
-                  className={`${styles.infoIcon} ${isShowInfoOpera ? styles.activeIcon : ''}`}>
-                    <DiOpera onClick={() => handleShowInfo('Opera')} />
-                  {
-                    isShowInfoOpera && (
-                      <p className={styles.infoText}>
-                        Для установки приложения из Opera, нажмите вверху экрана 
-                        <HiDotsVertical className={styles.iconText} /> ,
-                        а затем &#34;главный экран&#34;
-                      </p>
-                    )
-                  }
-                </a>
-                <a 
-                  className={`${styles.infoIcon} ${isShowInfoFirefox ? styles.activeIcon : ''}`}>
-                    <DiFirefox onClick={() => handleShowInfo('Firefox')} />
-                  {
-                    isShowInfoFirefox && (
-                      <p className={styles.infoText}>
-                        Для установки приложения из Firefox нужно установить расширение
-                        &#34;Progressive Web Apps for Firefox&#34; и проследовать небольшой инструкции
-                      </p>
-                    )
-                  }
-                </a>
-              </div>
-            </>
-        )}
-      </div>
-      <div className={styles.contacts}>
-        <div className={styles.inner}>
-          <h3><span>Наши контакты:</span></h3>
-          <div className={styles.contactsItem}>
-            <GrContact size={13} />
-            <Link href="https://ligatennisa.com/players/704">
-              <span>Александр Вабищевич</span>
-            </Link>
-            <Link href="https://t.me/vabishch">
-              <TbBrandTelegram />
-            </Link>
-            <Link href="tel:+375292010870">
-              <BiPhoneCall />
-            </Link>
-          </div>
-          <div className={styles.contactsItem}>
-            <GrContact size={13} />
-            <Link href="https://ligatennisa.com/players/551">
-              <span>Александр Прозоров</span>
-            </Link>
-            <Link href="https://t.me/mnimoe199">
-              <TbBrandTelegram />
-            </Link>
-            <Link href="tel:+375292010870">
-              <BiPhoneCall />
-            </Link>
-          </div>
+                </div>
+              </>
+          )}
         </div>
       </div>
       <div className={styles.description}>

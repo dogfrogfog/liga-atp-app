@@ -23,6 +23,10 @@
     transform: scale(1.2);
   }
 
+  .logo{
+    border-radius: 50%;
+  }
+
   .settingsIcon:hover svg {
     transition: 0.3s;
     cursor: pointer;

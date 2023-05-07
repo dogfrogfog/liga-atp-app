@@ -7,27 +7,7 @@
   "name": "Liga Tennisa",
   "short_name": "Лига Тенниса",
   "icons": [
-    {
-      "src": "/16x16.png",
-      "sizes": "16x16",
-      "type": "image/png"
-    },
-    {
-      "src": "/32x32.png",
-      "sizes": "32x32",
-      "type": "image/png"
-    },
-    {
-      "src": "/152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "/167x167.png",
-      "sizes": "167x167",
-      "type": "image/png"
-    },
-    {
+        {
       "src": "/180x180.png",
       "sizes": "180x180",
       "type": "image/png"
