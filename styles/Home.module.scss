@@ -17,6 +17,7 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
+  row-gap: 20px;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -56,7 +57,7 @@
   color: $custom-gray;
   border: 2px solid $custom-gray;
   background-color: $custom-mediumdarkgray;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 
   &:last-child{
     margin: 0;
@@ -75,7 +76,8 @@
   top: -2px;
   right: 35px;
   height: 37px;
-  width: 300px;
+  width: max-content;
+  padding: 0 10px;
   border-radius: 5px 0 0 5px;
   font-size: 14px;
   background-color: $custom-gray;
@@ -86,47 +88,6 @@
   font-size: 20px;
   color: $custom-scarlet;
 }
-
-// .contacts {
-//   position: absolute;
-//   top: 120px;
-//   right: 30px;
-
-//   .inner{
-//     position: relative;
-//     display: flex;
-//     flex-direction: column;
-//     font-family: "Roboto", sans-serif;
-
-//     h3 span{
-//       font-weight: 400;
-//       font-size: 16px;
-//       border-bottom: 2px dotted $custom-aqua;
-//     }
-//   }
-// }
-
-// .contactsItem{
-//   display: flex;
-//   align-items: center;
-//   column-gap: 5px;
-//   font-size: 14px;
-//   font-weight: 400;
-
-//   svg {
-//     font-size: 22px;
-
-//     path:first-child{
-//       stroke: $custom-aqua;
-//       fill: $custom-aqua;
-//     }
-  
-//     path:last-child{
-//       stroke: $custom-aqua;
-//       fill: $custom-aqua;
-//     }
-//   }
-// }
 
 .description {
   padding: 20px;

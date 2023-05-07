@@ -5,6 +5,8 @@ import { HiDotsVertical } from 'react-icons/hi';
 import { AiOutlineCloudDownload } from 'react-icons/ai';
 import { BsApple } from 'react-icons/bs';
 import { DiAndroid } from 'react-icons/di';
+import { FaTelegramPlane, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa';
+import { FiPhoneCall } from 'react-icons/fi';
 
 import styles from 'styles/Home.module.scss';
 
@@ -46,7 +48,6 @@ const HomePage: NextPage = () => {
     telegramVabish: false
   });
 
-
   const handleShowInfo = (icon: TypeIcons) => {
     setIsShowText(prev => {
       const update: IShowInfo = {...prev}
@@ -60,7 +61,6 @@ const HomePage: NextPage = () => {
       return update;
     })
   }
-  
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (event: Event) => {
@@ -123,6 +123,80 @@ const HomePage: NextPage = () => {
                 </div>
               </>
           )}
+        </div>
+        <div className={styles.innerSocialIcons}>
+          <div className={`${styles.infoIcon} ${isShowText.telegramLiga ? styles.active : ''}`}>
+            <FaTelegramPlane onClick={() => handleShowInfo('telegramLiga')} />
+            {
+              isShowText.telegramLiga && (
+                <a href='https://t.me/ligatennisa' className={styles.infoText}>
+                  @ligatennisa
+                </a>
+              )
+            }
+          </div>
+          <div className={`${styles.infoIcon} ${isShowText.instagram ? styles.active : ''}`}>
+            <FaInstagram onClick={() => handleShowInfo('instagram')} />
+            {
+              isShowText.instagram && (
+                <a href='https://www.instagram.com/liga_tennisa/' className={styles.infoText}>
+                  @liga_tennisa
+                </a>
+              )
+            }
+          </div>
+          <div className={`${styles.infoIcon} ${isShowText.youtube ? styles.active : ''}`}>
+            <FaYoutube onClick={() => handleShowInfo('youtube')} />
+            {
+              isShowText.youtube && (
+                <a href='https://www.youtube.com/@liga_tennisa' className={styles.infoText}>
+                  @liga_tennisa
+                </a>
+              )
+            }
+          </div>
+          <div className={`${styles.infoIcon} ${isShowText.tiktok ? styles.active : ''}`}>
+            <FaTiktok onClick={() => handleShowInfo('tiktok')} />
+            {
+              isShowText.tiktok && (
+                <a href='http://www.tiktok.com/@liga_tennisa' className={styles.infoText}>
+                  @liga_tennisa
+                </a>
+              )
+            }
+          </div>
+        </div>
+        <div className={styles.innerCallIcons}>
+          <div className={`${styles.infoIcon} ${isShowText.telVabish ? styles.active : ''}`}>
+            <FiPhoneCall onClick={() => handleShowInfo('telVabish')} />
+            {
+              isShowText.telVabish && (
+                <a href='tel:+375292010870' className={styles.infoText}>
+                  Александр Вабищевич
+                </a>
+              )
+            }
+          </div>
+          <div className={`${styles.infoIcon} ${isShowText.telProzor ? styles.active : ''}`}>
+            <FiPhoneCall onClick={() => handleShowInfo('telProzor')} />
+            {
+              isShowText.telProzor && (
+                <a href='tel:+375447250028' className={styles.infoText}>
+                  Александр Прозоров
+                </a>
+              )
+            }
+          </div>
+          <div className={`${styles.infoIcon} ${isShowText.telegramVabish ? styles.active : ''}`}>
+            <FaTelegramPlane onClick={() => handleShowInfo('telegramVabish')} />
+            {
+              isShowText.telegramVabish && (
+                <a href='https://t.me/vabishch' className={styles.infoText}>
+                  @vabishch
+                </a>
+              )
+            }
+          </div>
         </div>
       </div>
       <div className={styles.description}>
