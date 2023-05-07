@@ -55,8 +55,6 @@
   height: 37px;
   border-radius: 5px;
   color: $custom-gray;
-  border: 2px solid $custom-gray;
-  background-color: $custom-mediumdarkgray;
   margin-bottom: 5px;
 
   &:last-child{
@@ -65,6 +63,8 @@
 
   &.active {
     border-radius: 0 5px 5px 0;
+    background-color: $custom-gray;
+    color: $custom-mediumdarkgray;
   }  
 }
 
@@ -73,8 +73,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  top: -2px;
-  right: 35px;
+  top: 0px;
+  right: 37px;
   height: 37px;
   width: max-content;
   padding: 0 10px;

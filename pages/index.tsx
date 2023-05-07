@@ -3,10 +3,9 @@ import { useState, useEffect } from 'react';
 import { MdIosShare } from 'react-icons/md';
 import { HiDotsVertical } from 'react-icons/hi';
 import { AiOutlineCloudDownload } from 'react-icons/ai';
-import { BsApple } from 'react-icons/bs';
+import { BsApple, BsTelephone } from 'react-icons/bs';
 import { DiAndroid } from 'react-icons/di';
 import { FaTelegramPlane, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa';
-import { FiPhoneCall } from 'react-icons/fi';
 
 import styles from 'styles/Home.module.scss';
 
@@ -168,7 +167,7 @@ const HomePage: NextPage = () => {
         </div>
         <div className={styles.innerCallIcons}>
           <div className={`${styles.infoIcon} ${isShowText.telVabish ? styles.active : ''}`}>
-            <FiPhoneCall onClick={() => handleShowInfo('telVabish')} />
+            <BsTelephone onClick={() => handleShowInfo('telVabish')} />
             {
               isShowText.telVabish && (
                 <a href='tel:+375292010870' className={styles.infoText}>
@@ -178,7 +177,7 @@ const HomePage: NextPage = () => {
             }
           </div>
           <div className={`${styles.infoIcon} ${isShowText.telProzor ? styles.active : ''}`}>
-            <FiPhoneCall onClick={() => handleShowInfo('telProzor')} />
+            <BsTelephone onClick={() => handleShowInfo('telProzor')} />
             {
               isShowText.telProzor && (
                 <a href='tel:+375447250028' className={styles.infoText}>
