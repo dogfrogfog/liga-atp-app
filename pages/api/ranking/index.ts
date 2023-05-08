@@ -90,52 +90,69 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // console.log('new elo: p1, p2');
     // console.log(p1NewElo, p2NewElo);
 
+    let playerUpdates = [];
+
+    if(!isDoubles) {
+      playerUpdates = [
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player1_id,
+          },
+          data: {
+            elo_points: p1NewElo,
+            expire_date: now
+          },
+        }),
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player2_id,
+          },
+          data: {
+            elo_points: p2NewElo,
+            expire_date: now
+          },
+        }),
+      ];
+    } else {
+      playerUpdates = [
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player1_id,
+          },
+          data: {
+            elo_points: p1NewElo
+          },
+        }),
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player2_id,
+          },
+          data: {
+            elo_points: p2NewElo
+          },
+        }),
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player3_id,
+          },
+          data: {
+            elo_points: doublesPNewEloPoints.p3NewElo
+          },
+        }),
+        prisma.player_elo_ranking.update({
+          where: {
+            player_id: matchData.player4_id,
+          },
+          data: {
+            elo_points: doublesPNewEloPoints.p4NewElo
+          },
+        }),
+      ];
+    }
+
     // we update expireDates if needed
     await prisma.$transaction([
-      prisma.player_elo_ranking.update({
-        where: {
-          player_id: matchData.player1_id,
-        },
-        data: {
-          elo_points: p1NewElo,
-          expire_date: now
-          // ...(expireDates.p1 && { expire_date: expireDates.p1 }),
-        },
-      }),
-      prisma.player_elo_ranking.update({
-        where: {
-          player_id: matchData.player2_id,
-        },
-        data: {
-          elo_points: p2NewElo,
-          expire_date: now
-          // ...(expireDates.p2 && { expire_date: expireDates.p2 }),
-        },
-      }),
-      ...(isDoubles
-        ? [
-            prisma.player_elo_ranking.update({
-              where: {
-                player_id: matchData.player3_id,
-              },
-              data: {
-                elo_points: doublesPNewEloPoints.p3NewElo,
-                expire_date: now
-                // ...(expireDates.p3 && { expire_date: expireDates.p3 }),
-              },
-            }),
-            prisma.player_elo_ranking.update({
-              where: {
-                player_id: matchData.player4_id,
-              },
-              data: {
-                elo_points: doublesPNewEloPoints.p4NewElo,
-                expire_date: now
-                // ...(expireDates.p4 && { expire_date: expireDates.p4 }),
-              },
-            }),
-          ]
-        : []),
+      ...playerUpdates,
       prisma.elo_ranking_change.createMany({
         data: [
           {
