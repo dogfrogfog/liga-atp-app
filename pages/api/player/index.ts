@@ -21,7 +21,6 @@ export default async (
       data: {
         player_id: createdPlayer.id,
         elo_points,
-        expire_date: new Date(),
       },
     });
 
