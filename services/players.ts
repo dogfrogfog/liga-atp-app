@@ -15,8 +15,8 @@ export const createPlayer = async (
   }
 };
 
-export const updatePlayer = async (player: PlayerT) => {
-  const response = await axios.put<PlayerT>('/api/player', { data: player });
+export const updatePlayer = async (playerWElo: PlayerT & { elo_points: number | null }) => {
+  const response = await axios.put<PlayerT>('/api/player', { data: playerWElo });
 
   if (response.status === 200) {
     return { isOk: true };
