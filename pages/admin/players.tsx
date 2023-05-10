@@ -4,6 +4,7 @@ import {
   useCallback,
   useState,
   useMemo,
+  ChangeEvent,
 } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
@@ -53,8 +54,15 @@ const Players: NextPage = () => {
   const handleUpdateClick = useCallback(() => {
     const editingPlayerData = players[selectedRow];
 
+    const playerElo = eloPoints.find((e) => e.player_id === editingPlayerData.id);
+
+    const editingPlayer = {
+      ...editingPlayerData,
+      elo_points: playerElo?.elo_points || null,
+    };
+
     setModalStatus({ isOpen: true, type: 'update' });
-    setEditingPlayer(editingPlayerData);
+    setEditingPlayer(editingPlayer);
   }, [players, selectedRow]);
 
   const handleDeleteClick = useCallback(async () => {
@@ -73,20 +81,19 @@ const Players: NextPage = () => {
     async (props: PlayerT & { elo_points: number | null }) => {
       setIsLoadingState(true);
       let res;
+
       if (modalStatus.type === 'add') {
         res = await createPlayer(props);
-
         await mutateElo();
       }
 
-      if (modalStatus.type === 'update') {
-        const { elo_points, ...propsToUpdate } = props;
-        res = await updatePlayer(propsToUpdate);
+      if (modalStatus.type === "update") {
+        res = await updatePlayer(props);
+        await mutateElo();
       }
 
       if (res?.isOk) {
         handleReset();
-
         await mutate();
       } else {
         console.error(res?.errorMessage);
@@ -164,6 +171,12 @@ const PlayerForm = ({
         : null,
     },
   });
+
+  const [isConfirmChecked, setIsConfirmChecked] = useState<boolean>(false);
+
+  const handleConfirmChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsConfirmChecked(e.target.checked);
+  }
 
   return (
     <div className={formStyles.formContainer}>
@@ -305,22 +318,39 @@ const PlayerForm = ({
             })}
           />
         </InputWithError>
-        {!player && (
-          <InputWithError error={errors.elo_points}>
-            очки, которые задаются при создании игрока один раз
-            <br />
-            в дальнейшие изменения происходят автоматически или через базу
-            данных
-            <input
-              type="number"
-              placeholder="Очки эло"
-              {...register('elo_points', {
-                required: true,
-                valueAsNumber: true,
-              })}
-            />
-          </InputWithError>
-        )}
+        {
+          player ? (
+            <InputWithError error={errors.elo_points}>
+                Я хочу изменить Эло
+                <input type="checkbox" 
+                  style={{ width: 'max-content' }}
+                  onChange={handleConfirmChange} 
+                />
+                <br />
+              <input
+                type="number"
+                placeholder="Очки эло"
+                {...register('elo_points', {
+                  required: true,
+                  valueAsNumber: true,
+                  disabled: !isConfirmChecked,
+                })}
+              />
+            </InputWithError>
+          ) : (
+            <InputWithError error={errors.elo_points}>
+              Рейтинг Эло <br />
+              <input
+                type="number"
+                placeholder="Очки эло"
+                {...register('elo_points', {
+                  required: true,
+                  valueAsNumber: true,
+                })}
+              />
+            </InputWithError>
+          )
+        }
         <br />
         <InputWithError error={errors.premium}>
           Премиум (из Аллеи славы)

@@ -32,11 +32,21 @@ export default async (
       res.status(404);
     }
 
+    const { elo_points, ...playerData } = req.body.data;
     const updatedPlayer = await prisma.player.update({
       where: {
-        id: req.body.data.id,
+        id: playerData.id,
       },
-      data: req.body.data,
+      data: playerData,
+    });
+
+    await prisma.player_elo_ranking.update({
+      where: {
+          player_id: playerData.id,
+      },
+      data: {
+          elo_points,
+      },
     });
 
     res.json(updatedPlayer);
