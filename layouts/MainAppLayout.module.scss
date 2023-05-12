@@ -1,7 +1,8 @@
 @import '../styles/variables.scss';
 
 .pageContainer {
-  height: calc(100vh - 130px);
+  margin-bottom: 130px;
+  //height: calc(100vh - 130px);
   overflow-y: scroll;
 
   &.homePageContainer {
