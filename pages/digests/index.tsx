@@ -1,6 +1,5 @@
-import { useState, memo, Dispatch, SetStateAction } from 'react';
+import { useState, memo, Dispatch, SetStateAction, useEffect, useCallback } from 'react';
 import type { NextPage } from 'next';
-import Link from 'next/link';
 
 import PageTitle from 'ui-kit/PageTitle';
 import DigestListEl from 'components/DigestListEl';
@@ -9,6 +8,7 @@ import useDigests from 'hooks/useDigests';
 import { DIGEST_PAGE_SIZE } from 'constants/values';
 import styles from 'styles/Digests.module.scss';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
+import { useRouter } from "next/router";
 
 const DigestsPage: NextPage = () => {
   const [digestPageNumber, setDigestPageNumber] = useState(1);
@@ -48,6 +48,19 @@ const DigestsList = memo(
     setDigestPageNumber: Dispatch<SetStateAction<number>>;
   }) => {
     const { digests, isLoading } = useDigests(pageNumber);
+    const [scrollDigest, setScrollDigest] = useState<number>(0);
+    const router = useRouter();
+    useEffect(() => {
+      const savedScrollPosition = sessionStorage.getItem('scrollDigest');
+      if (savedScrollPosition) {
+        setScrollDigest(parseInt(savedScrollPosition, 10));
+      }
+      window.scrollTo(0, scrollDigest);
+    }, [scrollDigest]);
+    const handleScroll = useCallback((id: number) => {
+      sessionStorage.setItem('scrollDigest', window.pageYOffset.toString());
+      router.push(`/digests/${id}`);
+    }, [router])
 
     if (isLastPage && isLoading) {
       return <LoadingSpinner />;
@@ -56,15 +69,13 @@ const DigestsList = memo(
     return (
       <>
         {digests.map((d) => (
-          <Link href={`/digests/${d.id}`} key={d.id}>
-            <a className={styles.listEl}>
+          <div key={d.id} className={styles.listEl} onClick={() => handleScroll(d.id)}>
               <DigestListEl
                 key={d.id}
                 title={d.title || ''}
                 date={d.date || undefined}
               />
-            </a>
-          </Link>
+          </div>
         ))}
         {isLastPage && digests.length === DIGEST_PAGE_SIZE && (
           <div className={styles.loadMoreContainer}>
