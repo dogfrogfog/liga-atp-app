@@ -8,7 +8,6 @@ import {
 } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import {
   format,
@@ -299,6 +298,21 @@ const FinishedTournamentsList = memo(
     setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
     const { playedTournaments, isLoading } = usePlayedTournaments(playedTournamentsPage);
+    const [scrollTournament, setScrollTournament] = useState<number>(0);
+    const router = useRouter();
+
+    useEffect(() => {
+      const savedScrollPosition = sessionStorage.getItem('scrollTournament');
+      if (savedScrollPosition) {
+        setScrollTournament(parseInt(savedScrollPosition, 10));
+      }
+      window.scrollTo(0, scrollTournament);
+    }, [scrollTournament]);
+
+    const handleScroll = useCallback((id: number) => {
+      sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
+      router.push(`/tournaments/${id}`);
+    }, [router])
 
     const playersMap = useMemo(
       () =>
@@ -322,8 +336,7 @@ const FinishedTournamentsList = memo(
     return (
       <>
         {filteredFinishedTournaments.map((v) => (
-          <Link key={v.id} href={'/tournaments/' + v.id}>
-            <a className={styles.link}>
+            <div key={v.id} className={styles.link} onClick={() => handleScroll(v.id)}>
               <TournamentListItem
                 name={v.name || 'название не определено'}
                 status={
@@ -342,8 +355,7 @@ const FinishedTournamentsList = memo(
                     : ''
                 }
               />
-            </a>
-          </Link>
+            </div>
         ))}
         {isLastPage &&
           playedTournaments.length === PLAYED_TOURNAMENT_PAGE_SIZE && (
