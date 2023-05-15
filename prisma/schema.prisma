@@ -115,7 +115,7 @@ model elo_ranking_change {
 
 model other_page {
   id       Int     @id @default(autoincrement())
-  order    Int @unique @default(autoincrement())
+  order    Int     @default(autoincrement())
   markdown String?
   slug     String? @unique
   title    String?

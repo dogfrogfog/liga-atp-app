@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import type { other_page as OtherPageT } from '@prisma/client';
 
 export const deleteOtherPage = async (id: number) => {
@@ -7,8 +8,10 @@ export const deleteOtherPage = async (id: number) => {
   });
 
   if (response.status === 200) {
+    toast.success('Page deleted successfully');
     return { isOk: true };
   } else {
+    toast.error('Something went wrong!');
     return { isOk: false, errorMessage: response.statusText };
   }
 };
@@ -17,28 +20,22 @@ export const updateOtherPage = async (data: OtherPageT) => {
   const response = await axios.put<OtherPageT>('/api/other', { data });
 
   if (response.status === 200) {
+    toast.success('Page updated successfully');
     return { isOk: true, data: response.data };
   } else {
+    toast.error('Something went wrong!');
     return { isOk: false, errorMessage: response.statusText };
   }
 };
 
 export const updateOrderOtherPages = async (data: OtherPageT[]) => {
-  console.log(`data`, data);
-
-  console.log('in update');
-
   const response = await axios.put<OtherPageT[]>('/api/other/order', { data });
 
-  console.log(response);
   if (response.status === 200) {
-    console.log('good');
-    
+    toast.success('Page order changed successfully');
     return { isOk: true, data: response.data };
   } else {
-    console.log('in error');
-    console.log(response);
-
+    toast.error('Something went wrong!');
     return { isOk: false, errorMessage: response.statusText };
   }
 };
@@ -55,8 +52,10 @@ export const createOtherPage = async (
   });
 
   if (response.status === 200) {
+    toast.success('Page created successfully');
     return { isOk: true, data: response.data };
   } else {
+    toast.error('Something went wrong!');
     return { isOk: false, errorMessage: response.statusText };
   }
 };

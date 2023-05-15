@@ -8,10 +8,10 @@ export default async (
   res: NextApiResponse<OtherPageT | OtherPageT[]>
 ) => {
   if (req.method === 'PUT') {
-    const promiseArray: any[] = [];
-    const others = req.body.data as OtherPageT[];
-    others.forEach(({ id, order }) => {
-        let updatedOtherPage = prisma.other_page.update({
+    const promiseArray: OtherPageT[] = [];
+    const others: OtherPageT[] = req.body.data;
+    others.forEach(async ({ id, order }) => {
+        let updatedOtherPage = await prisma.other_page.update({
             where: {
               id,
             },

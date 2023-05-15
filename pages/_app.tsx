@@ -5,11 +5,13 @@ import { Analytics } from '@vercel/analytics/react'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPasswordProtect } from 'next-password-protect';
+import { ToastContainer } from 'react-toastify';
 import '../styles/globals.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import PWALayout from '../layouts/PWALayout';
 import AdminLayout from '../layouts/AdminLayout';
@@ -37,6 +39,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   if (router.pathname.startsWith('/admin')) {
     return (
       <AdminLayout>
+        <ToastContainer position='top-center' theme='colored' />
         <Component {...pageProps} />
       </AdminLayout>
     );

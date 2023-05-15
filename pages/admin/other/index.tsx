@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { DragEvent, useEffect, useState } from 'react';
 
 import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
@@ -14,30 +14,37 @@ const AdminOtherPage: NextPage = () => {
   const [pages, setPages] = useState<other_page[]>([]);
   const [currentPage, setCurrentPage] = useState<other_page | null>(null);
 
-  const dragStartHandler = (e: any, elem: any) => {
+  const dragStartHandler = (elem: other_page) => {
     setCurrentPage(elem);
   };
 
-  const dragEndHandler = (e: any) => {
-    e.target.style.backgroundColor = '#dbdbdb';
+  const dragEndHandler = (e: DragEvent<HTMLAnchorElement>) => {
+    (e.target as HTMLAnchorElement).style.backgroundColor = '#dbdbdb';
   };
 
-  const dragOverHandler = (e: any) => {
+  const dragOverHandler = (e: DragEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    e.target.style.backgroundColor = 'red';
+    (e.target as HTMLAnchorElement).style.backgroundColor = 'red';
   };
 
-  const dropHandler = (e: any, elem: any) => {
+  const dropHandler = (e: DragEvent<HTMLAnchorElement>, elem: other_page) => {
     e.preventDefault();
-    setPages(pages.map((page: any ) => {
+
+    if (!currentPage) {
+      return;
+    }
+
+    (e.target as HTMLAnchorElement).style.backgroundColor = '#dbdbdb';
+    setPages(pages.map((page): other_page => {
       if (page.id === elem.id) {
-        return {...page, order: currentPage?.order};
+        return {...page, order: currentPage.order};
       }
       if (page.id === currentPage?.id) {
         return {...page, order: elem.order};
       }
       return page;
     }));
+    setCurrentPage(null);
   };
 
   const handleSaveOrderClick = async () => {
@@ -65,7 +72,7 @@ const AdminOtherPage: NextPage = () => {
             <a
               className={styles.pageLink}
               draggable
-              onDragStart={(e) => dragStartHandler(e, elem)}
+              onDragStart={() => dragStartHandler(elem)}
               onDragLeave={(e) => dragEndHandler(e)}
               onDragEnd={(e) => dragEndHandler(e)}
               onDragOver={(e) => dragOverHandler(e)}
