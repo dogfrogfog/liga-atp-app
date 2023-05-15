@@ -23,6 +23,26 @@ export const updateOtherPage = async (data: OtherPageT) => {
   }
 };
 
+export const updateOrderOtherPages = async (data: OtherPageT[]) => {
+  console.log(`data`, data);
+
+  console.log('in update');
+
+  const response = await axios.put<OtherPageT[]>('/api/other/order', { data });
+
+  console.log(response);
+  if (response.status === 200) {
+    console.log('good');
+    
+    return { isOk: true, data: response.data };
+  } else {
+    console.log('in error');
+    console.log(response);
+
+    return { isOk: false, errorMessage: response.statusText };
+  }
+};
+
 export const createOtherPage = async (
   data: Omit<OtherPageT, 'id'>
 ): Promise<{

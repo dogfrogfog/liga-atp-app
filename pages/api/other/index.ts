@@ -8,14 +8,14 @@ export default async (
   res: NextApiResponse<OtherPageT | OtherPageT[]>
 ) => {
   if (req.method === 'GET') {
-    const othePages = await prisma.other_page.findMany();
+    const otherPages = await prisma.other_page.findMany();
 
-    res.json(othePages);
+    res.json(otherPages);
   }
 
   if (req.method === 'PUT') {
     const { id, markdown, title, slug } = req.body.data;
-    const updatedOthePage = await prisma.other_page.update({
+    const updatedOtherPage = await prisma.other_page.update({
       where: {
         id,
       },
@@ -26,7 +26,7 @@ export default async (
       },
     });
 
-    res.json(updatedOthePage);
+    res.json(updatedOtherPage);
   }
 
   if (req.method === 'DELETE') {
