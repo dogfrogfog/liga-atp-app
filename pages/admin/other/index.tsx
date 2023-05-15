@@ -6,6 +6,7 @@ import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import styles from 'styles/AdminOther.module.scss';
+import { updateOrderOtherPages } from 'services/other';
 
 const AdminOtherPage: NextPage = () => {
   const { otherPages, isLoading } = useOtherPages();
@@ -17,17 +18,9 @@ const AdminOtherPage: NextPage = () => {
     {id: 4, order: 4, title: 'Страница 4'}, */
   ]);
   const [currentPage, setCurrentPage] = useState<any>(null);
-  /* console.log(otherPages); */
-
-  /* const pages: any =  [
-    {id: 1, order: 1, title: 'Страница 1'},
-    {id: 2, order: 2, title: 'Страница 2'},
-    {id: 3, order: 3, title: 'Страница 3'},
-    {id: 4, order: 4, title: 'Страница 4'},
-  ] */
+  console.log(pages);
 
   const dragStartHandler = (e: any, elem: any) => {
-    console.log('drag', elem);
     setCurrentPage(elem);
   };
 
@@ -42,7 +35,6 @@ const AdminOtherPage: NextPage = () => {
 
   const dropHandler = (e: any, elem: any) => {
     e.preventDefault();
-    console.log('drop', elem);
     setPages(pages.map((page: any ) => {
       if (page.id === elem.id) {
         return {...page, order: currentPage.order};
@@ -54,9 +46,11 @@ const AdminOtherPage: NextPage = () => {
     }));
   };
 
-  /* const sortPages = (a, b) => {
+  const handleSaveOrderClick = async () => {
+    const res = await updateOrderOtherPages(pages);
+    console.log(res);
     
-  } */
+  }
  
   useEffect(() => {
     setPages(otherPages);
@@ -71,12 +65,13 @@ const AdminOtherPage: NextPage = () => {
       <Link href="/admin/other/new">
         <a className={styles.createPageButton}>создать страницу</a>
       </Link>
+      <button className={styles.createPageButton} onClick={handleSaveOrderClick}>сохранить порядок</button>
       <br />
       <br />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        pages/* .sort((a: any, b: any) => a.order - b.order) */.map((elem: any) => (
+        pages.sort((a: any, b: any) => a.order - b.order).map((elem: any) => (
           <Link key={elem.id} href={`/admin/other/${elem.slug}`}>
             <a
               className={styles.pageLink}

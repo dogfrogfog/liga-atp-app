@@ -7,10 +7,12 @@ import { prisma } from 'services/db';
 import styles from 'styles/Other.module.scss';
 
 type OtherPageProps = {
-  pages: Pick<other_page, 'title' | 'slug'>[];
+  pages: Pick<other_page, 'title' | 'slug' | 'order'>[];
 };
 
 const OtherPage: NextPage<OtherPageProps> = ({ pages }) => {
+  console.log(pages);
+  
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Прочее</PageTitle>
@@ -28,12 +30,13 @@ export const getStaticProps = async () => {
     select: {
       title: true,
       slug: true,
+      order: true,
     },
   });
 
   return {
     props: {
-      pages,
+      pages: pages.sort((a, b) => a.order - b.order),
     },
     revalidate: 600, // sec
   };

@@ -7,6 +7,7 @@ export default async (
   req: NextApiRequest,
   res: NextApiResponse<OtherPageT>
 ) => {
+  console.log(req.body.data);
   if (req.method === 'POST') {
     const { data } = req.body;
     const createdPage = await prisma.other_page.create({

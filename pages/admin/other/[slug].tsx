@@ -48,6 +48,7 @@ const AdminOtherPage: NextPage<{ page: OtherPageT }> = ({ page }) => {
     setIsLoading(true);
     const res = await updateOtherPage({
       id: page.id,
+      order: page.order,
       markdown: markdown || '',
       title,
       slug: slug(title as string),
