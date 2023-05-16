@@ -88,20 +88,20 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                   return;
                 }
                 
-                if (diff < 100 && diff > -100) {
+                if (diff < 110 && diff > -110) {
                   console.log('not moved stage not changed');
                   setTouchStart(null);
                   return;
                 }
 
-                if (diff >= 100) {
+                if (diff >= 110) {
                   setActiveStage(i + 1)
                   setTouchStart(null);
                   console.log('moved right');
                   return;
                 }
 
-                if (diff <= 100) {
+                if (diff <= 110) {
                   setActiveStage(i - 1)
                   setTouchStart(null);
                   console.log('moved left');
