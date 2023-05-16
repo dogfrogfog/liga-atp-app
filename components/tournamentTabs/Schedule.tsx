@@ -47,6 +47,8 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
 
     const [activeStage, setActiveStage] = useState('0');
     const [touchStartPosition, setTouchPosition] = useState(null)
+    console.log(activeStage);
+    
 
 
     const { carouselFragment, thumbsFragment, slideToItem, getIsActiveItem } = useSpringCarousel(
@@ -70,7 +72,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
 
                 setActiveStage(i + '')
 
-                const touchEnd = e.changedTouches[0].screenX
+                /* const touchEnd = e.changedTouches[0].screenX
                 
                 const diff = touchStartPosition - touchEnd
                 console.log('diff', diff);
@@ -83,7 +85,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                 }
 
                 setTouchPosition(null)
-                console.log('moved');
+                console.log('moved'); */
               }
                 
               }>
