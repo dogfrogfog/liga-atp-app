@@ -5,28 +5,14 @@ import cl from 'classnames';
 
 import { LEVEL_NUMBER_VALUES } from 'constants/values';
 import styles from './PlayersList.module.scss';
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 type PlayersListProps = {
     players: (PlayerT & { elo_points: any })[];
+    handleScroll?: (id: number) => void;
     shouldShowPlace?: boolean;
 };
 
-export const PlayersList = ({players, shouldShowPlace = false}: PlayersListProps) => {
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const router = useRouter();
-    useEffect(() => {
-        const savedScrollPosition = sessionStorage.getItem('scrollPosition');
-        if (savedScrollPosition) {
-            setScrollPosition(parseInt(savedScrollPosition, 10));
-        }
-        window.scrollTo(0, scrollPosition);
-    }, [scrollPosition]);
-    const handleScroll = useCallback((id: number) => {
-        sessionStorage.setItem('scrollPosition', window.pageYOffset.toString());
-        router.push(`/players/${id}`);
-    }, [router])
+export const PlayersList = ({players, handleScroll, shouldShowPlace = false}: PlayersListProps) => {
     return (
         <div className={styles.list}>
             {players.map(
@@ -37,7 +23,7 @@ export const PlayersList = ({players, shouldShowPlace = false}: PlayersListProps
                             styles.listItem,
                             shouldShowPlace ? styles.withPlace : ''
                         )}
-                        onClick={() => handleScroll(id)}
+                        onClick={() => handleScroll && handleScroll(id)}
                     >
                         {shouldShowPlace && (
                             <div className={styles.placeColumn}>

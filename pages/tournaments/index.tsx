@@ -59,7 +59,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
 
   const { tournaments, isLoading } = useTournaments();
   const router = useRouter();
-  const {tournament, type} = router.query
+  const {tournament, type, position} = router.query
 
   useEffect(() => {
     switch (tournament) {
@@ -82,17 +82,16 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   }, [type])
 
   useEffect(() => {
-    const savedScrollPosition = sessionStorage.getItem('scrollTournament');
-    if (savedScrollPosition) {
-      setScrollTournament(parseInt(savedScrollPosition, 10));
+    if (position) {
+      setScrollTournament(+position);
     }
     window.scrollTo(0, scrollTournament);
   }, [scrollTournament]);
 
   const handleScroll = useCallback((id: number) => {
-    sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
+    router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}})
     router.push(`/tournaments/${id}`);
-  }, [router])
+  }, [position])
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -300,17 +299,17 @@ const FinishedTournamentsList = memo(
     const { playedTournaments, isLoading } = usePlayedTournaments(playedTournamentsPage);
     const [scrollTournament, setScrollTournament] = useState<number>(0);
     const router = useRouter();
+    const {position} = router.query;
 
     useEffect(() => {
-      const savedScrollPosition = sessionStorage.getItem('scrollTournament');
-      if (savedScrollPosition) {
-        setScrollTournament(parseInt(savedScrollPosition, 10));
+      if (position) {
+        setScrollTournament(+position);
       }
       window.scrollTo(0, scrollTournament);
     }, [scrollTournament]);
 
     const handleScroll = useCallback((id: number) => {
-      sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
+      router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}})
       router.push(`/tournaments/${id}`);
     }, [router])
 

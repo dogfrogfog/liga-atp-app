@@ -1,4 +1,4 @@
-import { useMemo, useState, ChangeEvent, useEffect } from 'react';
+import { useMemo, useState, ChangeEvent, useEffect, useCallback } from 'react';
 import { player as PlayerT, player_elo_ranking } from '@prisma/client';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
@@ -18,9 +18,10 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
   players,
   playerEloRanking,
 }) => {
-  const router = useRouter();
   const [selectedLvl, setSelectedLvl] = useState('');
-  const {level} = router.query;
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const router = useRouter();
+  const {level, position} = router.query;
 
   useEffect(() => {
     switch (level) {
@@ -58,7 +59,12 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
       }
     }
   }, [level])
-  
+  useEffect(() => {
+    if (position) {
+      setScrollPosition(+position);
+    }
+    window.scrollTo(0, scrollPosition);
+  }, [scrollPosition]);
 
   const onSuggestionClick = (p: PlayerT) => {
     router.push(`/players/${p.id}`);
@@ -106,6 +112,10 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
       }
     }
   };
+  const handleScroll = useCallback((id: number) => {
+    router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}})
+    router.push(`/players/${id}`);
+  }, [level])
 
   const playersRankingsMap = useMemo(
     () =>
@@ -159,7 +169,7 @@ const PlayersPage: NextPage<PlayersPageProps> = ({
         </div>
       </PageTitle>
       <PlayersListHeader />
-      <PlayersList players={filteredPlayers} />
+      <PlayersList players={filteredPlayers} handleScroll={handleScroll}/>
     </div>
   );
 };

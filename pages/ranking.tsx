@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 
@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { PlayerLevel } from "../constants/playerLevel";
 
 const RANKING_TABS = [
-  'На хайпе',
+  'На хайпе',//0
   'Про', // 3
   'S-Мастерс', // 5
   'Мастерс', // 2
@@ -31,8 +31,9 @@ const RankingPage: NextPage<RankingPageProps> = ({
   playerEloRanking,
 }) => {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const router = useRouter();
-  const {level} = router.query
+  const {level, position} = router.query
 
   useEffect(() => {
     switch (level) {
@@ -70,6 +71,12 @@ const RankingPage: NextPage<RankingPageProps> = ({
       }
     }
   }, [level])
+  useEffect(() => {
+    if (position) {
+      setScrollPosition(+position);
+    }
+    window.scrollTo(0, scrollPosition);
+  }, [scrollPosition]);
 
 
   const playersMap = useMemo(
@@ -180,6 +187,11 @@ const RankingPage: NextPage<RankingPageProps> = ({
     }
   };
 
+  const handleScroll = useCallback((id: number) => {
+    router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}});
+    router.push(`/players/${id}`);
+  }, [level])
+
   return (
     <div className={styles.pageContainer}>
       <PageTitle>Эло</PageTitle>
@@ -189,7 +201,7 @@ const RankingPage: NextPage<RankingPageProps> = ({
         onChange={handleTabChange}
       />
       <PlayersListHeader shouldShowPlace />
-      <PlayersList players={filteredPlayers} shouldShowPlace />
+      <PlayersList players={filteredPlayers} handleScroll={handleScroll} shouldShowPlace />
     </div>
   );
 };

@@ -50,15 +50,15 @@ const DigestsList = memo(
     const { digests, isLoading } = useDigests(pageNumber);
     const [scrollDigest, setScrollDigest] = useState<number>(0);
     const router = useRouter();
+    const {position} = router.query;
     useEffect(() => {
-      const savedScrollPosition = sessionStorage.getItem('scrollDigest');
-      if (savedScrollPosition) {
-        setScrollDigest(parseInt(savedScrollPosition, 10));
+      if (position) {
+        setScrollDigest(+position);
       }
       window.scrollTo(0, scrollDigest);
     }, [scrollDigest]);
     const handleScroll = useCallback((id: number) => {
-      sessionStorage.setItem('scrollDigest', window.pageYOffset.toString());
+      router.push({ pathname: router.pathname, query: {position: window.scrollY}})
       router.push(`/digests/${id}`);
     }, [router])
 
