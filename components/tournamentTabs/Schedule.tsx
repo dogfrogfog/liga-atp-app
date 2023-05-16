@@ -84,38 +84,6 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       }
     );
 
-    const [touchPosition, setTouchPosition] = useState(null)
-
-  const handleTouchStart = (e: any) => {
-    const touchDown = e.touches[0].clientX
-    /* console.log('touchDown', touchDown); */
-    
-    setTouchPosition(touchDown)
-  }
-
-  const handleTouchMove = (e: any) => {
-    if(touchPosition === null) {
-        return
-    }
-
-    const currentTouch = e.touches[0].clientX
-    /* console.log('currentTouch', currentTouch); */
-    
-    const diff = touchPosition - currentTouch
-    console.log('diff', diff);
-    
-
-    if (diff < 30 && diff > -30) {
-      console.log('not moved');
-      
-        return;
-    }
-
-    setTouchPosition(null)
-    console.log('moved');
-    
-  }
-
     return (
       <>
         <div ref={downloadImageRef} className={styles.fakeBracket}>
@@ -132,7 +100,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
           ))}
         </div>
         <div className={styles.stageButtons}>{thumbsFragment}</div>
-        <div className={styles.carouselFragmentWrapper} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+        <div className={styles.carouselFragmentWrapper}>
           {carouselFragment}
         </div>
       </>
@@ -158,10 +126,41 @@ const Stage = ({
   getIsActiveItem
 }: StageProps) => {
 
-  
+  const [touchPosition, setTouchPosition] = useState(null)
+
+  const handleTouchStart = (e: any) => {
+    const touchDown = e.touches[0].clientX
+    /* console.log('touchDown', touchDown); */
+    
+    setTouchPosition(touchDown)
+  }
+
+  const handleTouchMove = (e: any) => {
+    e.stopPropagation();
+    if(touchPosition === null) {
+        return
+    }
+
+    const currentTouch = e.touches[0].clientX
+    /* console.log('currentTouch', currentTouch); */
+    
+    const diff = touchPosition - currentTouch
+    console.log('diff', diff);
+    
+
+    if (diff < 30 && diff > -30) {
+      console.log('not moved');
+      
+        return;
+    }
+
+    setTouchPosition(null)
+    console.log('moved');
+    
+  }
   
   return (
-    <div className={styles.stage}>
+    <div className={styles.stage} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
       {stage.map((bracketUnit, mi) => {
         if (Array.isArray(bracketUnit)) {
           return (
