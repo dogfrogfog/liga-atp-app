@@ -60,7 +60,6 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
-              getIsActiveItem={getIsActiveItem}
             />
           ),
           renderThumb: (
@@ -95,7 +94,6 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
-              getIsActiveItem={getIsActiveItem}
             />
           ))}
         </div>
@@ -114,7 +112,6 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
-  getIsActiveItem: (id: string) => boolean
 };
 
 const Stage = ({
@@ -123,10 +120,11 @@ const Stage = ({
   matchesMap,
   playersMap,
   isFinal,
-  getIsActiveItem
 }: StageProps) => {
 
   const [touchStartPosition, setTouchPosition] = useState(null)
+  console.log(stage);
+  
 
   const handleTouchStart = (e: any) => {
     const touchStart = e.changedTouches[0].screenX
@@ -147,7 +145,7 @@ const Stage = ({
     console.log('diff', diff);
     
 
-    if (diff < 35 && diff > -35) {
+    if (diff < 250 && diff > -250) {
       console.log('not moved');
       
         return;
