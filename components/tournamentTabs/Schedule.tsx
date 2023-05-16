@@ -105,12 +105,12 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
-              onTouchEnd={(e: any) => {
+              /* onTouchEnd={(e: any) => {
                 e.stopPropagation();
                 console.log('in touch end 2');
                   console.log(`i in touch end 2`, i);
                 setActiveStage(i + '')
-              }}
+              }} */
             />
           ))}
         </div>
@@ -129,7 +129,8 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
-  onTouchEnd: any
+  isTouchEnd?: boolean;
+  onTouchEnd?: any
 };
 
 const Stage = ({
@@ -139,12 +140,13 @@ const Stage = ({
   playersMap,
   isFinal,
   onTouchEnd,
+  isTouchEnd
 }: StageProps) => {
 
   
   
   return (
-    <div className={styles.stage} onTouchEnd={onTouchEnd}>
+    <div className={styles.stage} onTouchEnd={isTouchEnd ? onTouchEnd : null}>
       {stage.map((bracketUnit, mi) => {
         if (Array.isArray(bracketUnit)) {
           return (
