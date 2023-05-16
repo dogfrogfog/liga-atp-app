@@ -63,6 +63,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                 isDoubles={isDoubles}
                 matchesMap={matchesMap}
                 playersMap={playersMap}
+                isTouchEnd
                 onTouchEnd={(e: any) => {
                   e.stopPropagation();
                   console.log('in touch end');
