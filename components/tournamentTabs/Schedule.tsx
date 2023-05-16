@@ -135,7 +135,7 @@ const Stage = ({
     setTouchPosition(touchDown)
   }
 
-  const handleTouchMove = (e: any) => {
+  const handleTouchEnd = (e: any) => {
     e.stopPropagation();
     if(touchPosition === null) {
         return
@@ -160,7 +160,7 @@ const Stage = ({
   }
   
   return (
-    <div className={styles.stage} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+    <div className={styles.stage} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       {stage.map((bracketUnit, mi) => {
         if (Array.isArray(bracketUnit)) {
           return (
