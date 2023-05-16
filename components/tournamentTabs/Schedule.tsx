@@ -92,7 +92,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
   }
 
   const handleTouchMove = (e: any) => {
-    /* const touchDown = touchPosition
+    const touchDown = touchPosition
 
     if(touchDown === null) {
         return
@@ -109,7 +109,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       return;
     }
 
-    setTouchPosition(null) */
+    setTouchPosition(null)
     console.log('moved');
     
   }
