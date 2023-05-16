@@ -58,46 +58,17 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
         items: brackets.map((stage, i, arr) => ({
           id: i + '',
           renderItem: (
-            <div
-              onTouchStart={(e: any) => {
-                const touchStart = e.changedTouches[0].screenX
-                
-                setTouchPosition(touchStart)
-              }}
-              onTouchEnd={(e) => {
-                e.stopPropagation();
-                if(touchStartPosition === null) {
-                    return
-                }
-
-                setActiveStage(i + '')
-
-                /* const touchEnd = e.changedTouches[0].screenX
-                
-                const diff = touchStartPosition - touchEnd
-                console.log('diff', diff);
-                
-
-                if (diff < 250 && diff > -250) {
-                  console.log('not moved');
-                  
-                    return;
-                }
-
-                setTouchPosition(null)
-                console.log('moved'); */
-              }
-                
-              }>
               <Stage
                 stage={stage}
                 isFinal={arr.length - 1 === i}
                 isDoubles={isDoubles}
                 matchesMap={matchesMap}
                 playersMap={playersMap}
+                onTouchEnd={(e: any) => {
+                  e.stopPropagation();
+                setActiveStage(i + '')
+                }}
               />
-            </div>
-            
           ),
           renderThumb: (
             <button
@@ -120,37 +91,6 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       }
     );
 
- /*  const handleTouchStart = (e: any) => {
-    const touchStart = e.changedTouches[0].screenX
-    
-    setTouchPosition(touchStart)
-  } */
-
-  /* const handleTouchEnd = (e: any) => {
-    e.stopPropagation();
-    if(touchStartPosition === null) {
-        return
-    }
-
-    setActiveStage(i + '')
-
-    const touchEnd = e.changedTouches[0].screenX
-    
-    const diff = touchStartPosition - touchEnd
-    console.log('diff', diff);
-    
-
-    if (diff < 250 && diff > -250) {
-      console.log('not moved');
-      
-        return;
-    }
-
-    setTouchPosition(null)
-    console.log('moved');
-    
-  } */
-
     return (
       <>
         <div ref={downloadImageRef} className={styles.fakeBracket}>
@@ -162,6 +102,10 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
+              onTouchEnd={(e: any) => {
+                e.stopPropagation();
+                setActiveStage(i + '')
+              }}
             />
           ))}
         </div>
@@ -180,6 +124,7 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
+  onTouchEnd: any
 };
 
 const Stage = ({
@@ -188,12 +133,13 @@ const Stage = ({
   matchesMap,
   playersMap,
   isFinal,
+  onTouchEnd,
 }: StageProps) => {
 
   
   
   return (
-    <div className={styles.stage}>
+    <div className={styles.stage} onTouchEnd={onTouchEnd}>
       {stage.map((bracketUnit, mi) => {
         if (Array.isArray(bracketUnit)) {
           return (
