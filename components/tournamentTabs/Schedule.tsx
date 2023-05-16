@@ -101,13 +101,13 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
     const currentTouch = e.touches[0].clientX
     const diff = touchDown - currentTouch
 
-    if (diff > 50) {
+    if (diff > 500) {
       console.log('not moved');
       
         return;
     }
 
-    if (diff < -50) {
+    if (diff < -500) {
       console.log('not moved');
       return;
     }
