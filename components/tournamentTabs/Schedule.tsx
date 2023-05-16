@@ -68,9 +68,8 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                   e.stopPropagation();
                   console.log('in touch end');
                   console.log(`i in touch end`, i);
-                  
-                  
-                setActiveStage(i + '')
+
+                  setActiveStage((i + 1) + '')
                 }}
               />
           ),
