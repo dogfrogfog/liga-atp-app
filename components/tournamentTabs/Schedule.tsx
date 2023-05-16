@@ -126,29 +126,28 @@ const Stage = ({
   getIsActiveItem
 }: StageProps) => {
 
-  const [touchPosition, setTouchPosition] = useState(null)
+  const [touchStartPosition, setTouchPosition] = useState(null)
 
   const handleTouchStart = (e: any) => {
-    const touchDown = e.touches[0].clientX
+    const touchStart = e.changedTouches[0].screenX
     /* console.log('touchDown', touchDown); */
     
-    setTouchPosition(touchDown)
+    setTouchPosition(touchStart)
   }
 
   const handleTouchEnd = (e: any) => {
     e.stopPropagation();
-    if(touchPosition === null) {
+    if(touchStartPosition === null) {
         return
     }
 
-    const currentTouch = e.touches[0].clientX
-    /* console.log('currentTouch', currentTouch); */
+    const touchEnd = e.changedTouches[0].screenX
     
-    const diff = touchPosition - currentTouch
+    const diff = touchStartPosition - touchEnd
     console.log('diff', diff);
     
 
-    if (diff < 30 && diff > -30) {
+    if (diff < 35 && diff > -35) {
       console.log('not moved');
       
         return;
