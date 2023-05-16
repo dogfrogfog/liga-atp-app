@@ -46,6 +46,8 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
     }, new Map<number, PlayerT>());
 
     const [activeStage, setActiveStage] = useState('0');
+    const [touchStartPosition, setTouchPosition] = useState(null)
+
 
     const { carouselFragment, thumbsFragment, slideToItem, getIsActiveItem } = useSpringCarousel(
       {
@@ -54,13 +56,46 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
         items: brackets.map((stage, i, arr) => ({
           id: i + '',
           renderItem: (
-            <Stage
-              stage={stage}
-              isFinal={arr.length - 1 === i}
-              isDoubles={isDoubles}
-              matchesMap={matchesMap}
-              playersMap={playersMap}
-            />
+            <div
+              onTouchStart={(e: any) => {
+                const touchStart = e.changedTouches[0].screenX
+                
+                setTouchPosition(touchStart)
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                if(touchStartPosition === null) {
+                    return
+                }
+
+                setActiveStage(i + '')
+
+                const touchEnd = e.changedTouches[0].screenX
+                
+                const diff = touchStartPosition - touchEnd
+                console.log('diff', diff);
+                
+
+                if (diff < 250 && diff > -250) {
+                  console.log('not moved');
+                  
+                    return;
+                }
+
+                setTouchPosition(null)
+                console.log('moved');
+              }
+                
+              }>
+              <Stage
+                stage={stage}
+                isFinal={arr.length - 1 === i}
+                isDoubles={isDoubles}
+                matchesMap={matchesMap}
+                playersMap={playersMap}
+              />
+            </div>
+            
           ),
           renderThumb: (
             <button
@@ -82,6 +117,37 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
         })),
       }
     );
+
+ /*  const handleTouchStart = (e: any) => {
+    const touchStart = e.changedTouches[0].screenX
+    
+    setTouchPosition(touchStart)
+  } */
+
+  /* const handleTouchEnd = (e: any) => {
+    e.stopPropagation();
+    if(touchStartPosition === null) {
+        return
+    }
+
+    setActiveStage(i + '')
+
+    const touchEnd = e.changedTouches[0].screenX
+    
+    const diff = touchStartPosition - touchEnd
+    console.log('diff', diff);
+    
+
+    if (diff < 250 && diff > -250) {
+      console.log('not moved');
+      
+        return;
+    }
+
+    setTouchPosition(null)
+    console.log('moved');
+    
+  } */
 
     return (
       <>
@@ -122,42 +188,10 @@ const Stage = ({
   isFinal,
 }: StageProps) => {
 
-  const [touchStartPosition, setTouchPosition] = useState(null)
-  console.log(stage);
   
-
-  const handleTouchStart = (e: any) => {
-    const touchStart = e.changedTouches[0].screenX
-    /* console.log('touchDown', touchDown); */
-    
-    setTouchPosition(touchStart)
-  }
-
-  const handleTouchEnd = (e: any) => {
-    e.stopPropagation();
-    if(touchStartPosition === null) {
-        return
-    }
-
-    const touchEnd = e.changedTouches[0].screenX
-    
-    const diff = touchStartPosition - touchEnd
-    console.log('diff', diff);
-    
-
-    if (diff < 250 && diff > -250) {
-      console.log('not moved');
-      
-        return;
-    }
-
-    setTouchPosition(null)
-    console.log('moved');
-    
-  }
   
   return (
-    <div className={styles.stage} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div className={styles.stage}>
       {stage.map((bracketUnit, mi) => {
         if (Array.isArray(bracketUnit)) {
           return (
