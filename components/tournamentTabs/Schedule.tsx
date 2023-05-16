@@ -1,4 +1,4 @@
-import { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import cl from 'classnames';
@@ -45,7 +45,9 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       return acc;
     }, new Map<number, PlayerT>());
 
-    const { carouselFragment, thumbsFragment, slideToItem } = useSpringCarousel(
+    const [activeStage, setActiveStage] = useState('0');
+
+    const { carouselFragment, thumbsFragment, slideToItem, getIsActiveItem } = useSpringCarousel(
       {
         withThumbs: true,
         touchAction: '',
@@ -58,17 +60,21 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
+              getIsActiveItem={getIsActiveItem}
             />
           ),
           renderThumb: (
             <button
               onClick={() => {
-                // setActiveStage(i + '');
+                setActiveStage(i + '');
                 slideToItem(i);
+                console.log(i);
+                
+                console.log(getIsActiveItem(i + ''));
               }}
               className={cl(
-                styles.stageButton
-                // i + '' === activeStage ? styles.active : ''
+                styles.stageButton,
+                i + '' === activeStage ? styles.active : ''
               )}
             >
               {stages[i]}
@@ -77,6 +83,36 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
         })),
       }
     );
+
+    const [touchPosition, setTouchPosition] = useState(null)
+
+  const handleTouchStart = (e: any) => {
+    const touchDown = e.touches[0].clientX
+    setTouchPosition(touchDown)
+  }
+
+  const handleTouchMove = (e: any) => {
+    /* const touchDown = touchPosition
+
+    if(touchDown === null) {
+        return
+    }
+
+    const currentTouch = e.touches[0].clientX
+    const diff = touchDown - currentTouch
+
+    if (diff > 50) {
+        return;
+    }
+
+    if (diff < -50) {
+      return;
+    }
+
+    setTouchPosition(null) */
+    console.log('moved');
+    
+  }
 
     return (
       <>
@@ -89,11 +125,12 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
+              getIsActiveItem={getIsActiveItem}
             />
           ))}
         </div>
         <div className={styles.stageButtons}>{thumbsFragment}</div>
-        <div className={styles.carouselFragmentWrapper}>
+        <div className={styles.carouselFragmentWrapper} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
           {carouselFragment}
         </div>
       </>
@@ -107,6 +144,7 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
+  getIsActiveItem: (id: string) => boolean
 };
 
 const Stage = ({
@@ -115,49 +153,55 @@ const Stage = ({
   matchesMap,
   playersMap,
   isFinal,
-}: StageProps) => (
-  <div className={styles.stage}>
-    {stage.map((bracketUnit, mi) => {
-      if (Array.isArray(bracketUnit)) {
-        return (
-          <div key={mi} className={styles.groupWrapper}>
-            <p className={styles.groupTitle}>Группа {mi + 1}</p>
-            {bracketUnit.length > 0 ? (
-              bracketUnit.map((v, gmi) => (
-                <Match
-                  className={styles.groupMatch}
-                  key={gmi}
-                  isFinal={isFinal}
-                  isDoubles={isDoubles}
-                  match={matchesMap.get(v.matchId)}
-                  playersMap={playersMap}
-                />
-              ))
-            ) : (
-              <NotFoundMessage message="В группе пока нет матчей" />
-            )}
+  getIsActiveItem
+}: StageProps) => {
+
+  
+  
+  return (
+    <div className={styles.stage}>
+      {stage.map((bracketUnit, mi) => {
+        if (Array.isArray(bracketUnit)) {
+          return (
+            <div key={mi} className={styles.groupWrapper}>
+              <p className={styles.groupTitle}>Группа {mi + 1}</p>
+              {bracketUnit.length > 0 ? (
+                bracketUnit.map((v, gmi) => (
+                  <Match
+                    className={styles.groupMatch}
+                    key={gmi}
+                    isFinal={isFinal}
+                    isDoubles={isDoubles}
+                    match={matchesMap.get(v.matchId)}
+                    playersMap={playersMap}
+                  />
+                ))
+              ) : (
+                <NotFoundMessage message="В группе пока нет матчей" />
+              )}
+            </div>
+          );
+        }
+  
+        const match = bracketUnit?.matchId && matchesMap.get(bracketUnit.matchId);
+  
+        return match ? (
+          <Match
+            key={mi}
+            isFinal={isFinal}
+            isDoubles={isDoubles}
+            match={match}
+            playersMap={playersMap}
+          />
+        ) : (
+          <div key={mi} className={styles.matchDoesntExists}>
+            <FaQuestion />
           </div>
         );
-      }
-
-      const match = bracketUnit?.matchId && matchesMap.get(bracketUnit.matchId);
-
-      return match ? (
-        <Match
-          key={mi}
-          isFinal={isFinal}
-          isDoubles={isDoubles}
-          match={match}
-          playersMap={playersMap}
-        />
-      ) : (
-        <div key={mi} className={styles.matchDoesntExists}>
-          <FaQuestion />
-        </div>
-      );
-    })}
-  </div>
-);
+      })}
+    </div>
+  );
+}
 
 const Match = ({
   isDoubles,
