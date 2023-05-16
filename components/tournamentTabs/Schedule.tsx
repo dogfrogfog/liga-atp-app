@@ -105,13 +105,13 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
     console.log('diff', diff);
     
 
-    if (diff > 500) {
+    if (diff < 20 && diff > 0) {
       console.log('not moved');
       
         return;
     }
 
-    if (diff < -500) {
+    if (diff < 0 && diff < -20) {
       console.log('not moved');
       return;
     }
