@@ -88,7 +88,7 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
 
   const handleTouchStart = (e: any) => {
     const touchDown = e.touches[0].clientX
-    console.log('touchDown', touchDown);
+    /* console.log('touchDown', touchDown); */
     
     setTouchPosition(touchDown)
   }
@@ -99,21 +99,16 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
     }
 
     const currentTouch = e.touches[0].clientX
-    console.log('currentTouch', currentTouch);
+    /* console.log('currentTouch', currentTouch); */
     
     const diff = touchPosition - currentTouch
     console.log('diff', diff);
     
 
-    if (diff < 20 && diff > 0) {
+    if (diff < 30 && diff > -30) {
       console.log('not moved');
       
         return;
-    }
-
-    if (diff < 0 && diff < -20) {
-      console.log('not moved');
-      return;
     }
 
     setTouchPosition(null)
