@@ -1,12 +1,13 @@
 @import '../styles/variables.scss';
 
 .pageContainer {
-  margin-bottom: 130px;
-  //height: calc(100vh - 130px);
+  margin-bottom: 100px;
   overflow-y: scroll;
 
   &.homePageContainer {
     overflow: hidden;
+    height: calc(100vh - 130px);
+    margin-bottom: 0;
   }
 }
 
