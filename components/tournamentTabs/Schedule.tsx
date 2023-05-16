@@ -46,7 +46,6 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
     }, new Map<number, PlayerT>());
 
     const [activeStage, setActiveStage] = useState('0');
-    const [touchStartPosition, setTouchPosition] = useState(null)
     console.log(activeStage);
     
 
@@ -66,6 +65,10 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                 playersMap={playersMap}
                 onTouchEnd={(e: any) => {
                   e.stopPropagation();
+                  console.log('in touch end');
+                  console.log(`i in touch end`, i);
+                  
+                  
                 setActiveStage(i + '')
                 }}
               />
@@ -104,6 +107,8 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               playersMap={playersMap}
               onTouchEnd={(e: any) => {
                 e.stopPropagation();
+                console.log('in touch end 2');
+                  console.log(`i in touch end 2`, i);
                 setActiveStage(i + '')
               }}
             />
