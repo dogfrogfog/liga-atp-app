@@ -11,8 +11,6 @@ export const getRegPlayersIds = (
       // old doubles id separated with 012340
       const shouldSplitIds = (v + '').includes('012340');
 
-      console.log(shouldSplitIds);
-
       if (shouldSplitIds) {
         const [id1, id2] = (v + '').split('012340');
         acc.push(parseInt(id1, 10), parseInt(id2, 10));
