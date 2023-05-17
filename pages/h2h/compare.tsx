@@ -38,7 +38,8 @@ const CompareTwoPlayersPage: NextPage<{
   const { matches: p2Matches } = useMatches(p2?.id as number);
 
   // @ts-ignore
-  const { playersMatches, p1Wins, p2Wins } = useMemo(
+  const { playersMatches, p1Wins, p2Wins }:
+  {playersMatches: MatchWithTournamentType[], p1Wins: number, p2Wins: number} = useMemo(
     () =>
       p1 && p2
         ? removeMatchesDuplicates([...p1Matches, ...p2Matches]).reduce(
@@ -59,7 +60,9 @@ const CompareTwoPlayersPage: NextPage<{
                 (m.player1_id === p2.id && m.player2_id === p1.id);
 
               if (!isDoubles && isBothPlayersInMatch) {
+                
                 acc.playersMatches.push(m);
+                console.log(playersMatches);
 
                 if (m.winner_id === p1.id + '' && !m.score.toLowerCase().includes('w/o')) {
                   acc.p1Wins += 1;
