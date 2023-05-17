@@ -1,4 +1,4 @@
-import { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef, useState, TouchEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import cl from 'classnames';
@@ -45,6 +45,10 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       return acc;
     }, new Map<number, PlayerT>());
 
+    const [activeStage, setActiveStage] = useState(0);
+    const [touchStart, setTouchStart]  = useState<null | number>(null);
+    const [touchEnd, setTouchEnd]  = useState<null | number>(null);
+
     const { carouselFragment, thumbsFragment, slideToItem } = useSpringCarousel(
       {
         withThumbs: true,
@@ -58,17 +62,69 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
+              isTouchStartNeeded
+              onTouchStart={(e) => {
+                setTouchStart(e.changedTouches[0].screenX);
+              }}
+              isTouchEndNeeded
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+
+                if (touchStart === null) {
+                  return;
+                }
+
+                setTouchEnd(e.changedTouches[0].screenX);
+
+                if (touchEnd === null) {
+                  return;
+                }
+                
+                const diff = touchStart - touchEnd;
+
+                if (i === arr.length - 1 && diff > 0) {
+                  setTouchStart(null);
+                  setTouchEnd(null);
+                  return;
+                }
+
+                if (i === 0 && diff < 0) {
+                  setTouchStart(null);
+                  setTouchEnd(null);
+                  return;
+                }
+                
+                if (diff < 150 && diff > -150) {
+                  setTouchStart(null);
+                  setTouchEnd(null);
+                  return;
+                }
+
+                if (diff >= 150) {
+                  setActiveStage(i + 1);
+                  setTouchStart(null);
+                  setTouchEnd(null);
+                  return;
+                }
+
+                if (diff <= 150) {
+                  setActiveStage(i - 1);
+                  setTouchStart(null);
+                  setTouchEnd(null);
+                  return;
+                }
+              }}
             />
           ),
           renderThumb: (
             <button
               onClick={() => {
-                // setActiveStage(i + '');
+                setActiveStage(i);
                 slideToItem(i);
               }}
               className={cl(
-                styles.stageButton
-                // i + '' === activeStage ? styles.active : ''
+                styles.stageButton,
+                i === activeStage ? styles.active : null,
               )}
             >
               {stages[i]}
@@ -107,6 +163,10 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
+  isTouchStartNeeded?: boolean;
+  onTouchStart?: (e: TouchEvent<HTMLDivElement>) => void;
+  isTouchEndNeeded?: boolean;
+  onTouchEnd?: (e: TouchEvent<HTMLDivElement>) => void;
 };
 
 const Stage = ({
@@ -115,8 +175,16 @@ const Stage = ({
   matchesMap,
   playersMap,
   isFinal,
+  isTouchStartNeeded,
+  onTouchStart,
+  isTouchEndNeeded,
+  onTouchEnd,
 }: StageProps) => (
-  <div className={styles.stage}>
+  <div
+    className={styles.stage}
+    onTouchStart={isTouchStartNeeded ? onTouchStart : undefined}
+    onTouchEnd={isTouchEndNeeded ? onTouchEnd : undefined}
+  >
     {stage.map((bracketUnit, mi) => {
       if (Array.isArray(bracketUnit)) {
         return (
