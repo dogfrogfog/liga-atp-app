@@ -61,11 +61,11 @@ const CompareTwoPlayersPage: NextPage<{
               if (!isDoubles && isBothPlayersInMatch) {
                 acc.playersMatches.push(m);
 
-                if (m.winner_id === p1.id + '') {
+                if (m.winner_id === p1.id + '' && !m.score.toLowerCase().includes('w/o')) {
                   acc.p1Wins += 1;
                 }
 
-                if (m.winner_id === p2.id + '') {
+                if (m.winner_id === p2.id + '' && !m.score.toLowerCase().includes('w/o')) {
                   acc.p2Wins += 1;
                 }
               }
