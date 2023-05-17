@@ -94,20 +94,20 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
                   return;
                 }
                 
-                if (diff < 120 && diff > -120) {
+                if (diff < 150 && diff > -150) {
                   setTouchStart(null);
                   setTouchEnd(null);
                   return;
                 }
 
-                if (diff >= 120) {
+                if (diff >= 150) {
                   setActiveStage(i + 1);
                   setTouchStart(null);
                   setTouchEnd(null);
                   return;
                 }
 
-                if (diff <= 120) {
+                if (diff <= 150) {
                   setActiveStage(i - 1);
                   setTouchStart(null);
                   setTouchEnd(null);
