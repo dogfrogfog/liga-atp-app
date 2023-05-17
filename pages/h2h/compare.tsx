@@ -64,11 +64,17 @@ const CompareTwoPlayersPage: NextPage<{
                 acc.playersMatches.push(m);
                 console.log(acc.playersMatches);
 
-                if (m.winner_id === p1.id + '' && !m.score.toLowerCase().includes('w/o')) {
+                if (m.winner_id === p1.id + '' &&
+                    !m.score?.toLowerCase().includes('w/o') &&
+                    !m.comment?.toLowerCase().includes('w/o')
+                  ) {
                   acc.p1Wins += 1;
                 }
 
-                if (m.winner_id === p2.id + '' && !m.score.toLowerCase().includes('w/o')) {
+                if (m.winner_id === p2.id + '' &&
+                    !m.score?.toLowerCase().includes('w/o') &&
+                    !m.comment?.toLowerCase().includes('w/o')
+                  ) {
                   acc.p2Wins += 1;
                 }
               }
