@@ -262,11 +262,18 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
         />
       </div>
       <PageTitle>Турниры</PageTitle>
-      <Tabs
-        activeTab={activeTab}
-        tabNames={TOURNAMENT_TABS}
-        onChange={handleTabChange}
-      />
+      <div className={styles.tabsWrapper}>
+        <Link href='/tournaments/matches-today'>
+          <a className={styles.live}>
+            <span>LIVE</span>
+          </a>
+        </Link>
+        <Tabs
+          activeTab={activeTab}
+          tabNames={TOURNAMENT_TABS}
+          onChange={handleTabChange}
+        />
+      </div>
       {isLoading ? <LoadingSpinner /> : activeTabContent}
     </div>
   );

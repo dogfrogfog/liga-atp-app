@@ -1,0 +1,102 @@
+@import '../../styles/variables.scss';
+
+.tabContentLiveMatches {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.innerTournament{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+
+    .title{
+        font-size: 20px;
+        font-weight: 600;
+    }
+}
+
+.innerMatches{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 27px;
+
+    svg {
+        color: $custom-aqua;
+        font-size: 22px;
+    }
+
+    .circle {
+        width: 15px;
+        height: 15px;
+        background-color: $custom-aqua;
+        border-radius: 50%;
+        animation: zoom 1s linear infinite alternate;
+    }
+}
+
+.wrapperPlayers{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    background-color: $custom-darkgray;
+    border-radius: 4px;
+    padding: 3px 5px;
+}
+
+.playersTwo{
+    display: flex;
+    flex-wrap: wrap;
+    width: max-content;
+}
+
+.playersFour{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.winner{
+    color: $custom-aqua;
+}
+
+.linkYouTube{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3px;
+
+    svg{
+        color: red;
+        font-size: 22px;
+    }
+}
+
+.youTubeAnimation{
+    animation: zoom 1s linear infinite alternate;
+}
+
+.currentScore{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@keyframes zoom {
+    0% {
+        transform: scale(0.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
