@@ -14,6 +14,27 @@ export const LEVEL_NUMBER_VALUES: NumberValuesT = {
   [-1]: 'Сателлит',
 };
 
+export const LEVEL_NUMBER_LIVE: NumberValuesT = {
+  1: 'Сателлит',
+  2: 'Фьючерс',
+  3: 'Леджер',
+  4: 'Челленджер',
+  5: 'Мастерс',
+  6: 'S-Мастерс',
+  7: 'Про',
+};
+
+export const LEVELS_TABS: string[] = [
+  'Все', 
+  'Сателлит', 
+  'Фьючерс', 
+  'Леджер', 
+  'Челленджер', 
+  'Мастерс', 
+  'S-Мастерс', 
+  'Про'
+];
+
 // previously used indexes: 8, 9, 10, 16
 export const TOURNAMENT_TYPE_NUMBER_VALUES: NumberValuesT = {
   0: 'Большой Шлем',
@@ -80,6 +101,8 @@ export const TOURNAMENT_STATUS_NUMBER_VALUES: NumberValuesT = {
   3: 'Завершен',
 };
 
+export const MATCHES_TABS_MAIN: string[] = ['Матчи сегодня', 'Матчи завтра'];
+
 export const DEFAULT_MODAL = { isOpen: false, type: '' };
 
 export const PLAYER_COLUMNS = [
@@ -116,6 +139,7 @@ export const TOURNAMENT_COLUMNS = [
   'address',
   'start_date',
   'tournament_type',
+  'tournament_level',
   'draw_type',
   'surface',
   'status',

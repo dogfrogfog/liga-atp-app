@@ -72,21 +72,22 @@ model player {
 }
 
 model tournament {
-  id                   Int       @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
-  name                 String?
-  address              String?
-  start_date           DateTime? @db.Date
-  is_finished          Boolean?
-  surface              Int?
-  draw_type            Int?
-  players_order        String?
-  draw                 String?
-  city                 String?
-  tournament_type      Int?
-  is_doubles           Boolean?
-  status               Int?
-  unregistered_players String?   @default("")
-  match                match[]
+  id                         Int       @id(map: "idx_16929_core_tournament_pkey") @default(autoincrement())
+  name                       String?
+  address                    String?
+  start_date                 DateTime? @db.Date
+  is_finished                Boolean?
+  surface                    Int?
+  draw_type                  Int?
+  players_order              String?
+  draw                       String?
+  city                       String?
+  tournament_type            Int?
+  tournament_level           Int?
+  is_doubles                 Boolean?
+  status                     Int?
+  unregistered_players       String?   @default("")
+  match                      match[]
 }
 
 model digest {

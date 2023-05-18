@@ -7,6 +7,7 @@ import {
   SetStateAction, useEffect, useCallback,
 } from 'react';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import {
@@ -271,11 +272,18 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
         />
       </div>
       <PageTitle>Турниры</PageTitle>
-      <Tabs
-        activeTab={activeTab}
-        tabNames={TOURNAMENT_TABS}
-        onChange={handleTabChange}
-      />
+      <div className={styles.tabsWrapper}>
+        <Link href='/tournaments/matches-today'>
+          <a className={styles.live}>
+            <span>LIVE</span>
+          </a>
+        </Link>
+        <Tabs
+          activeTab={activeTab}
+          tabNames={TOURNAMENT_TABS}
+          onChange={handleTabChange}
+        />
+      </div>
       {isLoading ? <LoadingSpinner /> : activeTabContent}
     </div>
   );
