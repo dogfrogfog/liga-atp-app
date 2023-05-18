@@ -7,6 +7,7 @@ import {
   SetStateAction, useEffect, useCallback,
 } from 'react';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import {
