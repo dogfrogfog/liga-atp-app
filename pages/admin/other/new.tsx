@@ -20,21 +20,25 @@ const MDEditor = dynamic(
 
 import PageTitle from 'ui-kit/PageTitle';
 import useOtherPages from 'hooks/useOtherPages';
+import { usePageOrder } from 'hooks/usePageOrder';
 
 const CreateOtherPagePage: NextPage = () => {
   const [markdown, setMarkdown] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { otherPages } = useOtherPages();
+  const { pageOrder } = usePageOrder(otherPages);
   const router = useRouter();
   const { mutate } = useOtherPages();
   const { register, handleSubmit } =
-    useForm<Omit<OtherPageT, 'id' | 'slug' | 'markdown'>>();
+    useForm<Omit<OtherPageT, 'id' | 'slug' | 'markdown' | 'order'>>();
 
   const onSubmit = async (
-    formData: Omit<OtherPageT, 'id' | 'slug' | 'markdown'>
+    formData: Omit<OtherPageT, 'id' | 'slug' | 'markdown' | 'order'>
   ) => {
     setIsLoading(true);
     const res = await createOtherPage({
       ...formData,
+      order: pageOrder,
       markdown,
       slug: slug(formData.title as string),
     });

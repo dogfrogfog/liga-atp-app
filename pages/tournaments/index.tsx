@@ -4,11 +4,10 @@ import {
   useMemo,
   memo,
   Dispatch,
-  SetStateAction, useEffect,
+  SetStateAction, useEffect, useCallback,
 } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
 import {
   format,
@@ -56,6 +55,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   const [weekFilterIndex, setWeekFilterIndex] = useState(0);
   const [finishedTournamentsType, setFinishedTournamentsType] = useState(999);
   const [playedTournamentsPage, setPlayedTournamentsPage] = useState(1);
+  const [scrollTournament, setScrollTournament] = useState<number>(0);
 
   const { tournaments, isLoading } = useTournaments();
   const router = useRouter();
@@ -81,6 +81,19 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
 
   }, [type])
 
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem('scrollTournament');
+    if (savedScrollPosition) {
+      setScrollTournament(parseInt(savedScrollPosition, 10));
+    }
+    window.scrollTo(0, scrollTournament);
+  }, [scrollTournament]);
+
+  const handleScroll = useCallback((id: number) => {
+    sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
+    router.push(`/tournaments/${id}`);
+  }, [router])
+
   const activeTabContent = (() => {
     switch (activeTab) {
       case TOURNAMENT_TABS[0]:
@@ -89,8 +102,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
         }
 
         return activeTournaments.map((v) => (
-          <Link key={v.id} href={'/tournaments/' + v.id}>
-            <a className={styles.link}>
+          <div key={v.id} className={styles.link} onClick={() => handleScroll(v.id)}>
               <TournamentListItem
                 name={v.name || 'tbd'}
                 status={
@@ -105,8 +117,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
                   v.status === 3 || v.is_finished ? '<имя победителя>' : ''
                 }
               />
-            </a>
-          </Link>
+          </div>
         ));
       case TOURNAMENT_TABS[2]: //TODO: when uncomment TOURNAMENT_TABS replace case 1 and 2
         const now = Date.now();
@@ -171,8 +182,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
             </div>
             {filteredTournaments.length > 0 ? (
               filteredTournaments.map((v) => (
-                <Link key={v.id} href={'/tournaments/' + v.id}>
-                  <a className={styles.link}>
+                  <div key={v.id} className={styles.link} onClick={() => handleScroll(v.id)}>
                     <TournamentListItem
                       name={v.name || 'tbd'}
                       status={
@@ -191,8 +201,7 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
                           : ''
                       }
                     />
-                  </a>
-                </Link>
+                  </div>
               ))
             ) : (
               <NotFoundMessage message="Нет доступных турниров" />
@@ -296,6 +305,21 @@ const FinishedTournamentsList = memo(
     setPlayedTournamentsPage,
   }: FinishedTournamentsListProps) => {
     const { playedTournaments, isLoading } = usePlayedTournaments(playedTournamentsPage);
+    const [scrollTournament, setScrollTournament] = useState<number>(0);
+    const router = useRouter();
+
+    useEffect(() => {
+      const savedScrollPosition = sessionStorage.getItem('scrollTournament');
+      if (savedScrollPosition) {
+        setScrollTournament(parseInt(savedScrollPosition, 10));
+      }
+      window.scrollTo(0, scrollTournament);
+    }, [scrollTournament]);
+
+    const handleScroll = useCallback((id: number) => {
+      sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
+      router.push(`/tournaments/${id}`);
+    }, [router])
 
     const playersMap = useMemo(
       () =>
@@ -319,8 +343,7 @@ const FinishedTournamentsList = memo(
     return (
       <>
         {filteredFinishedTournaments.map((v) => (
-          <Link key={v.id} href={'/tournaments/' + v.id}>
-            <a className={styles.link}>
+            <div key={v.id} className={styles.link} onClick={() => handleScroll(v.id)}>
               <TournamentListItem
                 name={v.name || 'название не определено'}
                 status={
@@ -339,8 +362,7 @@ const FinishedTournamentsList = memo(
                     : ''
                 }
               />
-            </a>
-          </Link>
+            </div>
         ))}
         {isLastPage &&
           playedTournaments.length === PLAYED_TOURNAMENT_PAGE_SIZE && (
