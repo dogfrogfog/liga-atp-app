@@ -63,7 +63,7 @@ const Players: NextPage = () => {
 
     setModalStatus({ isOpen: true, type: 'update' });
     setEditingPlayer(editingPlayer);
-  }, [players, selectedRow]);
+  }, [players, selectedRow, eloPoints]);
 
   const handleDeleteClick = useCallback(async () => {
     setIsLoadingState(true);

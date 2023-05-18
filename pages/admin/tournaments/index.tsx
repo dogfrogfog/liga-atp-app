@@ -178,7 +178,7 @@ const TournamentForm = ({
     if (tournamentTypeValue === 0 || tournamentTypeValue === 7 || tournamentTypeValue === 23 || tournamentTypeValue === 100) {
       setShowField(true);
     } 
-  },[])
+  },[getValues])
 
   const handleTournamentTypeChange = (e:ChangeEvent<HTMLSelectElement>) => {
     const sel:string = e.target.value;
