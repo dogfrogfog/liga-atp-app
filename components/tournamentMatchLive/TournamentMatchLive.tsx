@@ -30,7 +30,7 @@ const TournamentMatchLive: FC<TypeGroupedMatches> = ({ sortedGroupedMatches }) =
         return <div className={styles.circle}></div>;
 
       case match.winner_id !== null:
-        return <GiCheckMark />;
+        return <GiCheckMark size={15} />;
 
       default:
         return null;
