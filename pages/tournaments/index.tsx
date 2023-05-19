@@ -1,23 +1,9 @@
-import {
-  useState,
-  ChangeEvent,
-  useMemo,
-  memo,
-  Dispatch,
-  SetStateAction, useEffect, useCallback,
-} from 'react';
+import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useEffect, useMemo, useState, } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { tournament as TournamentT, player as PlayerT } from '@prisma/client';
-import {
-  format,
-  startOfWeek,
-  addDays,
-  endOfWeek,
-  addWeeks,
-  getWeek,
-} from 'date-fns';
+import { player as PlayerT, tournament as TournamentT } from '@prisma/client';
+import { addDays, addWeeks, endOfWeek, format, getWeek, startOfWeek, } from 'date-fns';
 import cl from 'classnames';
 import useTournaments from 'hooks/useTournaments';
 import usePlayedTournaments from 'hooks/usePlayedTournaments';
@@ -27,14 +13,12 @@ import SuggestionsInput from 'ui-kit/SuggestionsInput';
 import LoadingSpinner from 'ui-kit/LoadingSpinner';
 import TournamentListItem from 'components/TournamentListItem';
 import TournamentTypeFilter from 'components/TournamentTypeFilter';
-import {
-  TOURNAMENT_STATUS_NUMBER_VALUES,
-  PLAYED_TOURNAMENT_PAGE_SIZE,
-} from 'constants/values';
+import { PLAYED_TOURNAMENT_PAGE_SIZE, TOURNAMENT_STATUS_NUMBER_VALUES, } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import styles from '../../styles/Tournaments.module.scss';
 import getTournamentWinners from 'utils/getTournamentWinners';
 import { prisma } from 'services/db';
+import { TournamentsStatus } from "../../constants/tournamentsType";
 
 const TOURNAMENT_TABS = ['Идут сейчас', 'Прошедшие'];
 
@@ -60,20 +44,18 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
 
   const { tournaments, isLoading } = useTournaments();
   const router = useRouter();
-  const {tournament, type} = router.query
+  const {status, type, position} = router.query
 
   useEffect(() => {
-    switch (tournament) {
-      case 'new': {
+    switch (status as TournamentsStatus) {
+      case TournamentsStatus.New:
         setActiveTab(TOURNAMENT_TABS[0]);
         break;
-      }
-      case 'finished': {
+      case TournamentsStatus.Finished:
         setActiveTab(TOURNAMENT_TABS[1]);
         break;
-      }
     }
-  }, [tournament])
+  }, [status])
 
   useEffect(() => {
     if(type){
@@ -83,17 +65,16 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
   }, [type])
 
   useEffect(() => {
-    const savedScrollPosition = sessionStorage.getItem('scrollTournament');
-    if (savedScrollPosition) {
-      setScrollTournament(parseInt(savedScrollPosition, 10));
+    if (position) {
+      setScrollTournament(+position);
     }
     window.scrollTo(0, scrollTournament);
   }, [scrollTournament]);
 
-  const handleScroll = useCallback((id: number) => {
-    sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
-    router.push(`/tournaments/${id}`);
-  }, [router])
+  const handleScroll = useCallback(async (id: number) => {
+    await router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}})
+    await router.push(`/tournaments/${id}`);
+  }, [position])
 
   const activeTabContent = (() => {
     switch (activeTab) {
@@ -210,9 +191,9 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
           </div>
         );
       case TOURNAMENT_TABS[1]: //TODO: when uncomment TOURNAMENT_TABS replace case 1 and 2
-        const handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const handleLevelChange = async (e: ChangeEvent<HTMLSelectElement>) => {
           setFinishedTournamentsType(parseInt(e.target.value, 10));
-          router.push({ pathname: router.pathname, query: {tournament: router.query.tournament, type: e.target.value}})
+          await router.push({ pathname: router.pathname, query: {tournament: router.query.tournament, type: e.target.value}})
         };
 
         const pages = [];
@@ -243,22 +224,23 @@ const TournamentsPage: NextPage<TournamentsPageProps> = ({
     return null;
   })();
 
-  const handleTabChange = (_: any, value: number) => {
+  const handleTabChange = async (_: any, value: number) => {
     setActiveTab(TOURNAMENT_TABS[value]);
     switch (value) {
-      case 0: {
-        router.push({ pathname: router.pathname, query: {tournament: 'new'}})
+      case 0:
+        await setTournamentsStatusToQuery(TournamentsStatus.New);
         break;
-      }
-      case 1: {
-        router.push({ pathname: router.pathname, query: {tournament: 'finished'}})
+      case 1:
+        await setTournamentsStatusToQuery(TournamentsStatus.Finished);
         break;
-      }
     }
   };
+  const setTournamentsStatusToQuery = async (status: TournamentsStatus) => {
+    await router.push({ pathname: router.pathname, query: {status}});
+  }
 
-  const onSuggestionClick = (t: TournamentT) => {
-    router.push(`tournaments/${t.id}`);
+  const onSuggestionClick = async (t: TournamentT) => {
+    await router.push(`tournaments/${t.id}`);
   };
 
   return (
@@ -308,18 +290,18 @@ const FinishedTournamentsList = memo(
     const { playedTournaments, isLoading } = usePlayedTournaments(playedTournamentsPage);
     const [scrollTournament, setScrollTournament] = useState<number>(0);
     const router = useRouter();
+    const {position} = router.query;
 
     useEffect(() => {
-      const savedScrollPosition = sessionStorage.getItem('scrollTournament');
-      if (savedScrollPosition) {
-        setScrollTournament(parseInt(savedScrollPosition, 10));
+      if (position) {
+        setScrollTournament(+position);
       }
       window.scrollTo(0, scrollTournament);
     }, [scrollTournament]);
 
-    const handleScroll = useCallback((id: number) => {
-      sessionStorage.setItem('scrollTournament', window.pageYOffset.toString());
-      router.push(`/tournaments/${id}`);
+    const handleScroll = useCallback(async (id: number) => {
+      await router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}})
+      await router.push(`/tournaments/${id}`);
     }, [router])
 
     const playersMap = useMemo(
