@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
 import type { player as PlayerT, player_elo_ranking } from '@prisma/client';
 
@@ -9,6 +9,7 @@ import styles from 'styles/Ranking.module.scss';
 import { prisma } from 'services/db';
 import { useRouter } from "next/router";
 import { PlayerLevel } from "../constants/playerLevel";
+import { setPlayersLevelToQuery } from "../utils/setPlayersLevelToQuery";
 
 const RANKING_TABS = [
   'На хайпе',//0
@@ -36,7 +37,7 @@ const RankingPage: NextPage<RankingPageProps> = ({
   const {level, position} = router.query
 
   useEffect(() => {
-    switch (level) {
+    switch (level as PlayerLevel) {
       case PlayerLevel.Hype:{
         setActiveTab(RANKING_TABS[0]);
         break;
@@ -149,47 +150,47 @@ const RankingPage: NextPage<RankingPageProps> = ({
     return result;
   })();
 
-  const handleTabChange = (_: any, value: number) => {
+  const handleTabChange = async (_: any, value: number) => {
     setActiveTab(RANKING_TABS[value]);
     switch (value) {
       case 0: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Hype}})
+        await setPlayersLevelToQuery(PlayerLevel.Hype, router);
         break;
       }
       case 1: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Pro}})
+        await setPlayersLevelToQuery(PlayerLevel.Pro, router);
         break;
       }
       case 2: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.SuperMasters}})
+        await setPlayersLevelToQuery(PlayerLevel.SuperMasters, router);
         break;
       }
       case 3: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Masters}})
+        await setPlayersLevelToQuery(PlayerLevel.Masters, router);
         break;
       }
       case 4: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Challenger}})
+        await setPlayersLevelToQuery(PlayerLevel.Challenger, router);
         break;
       }
       case 5: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Legger}})
+        await setPlayersLevelToQuery(PlayerLevel.Legger, router);
         break;
       }
       case 6: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Futures}})
+        await setPlayersLevelToQuery(PlayerLevel.Futures, router);
         break;
       }
       case 7: {
-        router.push({ pathname: router.pathname, query: {level: PlayerLevel.Satellite}})
+        await setPlayersLevelToQuery(PlayerLevel.Satellite, router);
         break;
       }
     }
   };
 
-  const handleScroll = useCallback((id: number) => {
-    router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}});
-    router.push(`/players/${id}`);
+  const handleScroll = useCallback(async (id: number) => {
+    await router.push({ pathname: router.pathname, query: {...router.query, position: window.scrollY}});
+    await router.push(`/players/${id}`);
   }, [level])
 
   return (
