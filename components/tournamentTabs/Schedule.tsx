@@ -1,4 +1,4 @@
-import { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef, useState, TouchEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import cl from 'classnames';
@@ -45,6 +45,8 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
       return acc;
     }, new Map<number, PlayerT>());
 
+    const [activeStage, setActiveStage] = useState<number | null>(0);
+
     const { carouselFragment, thumbsFragment, slideToItem } = useSpringCarousel(
       {
         withThumbs: true,
@@ -58,17 +60,19 @@ const ScheduleTab = forwardRef<any, ScheduleTabProps>(
               isDoubles={isDoubles}
               matchesMap={matchesMap}
               playersMap={playersMap}
+              isTouchEndNeeded
+              onTouchEnd={() => setActiveStage(null)}
             />
           ),
           renderThumb: (
             <button
               onClick={() => {
-                // setActiveStage(i + '');
+                setActiveStage(i);
                 slideToItem(i);
               }}
               className={cl(
-                styles.stageButton
-                // i + '' === activeStage ? styles.active : ''
+                styles.stageButton,
+                i === activeStage ? styles.active : null,
               )}
             >
               {stages[i]}
@@ -107,6 +111,8 @@ type StageProps = {
   isFinal: boolean;
   matchesMap: Map<number, MatchT>;
   playersMap: Map<number, PlayerT>;
+  isTouchEndNeeded?: boolean;
+  onTouchEnd?: () => void;
 };
 
 const Stage = ({
@@ -115,8 +121,13 @@ const Stage = ({
   matchesMap,
   playersMap,
   isFinal,
+  isTouchEndNeeded,
+  onTouchEnd,
 }: StageProps) => (
-  <div className={styles.stage}>
+  <div
+    className={styles.stage}
+    onTouchEnd={isTouchEndNeeded ? onTouchEnd : undefined}
+  >
     {stage.map((bracketUnit, mi) => {
       if (Array.isArray(bracketUnit)) {
         return (

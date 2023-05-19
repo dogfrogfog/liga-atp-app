@@ -1,0 +1,11 @@
+@import './variables.scss';
+
+.container {
+    padding: 15px;
+    overflow-y: scroll;
+    min-height: 100vh;
+}
+
+.wrapper {
+    padding-top: 100px;
+}

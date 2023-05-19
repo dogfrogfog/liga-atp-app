@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { tournament as TournamentT } from '@prisma/client';
@@ -13,6 +13,7 @@ import {
   TOURNAMENT_DRAW_TYPE_NUMBER_VALUES,
   TOURNAMENT_STATUS_NUMBER_VALUES,
   TOURNAMENT_COLUMNS,
+  LEVEL_NUMBER_LIVE,
 } from 'constants/values';
 import PageTitle from 'ui-kit/PageTitle';
 import LoadingShadow from 'components/LoadingShadow';
@@ -55,6 +56,7 @@ const Tournaments: NextPage = () => {
     const updatingTournamentData = tournaments[selectedRow];
 
     setModalStatus({ isOpen: true, type: 'update' });
+
     setEditingTournament(updatingTournamentData);
   }, [tournaments, selectedRow]);
 
@@ -153,9 +155,12 @@ const TournamentForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue
   } = useForm<TournamentT>({
     defaultValues: {
       tournament_type: null,
+      tournament_level: null,
       surface: null,
       status: 1,
       ...tournament,
@@ -165,13 +170,34 @@ const TournamentForm = ({
     },
   });
 
+  const [showField, setShowField] = useState<boolean>(false);
+
+  useEffect(() => {
+    const tournamentTypeValue: number | null = getValues('tournament_type');
+
+    if (tournamentTypeValue === 0 || tournamentTypeValue === 7 || tournamentTypeValue === 23 || tournamentTypeValue === 100) {
+      setShowField(true);
+    } 
+  },[getValues])
+
+  const handleTournamentTypeChange = (e:ChangeEvent<HTMLSelectElement>) => {
+    const sel:string = e.target.value;
+
+    if (sel === '0' || sel === '7' || sel === '23' || sel === '100') {
+      setShowField(true);
+    } else {
+      setShowField(false);
+      setValue('tournament_level', null);
+    }
+  };
+
   return (
     <div className={formStyles.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWithError error={errors.name}>
           Название турнира
           <br />
-          <input {...register('name', { required: false })} />
+          <input {...register('name', { required: true })} />
         </InputWithError>
         <InputWithError error={errors.address}>
           Адрес
@@ -191,6 +217,7 @@ const TournamentForm = ({
               required: true,
               valueAsNumber: true,
             })}
+            onChange={handleTournamentTypeChange}
           >
             {Object.entries(TOURNAMENT_TYPE_NUMBER_VALUES).map(
               ([key, value]) => (
@@ -201,6 +228,28 @@ const TournamentForm = ({
             )}
           </select>
         </InputWithError>
+        {
+          showField && (
+            <InputWithError error={errors.tournament_level}>
+              Уровень БШ, ПБШ, ТБ, ИТ
+              <br />
+              <select
+                {...register('tournament_level', {
+                  required: true,
+                  valueAsNumber: true,
+                })}
+              >
+                {Object.entries(LEVEL_NUMBER_LIVE).map(
+                  ([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  )
+                )}
+              </select>
+            </InputWithError>
+          )
+        }
         <InputWithError error={errors.surface}>
           Поверхность
           <br />
@@ -254,7 +303,7 @@ const getTableValue = (t: TournamentT, k: keyof TournamentT) => {
     return TOURNAMENT_DRAW_TYPE_NUMBER_VALUES[t.draw_type];
   }
 
-  if (k === 'surface' && t.surface) {
+  if (k === 'surface' && t.surface !== null) {
     return SURFACE_TYPE_NUMBER_VALUES[t.surface];
   }
 
@@ -266,9 +315,13 @@ const getTableValue = (t: TournamentT, k: keyof TournamentT) => {
     return format(new Date(t.start_date), 'dd.MM.yyyy');
   }
 
-  if (k === 'tournament_type' && t.tournament_type) {
+  if (k === 'tournament_type' && t.tournament_type !== null) {
     return TOURNAMENT_TYPE_NUMBER_VALUES[t.tournament_type];
   }
+
+  if (k === 'tournament_level' && t.tournament_level !== null) {
+    return LEVEL_NUMBER_LIVE[t.tournament_level];
+  } 
 
   return t[k];
 };

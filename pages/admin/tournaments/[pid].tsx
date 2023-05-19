@@ -64,6 +64,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
     handleSubmit,
     setValue,
     reset,
+    getValues,
     formState: { isDirty },
   } = useForm({
     defaultValues: {
@@ -72,6 +73,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       city: tournament?.city,
       draw_type: tournament?.draw_type,
       tournament_type: tournament?.tournament_type,
+      tournament_level: tournament?.tournament_level,
       surface: tournament?.surface,
       status: tournament?.status,
       start_date: tournament?.start_date
@@ -286,7 +288,7 @@ const AdminSingleTournamentPape: NextPage<AdminSingleTournamentPapeProps> = ({
       <div className={styles.twoSides}>
         <div className={styles.side}>
           <p className={styles.sideTitle}>Поля турнира</p>
-          <TournamentForm register={register} setValue={setValue} />
+          <TournamentForm register={register} setValue={setValue} getValues={getValues} />
         </div>
         <div className={cl(styles.side, styles.addPlayersContainer)}>
           <p className={styles.sideTitle}>Игроки</p>
