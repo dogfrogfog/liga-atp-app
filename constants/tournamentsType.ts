@@ -20,3 +20,8 @@ export enum TournamentsType {
     DoubleGrandSlam = 23,
     FinalTournament = 100
 }
+
+export const enum TournamentsStatus {
+    Finished = 'finished',
+    New = 'new',
+}

@@ -57,9 +57,9 @@ const DigestsList = memo(
       }
       window.scrollTo(0, scrollDigest);
     }, [scrollDigest]);
-    const handleScroll = useCallback((id: number) => {
-      router.push({ pathname: router.pathname, query: {position: window.scrollY}})
-      router.push(`/digests/${id}`);
+    const handleScroll = useCallback(async (id: number) => {
+      await router.push({ pathname: router.pathname, query: {position: window.scrollY}})
+      await router.push(`/digests/${id}`);
     }, [router])
 
     if (isLastPage && isLoading) {
